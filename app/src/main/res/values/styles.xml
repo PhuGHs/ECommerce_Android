@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CartButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/cart_button_bg</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:drawableBottom">@drawable/baseline_shopping_cart_24</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">10dp</item>
+        <item name="elevation">4dp</item>
+    </style>
+    <style name="Animation" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+    <style name="logo_header_signup">
+        <item name="fontFamily">@font/bungee</item>
+        <item name="android:textSize">50dp</item>
+    </style>
+</resources>

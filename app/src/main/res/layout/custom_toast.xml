@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_custom_toast1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:background="@android:color/transparent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/toast_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/toast_error"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/toast_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/baseline_check_24" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="12dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@+id/toast_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/toast_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ố yề"
+                android:textColor="@color/white"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/toast_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng ký thành công"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

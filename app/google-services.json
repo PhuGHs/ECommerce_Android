@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "228766650036",
+    "project_id": "ecommerce-hvpp",
+    "storage_bucket": "ecommerce-hvpp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228766650036:android:af08c29d527b32b76651e1",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_hvpp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228766650036-3lknp254naqmo2gcttm8n529liohjcp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlZVeDHVbya41BrTk3KNuY4dm18G9PYqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228766650036-3lknp254naqmo2gcttm8n529liohjcp8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
