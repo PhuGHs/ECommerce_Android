@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.RegisterLoginActivity"
+    tools:context=".fragments.LoginFragment"
     android:orientation="vertical"
     android:gravity="center_vertical"
     android:background="#fff"
+    android:id="@+id/login_fragment"
     android:padding="20dp">
 
     <TextView
@@ -21,15 +22,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chào bạn,"
-        android:textSize="40sp"
+        android:text="Đăng nhập"
+        android:textSize="50sp"
         android:transitionName="logo_text"
         android:layout_marginTop="-20dp"
         android:textColor="#000"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hãy đăng ký để có thể trải nghiệm!"
+        android:text="Chất lượng làm nên thương hiệu!"
         android:textSize="18sp"
         android:transitionName="logo_desc"/>
     <LinearLayout
@@ -38,19 +39,9 @@
         android:orientation="vertical"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/reg_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Họ và tên"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/reg_email"
+            android:id="@+id/log_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
@@ -61,7 +52,7 @@
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/reg_password"
+            android:id="@+id/log_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Mật khẩu"
@@ -74,38 +65,33 @@
                 android:inputType="textPassword">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/reg_confirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Xác nhận mật khẩu"
-            app:passwordToggleEnabled="true"
-            android:transitionName="password_tran"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <Button
-        android:id="@+id/reg_btn"
+        android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ĐĂNG KÝ"
+        android:text="ĐĂNG NHẬP"
+        android:textSize="18dp"
         android:layout_marginBottom="10dp"
         android:background="#000"
         android:textColor="#fff"
         android:transitionName="button_tran"/>
 
     <TextView
-        android:id="@+id/reg_login_btn"
+        android:id="@+id/btnResetPassword"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:onClick="onClick"
         android:clickable="true"
         android:background="@android:color/transparent"
-        android:text="Bạn đã có tài khoản? Đăng nhập."
-        android:textSize="15dp" />
+        android:text="Quên mật khẩu?"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/reg_signup_button"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:clickable="true"
+        android:background="@android:color/transparent"
+        android:text="Chưa có tài khoản? Đăng ký"
+        android:textSize="17dp" />
 </LinearLayout>
