@@ -15,6 +15,10 @@ public class RegisterLoginViewModel extends ViewModel {
     public LiveData<Resource<Void>> getResetPasswordResult() {
         return resetPasswordResult;
     }
+    public LiveData<Resource<FirebaseUser>> getUserID() {
+        _register.setValue(Resource.success(FirebaseAuth.getInstance().getCurrentUser()));
+        return _register;
+    }
 
     public LiveData<Resource<FirebaseUser>> registerUser(String email, String password) {
         _register.setValue(Resource.loading(null));
