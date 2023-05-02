@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,6 @@ public class LoginFragment extends Fragment {
         loginButton = view.findViewById(R.id.login_btn);
         btnResetPassword = view.findViewById(R.id.btnResetPassword);
 
-        Log.e("1",viewModel.getUserID().toString());
         email.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -98,7 +96,7 @@ public class LoginFragment extends Fragment {
                             break;
                         case SUCCESS:
                             Intent intent = new Intent(requireActivity(), MainActivity.class);
-                            intent.putExtra("userInfo", resource.data);
+                            intent.putExtra("UID", viewModel.UID);
                             startActivity(intent);
                             break;
                         case ERROR:

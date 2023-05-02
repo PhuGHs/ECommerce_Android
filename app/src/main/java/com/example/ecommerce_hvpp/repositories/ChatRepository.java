@@ -23,7 +23,7 @@ public class ChatRepository {
 
     public LiveData<Resource<List<ChatMessage>>> getChatMessagesLiveData() {
         chatMessagesLiveData.setValue(Resource.loading(null));
-        FirebaseDatabase.getInstance().getReference("chat")
+        FirebaseDatabase.getInstance().getReference("chats")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -12,4 +12,7 @@
     <item android:title="@string/account"
         android:id="@+id/accountFragment"
         android:icon="@drawable/baseline_account_circle_24" />
+    <item android:title="Tin nhắn"
+        android:id="@+id/inboxFragment"
+        android:icon="@drawable/baseline_favorite_border_24"/>
 </menu>
