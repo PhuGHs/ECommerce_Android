@@ -1,14 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AccountFragment">
+    android:orientation="vertical"
+    android:gravity="top|center"
+    tools:context=".fragments.AccountFragment"
+    android:background="@color/background">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="account fragment" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User"
+        android:textColor="@color/primary"
+        style="@style/header"
+        android:textSize="64px"
+        android:layout_marginTop="40px"/>
 
-</FrameLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="23px"
+        android:layout_marginBottom="12px"
+        android:background="@drawable/ava_circle"
+        android:src="@drawable/baseline_account_circle_24"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="77px"
+        android:text="Hoang Phuc"
+        android:textColor="@color/black"
+        android:textSize="64px"
+        style="@style/header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/background">
+
+        <Button
+            android:layout_width="300px"
+            android:layout_height="350px"
+            android:layout_marginLeft="50px"
+            android:textSize="35px"
+            android:drawableTop="@drawable/baseline_account_circle_24"
+            android:text="Voucher"
+            style="@style/font_medium"
+            android:textColor="@color/black"
+            android:gravity="bottom"
+            android:backgroundTint="@color/white"/>
+
+        <Button
+            android:layout_width="340px"
+            android:layout_height="350px"
+            android:layout_marginLeft="20px"
+            android:textSize="25px"
+            android:drawableTop="@drawable/baseline_account_circle_24"
+            android:text="Progress Order"
+            android:textColor="@color/black"
+            android:gravity="bottom"
+            android:backgroundTint="@color/white"/>
+
+        <Button
+            android:layout_width="300px"
+            android:layout_height="350px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="50px"
+            android:textSize="35px"
+            android:drawableTop="@drawable/baseline_account_circle_24"
+            android:text="Feedback"
+            android:textColor="@color/black"
+            android:gravity="bottom"
+            android:backgroundTint="@color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <Button
+            android:layout_width="755px"
+            android:layout_height="140px"
+            android:textSize="35px"
+            android:layout_marginBottom="50px"
+            android:backgroundTint="@color/white"
+            style="@style/header"
+            android:textColor="@color/primary"
+            android:drawableLeft="@drawable/ic_user_btn"
+            android:text="Profile"/>
+
+        <Button
+            android:layout_width="755px"
+            android:layout_height="140px"
+            android:textSize="35px"
+            android:layout_marginBottom="50px"
+            android:backgroundTint="@color/white"
+            style="@style/header"
+            android:textColor="@color/primary"
+            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:text="Recipient's information"/>
+
+        <Button
+            android:layout_width="755px"
+            android:layout_height="140px"
+            android:textSize="35px"
+            android:layout_marginBottom="50px"
+            android:backgroundTint="@color/white"
+            style="@style/header"
+            android:textColor="@color/primary"
+            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:text="Order history"/>
+
+        <Button
+            android:layout_width="755px"
+            android:layout_height="140px"
+            android:textSize="35px"
+            android:layout_marginBottom="50px"
+            android:backgroundTint="@color/white"
+            style="@style/header"
+            android:textColor="@color/primary"
+            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:text="Chat with admin"/>
+
+        <Button
+            android:layout_width="755px"
+            android:layout_height="140px"
+            android:textSize="35px"
+            android:layout_marginBottom="50px"
+            android:backgroundTint="@color/white"
+            style="@style/header"
+            android:textColor="@color/primary"
+            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:text="Log out"/>
+
+    </LinearLayout>
+</LinearLayout>

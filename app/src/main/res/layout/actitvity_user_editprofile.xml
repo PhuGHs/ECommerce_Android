@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="132px"
+            android:layout_height="143px"
+            android:layout_marginTop="20px"
+            android:layout_marginLeft="15px"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/ic_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:layout_marginLeft="275px"
+            android:text="Profile"
+            android:textColor="@color/primary"
+            android:textSize="80px"
+            style="@style/header"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="89px"
+        android:background="@drawable/ava_circle"
+        android:src="@drawable/baseline_account_circle_24"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30px"
+        android:text="Hoàng Phúc"
+        android:textColor="@color/black"
+        android:textSize="66px"
+        style="@style/header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80px"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:textColor="@color/primary"
+                android:textSize="50px"
+                android:text="Name: "/>
+
+            <EditText
+                android:layout_width="750px"
+                android:layout_marginLeft="100px"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:textColor="@color/primary"
+                android:textSize="50px"
+                android:text="Datebirth: "/>
+
+            <EditText
+                style="@style/header"
+                android:layout_width="750px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15px"
+                android:textColor="@color/primary"
+                android:textSize="50px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:text="Address: "/>
+
+            <EditText
+                android:layout_width="750px"
+                android:layout_marginLeft="55px"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:text="Email: "/>
+
+            <EditText
+                android:layout_width="750px"
+                android:layout_marginLeft="100px"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+    
+    <Button
+        android:layout_width="500px"
+        android:layout_height="130px"
+        android:layout_marginTop="100px"
+        android:text="Change avatar"
+        style="@style/header"
+        android:textColor="@color/black"
+        android:textSize="35px"
+        android:backgroundTint="#B3E5BE"/>
+
+    <Button
+        android:layout_width="500px"
+        android:layout_height="130px"
+        android:layout_marginTop="40px"
+        android:text="Edit profile"
+        style="@style/header"
+        android:textColor="@color/black"
+        android:textSize="35px"
+        android:backgroundTint="#B3E5BE"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="112px">
+        <Button
+            android:layout_width="420px"
+            android:layout_height="135px"
+            android:layout_marginLeft="69px"
+            android:text="Cancel"
+            style="@style/header"
+            android:textColor="@color/white"
+            android:textSize="35px"
+            android:backgroundTint="@color/primary"/>
+
+        <Button
+            android:layout_width="420px"
+            android:layout_height="135px"
+            android:layout_marginLeft="86px"
+            android:text="Save"
+            style="@style/header"
+            android:textColor="@color/white"
+            android:textSize="35px"
+            android:backgroundTint="@color/primary"/>
+    </LinearLayout>
+</LinearLayout>
