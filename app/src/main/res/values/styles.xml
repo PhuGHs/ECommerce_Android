@@ -15,4 +15,13 @@
         <item name="fontFamily">@font/bungee</item>
         <item name="android:textSize">50dp</item>
     </style>
+    <style name="font_crimson_bold">
+        <item name="fontFamily">@font/crimson_text_bold</item>
+    </style>
+    <style name="font_crimson_regular">
+        <item name="fontFamily">@font/crimson_text_regular</item>
+    </style>
+    <style name="font_crimson_italic">
+        <item name="fontFamily">@font/crimson_text_italic</item>
+    </style>
 </resources>

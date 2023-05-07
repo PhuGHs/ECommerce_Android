@@ -2,13 +2,22 @@ package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.activities.ProductAdapter;
+import com.example.ecommerce_hvpp.model.Product;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +56,13 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    RecyclerView listNewArrivalsRv;
+    RecyclerView listBestSellerRv;
+    ArrayList<Product> listNewArrivals = new ArrayList<>();
+    ArrayList<Product> listBestSeller = new ArrayList<>();
+    LinearLayoutManager linearLayoutManager1, linearLayoutManager2;
+    ProductAdapter newArrivalAdapter;
+    ProductAdapter bestSellerAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +76,40 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
+        listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
+
+        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+
+        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+
+        linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals);
+        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller);
+
+        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
+        listNewArrivalsRv.setAdapter(newArrivalAdapter);
+
+        listBestSellerRv.setLayoutManager(linearLayoutManager2);
+        listBestSellerRv.setAdapter(bestSellerAdapter);
     }
 }
