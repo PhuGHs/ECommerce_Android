@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_rounded"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_recep_info"
+            android:text="Hoang Phuc"
+            android:textColor="@color/black"
+            android:textSize="50px"
+            style="@style/header"/>
+
+        <ImageView
+            android:layout_width="60px"
+            android:layout_height="64px"
+            android:layout_marginHorizontal="576px"
+            android:src="@drawable/checked"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/numberphone_recep_info"
+        android:layout_marginTop="11px"
+        android:text="0822279678"
+        android:textColor="@color/black"
+        android:textSize="40px"
+        style="@style/regularfont"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address_recep_info"
+        android:layout_marginTop="11px"
+        android:text="Xã Tân Lập,phường Đông Hòa,huyện Dĩ An, Bình Dương"
+        android:textColor="#776363"
+        android:textSize="40px"
+        style="@style/regularfont"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26px">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/apply_btn"
+            android:layout_marginLeft="426px"
+            android:text="Apply"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_btn"
+            android:layout_marginLeft="41px"
+            android:text="Edit"/>
+    </LinearLayout>
+</LinearLayout>

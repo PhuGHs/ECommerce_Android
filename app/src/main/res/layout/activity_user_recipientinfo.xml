@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_info"
+            android:layout_width="132px"
+            android:layout_height="143px"
+            android:layout_marginTop="20px"
+            android:layout_marginLeft="15px"
+            android:backgroundTint="@color/background"
+            android:src="@drawable/ic_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:layout_marginLeft="10px"
+            android:text="Recipient's Information"
+            android:textColor="@color/primary"
+            android:textSize="80px"
+            style="@style/header"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="125px"
+            android:layout_height="100px"
+            android:layout_marginTop="110px"
+            android:layout_marginLeft="46px"
+            android:id="@+id/add_btn"
+            android:background="@drawable/bg_white_rounded"
+            android:backgroundTint="@color/primary"
+            android:src="@drawable/ic_add_24"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="125px"
+            android:layout_height="100px"
+            android:layout_marginTop="110px"
+            android:layout_marginLeft="46px"
+            android:id="@+id/delete_btn"
+            android:background="@drawable/bg_white_rounded"
+            android:backgroundTint="@color/primary"
+            android:src="@drawable/ic_delete"/>
+    </LinearLayout>
+    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="66px">
+
+    </view>
+</LinearLayout>

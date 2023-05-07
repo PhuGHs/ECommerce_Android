@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_info"
+            android:layout_width="132px"
+            android:layout_height="143px"
+            android:layout_marginTop="20px"
+            android:layout_marginLeft="15px"
+            android:backgroundTint="@color/background"
+            android:src="@drawable/ic_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40px"
+            android:layout_marginLeft="15px"
+            android:text="Edit Recipient's Information"
+            android:textColor="@color/primary"
+            android:textSize="64px"
+            style="@style/header"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="119px"
+        android:background="@drawable/bg_white_rounded"
+        android:orientation="vertical"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:layout_marginLeft="40px"
+                android:textColor="@color/primary"
+                android:textSize="50px"
+                android:text="Name: "/>
+
+            <EditText
+                android:layout_width="750px"
+                android:layout_marginLeft="100px"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:layout_marginLeft="40px"
+                android:textColor="@color/primary"
+                android:textSize="50px"
+                android:text="Phone number: "/>
+
+            <EditText
+                style="@style/header"
+                android:layout_width="640px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:textColor="@color/primary"
+                android:textSize="50px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/header"
+                android:layout_marginLeft="40px"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:text="Address: "/>
+
+            <EditText
+                android:layout_width="750px"
+                android:layout_marginLeft="55px"
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="520px"
+            android:id="@+id/cancel_btn"
+            android:text="Cancel"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_btn"
+            android:layout_marginLeft="38px"
+            android:text="Save"/>
+    </LinearLayout>
+</LinearLayout>
