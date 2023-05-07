@@ -3,6 +3,7 @@ package com.example.ecommerce_hvpp.firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseHelper {
@@ -13,6 +14,7 @@ public class FirebaseHelper {
 
     public FirebaseHelper() {
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
     }
@@ -27,8 +29,15 @@ public class FirebaseHelper {
     public FirebaseFirestore getDb() {
         return db;
     }
+
+    public CollectionReference getCollection(String path) {
+        return db.collection(path);
+    }
     public FirebaseAuth getAuth() {
         return auth;
+    }
+    public DatabaseReference getDatabaseReference(String url) {
+        return firebaseDatabase.getReference(url);
     }
 
 

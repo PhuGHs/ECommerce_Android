@@ -7,16 +7,22 @@ public class ChatMessage {
     private String messageText;
     private String senderId;
     private String receiverId;
+    private String chatId;
+    private String roomId;
+    private long sendingTime;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String messageText, String senderId, String receiverId, int type) {
+    public ChatMessage(String roomId, String chatId, String senderId, String receiverId, String messageText, long sendingTime ) {;
         this.messageText = messageText;
         this.senderId = senderId;
         this.receiverId = receiverId;
-        this.type = type;
+        this.chatId = chatId;
+        this.roomId = roomId;
+        this.sendingTime = sendingTime;
     }
+
 
     public String getMessageText() {
         return messageText;
@@ -48,5 +54,29 @@ public class ChatMessage {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public long getSendingTime() {
+        return sendingTime;
+    }
+
+    public void setSendingTime(long sendingTime) {
+        this.sendingTime = sendingTime;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapters;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.model.Inbox;
+import com.example.ecommerce_hvpp.fragments.ChatRoomFragment;
+import com.example.ecommerce_hvpp.model.ChatRoom;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 
-public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<Inbox> list;
-    private OnItemClickListener onItemClickListener;
+public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<ChatRoom> list;
+    private ChatRoomFragment parent;
 
-    public interface OnItemClickListener {
-        void onItemClick(Inbox inboxItem);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public InboxAdapter(List<Inbox> list) {
+    public ChatRoomAdapter(List<ChatRoom> list, ChatRoomFragment parent) {
         this.list = list;
+        this.parent = parent;
     }
 
     @NonNull
@@ -39,19 +34,27 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Inbox ib = list.get(position);
+        ChatRoom ib = list.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.tvRecipientName.setText(ib.getRecipientName());
         viewHolder.tvLastMessage.setText(ib.getLastMessage());
         viewHolder.siImage.setImageResource(R.drawable.profile);
+
+        viewHolder.itemView.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("roomId", ib.getChatRoomId());
+            bundle.putString("senderId", ib.getSenderId());
+            bundle.putString("recipientId", ib.getRecipientName());
+            parent.getNavController().navigate(R.id.navigate_to_chatDetail, bundle);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         private ShapeableImageView siImage;
         private TextView tvRecipientName, tvLastMessage;
 
@@ -60,11 +63,6 @@ public class InboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             siImage = itemView.findViewById(R.id.profileImageInChatItem);
             tvRecipientName = itemView.findViewById(R.id.tvRecipientName);
             tvLastMessage = itemView.findViewById(R.id.tvLastMessage);
-            itemView.setOnClickListener(v -> {
-                if(onItemClickListener != null) {
-                    onItemClickListener.onItemClick(list.get(getAdapterPosition()));
-                }
-            });
         }
     }
 }

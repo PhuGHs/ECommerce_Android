@@ -34,11 +34,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:gravity="center_vertical"
-                    android:textSize="30dp"
+                    android:textSize="25dp"
                     android:text="Lê Văn Phú"
                     android:textColor="@color/black"
-                    style="@style/font_medium"
-                    android:textStyle="bold"/>
+                    style="@style/font_medium" />
                 <TextView
                     android:id="@+id/tvLastMessage"
                     android:layout_width="match_parent"
