@@ -1,15 +1,20 @@
 package com.example.ecommerce_hvpp.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.fragments.FavoriteFragment;
 import com.example.ecommerce_hvpp.model.Product;
 
 import java.util.ArrayList;
@@ -36,27 +41,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
 
         return new DataViewHolder(itemView);
     }
-
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         holder.productName.setText(listProduct.get(position).getName());
         holder.productSeason.setText(listProduct.get(position).getSeason());
         holder.productPrice.setText(String.valueOf(listProduct.get(position).getPrice()));
     }
-
+    
     /**
      * Data ViewHolder class.
      */
     public static class DataViewHolder extends RecyclerView.ViewHolder {
 
         private TextView productName, productSeason, productPrice;
-
+        private ImageButton btnFav;
         public DataViewHolder(View itemView) {
             super(itemView);
 
             productName = (TextView) itemView.findViewById(R.id.productName);
             productSeason = (TextView) itemView.findViewById(R.id.productSeason);
             productPrice = (TextView) itemView.findViewById(R.id.productPrice);
+
+            btnFav = (ImageButton) itemView.findViewById(R.id.btnFav);
         }
     }
 }

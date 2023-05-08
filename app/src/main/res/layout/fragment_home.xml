@@ -104,7 +104,6 @@
                         android:src="@drawable/right_arrow"/>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_margin="20px"
                     android:id="@+id/listNewArrivals"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -144,7 +143,6 @@
                         android:src="@drawable/right_arrow"/>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_margin="20px"
                     android:id="@+id/listBestSeller"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
