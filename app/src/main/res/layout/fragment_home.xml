@@ -3,142 +3,153 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#EBEAEF"
+    android:scrollbars="vertical"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
-    <LinearLayout
-        android:layout_marginTop="73px"
-        android:layout_marginLeft="37px"
-        android:orientation="horizontal"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="750px"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_rounded"
-            app:iconifiedByDefault="false"
-            app:queryBackground="@color/white"
-            app:queryHint="Type ur fav"
-            style="@style/font_crimson_regular"
-            app:searchIcon="@drawable/baseline_search_24"
-            app:submitBackground="@drawable/bg_white_rounded" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_marginTop="73px"
+                android:layout_marginLeft="37px"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.SearchView
+                    android:layout_width="750px"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_white_rounded"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@color/white"
+                    app:queryHint="Type ur fav"
+                    style="@style/font_crimson_regular"
+                    app:searchIcon="@drawable/baseline_search_24"
+                    app:submitBackground="@drawable/bg_white_rounded" />
 
-        <ImageButton
-            android:layout_width="46dp"
-            android:layout_marginLeft="20px"
-            android:layout_height="match_parent"
-            android:background="@color/transparent"
-            android:src="@drawable/outline_shopping_cart_24" />
-        <ImageButton
-            android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:background="@color/transparent"
-            android:src="@drawable/message" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@drawable/bg_white_rounded"
-        android:layout_marginTop="64px"
-        android:layout_marginLeft="37px"
-        android:layout_marginRight="37px"
-        android:layout_width="match_parent"
-        android:layout_height="437px">
-        <TextView
-            android:layout_marginLeft="34px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to RetroF"
-            android:textColor="#A86464"
-            android:textSize="70px"
-            style = "@style/font_crimson_bold"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buy what u want, Hala Madrid, Fede Valverde"
-            android:textSize="60px"
-            android:textColor="#A86464"
-            android:layout_marginLeft="100px"
-            android:layout_marginRight="100px"
-            android:layout_marginTop="50px"
-            style="@style/font_crimson_italic"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="46px"
-        android:layout_marginLeft="37px"
-        android:layout_marginRight="37px"
-        android:background="@drawable/bg_white_rounded"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_marginLeft="34px"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Arrivals"
-                android:textColor="#A86464"
-                android:textSize="70px"
-                style = "@style/font_crimson_bold"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_marginTop="20px"
-                android:layout_marginRight="20px"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:src="@drawable/right_arrow"/>
+                <ImageButton
+                    android:layout_width="46dp"
+                    android:layout_marginLeft="20px"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:src="@drawable/outline_shopping_cart_24" />
+                <ImageButton
+                    android:layout_width="46dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:src="@drawable/message" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_white_rounded"
+                android:layout_marginTop="64px"
+                android:layout_marginLeft="37px"
+                android:layout_marginRight="37px"
+                android:layout_width="match_parent"
+                android:layout_height="437px">
+                <TextView
+                    android:layout_marginLeft="34px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome to RetroF"
+                    android:textColor="#A86464"
+                    android:textSize="70px"
+                    style = "@style/font_crimson_bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy what u want, Hala Madrid, Fede Valverde"
+                    android:textSize="60px"
+                    android:textColor="#A86464"
+                    android:layout_marginLeft="100px"
+                    android:layout_marginRight="100px"
+                    android:layout_marginTop="50px"
+                    style="@style/font_crimson_italic"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="46px"
+                android:layout_marginLeft="37px"
+                android:layout_marginRight="37px"
+                android:background="@drawable/bg_white_rounded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="34px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Arrivals"
+                        android:textColor="#A86464"
+                        android:textSize="70px"
+                        style = "@style/font_crimson_bold"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                    <ImageButton
+                        android:layout_marginTop="20px"
+                        android:layout_marginRight="20px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:src="@drawable/right_arrow"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_margin="20px"
+                    android:id="@+id/listNewArrivals"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="horizontal"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="46px"
+                android:layout_marginLeft="37px"
+                android:layout_marginRight="37px"
+                android:layout_marginBottom="40px"
+                android:background="@drawable/bg_white_rounded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="34px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Best Seller"
+                        android:textColor="#A86464"
+                        android:textSize="70px"
+                        style = "@style/font_crimson_bold"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                    <ImageButton
+                        android:layout_marginTop="20px"
+                        android:layout_marginRight="20px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:src="@drawable/right_arrow"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_margin="20px"
+                    android:id="@+id/listBestSeller"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="horizontal"/>
+            </LinearLayout>
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_margin="20px"
-            android:id="@+id/listNewArrivals"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="horizontal"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="46px"
-        android:layout_marginLeft="37px"
-        android:layout_marginRight="37px"
-        android:background="@drawable/bg_white_rounded"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_marginLeft="34px"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Best Seller"
-                android:textColor="#A86464"
-                android:textSize="70px"
-                style = "@style/font_crimson_bold"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-            <ImageButton
-                android:layout_marginTop="20px"
-                android:layout_marginRight="20px"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:src="@drawable/right_arrow"/>
-        </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_margin="20px"
-            android:id="@+id/listBestSeller"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="horizontal"/>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
