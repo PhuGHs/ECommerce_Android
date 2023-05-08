@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_white_rounded">
+
+    <ImageView
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:src="@drawable/ic_launcher_background"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20px">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_feedback"
+            android:text="vanphudh2003"
+            android:textColor="@color/black"
+            style="@style/header"/>
+
+        <ImageView
+            android:layout_width="200px"
+            android:layout_height="100px"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/rate_star"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_feedback"
+            android:text="18-04-2023  22:01"
+            android:textColor="#776363"
+            style="@style/header"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:id="@+id/detail_feedback"
+            android:text="Áo đẹp rất hợp"
+            android:textColor="@color/black"
+            style="@style/regularfont"/>
+
+        <LinearLayout
+            android:layout_width="900px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:background="@drawable/bg_white_rounded"
+            android:backgroundTint="@color/background">
+            <ImageView
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/ic_launcher_background"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40px"
+                android:gravity="left|center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Áo Retro Manchester City"
+                    android:textSize="40px"
+                    style="@style/header"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
