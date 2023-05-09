@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.activities.ProductAdapter;
+import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
 
 import java.util.ArrayList;
