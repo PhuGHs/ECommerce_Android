@@ -25,4 +25,9 @@
         android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" />
 </navigation>

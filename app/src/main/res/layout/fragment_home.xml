@@ -33,16 +33,20 @@
                     app:submitBackground="@drawable/bg_white_rounded" />
 
                 <ImageButton
+                    android:id="@+id/btnNavToCart"
                     android:layout_width="46dp"
                     android:layout_marginLeft="20px"
                     android:layout_height="match_parent"
                     android:background="@color/transparent"
-                    android:src="@drawable/outline_shopping_cart_24" />
+                    android:src="@drawable/outline_shopping_cart_24"
+                    android:clickable="true"/>
                 <ImageButton
+                    android:id="@+id/btnNavToMessage"
                     android:layout_width="46dp"
                     android:layout_height="match_parent"
                     android:background="@color/transparent"
-                    android:src="@drawable/message" />
+                    android:src="@drawable/message"
+                    android:clickable="true"/>
             </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"
