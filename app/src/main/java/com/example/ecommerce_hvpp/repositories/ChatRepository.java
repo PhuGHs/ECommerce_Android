@@ -21,12 +21,14 @@ import java.util.Objects;
 
 public class ChatRepository {
     private final MutableLiveData<Resource<List<ChatMessage>>> chatMessagesLiveData;
+    private MutableLiveData<Resource<ChatMessage>> lastChatMessageLiveData;
     private FirebaseHelper fbHelper;
     private DatabaseReference ref;
     private static final String TAG = "ChatRepository";
 
     public ChatRepository() {
         chatMessagesLiveData = new MutableLiveData<>();
+        lastChatMessageLiveData = new MutableLiveData<>();
         fbHelper = FirebaseHelper.getInstance();
         ref = fbHelper.getDatabaseReference("messages");
     }
@@ -58,13 +60,16 @@ public class ChatRepository {
         return chatMessagesLiveData;
     }
 
-    public void sendMessage(String roomId, String senderId, String receiverId, long sendingTime, String message) {
+    public ChatMessage sendMessage(String roomId, String senderId, String receiverId, long sendingTime, String message) {
         String chatId = ref.push().getKey();
         ChatMessage ms = new ChatMessage(roomId, chatId, senderId, receiverId,message, sendingTime);
         if(chatId == null) {
             Log.i(TAG, "chatid null");
-            return;
+            return null;
         }
         ref.child(chatId).setValue(ms);
+        return ms;
     }
+
+
 }

@@ -20,7 +20,7 @@ public class ChatViewModel extends ViewModel {
         return repo.getChatMessagesLiveData(roomId);
     }
 
-    public void sendChatMessage(String roomId, String senderId, String receiverId, long sendingTime, String message) {
-        repo.sendMessage(roomId, senderId, receiverId, sendingTime, message);
+    public ChatMessage sendChatMessage(String roomId, String senderId, String receiverId, long sendingTime, String message) {
+        return repo.sendMessage(roomId, senderId, receiverId, sendingTime, message);
     }
 }

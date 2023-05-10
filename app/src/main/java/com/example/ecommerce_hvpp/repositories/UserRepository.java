@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -33,13 +35,34 @@ public class UserRepository {
         _mldUser.setValue(Resource.loading(null));
         firebaseHelper.getCollection("users").document(UID).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    User user = documentSnapshot.toObject(User.class);
-                   _mldUser.setValue(Resource.success(user));
+                    if(documentSnapshot.exists()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        _mldUser.setValue(Resource.success(user));
+                    } else {
+                        Log.d(TAG, "user not found");
+                    }
                 })
                 .addOnFailureListener(e -> {
                     _mldUser.setValue(Resource.error(e.getMessage(), null));
+                })
+                .addOnCompleteListener(task -> {
+                    // Notify observers that the data is ready
+                    _mldUser.postValue(_mldUser.getValue());
                 });
         return _mldUser;
+    }
+
+    public void getAllUsers() {
+        firebaseHelper.getCollection("users").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<User> users = new ArrayList<>();
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        Log.d(TAG, snapshot.getData().toString());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    _mldListUser.setValue(Resource.error(e.getMessage(), null));
+                });
     }
 
     public LiveData<Resource<List<User>>> getUsers() {

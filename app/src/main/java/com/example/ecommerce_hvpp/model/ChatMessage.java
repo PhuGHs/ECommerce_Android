@@ -14,7 +14,7 @@ public class ChatMessage {
     public ChatMessage() {
     }
 
-    public ChatMessage(String roomId, String chatId, String senderId, String receiverId, String messageText, long sendingTime ) {;
+    public ChatMessage(String roomId, String chatId, String senderId, String receiverId, String messageText, long sendingTime) {;
         this.messageText = messageText;
         this.senderId = senderId;
         this.receiverId = receiverId;

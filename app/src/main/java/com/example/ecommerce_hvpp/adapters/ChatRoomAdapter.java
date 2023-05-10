@@ -19,6 +19,9 @@ import java.util.List;
 public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ChatRoom> list;
     private ChatRoomFragment parent;
+    private String senderId;
+    private String recipientId;
+    private String roomName;
 
     public ChatRoomAdapter(List<ChatRoom> list, ChatRoomFragment parent) {
         this.list = list;
@@ -36,15 +39,30 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChatRoom ib = list.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.tvRecipientName.setText(ib.getRecipientName());
+
+        //decide who is recipient, who is sender
+        if(ib.getUser1Id() == parent.getCurrentUserUID()) {
+            senderId =  ib.getUser1Id();
+            recipientId = ib.getUser2Id();
+        } else {
+            senderId = ib.getUser2Id();
+            recipientId = ib.getUser1Id();
+        }
+
+        // assign value
+        roomName = parent.getChatRoomName(recipientId);
+        viewHolder.tvRecipientName.setText(roomName);
         viewHolder.tvLastMessage.setText(ib.getLastMessage());
         viewHolder.siImage.setImageResource(R.drawable.profile);
 
+
+        // implement button click and pass value to new fragment through navController bundle
         viewHolder.itemView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("roomId", ib.getChatRoomId());
-            bundle.putString("senderId", ib.getSenderId());
-            bundle.putString("recipientId", ib.getRecipientName());
+            bundle.putString("roomName", roomName);
+            bundle.putString("senderId", senderId);
+            bundle.putString("recipientId", recipientId);
             parent.getNavController().navigate(R.id.navigate_to_chatDetail, bundle);
         });
     }

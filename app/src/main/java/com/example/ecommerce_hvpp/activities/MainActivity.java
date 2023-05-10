@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupWithNavController(bottomNav, navController);
     }
+
     @Override
     protected void onResume() {
         super.onResume();

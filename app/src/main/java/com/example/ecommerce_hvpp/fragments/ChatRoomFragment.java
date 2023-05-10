@@ -23,9 +23,11 @@ import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ChatRoomFragment extends Fragment {
     private static final String TAG = "ChatRoomFragment";
+    private String currentUserUID;
     private ChatRoomViewModel viewModel;
     private ChatRoomAdapter adapter;
     private List<ChatRoom> list;
@@ -49,6 +51,10 @@ public class ChatRoomFragment extends Fragment {
 
         //Initialize viewModel
         viewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+
+
+        //Initialize CurrentUserUID
+        currentUserUID = viewModel.getCurrentUserUID();
 
         return view;
     }
@@ -76,5 +82,23 @@ public class ChatRoomFragment extends Fragment {
                 default: break;
             }
         });
+    }
+
+    public String getChatRoomName(String recipientId) {
+        final AtomicReference<String> roomNameRef = new AtomicReference<>();
+        viewModel.getUser(recipientId).observe(requireActivity(), resource -> {
+            switch(resource.status) {
+                case ERROR:
+                    Log.e(TAG, resource.message);
+                    break;
+                case SUCCESS:
+                    roomNameRef.set(resource.data.getUsername());
+            }
+        });
+        return roomNameRef.get();
+    }
+
+    public String getCurrentUserUID() {
+        return currentUserUID;
     }
 }
