@@ -81,27 +81,35 @@ public class CartFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     CartAdapter adapter;
     ImageButton btnBackToHome;
+    Button btnNavToCheckout;
     private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //initialize
         navController = Navigation.findNavController(requireView());
-
         listCartRv = (RecyclerView) view.findViewById(R.id.listCart);
-        getCartData();
-
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        getCartData();
         adapter = new CartAdapter(getContext(), listCart);
+        btnBackToHome = (ImageButton) view.findViewById(R.id.btnBackToHome);
+        btnNavToCheckout = (Button) view.findViewById(R.id.btnNavToCheckout);
 
         listCartRv.setLayoutManager(linearLayoutManager);
         listCartRv.setAdapter(adapter);
 
-        btnBackToHome = (ImageButton) view.findViewById(R.id.btnBackToHome);
+        //navigate
         btnBackToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.homeFragment);
+            }
+        });
+        btnNavToCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.checkoutFragment);
             }
         });
     }

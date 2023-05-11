@@ -75,6 +75,7 @@
                 android:text="$56.99"/>
         </LinearLayout>
         <Button
+            android:id="@+id/btnNavToCheckout"
             android:layout_width="match_parent"
             android:layout_height="140px"
             android:background="@drawable/bg_brown_rounded"
