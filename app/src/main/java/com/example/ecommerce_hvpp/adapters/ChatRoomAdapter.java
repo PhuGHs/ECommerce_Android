@@ -15,6 +15,7 @@ import com.example.ecommerce_hvpp.model.ChatRoom;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ChatRoom> list;
@@ -41,7 +42,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ViewHolder viewHolder = (ViewHolder) holder;
 
         //decide who is recipient, who is sender
-        if(ib.getUser1Id() == parent.getCurrentUserUID()) {
+        if(Objects.equals(ib.getUser1Id(), parent.getCurrentUserUID())) {
             senderId =  ib.getUser1Id();
             recipientId = ib.getUser2Id();
         } else {
@@ -50,7 +51,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         // assign value
-        roomName = parent.getChatRoomName(recipientId);
+        parent.getChatRoomName(recipientId);
+        roomName = parent.getRoomName();
         viewHolder.tvRecipientName.setText(roomName);
         viewHolder.tvLastMessage.setText(ib.getLastMessage());
         viewHolder.siImage.setImageResource(R.drawable.profile);

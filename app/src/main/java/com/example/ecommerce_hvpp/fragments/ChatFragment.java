@@ -68,6 +68,7 @@ public class ChatFragment extends Fragment {
 
         //Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
 
         //assign value
         tvName.setText(roomName);
@@ -120,7 +121,6 @@ public class ChatFragment extends Fragment {
 
         btnSend.setOnClickListener(v -> {
             String messageText = etTextMessage.getText().toString();
-            Log.i(TAG, "button works");
             viewModel.sendChatMessage(roomId, senderId, recipientId, System.currentTimeMillis(), messageText);
             chatRoomViewModel.updateChatRoom(roomId);
             etTextMessage.setText("");

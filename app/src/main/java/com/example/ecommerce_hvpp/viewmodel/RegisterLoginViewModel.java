@@ -52,7 +52,6 @@ public class RegisterLoginViewModel extends ViewModel {
     }
 
     public LiveData<Resource<User>> loginUser(String email, String password) {
-        repo.getAllUsers();
         _register.setValue(Resource.loading(null));
         firebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {

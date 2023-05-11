@@ -23,7 +23,6 @@ import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ChatRoomFragment extends Fragment {
     private static final String TAG = "ChatRoomFragment";
@@ -34,6 +33,7 @@ public class ChatRoomFragment extends Fragment {
     private RecyclerView rcvInboxList;
     private SearchView svSearch;
     private NavController navController;
+    private String roomName;
     public NavController getNavController() {
         return navController;
     }
@@ -51,7 +51,6 @@ public class ChatRoomFragment extends Fragment {
 
         //Initialize viewModel
         viewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
-
 
         //Initialize CurrentUserUID
         currentUserUID = viewModel.getCurrentUserUID();
@@ -84,21 +83,27 @@ public class ChatRoomFragment extends Fragment {
         });
     }
 
-    public String getChatRoomName(String recipientId) {
-        final AtomicReference<String> roomNameRef = new AtomicReference<>();
+    public void getChatRoomName(String recipientId) {
+
         viewModel.getUser(recipientId).observe(requireActivity(), resource -> {
             switch(resource.status) {
+                case LOADING:
+                    break;
                 case ERROR:
                     Log.e(TAG, resource.message);
                     break;
                 case SUCCESS:
-                    roomNameRef.set(resource.data.getUsername());
+                    roomName = resource.data.getUsername();
+                    break;
             }
         });
-        return roomNameRef.get();
     }
 
     public String getCurrentUserUID() {
         return currentUserUID;
+    }
+
+    public String getRoomName() {
+        return roomName;
     }
 }

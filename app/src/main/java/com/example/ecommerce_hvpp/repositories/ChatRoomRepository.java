@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,7 +14,6 @@ import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -27,6 +28,11 @@ public class ChatRoomRepository {
     private DatabaseReference ref;
     private DatabaseReference chatRef;
     private UserRepository userRepository;
+
+    public interface ChatRoomListCallback {
+        void onChatRoomListReceived(List<ChatRoom> chatRooms);
+        void onChatRoomListError(String error);
+    }
     public ChatRoomRepository() {
         _mldChatRoomList = new MutableLiveData<>();
         _mldUser = new MutableLiveData<>();
@@ -67,6 +73,7 @@ public class ChatRoomRepository {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i("updateChatRoom", "we have come here");
                 ChatMessage lastMessage = null;
                 for(DataSnapshot messageSnapShot : snapshot.getChildren()) {
                     ChatMessage message = messageSnapShot.getValue(ChatMessage.class);
@@ -91,54 +98,61 @@ public class ChatRoomRepository {
 
     public LiveData<Resource<List<ChatRoom>>> getChatRoomList() {
         String currentUserId = getCurrentUserUID();
-        _mldChatRoomList.setValue(Resource.loading(null));
-
-        Query query1 = ref.orderByChild("user1Id").equalTo(currentUserId);
-        Query query2 = ref.orderByChild("user2Id").equalTo(currentUserId);
-
-        List<ChatRoom> chatRooms = new ArrayList<>();
-
-        query1.addValueEventListener(new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    ChatRoom chatRoom = dataSnapshot.getValue(ChatRoom.class);
-                    chatRooms.add(chatRoom);
+                List<ChatRoom> result = new ArrayList<>();
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    String user1Id = datasnapshot.child("user1Id").getValue(String.class);
+                    String user2Id = datasnapshot.child("user2Id").getValue(String.class);
+                    if(user1Id.equals(currentUserId) || user2Id.equals(currentUserId)) {
+                        result.add(datasnapshot.getValue(ChatRoom.class));
+                    }
                 }
-                // After query1 is completed, also execute query2
-                query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            ChatRoom chatRoom = dataSnapshot.getValue(ChatRoom.class);
-                            chatRooms.add(chatRoom);
-                        }
-                        // After both queries are completed, handle the resulting chatRooms list
-                        _mldChatRoomList.setValue(Resource.success(chatRooms));
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        _mldChatRoomList.setValue(Resource.error(error.getMessage(), null));
-                    }
-                });
+                _mldChatRoomList.setValue(Resource.success(result));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                _mldChatRoomList.setValue(Resource.error(error.getMessage(), null));
+                Log.e("Firebase", "Error retrieving chatroom data" + error.getMessage());
             }
-        });
+        };
+        ref.addValueEventListener(listener);
 
         return _mldChatRoomList;
     }
 
 
-//    public void createNewChatRoom() {
-//        String roomId = ref.push().getKey();
-//        ChatRoom room2 = new ChatRoom(roomId, getCurrentUserUID(), "Lê Hoài Hải", "TAU MỚI ĐẾN", System.currentTimeMillis());
-//        ref.child(roomId).setValue(room2);
-//    }
+
+    public List<ChatRoom> getAllChatRooms(ChatRoomListCallback callback) {
+        List<ChatRoom> result = new ArrayList<>();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatRoom chatRoom = snapshot.getValue(ChatRoom.class);
+                    result.add(chatRoom);
+                }
+
+                callback.onChatRoomListReceived(result);
+
+                // Do something with the retrieved chatRooms list
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+        return result;
+    }
+
+    public void createNewChatRoom() {
+        String roomId = ref.push().getKey();
+        ChatRoom room2 = new ChatRoom(roomId, getCurrentUserUID(), "lqPv1mxDkVe3O6dZCkzN28OgNKF2", "Vừa nãy t đến xong về", System.currentTimeMillis());
+        ref.child(roomId).setValue(room2);
+    }
 
     public String getCurrentUserUID() {
         return fbHelper.getAuth().getCurrentUser().getUid();
