@@ -4,6 +4,7 @@ public class ChatRoom {
     private String id;
     private String user1Id;
     private String user2Id;
+    private String recipientId;
     private String lastMessage;
     private String roomName;
     private long lastMessageTimeStamp;
@@ -73,5 +74,9 @@ public class ChatRoom {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getRecipientId() {
+        return recipientId;
     }
 }

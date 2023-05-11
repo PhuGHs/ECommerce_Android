@@ -122,7 +122,7 @@ public class ChatFragment extends Fragment {
         btnSend.setOnClickListener(v -> {
             String messageText = etTextMessage.getText().toString();
             viewModel.sendChatMessage(roomId, senderId, recipientId, System.currentTimeMillis(), messageText);
-            chatRoomViewModel.updateChatRoom(roomId);
+            chatRoomViewModel.updateChatRoom(roomId, recipientId);
             etTextMessage.setText("");
         });
     }

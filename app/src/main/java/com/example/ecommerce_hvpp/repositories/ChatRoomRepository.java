@@ -28,11 +28,6 @@ public class ChatRoomRepository {
     private DatabaseReference ref;
     private DatabaseReference chatRef;
     private UserRepository userRepository;
-
-    public interface ChatRoomListCallback {
-        void onChatRoomListReceived(List<ChatRoom> chatRooms);
-        void onChatRoomListError(String error);
-    }
     public ChatRoomRepository() {
         _mldChatRoomList = new MutableLiveData<>();
         _mldUser = new MutableLiveData<>();
@@ -46,34 +41,11 @@ public class ChatRoomRepository {
         return userRepository.getUser(UID);
     }
 
-//    public List<String> getUsersInSpecificRoom(String roomId) {
-//        List<String> idList = new ArrayList<>();
-//        ref.child(roomId).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for(DataSnapshot chatRoomSnapshot : snapshot.getChildren()) {
-//                    String user1Id = chatRoomSnapshot.child("user1Id").getValue(String.class);
-//                    String user2Id = chatRoomSnapshot.child("user2Id").getValue(String.class);
-//                    idList.add(user1Id);
-//                    idList.add(user2Id);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("ChatRoomRepository_getUsersInSpecificRoom: ", error.getMessage());
-//            }
-//        });
-//        return idList;
-//    }
-
-
-    public void updateChatRoom(String chatRoomId) {
+    public void updateChatRoom(String chatRoomId, String recipientId) {
         chatRef.orderByChild("roomId").equalTo(chatRoomId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.i("updateChatRoom", "we have come here");
                 ChatMessage lastMessage = null;
                 for(DataSnapshot messageSnapShot : snapshot.getChildren()) {
                     ChatMessage message = messageSnapShot.getValue(ChatMessage.class);
@@ -85,6 +57,7 @@ public class ChatRoomRepository {
                     Map<String, Object> updatedMessage = new HashMap<>();
                     updatedMessage.put("lastMessage", lastMessage.getMessageText());
                     updatedMessage.put("lastMessageTimeStamp", lastMessage.getSendingTime());
+                    updatedMessage.put("recipientId", recipientId);
                     ref.child(chatRoomId).updateChildren(updatedMessage);
                 }
             }
@@ -121,31 +94,8 @@ public class ChatRoomRepository {
 
         return _mldChatRoomList;
     }
+    public void updateAllChatRoom() {
 
-
-
-    public List<ChatRoom> getAllChatRooms(ChatRoomListCallback callback) {
-        List<ChatRoom> result = new ArrayList<>();
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChatRoom chatRoom = snapshot.getValue(ChatRoom.class);
-                    result.add(chatRoom);
-                }
-
-                callback.onChatRoomListReceived(result);
-
-                // Do something with the retrieved chatRooms list
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
-            }
-        });
-        return result;
     }
 
     public void createNewChatRoom() {

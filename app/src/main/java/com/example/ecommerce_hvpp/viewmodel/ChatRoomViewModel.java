@@ -16,8 +16,8 @@ public class ChatRoomViewModel extends ViewModel {
     public ChatRoomViewModel() {
         repo = new ChatRoomRepository();
     }
-    public void updateChatRoom(String roomId) {
-        repo.updateChatRoom(roomId);
+    public void updateChatRoom(String roomId, String recipientId) {
+        repo.updateChatRoom(roomId, recipientId);
     }
     public LiveData<Resource<User>> getUser(String UID) {
         return repo.getUser(UID);
