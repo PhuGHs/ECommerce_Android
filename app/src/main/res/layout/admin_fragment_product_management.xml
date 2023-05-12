@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <TextView
+            android:id="@+id/header_title"
+            style="@style/font_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Product List"
+            android:textColor="@color/primary"
+            android:textSize="31dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/header_title"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="25dp"
+            android:text="Add"
+            android:textAllCaps="false"
+            style="@style/font_medium"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_marginStart="20dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/search_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header">
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/searchview_bg"
+            android:queryHint="Find what you want ..."
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:padding="8dp"/>
+    </RelativeLayout>
+    <androidx.cardview.widget.CardView
+        android:backgroundTint="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        app:cardElevation="0dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RclProductList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -57,6 +57,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
 
+    //image slider
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
     //viewpager2 indicatior
     implementation 'io.github.vejei.viewpagerindicator:viewpagerindicator:1.0.0-alpha.1'
 
