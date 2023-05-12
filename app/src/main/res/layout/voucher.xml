@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|top">
+    <LinearLayout
+        android:layout_width="936px"
+        android:layout_height="512px"
+        android:background="@drawable/bg_white_rounded">
+        <ImageView
+            android:layout_width="155px"
+            android:layout_height="138px"
+            android:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="68px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title_of_voucher"
+                android:text="Happy Valentine Day 14/2"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/regularfont"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/code_of_voucher"
+                android:text="Code:     VAR142"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/header"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/discount_of_voucher"
+                android:text="Discount:     30%"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/regularfont"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/expireday_of_voucher"
+                android:text="Expired Day:     30/02/2023"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/regularfont"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38px"
+                android:layout_marginRight="66px"
+                android:gravity="right">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Use"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

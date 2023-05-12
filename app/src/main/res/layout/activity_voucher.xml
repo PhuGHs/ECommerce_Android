@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -23,40 +24,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"
-            android:layout_marginLeft="235px"
-            android:text="Feedback"
+            android:layout_marginLeft="230px"
+            android:text="Voucher"
             android:textColor="@color/primary"
             android:textSize="80px"
             style="@style/header"/>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="230px"
-            style="@style/regularfont"
-            android:text="Reviewed"
-            android:textSize="80px"
-            android:textColor="#776363"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/regularfont"
-            android:text="Unreviewed"
-            android:textSize="80px"
-            android:textColor="@color/primary"/>
-    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_unreviewed"
-        android:layout_marginTop="50px"
-        android:layout_marginLeft="50px"/>
+        android:id="@+id/list_voucher"
+        android:layout_marginTop="80px"
+        android:layout_marginLeft="40px"/>
 
 </LinearLayout>

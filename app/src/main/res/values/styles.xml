@@ -25,5 +25,7 @@
         <item name="fontFamily">@font/myfont_book</item>
         <item name="android:textColor">@color/primary</item>
     </style>
-
+    <style name="italicfont">
+        <item name="fontFamily">@font/myfont</item>
+    </style>
 </resources>
