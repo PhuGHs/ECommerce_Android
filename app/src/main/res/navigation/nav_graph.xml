@@ -35,4 +35,9 @@
         android:name="com.example.ecommerce_hvpp.fragments.CheckoutFragment"
         android:label="fragment_checkout"
         tools:layout="@layout/fragment_checkout" />
+    <fragment
+        android:id="@+id/detailProductCustomerFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.DetailProductCustomerFragment"
+        android:label="fragment_detail_product_customer"
+        tools:layout="@layout/fragment_detail_product_customer" />
 </navigation>

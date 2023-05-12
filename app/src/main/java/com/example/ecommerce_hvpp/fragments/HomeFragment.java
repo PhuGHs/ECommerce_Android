@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
         btnNavToMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Nav to Message", Toast.LENGTH_SHORT).show();
+                navController.navigate(R.id.detailProductCustomerFragment);
             }
         });
     }
