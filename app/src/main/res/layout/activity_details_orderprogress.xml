@@ -13,10 +13,10 @@
             android:id="@+id/back_info"
             android:layout_width="132px"
             android:layout_height="143px"
-            android:layout_marginTop="20px"
-            android:layout_marginLeft="15px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="10px"
             android:backgroundTint="@color/background"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/back_back_ic"/>
 
         <TextView
             android:layout_width="wrap_content"

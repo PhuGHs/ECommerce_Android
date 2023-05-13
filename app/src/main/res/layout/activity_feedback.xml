@@ -13,10 +13,10 @@
             android:id="@+id/back_info"
             android:layout_width="132px"
             android:layout_height="143px"
-            android:layout_marginTop="20px"
-            android:layout_marginLeft="15px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="10px"
             android:backgroundTint="@color/background"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/back_back_ic"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,18 +68,18 @@
             android:textSize="50px"
             android:textColor="@color/black"
             style="@style/header"/>
-        <ImageView
-            android:layout_width="400px"
-            android:layout_height="110px"
-            android:backgroundTint="@color/transparent"
-            android:src="@drawable/rate_star"/>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="125px"/>
     </LinearLayout>
 
     <Button
         android:layout_width="800px"
         android:layout_height="200px"
-        android:textSize="40px"
+        android:textSize="70px"
         android:layout_marginTop="100px"
         android:layout_marginLeft="150px"
+        style="@style/regularfont"
+        android:textAllCaps="false"
         android:text="Send feedback"/>
 </LinearLayout>

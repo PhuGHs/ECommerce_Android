@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center|top"
     android:background="@color/background">
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,16 +13,16 @@
             android:id="@+id/back_info"
             android:layout_width="132px"
             android:layout_height="143px"
-            android:layout_marginTop="20px"
-            android:layout_marginLeft="15px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="10px"
             android:backgroundTint="@color/background"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/back_back_ic"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"
-            android:layout_marginLeft="10px"
+            android:layout_marginLeft="15px"
             android:text="Recipient's Information"
             android:textColor="@color/primary"
             android:textSize="80px"
@@ -41,7 +40,7 @@
             android:id="@+id/add_btn"
             android:background="@drawable/bg_white_rounded"
             android:backgroundTint="@color/primary"
-            android:src="@drawable/ic_add_24"/>
+            android:src="@drawable/add_ic"/>
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:layout_width="125px"
@@ -51,12 +50,11 @@
             android:id="@+id/delete_btn"
             android:background="@drawable/bg_white_rounded"
             android:backgroundTint="@color/primary"
-            android:src="@drawable/ic_delete"/>
+            android:src="@drawable/delete_ic"/>
     </LinearLayout>
-    <view class="androidx.appcompat.app.AlertController$RecycleListView"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="66px">
-
-    </view>
+        android:paddingLeft="50px"
+        android:layout_marginTop="66px"/>
 </LinearLayout>
