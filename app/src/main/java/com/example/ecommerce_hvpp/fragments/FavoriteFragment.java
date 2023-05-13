@@ -89,7 +89,7 @@ public class FavoriteFragment extends Fragment {
         listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
 
         layoutManager = new GridLayoutManager(getContext(), 2);
-        favProductAdapter = new ProductAdapter(getContext(), listFavorite);
+        favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView());
 
         listFavoriteRv.setLayoutManager(layoutManager);
         listFavoriteRv.setAdapter(favProductAdapter);

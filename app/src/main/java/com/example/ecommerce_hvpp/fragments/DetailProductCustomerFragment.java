@@ -5,11 +5,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ViewPagerDetailPC;
@@ -70,13 +74,36 @@ public class DetailProductCustomerFragment extends Fragment {
     ViewPager imageViewPager;
     int[] images = {R.drawable.product_pattern, R.drawable.product_pattern, R.drawable.product_pattern};
     ViewPagerDetailPC viewPagerAdapter;
+    ImageButton btnBackToPrevious;
+    int previousFragmentID;
+    String productID;
+    private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //initialize
+        navController = Navigation.findNavController(requireView());
+        btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
         imageViewPager = (ViewPager) view.findViewById(R.id.viewPagerDetailC);
         viewPagerAdapter = new ViewPagerDetailPC(getContext(), images);
 
+        //set data
+        getDataFromPreviousFragment();
         imageViewPager.setAdapter(viewPagerAdapter);
+
+        btnBackToPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.popBackStack();
+            }
+        });
+
+    }
+    public void getDataFromPreviousFragment(){
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            productID = bundle.getString("productID");
+        }
     }
 }

@@ -99,8 +99,8 @@ public class HomeFragment extends Fragment {
 
         linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals);
-        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller);
+        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView());
+        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView());
 
         listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
         listNewArrivalsRv.setAdapter(newArrivalAdapter);
@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment {
         btnNavToMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.detailProductCustomerFragment);
+                //navController.navigate(R.id.detailProductCustomerFragment);
             }
         });
     }
