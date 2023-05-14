@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
@@ -67,6 +70,7 @@ public class HomeFragment extends Fragment {
     ProductAdapter newArrivalAdapter;
     ProductAdapter bestSellerAdapter;
     private NavController navController;
+    ImageSlider imgSlider;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,14 +97,16 @@ public class HomeFragment extends Fragment {
 
         listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
         listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
+        imgSlider = (ImageSlider) view.findViewById(R.id.autoImageSlider);
 
+        loadImageSlider();
         getListNewArrivals();
         getListBestSeller();
 
         linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView());
-        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView());
+        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
+        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
 
         listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
         listNewArrivalsRv.setAdapter(newArrivalAdapter);
@@ -138,5 +144,17 @@ public class HomeFragment extends Fragment {
         listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
         listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
         listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+    }
+    public void loadImageSlider(){
+        ArrayList<SlideModel> listImage = new ArrayList<>();
+
+        listImage.add(new SlideModel(R.drawable.wall0_real, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall1_ucl, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall2_arg, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall3_dortmund, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall4_etihad, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall5_liverpool, ScaleTypes.FIT));
+
+        imgSlider.setImageList(listImage, ScaleTypes.FIT);
     }
 }

@@ -55,7 +55,7 @@
                 android:layout_marginLeft="37px"
                 android:layout_marginRight="37px"
                 android:layout_width="match_parent"
-                android:layout_height="437px">
+                android:layout_height="350px">
                 <TextView
                     android:layout_marginLeft="34px"
                     android:layout_width="wrap_content"
@@ -72,9 +72,24 @@
                     android:textColor="#A86464"
                     android:layout_marginLeft="100px"
                     android:layout_marginRight="100px"
-                    android:layout_marginTop="50px"
+                    android:layout_marginTop="20px"
                     style="@style/font_crimson_italic"/>
             </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="46px"
+                android:layout_marginRight="37px"
+                android:layout_marginLeft="37px"
+                android:layout_width="match_parent"
+                app:cardCornerRadius="25px"
+                android:layout_height="470px">
+                <com.denzcoskun.imageslider.ImageSlider
+                    android:id="@+id/autoImageSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="470px"
+                    app:iss_period="1500"
+                    app:iss_auto_cycle="true"
+                    app:iss_delay="1500"/>
+            </androidx.cardview.widget.CardView>
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_marginTop="46px"

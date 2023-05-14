@@ -24,11 +24,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
     private ArrayList<Product> listProduct;
     private Context context;
     private View view;
+    private boolean isFavorite;
 
-    public ProductAdapter(Context context, ArrayList<Product> listProduct, View view) {
+    public ProductAdapter(Context context, ArrayList<Product> listProduct, View view, Boolean isFavorite) {
         this.context = context;
         this.listProduct = listProduct;
         this.view = view;
+        this.isFavorite = isFavorite;
     }
 
     @Override
@@ -49,6 +51,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         holder.productName.setText(listProduct.get(position).getName());
         holder.productSeason.setText(listProduct.get(position).getSeason());
         holder.productPrice.setText(String.valueOf(listProduct.get(position).getPrice()));
+        if (isFavorite == true) {
+            holder.btnFav.setImageResource(R.drawable.full_heart);
+        }
 
         //navigate to detail
         NavController navController = Navigation.findNavController(view);

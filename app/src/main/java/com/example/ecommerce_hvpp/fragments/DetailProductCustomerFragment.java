@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
@@ -75,7 +76,7 @@ public class DetailProductCustomerFragment extends Fragment {
     int[] images = {R.drawable.product_pattern, R.drawable.product_pattern, R.drawable.product_pattern};
     ViewPagerDetailPC viewPagerAdapter;
     ImageButton btnBackToPrevious;
-    int previousFragmentID;
+    RatingBar ratingBar;
     String productID;
     private NavController navController;
     @Override
@@ -87,6 +88,7 @@ public class DetailProductCustomerFragment extends Fragment {
         btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
         imageViewPager = (ViewPager) view.findViewById(R.id.viewPagerDetailC);
         viewPagerAdapter = new ViewPagerDetailPC(getContext(), images);
+        ratingBar = (RatingBar) view.findViewById(R.id.ratingBarDetailC);
 
         //set data
         getDataFromPreviousFragment();
@@ -104,6 +106,7 @@ public class DetailProductCustomerFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null){
             productID = bundle.getString("productID");
+            ratingBar.setRating((float)4.4);
         }
     }
 }
