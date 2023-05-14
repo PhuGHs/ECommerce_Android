@@ -50,7 +50,7 @@
             <ImageView
                 android:layout_width="166px"
                 android:layout_height="172px"
-                android:src="@drawable/voucher_real_icon"/>
+                android:src="@drawable/voucher_image"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
             <ImageView
                 android:layout_width="166px"
                 android:layout_height="172px"
-                android:src="@drawable/progress_order_icon"/>
+                android:src="@drawable/delivery_order"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
             <ImageView
                 android:layout_width="166px"
                 android:layout_height="172px"
-                android:src="@drawable/feedback_icon"/>
+                android:src="@drawable/like_image"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"
-            android:drawableLeft="@drawable/ic_user_btn"
+            android:drawableLeft="@drawable/profile_icon"
             android:textAllCaps="false"
             android:text="Profile"/>
 
@@ -164,7 +164,7 @@
             style="@style/header"
             android:textColor="@color/primary"
             android:textAllCaps="false"
-            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:drawableLeft="@drawable/shopping_cart_icon"
             android:text="Recipient's information"/>
 
         <Button
@@ -176,7 +176,7 @@
             style="@style/header"
             android:textColor="@color/primary"
             android:textAllCaps="false"
-            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:drawableLeft="@drawable/history_icon"
             android:text="Order history"/>
 
         <Button
@@ -188,7 +188,7 @@
             style="@style/header"
             android:textColor="@color/primary"
             android:textAllCaps="false"
-            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:drawableLeft="@drawable/chat_icon"
             android:text="Chat with admin"/>
 
         <Button
@@ -200,7 +200,7 @@
             style="@style/header"
             android:textColor="@color/primary"
             android:textAllCaps="false"
-            android:drawableLeft="@drawable/baseline_account_circle_24"
+            android:drawableLeft="@drawable/logout_icon"
             android:text="Log out"/>
 
     </LinearLayout>
