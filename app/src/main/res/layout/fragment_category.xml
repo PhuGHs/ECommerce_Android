@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EBEAEF"
     tools:context=".fragments.CategoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="category_fragment" />
-
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:layout_margin="20px"
+        style="@style/font_crimson_bold"
+        android:textColor="#A86464"
+        android:textSize="70px"
+        android:gravity="center"/>
+    <ExpandableListView
+        android:id="@+id/listCategory"
+        android:layout_margin="30px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="AdminCustomerManagementViewModel"
+            type="com.example.ecommerce_hvpp.viewmodel.admin_customer_management.AdminCustomerManagementViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="25dp"
+        android:background="@color/bg_primary"
+        android:paddingTop="29dp">
+
+        <!--    Header  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_back"
+                android:layout_width="14dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_back_34" />
+
+            <TextView
+                android:id="@+id/customer_list_title"
+                style="@style/header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Customer List"
+                android:textColor="@color/primary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                app:cardCornerRadius="100dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/avatar_customer"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+        <!--    Search Bar  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="39dp"
+                android:ems="10"
+                android:inputType="text"
+                style="@style/w400_50"
+                android:text="Amos Ivor"
+                android:textColor="@color/black"
+                android:hint="Search for ..."
+                android:textColorHint="@android:color/darker_gray"
+                android:background="@drawable/round_search_bar"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp" />
+
+            <ImageView
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:background="@drawable/round_search"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/baseline_search_white_24"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:padding="7dp" />
+
+        </RelativeLayout>
+
+        <!--    Customer List    -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/admin_customer_management_rcv_item_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+        </ScrollView>
+
+
+    </LinearLayout>
+</layout>

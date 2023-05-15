@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--    Promotion Component     -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:background="@drawable/round_item_promotion">
+
+            <TextView
+                android:id="@+id/admin_promotion_component_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name promotion"
+                android:textColor="@color/black"
+                style="@style/w600_50"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="5dp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/baseline_edit" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_code_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_name"
+                android:text="Code:"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="36dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_name"
+                android:layout_toEndOf="@+id/admin_promotion_component_code_label"
+                android:text="BC23525"
+                android:textColor="@color/black"
+                style="@style/w600_50"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="46dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_discount_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_code_label"
+                android:text="Discount:"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="36dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_code_label"
+                android:layout_toEndOf="@+id/admin_promotion_component_discount_label"
+                android:text="70%"
+                android:textColor="@color/black"
+                style="@style/w600_50"
+                android:layout_marginStart="16dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_start_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_discount_label"
+                android:text="Start date:"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="36dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_discount_label"
+                android:layout_toEndOf="@+id/admin_promotion_component_start_date_label"
+                android:text="22/12/2021"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="10dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_end_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_start_date_label"
+                android:text="End date:"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="36dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_start_date_label"
+                android:layout_toEndOf="@+id/admin_promotion_component_end_date_label"
+                android:text="11/09/2023"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="18dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_apply_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_end_date_label"
+                android:text="Apply to:"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="36dp" />
+
+            <TextView
+                android:id="@+id/admin_promotion_component_apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/admin_promotion_component_end_date_label"
+                android:layout_toEndOf="@+id/admin_promotion_component_apply_label"
+                android:text="Manchester City"
+                android:textColor="@color/black"
+                style="@style/w400_50"
+                android:layout_marginStart="22dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

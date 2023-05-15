@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/angle_left_solid"
+            app:tint="@color/primary"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/header_title"
+            style="@style/font_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Order list"
+            android:textColor="@color/primary"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tvTotalOrders"
+        android:layout_below="@id/header"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4 orders in total."
+        style="@style/font_medium"
+        android:textSize="20dp"/>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tvTotalOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/subHeader">
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/baseline_filter_alt_24"
+            android:backgroundTint="@color/primary"
+            android:background="@drawable/searchview_bg"
+            android:padding="5dp"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RclOrders"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/subHeader"
+        android:layout_marginTop="5dp"
+        android:padding="20dp" />
+</RelativeLayout>
