@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_info"
+            android:layout_width="132px"
+            android:layout_height="143px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="10px"
+            android:backgroundTint="@color/background"
+            android:src="@drawable/back_back_ic"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:layout_marginLeft="160px"
+            android:text="Order Progress"
+            android:textColor="@color/primary"
+            android:textSize="80px"
+            style="@style/header"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="948px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90px"
+        android:background="@drawable/bg_white_rounded"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@color/white"
+        app:queryHint="Tìm kiếm ..."
+        app:searchIcon="@drawable/baseline_search_24"
+        app:submitBackground="@drawable/bg_white_rounded" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_orderprogress"
+        android:layout_marginTop="80px"
+        android:layout_marginLeft="40px"/>
+
+</LinearLayout>

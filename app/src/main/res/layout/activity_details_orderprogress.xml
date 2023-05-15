@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_info"
+            android:layout_width="132px"
+            android:layout_height="143px"
+            android:layout_marginTop="10px"
+            android:layout_marginLeft="10px"
+            android:backgroundTint="@color/background"
+            android:src="@drawable/back_back_ic"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:layout_marginLeft="280px"
+            android:text="Details"
+            android:textColor="@color/primary"
+            android:textSize="80px"
+            style="@style/header"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="128px"
+        android:layout_marginLeft="78px">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_order"
+            android:text="ID: #2501"
+            android:textSize="96px"
+            android:textColor="@color/black"
+            style="@style/header"/>
+
+        <LinearLayout
+            android:layout_width="1006px"
+            android:layout_height="301px"
+            android:layout_marginTop="59px"
+            android:background="@drawable/bg_white_rounded">
+            <ImageView
+                android:layout_width="202px"
+                android:layout_height="252px"
+                android:src="@drawable/ic_launcher_background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="130px"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/name_of_order"
+                    android:text="Manchester UTD Away 2006 07"
+                    android:textSize="50px"
+                    android:textColor="@color/primary"
+                    style="@style/header"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="85px">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/price_of_order"
+                        android:text="$14.99"
+                        android:textSize="60px"
+                        android:textColor="@color/primary"
+                        style="@style/header"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="141px"
+                        android:id="@+id/quantity_of_order"
+                        android:text="Quantity:     1"
+                        android:textSize="60px"
+                        android:textColor="@color/primary"
+                        style="@style/header"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="69px"
+            android:background="@drawable/bg_white_rounded"
+            android:orientation="vertical"
+            android:gravity="center|left">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address: "
+                    android:textSize="50px"
+                    android:layout_marginLeft="40px"
+                    android:textColor="@color/primary"
+                    style="@style/header"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/address_of_order"
+                    android:text="Xã Tân Lập, huyện Đông Hòa, Dĩ An, Bình Dương "
+                    android:textSize="50px"
+                    android:textColor="@color/primary"
+                    style="@style/regularfont"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="58px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type of delivery: "
+                    android:textSize="50px"
+                    android:layout_marginLeft="40px"
+                    android:textColor="@color/primary"
+                    style="@style/header"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/type_of_delivery"
+                    android:layout_marginLeft="50px"
+                    android:text="Express Delivery "
+                    android:textSize="50px"
+                    android:textColor="@color/primary"
+                    style="@style/regularfont"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="58px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start date: "
+                    android:textSize="50px"
+                    android:layout_marginLeft="40px"
+                    android:textColor="@color/primary"
+                    style="@style/header"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/start_date"
+                    android:layout_marginLeft="50px"
+                    android:text="19/05/2023 "
+                    android:textSize="50px"
+                    android:textColor="@color/primary"
+                    style="@style/regularfont"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="58px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remaining day: "
+                    android:textSize="50px"
+                    android:layout_marginLeft="40px"
+                    android:textColor="@color/primary"
+                    style="@style/header"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/remaining_day"
+                    android:layout_marginLeft="50px"
+                    android:text="1 day"
+                    android:textSize="50px"
+                    android:textColor="@color/primary"
+                    style="@style/regularfont"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
