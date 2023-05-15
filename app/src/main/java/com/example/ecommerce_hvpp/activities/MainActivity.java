@@ -1,11 +1,12 @@
 package com.example.ecommerce_hvpp.activities;
 
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-
-import android.os.Bundle;
 
 import com.example.ecommerce_hvpp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,5 +23,12 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.host_fragment);
 
         NavigationUI.setupWithNavController(bottomNav, navController);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }

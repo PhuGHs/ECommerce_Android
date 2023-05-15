@@ -89,13 +89,13 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 String str_email = email.getEditText().getText().toString().trim();
                 String str_password = password.getEditText().getText().toString();
-
                 viewModel.loginUser(str_email, str_password).observe(requireActivity(), resource -> {
                     switch(resource.status) {
                         case LOADING:
                             break;
                         case SUCCESS:
                             Intent intent = new Intent(requireActivity(), MainActivity.class);
+                            intent.putExtra("UID", viewModel.UID);
                             startActivity(intent);
                             break;
                         case ERROR:

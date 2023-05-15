@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/searchview_bg"
+    android:backgroundTint="@color/background"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvOrderId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ORDER #1"
+        android:textColor="#0057A8"
+        style="@style/font_medium"
+        android:textSize="20dp"/>
+    <TextView
+        android:id="@+id/tvOrderDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="16/04/2023"
+        style="@style/font_medium"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        style="@style/font_medium"
+        android:textSize="20dp"
+        android:textColor="#FF7A00"
+        android:text="PENDING" />
+    <TextView
+        android:layout_below="@id/tvOrderId"
+        android:id="@+id/tvOrderedName"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lê Văn Phú"
+        style="@style/font_medium"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gemini PathLiverpool, New York(NY)"
+        android:maxLines="1"
+        android:layout_below="@id/tvOrderedName"
+        android:layout_marginTop="5dp"
+        style="@style/font_medium"
+        android:textSize="17dp" />
+    
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="450.000 đ"
+        android:layout_below="@id/tvAddress"
+        android:layout_marginTop="5dp"
+        android:textColor="#BD1111"
+        style="@style/font_medium"
+        android:textSize="25dp"/>
+</RelativeLayout>

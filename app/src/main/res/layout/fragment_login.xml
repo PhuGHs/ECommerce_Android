@@ -1,97 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.LoginFragment"
-    android:orientation="vertical"
-    android:gravity="center_vertical"
-    android:background="#fff"
-    android:id="@+id/login_fragment"
-    android:padding="20dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HVPP_R CLOTHES"
-        style="@style/logo_header_signup"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/primary" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:textSize="50sp"
-        android:transitionName="logo_text"
-        android:layout_marginTop="-20dp"
-        android:textColor="#000"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chất lượng làm nên thương hiệu!"
-        android:textSize="18sp"
-        android:transitionName="logo_desc"/>
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        tools:context=".fragments.LoginFragment"
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
+        android:gravity="center_vertical"
+        android:background="#fff"
+        android:id="@+id/login_fragment"
+        android:padding="20dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/log_email"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HVPP_R CLOTHES"
+            style="@style/logo_header_signup"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập"
+            android:textSize="50sp"
+            android:transitionName="logo_text"
+            android:layout_marginTop="-20dp"
+            android:textColor="#000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chất lượng làm nên thương hiệu!"
+            android:textSize="18sp"
+            android:transitionName="logo_desc"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/log_password"
+                android:hint="Email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/log_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mật khẩu"
+                app:passwordToggleEnabled="true"
+                android:transitionName="password_tran"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mật khẩu"
-            app:passwordToggleEnabled="true"
-            android:transitionName="password_tran"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:text="ĐĂNG NHẬP"
+            android:textSize="18dp"
+            android:layout_marginBottom="10dp"
+            android:background="#000"
+            android:textColor="#fff"
+            android:transitionName="button_tran"/>
+
+        <TextView
+            android:id="@+id/btnResetPassword"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:clickable="true"
+            android:background="@android:color/transparent"
+            android:text="Quên mật khẩu?"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/reg_signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:clickable="true"
+            android:background="@android:color/transparent"
+            android:text="Chưa có tài khoản? Đăng ký"
+            android:textSize="17dp" />
     </LinearLayout>
-    <Button
-        android:id="@+id/login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ĐĂNG NHẬP"
-        android:textSize="18dp"
-        android:layout_marginBottom="10dp"
-        android:background="#000"
-        android:textColor="#fff"
-        android:transitionName="button_tran"/>
-
-    <TextView
-        android:id="@+id/btnResetPassword"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:clickable="true"
-        android:background="@android:color/transparent"
-        android:text="Quên mật khẩu?"
-        android:textSize="17dp" />
-
-    <TextView
-        android:id="@+id/reg_signup_button"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:clickable="true"
-        android:background="@android:color/transparent"
-        android:text="Chưa có tài khoản? Đăng ký"
-        android:textSize="17dp" />
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,180 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragments.ChatFragment"
+    android:background="@color/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="130dp">
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/btnBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/angle_left_solid"
+            app:tint="@color/primary" />
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/angle_left_solid"
-        app:layout_constraintBottom_toBottomOf="@id/headerBottom"
-        app:layout_constraintRight_toRightOf="@id/right"
-        app:layout_constraintStart_toStartOf="@id/left"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/primary" />
-
-    <TextView
-        style="@style/font_medium"
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        android:gravity="center"
-        android:text="Phú Lê"
-        android:textColor="@color/primary"
-        android:textSize="35dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/headerBottom"
-        app:layout_constraintLeft_toLeftOf="@id/left"
-        app:layout_constraintRight_toRightOf="@id/right"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="11dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@id/headerBottom"
-        app:layout_constraintRight_toRightOf="@id/right"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/circle"
-        app:srcCompat="@drawable/profile" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        app:cardCornerRadius="30dp"
-        android:layout_marginBottom="-30dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/headerBottom"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/primary"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintLeft_toLeftOf="@id/leftChatBox"
-                app:layout_constraintTop_toTopOf="@id/headerChatBox">
-
-                <TextView
-                    style="@style/font_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Lorem Ipsum is simply dummy text of the printing typesetting."
-                    android:textColor="@color/white"
-                    android:textSize="22dp" />
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/rightChatBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="380dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/leftChatBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="26dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/headerChatBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="37dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/bottomChatBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="484dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="20dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="270dp"
-        android:layout_height="70dp"
-        app:cardCornerRadius="20dp"
-        android:padding="4px"
-        android:backgroundTint="@color/background"
-        app:layout_constraintLeft_toLeftOf="@id/left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/action_divider">
-        <EditText
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:textSize="28dp"
+        <TextView
+            android:id="@+id/tvName"
             style="@style/font_medium"
-            android:layout_height="match_parent"
-            android:hint="Type a message"
-            android:background="@color/transparent"
-            android:textColorHint="@color/primary"/>
-    </androidx.cardview.widget.CardView>
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/profileImage"
+            android:gravity="center"
+            android:text="Phú Lê"
+            android:textColor="@color/primary"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@id/btnBack"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="58dp"
+            android:layout_marginLeft="11dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/circle"
+            app:srcCompat="@drawable/profile" />
+    </RelativeLayout>
+
     <androidx.cardview.widget.CardView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/background"
-        app:layout_constraintRight_toRightOf="@id/right"
-        app:layout_constraintTop_toTopOf="@id/action_divider"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/actionLayout"
+        android:layout_below="@id/headerLayout"
+        android:layout_marginBottom="-20dp"
+        app:cardElevation="0dp"
         app:cardCornerRadius="20dp"
-        >
+        app:shapeAppearanceOverlay="@style/roundedCorners">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RclMessageList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp" />
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/actionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <androidx.cardview.widget.CardView
+            app:cardElevation="0dp"
+            android:id="@+id/etMessageContainer"
+            android:layout_width="270dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="4dp"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="20dp"
+            android:padding="4px"
+            android:backgroundTint="@color/background">
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_width="match_parent"
+                android:textSize="28dp"
+                style="@style/font_medium"
+                android:paddingStart="20dp"
+                android:layout_height="match_parent"
+                android:hint="Type a message"
+                android:background="@color/transparent"
+                android:textColorHint="@color/primary"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvBtnSend"
+            app:cardElevation="0dp"
+            android:layout_toEndOf="@id/etMessageContainer"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:clickable="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/background"
+            app:cardCornerRadius="20dp"
+            >
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:src="@drawable/paper_plane_solid"
             app:tint="@color/primary"/>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/action_divider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="626dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/headerBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="137dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/left"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/right"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="395dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
