@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/product_list"
+        android:id="@+id/productListFragment"
+        android:icon="@drawable/baseline_format_list_bulleted_24"/>
+    <item android:title="@string/category2"
+        android:id="@+id/categoryFragment"
+        android:icon="@drawable/baseline_category_24" />
+    <item android:title="@string/order_list"
+        android:id="@+id/orderedListFragment"
+        android:icon="@drawable/baseline_checklist_24"/>
+    <item android:title="@string/messages"
+        android:id="@+id/chatFragment"
+        android:icon="@drawable/baseline_chat_bubble_24" />
+    <item android:title="@string/account1"
+        android:id="@+id/accountFragment"
+        android:icon="@drawable/baseline_account_circle_24"/>
+</menu>

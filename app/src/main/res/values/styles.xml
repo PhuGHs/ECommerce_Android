@@ -44,4 +44,26 @@
         <item name="fontFamily">@font/crimson_pro</item>
         <item name="android:textSize">23sp</item>
     </style>
+    <style name="header">
+        <item name="fontFamily">@font/crimson_text_bold</item>
+    </style>
+    <style name="regularfont">
+        <item name="fontFamily">@font/crimsontext_regular</item>
+    </style>
+    <style name="font_crimson_bold">
+        <item name="fontFamily">@font/crimson_text_bold</item>
+    </style>
+    <style name="font_crimson_regular">
+        <item name="fontFamily">@font/crimson_text_regular</item>
+    </style>
+    <style name="font_crimson_italic">
+        <item name="fontFamily">@font/crimson_text_italic</item>
+    </style>
+    <style name="roundedCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
 </resources>

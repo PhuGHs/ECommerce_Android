@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/adminOrderedListFragment">
+
+
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.ChatRoomFragment"
+        android:label="admin_fragment_chat_list"
+        tools:layout="@layout/admin_fragment_chat_list" >
+        <action
+            android:id="@+id/navigate_to_chatDetail"
+            app:destination="@id/chatFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment2"
+        android:name="com.example.ecommerce_hvpp.fragments.ChatFragment"
+        android:label="chat_fragment"
+        tools:layout="@layout/chat_fragment" />
+    <fragment
+        android:id="@+id/adminProductListFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminProductListFragment"
+        android:label="admin_fragment_product_management"
+        tools:layout="@layout/admin_fragment_product_management" />
+    <fragment
+        android:id="@+id/adminOrderedListFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminOrderedListFragment"
+        android:label="admin_fragmnet_orderlist"
+        tools:layout="@layout/admin_fragmnet_orderlist" />
+    <fragment
+        android:id="@+id/categoryFragment2"
+        android:name="com.example.ecommerce_hvpp.fragments.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/accountFragment2"
+        android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+</navigation>
