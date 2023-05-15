@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="AdminCustomItemCustomerViewModel"
+            type="com.example.ecommerce_hvpp.viewmodel.admin_customer_management.AdminCustomItemCustomerViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+
+        <!-- Customer Component-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/round_item_customer"
+            android:layout_marginBottom="13dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/admin_customer_management_component_avatar_customer_container"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                app:cardCornerRadius="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp">
+
+                <ImageView
+                    android:id="@+id/admin_customer_management_component_avatar_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/avatar_customer"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/admin_customer_management_component_name_customer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@id/admin_customer_management_component_avatar_customer_container"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="Tran Tuan Vu"
+                android:textColor="@color/black"
+                style="@style/w400_50" />
+
+            <TextView
+                android:id="@+id/admin_customer_management_email_customer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/admin_customer_management_component_avatar_customer_container"
+                android:layout_toEndOf="@id/admin_customer_management_component_avatar_customer_container"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="trantuanvu@gmail.com"
+                android:textColor="@color/black"
+                style="@style/w400_50" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

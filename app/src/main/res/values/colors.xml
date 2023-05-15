@@ -26,4 +26,9 @@
     <color name="btn_logut_bg">#ff6861</color>
 
     <color name="g_black">#33405f</color>
+
+    <color name="bg_primary">#EBEAEF</color>
+    <color name="bg_calendar">#0D000000</color>
+
+    <color name="text_sub_color">#776363</color>
 </resources>
