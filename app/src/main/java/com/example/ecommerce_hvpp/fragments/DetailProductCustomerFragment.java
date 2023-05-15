@@ -7,17 +7,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.ViewPagerDetailPC;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,13 +74,11 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
-    ViewPager imageViewPager;
-    int[] images = {R.drawable.product_pattern, R.drawable.product_pattern, R.drawable.product_pattern};
-    ViewPagerDetailPC viewPagerAdapter;
     ImageButton btnBackToPrevious;
     RatingBar ratingBar;
     String productID;
     private NavController navController;
+    ImageSlider detailImgSlider;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,13 +86,12 @@ public class DetailProductCustomerFragment extends Fragment {
         //initialize
         navController = Navigation.findNavController(requireView());
         btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
-        imageViewPager = (ViewPager) view.findViewById(R.id.viewPagerDetailC);
-        viewPagerAdapter = new ViewPagerDetailPC(getContext(), images);
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBarDetailC);
+        detailImgSlider = (ImageSlider) view.findViewById(R.id.detailImageSlider);
 
         //set data
         getDataFromPreviousFragment();
-        imageViewPager.setAdapter(viewPagerAdapter);
+        loadDetailImage();
 
         btnBackToPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,5 +107,14 @@ public class DetailProductCustomerFragment extends Fragment {
             productID = bundle.getString("productID");
             ratingBar.setRating((float)4.4);
         }
+    }
+    public void loadDetailImage(){
+        ArrayList<SlideModel> listImage = new ArrayList<>();
+
+        listImage.add(new SlideModel(R.drawable.product_pattern, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
+
+        detailImgSlider.setImageList(listImage, ScaleTypes.FIT);
     }
 }
