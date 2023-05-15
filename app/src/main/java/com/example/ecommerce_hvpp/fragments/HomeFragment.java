@@ -2,13 +2,28 @@ package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.ProductAdapter;
+import com.example.ecommerce_hvpp.model.Product;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +62,15 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    RecyclerView listNewArrivalsRv;
+    RecyclerView listBestSellerRv;
+    ArrayList<Product> listNewArrivals = new ArrayList<>();
+    ArrayList<Product> listBestSeller = new ArrayList<>();
+    LinearLayoutManager linearLayoutManager1, linearLayoutManager2;
+    ProductAdapter newArrivalAdapter;
+    ProductAdapter bestSellerAdapter;
+    private NavController navController;
+    ImageSlider imgSlider;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +84,77 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        navController = Navigation.findNavController(requireView());
+
+        listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
+        listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
+        imgSlider = (ImageSlider) view.findViewById(R.id.autoImageSlider);
+
+        loadImageSlider();
+        getListNewArrivals();
+        getListBestSeller();
+
+        linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
+        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
+
+        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
+        listNewArrivalsRv.setAdapter(newArrivalAdapter);
+
+        listBestSellerRv.setLayoutManager(linearLayoutManager2);
+        listBestSellerRv.setAdapter(bestSellerAdapter);
+
+        ImageButton btnNavToCart = (ImageButton) view.findViewById(R.id.btnNavToCart);
+        ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
+        btnNavToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.cartFragment);
+            }
+        });
+        btnNavToMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //navController.navigate(R.id.detailProductCustomerFragment);
+            }
+        });
+    }
+    public void getListNewArrivals(){
+        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+    }
+    public void getListBestSeller(){
+        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+    }
+    public void loadImageSlider(){
+        ArrayList<SlideModel> listImage = new ArrayList<>();
+
+        listImage.add(new SlideModel(R.drawable.wall0_real, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall1_ucl, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall2_arg, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall3_dortmund, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall4_etihad, ScaleTypes.FIT));
+        listImage.add(new SlideModel(R.drawable.wall5_liverpool, ScaleTypes.FIT));
+
+        imgSlider.setImageList(listImage, ScaleTypes.FIT);
     }
 }

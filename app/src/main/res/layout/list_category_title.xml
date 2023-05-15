@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/category_title"
+        android:paddingLeft="90px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/font_crimson_bold"
+        android:textColor="#A86464"
+        android:textSize="75px"
+        android:layout_margin="30px"/>
+</LinearLayout>
