@@ -25,22 +25,5 @@
         android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
-    <fragment
-        android:id="@+id/inboxFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.ChatRoomFragment"
-        android:label="admin_fragment_chat_list"
-        tools:layout="@layout/admin_fragment_chat_list" >
-        <action
-            android:id="@+id/navigate_to_chatDetail"
-            app:destination="@id/chatFragment2" />
-    </fragment>
-    <fragment
-        android:id="@+id/chatFragment2"
-        android:name="com.example.ecommerce_hvpp.fragments.ChatFragment"
-        android:label="chat_fragment"
-        tools:layout="@layout/chat_fragment" >
-        <action
-            android:id="@+id/navigate_from_chatfragment_to_inboxfragment"
-            app:destination="@id/inboxFragment" />
-    </fragment>
+
 </navigation>
