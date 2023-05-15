@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/favoriteFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EBEAEF"
     tools:context=".fragments.FavoriteFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="favorite_fragment" />
-
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:text="Wish List"
+        android:layout_marginTop="20px"
+        style="@style/font_crimson_bold"
+        android:textColor="#A86464"
+        android:textSize="70px"
+        android:gravity="center"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listFavorite"
+        android:background="#EBEAEF"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="33px"
+        android:scrollbars="vertical"/>
+</LinearLayout>

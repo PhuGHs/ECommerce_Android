@@ -25,7 +25,7 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
-
+    <color name="background_fragment">#EBEAEF</color>
     <color name="g_black">#33405f</color>
 
     <color name="bg_primary">#EBEAEF</color>
