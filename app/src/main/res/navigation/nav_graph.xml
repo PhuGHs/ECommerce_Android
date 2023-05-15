@@ -1,43 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
-
-    <fragment
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/home"
         android:id="@+id/homeFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.FavoriteFragment"
-        android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
-    <fragment
+        android:icon="@drawable/baseline_home_24"/>
+    <item android:title="@string/category"
         android:id="@+id/categoryFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CategoryFragment"
-        android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
-    <fragment
+        android:icon="@drawable/baseline_category_24" />
+    <item android:title="@string/favorite"
+        android:id="@+id/favoriteFragment"
+        android:icon="@drawable/baseline_favorite_border_24"/>
+    <item android:title="@string/account"
         android:id="@+id/accountFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
-        android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
-    <fragment
-        android:id="@+id/cartFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
-    <fragment
-        android:id="@+id/checkoutFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CheckoutFragment"
-        android:label="fragment_checkout"
-        tools:layout="@layout/fragment_checkout" />
-    <fragment
-        android:id="@+id/detailProductCustomerFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.DetailProductCustomerFragment"
-        android:label="fragment_detail_product_customer"
-        tools:layout="@layout/fragment_detail_product_customer" />
-</navigation>
+        android:icon="@drawable/baseline_account_circle_24" />
+</menu>

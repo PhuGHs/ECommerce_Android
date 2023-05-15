@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="190dp">
+
+        <!--    Order Component     -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:background="@drawable/round_item_order">
+
+            <TextView
+                android:id="@+id/admin_order_history_component_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/w600_50"
+                android:text="Order #09117147"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp" />
+
+            <TextView
+                android:id="@+id/admin_order_history_component_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/admin_order_history_component_ic_calendar"
+                android:layout_marginTop="13dp"
+                android:text="17 Dec, 2022"
+                android:textColor="@color/black"
+                style="@style/w600_40" />
+
+            <ImageView
+                android:id="@+id/admin_order_history_component_ic_calendar"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="13dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/baseline_calendar"
+                android:layout_marginStart="13dp" />
+
+            <TextView
+                android:id="@+id/admin_order_history_component_customer_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer Info"
+                android:textColor="@color/primary"
+                style="@style/w600_40"
+                android:layout_marginStart="55dp"
+                android:layout_below="@id/admin_order_history_component_title"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/admin_order_history_component_name_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ms. Phuc Du"
+                android:textColor="@color/black"
+                style="@style/w600_40"
+                android:layout_marginStart="55dp"
+                android:layout_below="@id/admin_order_history_component_customer_info"
+                android:layout_marginTop="2dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/admin_order_history_component_avatar_customer_container"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                app:cardCornerRadius="100dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/admin_order_history_component_name_customer"
+                android:layout_below="@id/admin_order_history_component_customer_info"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="26dp">
+
+                <ImageView
+                    android:id="@+id/admin_order_history_component_avatar_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/avatar_customer"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/admin_order_history_component_phone_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0332541875"
+                android:textColor="@color/black"
+                style="@style/w400_40"
+                android:layout_marginStart="55dp"
+                android:layout_below="@id/admin_order_history_component_name_customer"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/admin_order_history_component_address_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="47 Tan Lap, Dong Hoa, Di An, Binh Duong"
+                android:textColor="@color/text_sub_color"
+                style="@style/w400_40"
+                android:layout_marginStart="55dp"
+                android:layout_below="@id/admin_order_history_component_phone_customer"
+                android:layout_marginTop="2dp" />
+
+            <ImageView
+                android:id="@+id/admin_order_history_component_icon_phone"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:layout_below="@+id/admin_order_history_component_address_customer"
+                android:src="@drawable/baseline_phone"
+                android:background="@drawable/round_phone"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="10dp"
+                android:padding="10dp" />
+
+            <ImageView
+                android:id="@+id/admin_order_history_component_icon_message"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:layout_below="@+id/admin_order_history_component_address_customer"
+                android:layout_toEndOf="@id/admin_order_history_component_icon_phone"
+                android:src="@drawable/baseline_message"
+                android:background="@drawable/round_phone"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:padding="10dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>
