@@ -21,4 +21,27 @@
     <style name="circle">
         <item name="cornerSize">50%</item>
     </style>
+    <style name="header_title">
+        <item name="fontFamily">@font/crimson_pro_semibold</item>
+    </style>
+    <style name="w600_50">
+        <item name="fontFamily">@font/crimson_pro_semibold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="w400_50">
+        <item name="fontFamily">@font/crimson_pro</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="w600_40">
+        <item name="fontFamily">@font/crimson_pro_semibold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="w400_40">
+        <item name="fontFamily">@font/crimson_pro</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="w400_60">
+        <item name="fontFamily">@font/crimson_pro</item>
+        <item name="android:textSize">23sp</item>
+    </style>
 </resources>
