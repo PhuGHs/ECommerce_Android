@@ -10,7 +10,7 @@
         android:id="@+id/orderedListFragment"
         android:icon="@drawable/baseline_checklist_24"/>
     <item android:title="@string/messages"
-        android:id="@+id/chatFragment"
+        android:id="@+id/chatRoomFragment"
         android:icon="@drawable/baseline_chat_bubble_24" />
     <item android:title="@string/account1"
         android:id="@+id/accountFragment"

@@ -2,6 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragments.AdminProductDetailsFragment"
     android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,6 +13,8 @@
         android:layout_height="90dp">
 
         <ImageView
+            android:clickable="true"
+            android:id="@+id/btnBackProductDetail"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -95,6 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginStart="20dp">
                 <TextView
                     android:id="@+id/details_header"
@@ -122,7 +127,7 @@
                     <EditText
                         android:id="@+id/etName"
                         android:layout_marginTop="5dp"
-                        android:layout_width="370dp"
+                        android:layout_width="350dp"
                         android:layout_height="50dp"
                         android:background="@drawable/searchview_bg"/>
                 </LinearLayout>
@@ -202,7 +207,7 @@
                     <EditText
                         android:id="@+id/etDescriptionName"
                         android:layout_marginTop="5dp"
-                        android:layout_width="370dp"
+                        android:layout_width="350dp"
                         android:layout_height="120dp"
                         android:background="@drawable/searchview_bg"/>
                 </LinearLayout>
@@ -224,7 +229,7 @@
                         style="@style/font_medium"
                         android:background="@drawable/searchview_bg"/>
                     <androidx.appcompat.widget.AppCompatButton
-                        android:layout_marginStart="130dp"
+                        android:layout_marginStart="110dp"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="Save"

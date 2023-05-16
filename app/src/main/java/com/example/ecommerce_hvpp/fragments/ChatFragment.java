@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapters.ChatAdapter;
+import com.example.ecommerce_hvpp.adapter.ChatAdapter;
 import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 import com.example.ecommerce_hvpp.viewmodel.ChatViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

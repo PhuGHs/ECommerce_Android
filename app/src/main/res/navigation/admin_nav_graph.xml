@@ -3,8 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav_graph"
-    app:startDestination="@id/adminOrderedListFragment">
+    app:startDestination="@id/productListFragment">
 
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminProductListFragment"
+        android:label="admin_fragment_product_management"
+        tools:layout="@layout/admin_fragment_product_management" >
+        <action
+            android:id="@+id/navigate_to_productDetails"
+            app:destination="@id/adminProductDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminProductDetailsFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminProductDetailsFragment"
+        android:label="admin_fragment_product_detail"
+        tools:layout="@layout/admin_fragment_product_detail" />
+
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+
+    <fragment
+        android:id="@+id/orderedListFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminOrderedListFragment"
+        android:label="admin_fragmnet_orderlist"
+        tools:layout="@layout/admin_fragmnet_orderlist" >
+        <action
+            android:id="@+id/navigate_to_orderdetails"
+            app:destination="@id/adminOrderDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminOrderDetailsFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminOrderDetailsFragment"
+        android:label="admin_fragment_order_detail"
+        tools:layout="@layout/admin_fragment_order_detail" />
 
     <fragment
         android:id="@+id/chatRoomFragment"
@@ -13,30 +49,16 @@
         tools:layout="@layout/admin_fragment_chat_list" >
         <action
             android:id="@+id/navigate_to_chatDetail"
-            app:destination="@id/chatFragment2" />
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
-        android:id="@+id/chatFragment2"
+        android:id="@+id/chatFragment"
         android:name="com.example.ecommerce_hvpp.fragments.ChatFragment"
         android:label="chat_fragment"
         tools:layout="@layout/chat_fragment" />
+
     <fragment
-        android:id="@+id/adminProductListFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.AdminProductListFragment"
-        android:label="admin_fragment_product_management"
-        tools:layout="@layout/admin_fragment_product_management" />
-    <fragment
-        android:id="@+id/adminOrderedListFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.AdminOrderedListFragment"
-        android:label="admin_fragmnet_orderlist"
-        tools:layout="@layout/admin_fragmnet_orderlist" />
-    <fragment
-        android:id="@+id/categoryFragment2"
-        android:name="com.example.ecommerce_hvpp.fragments.CategoryFragment"
-        android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
-    <fragment
-        android:id="@+id/accountFragment2"
+        android:id="@+id/accountFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
