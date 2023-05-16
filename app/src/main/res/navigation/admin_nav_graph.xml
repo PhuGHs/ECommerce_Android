@@ -36,8 +36,28 @@
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <fragment
-        android:id="@+id/accountFragment2"
-        android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
-        android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        android:id="@+id/adminProfileFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminProfileFragment"
+        android:label="admin_fragment_profile"
+        tools:layout="@layout/admin_fragment_profile" />
+    <fragment
+        android:id="@+id/adminPromotionFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminPromotionFragment"
+        android:label="admin_fragment_promotion"
+        tools:layout="@layout/admin_fragment_promotion" />
+    <fragment
+        android:id="@+id/adminCustomerManagementFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminCustomerManagementFragment"
+        android:label="admin_fragment_customer_management"
+        tools:layout="@layout/admin_fragment_customer_management" />
+    <fragment
+        android:id="@+id/adminOrderHistoryFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminOrderHistoryFragment"
+        android:label="admin_fragment_order_history"
+        tools:layout="@layout/admin_fragment_order_history" />
+    <fragment
+        android:id="@+id/adminStatisticsFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminStatisticsFragment"
+        android:label="admin_fragment_statistics"
+        tools:layout="@layout/admin_fragment_statistics" />
 </navigation>
