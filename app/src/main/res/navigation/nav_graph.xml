@@ -40,5 +40,20 @@
         android:name="com.example.ecommerce_hvpp.fragments.DetailProductCustomerFragment"
         android:label="fragment_detail_product_customer"
         tools:layout="@layout/fragment_detail_product_customer" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.EditProfileFrament"
+        android:label="fragment_edit_user_profile"
+        tools:layout="@layout/actitvity_user_editprofile"/>
+    <fragment
+        android:id="@+id/RecepientInfoFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.RecepientInfoFragment"
+        android:label="fragment_recepient_info"
+        tools:layout="@layout/activity_user_recipientinfo"/>
+    <fragment
+        android:id="@+id/OrderHistoryFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.OrderHistoryFragment"
+        android:label="fragment_order_history"
+        tools:layout="@layout/activity_user_orderhistory"/>
 
 </navigation>

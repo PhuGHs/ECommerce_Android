@@ -44,6 +44,7 @@
         <LinearLayout
             android:layout_width="300px"
             android:layout_height="350px"
+            android:id="@+id/btn_voucher"
             android:orientation="vertical"
             android:gravity="top|center"
             android:background="@color/white">
@@ -75,6 +76,7 @@
             android:layout_width="300px"
             android:layout_height="350px"
             android:layout_marginLeft="40px"
+            android:id="@+id/btn_orderprogress"
             android:orientation="vertical"
             android:gravity="top|center"
             android:background="@color/white">
@@ -106,6 +108,7 @@
             android:layout_width="300px"
             android:layout_height="350px"
             android:layout_marginLeft="40px"
+            android:id="@+id/btn_feedback"
             android:orientation="vertical"
             android:gravity="top|center"
             android:background="@color/white">
@@ -148,6 +151,7 @@
             android:layout_height="140px"
             android:textSize="40px"
             android:layout_marginBottom="50px"
+            android:id="@+id/btn_profile"
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"
@@ -160,6 +164,7 @@
             android:layout_height="140px"
             android:textSize="40px"
             android:layout_marginBottom="50px"
+            android:id="@+id/btn_recep_info"
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"
@@ -172,6 +177,7 @@
             android:layout_height="140px"
             android:textSize="40px"
             android:layout_marginBottom="50px"
+            android:id="@+id/btn_orderhistory"
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"
@@ -184,6 +190,7 @@
             android:layout_height="140px"
             android:textSize="40px"
             android:layout_marginBottom="50px"
+            android:id="@+id/btn_chat_with_admin"
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"
@@ -196,6 +203,7 @@
             android:layout_height="140px"
             android:textSize="40px"
             android:layout_marginBottom="50px"
+            android:id="@+id/btn_logout"
             android:backgroundTint="@color/white"
             style="@style/header"
             android:textColor="@color/primary"

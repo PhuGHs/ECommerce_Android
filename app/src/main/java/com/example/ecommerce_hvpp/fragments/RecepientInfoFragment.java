@@ -1,6 +1,10 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,20 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.example.ecommerce_hvpp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AccountFragment extends Fragment {
-
+public class RecepientInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +24,7 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AccountFragment() {
+    public RecepientInfoFragment() {
         // Required empty public constructor
     }
 
@@ -53,6 +46,7 @@ public class AccountFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
+    ImageButton back_Account_btn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +55,10 @@ public class AccountFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_account, container, false);
+        View v = inflater.inflate(R.layout.activity_user_recipientinfo, container, false);
 
         return v;
     }
@@ -74,25 +66,14 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
+        back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
 
-        Button profile_btn = (Button) view.findViewById(R.id.btn_profile);
-        Button recep_info_btn = (Button) view.findViewById(R.id.btn_recep_info);
-        //Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
-        //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
-        //Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
-
-        profile_btn.setOnClickListener(new View.OnClickListener() {
+        back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.editProfileFragment);
+                navController.navigate(R.id.accountFragment);
             }
         });
 
-        recep_info_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
-            }
-        });
     }
 }

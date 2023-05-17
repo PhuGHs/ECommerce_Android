@@ -11,16 +11,16 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.ecommerce_hvpp.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
+ * Use the {@link EditProfileFrament#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountFragment extends Fragment {
+public class EditProfileFrament extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +31,7 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AccountFragment() {
+    public EditProfileFrament() {
         // Required empty public constructor
     }
 
@@ -41,11 +41,11 @@ public class AccountFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountFragment.
+     * @return A new instance of fragment EditProfileFrament.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
+    public static EditProfileFrament newInstance(String param1, String param2) {
+        EditProfileFrament fragment = new EditProfileFrament();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -53,6 +53,7 @@ public class AccountFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
+    ImageButton back_Account_btn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,32 +67,18 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_account, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.actitvity_user_editprofile, container, false);
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
+        back_Account_btn = (ImageButton) view.findViewById(R.id.btn_backtoAccount);
 
-        Button profile_btn = (Button) view.findViewById(R.id.btn_profile);
-        Button recep_info_btn = (Button) view.findViewById(R.id.btn_recep_info);
-        //Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
-        //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
-        //Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
-
-        profile_btn.setOnClickListener(new View.OnClickListener() {
+        back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.editProfileFragment);
-            }
-        });
-
-        recep_info_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
+                navController.navigate(R.id.accountFragment);
             }
         });
     }
