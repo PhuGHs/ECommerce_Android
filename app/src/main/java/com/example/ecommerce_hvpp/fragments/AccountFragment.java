@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.ecommerce_hvpp.R;
 
@@ -75,11 +76,34 @@ public class AccountFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
 
+        LinearLayout voucher_btn = (LinearLayout) view.findViewById(R.id.btn_voucher);
+        LinearLayout orderprogress_btn = (LinearLayout) view.findViewById(R.id.btn_orderprogress);
+        LinearLayout feedback_btn = (LinearLayout) view.findViewById(R.id.btn_feedback);
+
         Button profile_btn = (Button) view.findViewById(R.id.btn_profile);
         Button recep_info_btn = (Button) view.findViewById(R.id.btn_recep_info);
-        //Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
+        Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
         //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
         //Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
+
+        voucher_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.VoucherFragment);
+            }
+        });
+        orderprogress_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.OrderProgressFragment);
+            }
+        });
+        feedback_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.FeedbackFragment);
+            }
+        });
 
         profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +116,13 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.RecepientInfoFragment);
+            }
+        });
+
+        order_history_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.OrderHistoryFragment);
             }
         });
     }

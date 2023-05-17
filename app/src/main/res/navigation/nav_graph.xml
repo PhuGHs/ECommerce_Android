@@ -55,5 +55,19 @@
         android:name="com.example.ecommerce_hvpp.fragments.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/activity_user_orderhistory"/>
-
+    <fragment
+        android:id="@+id/VoucherFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.VoucherFragment"
+        android:label="fragment_voucher"
+        tools:layout="@layout/activity_voucher"/>
+    <fragment
+        android:id="@+id/OrderProgressFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.OrderProgressFragment"
+        android:label="fragment_voucher"
+        tools:layout="@layout/activity_orderprogress"/>
+    <fragment
+        android:id="@+id/FeedbackFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.FeedbackFragment"
+        android:label="fragment_voucher"
+        tools:layout="@layout/activity_feedback"/>
 </navigation>
