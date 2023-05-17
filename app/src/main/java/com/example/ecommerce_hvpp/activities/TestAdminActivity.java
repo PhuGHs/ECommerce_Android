@@ -17,10 +17,10 @@ public class TestAdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.test_main_activity_admin);
 
-        bottomNav = findViewById(R.id.bottom_nav);
-        navController = Navigation.findNavController(this, R.id.host_fragment);
+        bottomNav = findViewById(R.id.bottom_nav_test);
+        navController = Navigation.findNavController(this, R.id.host_fragment_test);
 
         NavigationUI.setupWithNavController(bottomNav, navController);
     }
@@ -28,7 +28,7 @@ public class TestAdminActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_test);
         bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }

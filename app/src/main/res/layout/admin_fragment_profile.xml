@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="AdminProfileViewModel"
+            type="com.example.ecommerce_hvpp.viewmodel.AdminProfileViewModel" />
+        <import type="com.example.ecommerce_hvpp.util.constant" />
     </data>
 
     <LinearLayout
@@ -61,7 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="43dp"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp">
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.CUSTOMER_MANAGEMENT)}">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -97,7 +101,8 @@
                 android:layout_height="43dp"
                 android:layout_below="@+id/admin_profile_customer_management_container"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp">
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.DATA_STATISTICS)}">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -133,7 +138,8 @@
                 android:layout_height="43dp"
                 android:layout_below="@+id/admin_profile_statistic_container"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp">
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.ORDER_HISTORY)}">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -169,7 +175,8 @@
                 android:layout_height="43dp"
                 android:layout_below="@+id/admin_profile_order_history_container"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp">
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.PROMOTION_MANAGEMENT)}">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -205,7 +212,8 @@
                 android:layout_height="43dp"
                 android:layout_below="@+id/admin_profile_promotion_container"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp">
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.LOG_OUT)}">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -235,7 +243,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
 
     </LinearLayout>
 </layout>

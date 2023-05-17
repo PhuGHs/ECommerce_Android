@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav_graph"
-    app:startDestination="@id/adminOrderedListFragment">
+    app:startDestination="@id/adminProfileFragment">
 
 
     <fragment
@@ -39,7 +39,20 @@
         android:id="@+id/adminProfileFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AdminProfileFragment"
         android:label="admin_fragment_profile"
-        tools:layout="@layout/admin_fragment_profile" />
+        tools:layout="@layout/admin_fragment_profile" >
+        <action
+            android:id="@+id/action_adminProfileFragment_to_adminPromotionFragment"
+            app:destination="@id/adminPromotionFragment" />
+        <action
+            android:id="@+id/action_adminProfileFragment_to_adminCustomerManagementFragment"
+            app:destination="@id/adminCustomerManagementFragment" />
+        <action
+            android:id="@+id/action_adminProfileFragment_to_adminOrderHistoryFragment"
+            app:destination="@id/adminOrderHistoryFragment" />
+        <action
+            android:id="@+id/action_adminProfileFragment_to_adminStatisticsFragment"
+            app:destination="@id/adminStatisticsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/adminPromotionFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AdminPromotionFragment"
