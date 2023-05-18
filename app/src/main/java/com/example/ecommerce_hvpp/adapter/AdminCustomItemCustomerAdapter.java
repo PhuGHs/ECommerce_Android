@@ -7,14 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemCustomerBinding;
+import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.User;
 
 import java.util.List;
 
 public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCustomItemCustomerAdapter.AdminCustomItemCustomerViewHolder> {
-    List<User> mListUsers;
+    List<Customer> mListUsers;
 
-    public AdminCustomItemCustomerAdapter(List<User> listUser) {
+    public AdminCustomItemCustomerAdapter(List<Customer> listUser) {
         this.mListUsers = listUser;
     }
     @NonNull
@@ -31,7 +32,7 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mListUsers.size();
     }
 
     public static class AdminCustomItemCustomerViewHolder extends RecyclerView.ViewHolder {
