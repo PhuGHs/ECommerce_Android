@@ -56,13 +56,13 @@
                 android:layout_centerHorizontal="true"
                 app:cardCornerRadius="6dp"
                 android:layout_margin="16dp"
-                android:layout_width="290dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content">
 
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/imageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="400dp"
                     app:sliderAnimationDuration="600"
                     app:sliderAutoCycleDirection="back_and_forth"
                     app:sliderAutoCycleEnabled="true"
@@ -125,6 +125,12 @@
                         android:textColor="@color/primary"
                         style="@style/font_medium"/>
                     <EditText
+                        android:paddingLeft="10dp"
+                        android:gravity="center_vertical"
+                        style="@style/font_medium"
+                        android:textSize="24dp"
+                        android:text="Phu Le"
+                        android:textColor="@color/primary"
                         android:id="@+id/etName"
                         android:layout_marginTop="5dp"
                         android:layout_width="350dp"
@@ -132,9 +138,54 @@
                         android:background="@drawable/searchview_bg"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:id="@+id/typeField"
+                    android:layout_below="@id/nameField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Type"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"/>
+                    <Spinner
+                        android:id="@+id/type_Spinner"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/searchview_bg"
+                        android:layout_width="150dp"
+                        android:layout_height="45dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:id="@+id/seasonField"
+                    android:layout_below="@id/nameField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Season"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"/>
+                    <Spinner
+                        android:id="@+id/season_spinner"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/searchview_bg"
+                        android:layout_width="150dp"
+                        android:layout_height="45dp"/>
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/priceField"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@id/nameField"
+                    android:layout_below="@id/typeField"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -148,6 +199,11 @@
                         style="@style/font_medium"/>
                     <EditText
                         android:id="@+id/etPrice"
+                        android:textColor="@color/primary"
+                        android:paddingStart="10dp"
+                        style="@style/font_medium"
+                        android:textSize="24dp"
+                        android:gravity="center_vertical"
                         android:layout_marginTop="5dp"
                         android:layout_width="150dp"
                         android:layout_height="50dp"
@@ -155,7 +211,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_below="@id/nameField"
+                    android:layout_below="@id/typeField"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -173,6 +229,11 @@
                             android:textColor="@color/primary"
                             style="@style/font_medium"/>
                         <EditText
+                            style="@style/font_medium"
+                            android:textSize="24dp"
+                            android:paddingStart="10dp"
+                            android:textColor="@color/primary"
+                            android:gravity="center_vertical"
                             android:id="@+id/etSize"
                             android:layout_marginTop="5dp"
                             android:layout_width="80dp"
@@ -205,6 +266,10 @@
                         android:textColor="@color/primary"
                         style="@style/font_medium"/>
                     <EditText
+                        style="@style/font_medium"
+                        android:textColor="@color/primary"
+                        android:paddingStart="10dp"
+                        android:textSize="24dp"
                         android:id="@+id/etDescriptionName"
                         android:layout_marginTop="5dp"
                         android:layout_width="350dp"
@@ -218,6 +283,7 @@
                     android:orientation="horizontal"
                     android:layout_height="wrap_content">
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCancel"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="Cancel"
@@ -229,6 +295,7 @@
                         style="@style/font_medium"
                         android:background="@drawable/searchview_bg"/>
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSave"
                         android:layout_marginStart="110dp"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"

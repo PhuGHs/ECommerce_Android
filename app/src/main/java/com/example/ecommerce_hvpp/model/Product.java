@@ -10,7 +10,8 @@ public class Product {
     private String Season;
     private double Price;
     private int Quantity;
-    private double MarkAvg;
+    private double Point;
+    private String URLmain, URLsub1, URLsub2, URLthumb;
 
     public Product(String ID, String name, String color, String club, String nation, String season, double price, int quantity, double markAvg) {
         this.ID = ID;
@@ -21,7 +22,10 @@ public class Product {
         Season = season;
         Price = price;
         Quantity = quantity;
-        MarkAvg = markAvg;
+        Point = markAvg;
+    }
+
+    public Product() {
     }
 
     public String getID() {
@@ -56,7 +60,43 @@ public class Product {
         return Quantity;
     }
 
-    public double getMarkAvg() {
-        return MarkAvg;
+    public double getPoint() {
+        return Point;
+    }
+
+    public String getURLmain() {
+        return URLmain;
+    }
+
+    public void setURLmain(String URLmain) {
+        this.URLmain = URLmain;
+    }
+
+    public String getURLsub1() {
+        return URLsub1;
+    }
+
+    public void setURLsub1(String URLsub1) {
+        this.URLsub1 = URLsub1;
+    }
+
+    public String getURLsub2() {
+        return URLsub2;
+    }
+
+    public void setURLsub2(String URLsub2) {
+        this.URLsub2 = URLsub2;
+    }
+
+    public String getURLthumb() {
+        return URLthumb;
+    }
+
+    public void setURLthumb(String URLthumb) {
+        this.URLthumb = URLthumb;
+    }
+
+    public void setPoint(double point) {
+        Point = point;
     }
 }

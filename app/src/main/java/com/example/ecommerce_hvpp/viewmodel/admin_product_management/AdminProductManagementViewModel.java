@@ -1,9 +1,11 @@
 package com.example.ecommerce_hvpp.viewmodel.admin_product_management;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProductManagementRepository;
+import com.example.ecommerce_hvpp.util.Resource;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class AdminProductManagementViewModel extends ViewModel {
         repo = new AdminProductManagementRepository();
     }
 
-    public List<Product> getAllProductWithNoCriteria() {
+    public LiveData<Resource<List<Product>>> getAllProductWithNoCriteria() {
         return repo.getAllProductWithNoCriteria();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,19 @@ import java.util.List;
 
 public class AdminProductAdapter extends RecyclerView.Adapter {
     private List<Product> list;
+    private Context context;
+    private OnLongItemClickListener mOnLongItemClickListener;
 
-    public AdminProductAdapter(List<Product> list) {
+    public void setOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener) {
+        mOnLongItemClickListener = onLongItemClickListener;
+    }
+    public interface OnLongItemClickListener {
+        void itemLongClicked(View v, int position);
+    }
+
+    public AdminProductAdapter(Context context, List<Product> list) {
         this.list = list;
+        this.context = context;
     }
     @NonNull
     @Override
@@ -32,6 +43,15 @@ public class AdminProductAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AdminProductViewHolder viewHolder = (AdminProductViewHolder) holder;
         viewHolder.bind(list.get(position));
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(mOnLongItemClickListener != null) {
+                    mOnLongItemClickListener.itemLongClicked(view, position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -39,7 +59,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter {
         return list == null ? 0 : list.size();
     }
 
-    public class AdminProductViewHolder extends RecyclerView.ViewHolder {
+    public class AdminProductViewHolder extends RecyclerView.ViewHolder{
         private ImageView ivProductImage;
         private TextView tvProductName, tvPrice;
         public AdminProductViewHolder(@NonNull View itemView) {
@@ -50,7 +70,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter {
         }
         public void bind(Product pd) {
             Glide.with(itemView)
-                    .load("https://lh3.googleusercontent.com/pw/AJFCJaVgtMTQVkpGMBXheFDNVCF1aHT3fZeAfDL7JMOaQLDuRQfvYs2rxl_DRsVBgrVv9xN5b7Jc1Yg38jFfXewIWoP9lwZKwVSMdl7x70xpIcCM-cl9ToBKmKEZqDeq_mfGyMGSpH-hMFwjFaxidZxVWj8d=w872-h950-s-no?authuser=0")
+                    .load(pd.getURLthumb())
                     .fitCenter()
                     .into(ivProductImage);
             tvProductName.setText(pd.getName());

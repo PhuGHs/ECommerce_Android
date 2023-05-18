@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header">
         <SearchView
+            android:focusableInTouchMode="true"
             android:id="@+id/svSearch"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -49,6 +50,7 @@
             android:queryHint="Find what you want ..."
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
+            android:inputType="text"
             android:padding="8dp"/>
     </RelativeLayout>
     <androidx.cardview.widget.CardView

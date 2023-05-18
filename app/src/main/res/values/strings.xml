@@ -45,4 +45,17 @@
     <string name="search">Search</string>
     <string name="order_history">Order History</string>
     <string name="order_list">Order List</string>
+    <string-array name="type_array">
+        <item>Club</item>
+        <item>Nation</item>
+    </string-array>
+    <string-array name="season_array">
+        <item>1995/1996</item>
+        <item>1996/1997</item>
+        <item>1997/1998</item>
+        <item>1999/2000</item>
+        <item>2001/2002</item>
+        <item>2002/2003</item>
+        <item>2006</item>
+    </string-array>
 </resources>
