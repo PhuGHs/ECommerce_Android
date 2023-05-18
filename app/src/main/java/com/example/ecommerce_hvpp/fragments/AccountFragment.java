@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_internal_builders_ActivityComponentBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +63,8 @@ public class AccountFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +86,8 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         LinearLayout voucher_btn = (LinearLayout) view.findViewById(R.id.btn_voucher);
         LinearLayout orderprogress_btn = (LinearLayout) view.findViewById(R.id.btn_orderprogress);
@@ -84,7 +97,7 @@ public class AccountFragment extends Fragment {
         Button recep_info_btn = (Button) view.findViewById(R.id.btn_recep_info);
         Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
         //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
-        //Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
+        Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
 
         voucher_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +136,14 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.OrderHistoryFragment);
+            }
+        });
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                navController.navigate(R.id.homeFragment);
+
             }
         });
     }
