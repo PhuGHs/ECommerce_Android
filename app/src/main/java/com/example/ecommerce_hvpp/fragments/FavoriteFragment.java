@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,32 +80,25 @@ public class FavoriteFragment extends Fragment {
     ArrayList<Product> listFavorite = new ArrayList<>();
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
-    ProductViewModel viewModel = new ProductViewModel();
+    ProductViewModel viewModel;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
+        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         layoutManager = new GridLayoutManager(getContext(), 2);
+        listFavoriteRv.setLayoutManager(layoutManager);
 
         getListFavorite();
     }
     public void getListFavorite(){
-        viewModel.getListFavorite().observe(requireActivity(), resource -> {
-            switch (resource.status){
-                case LOADING:
-                    break;
-                case SUCCESS:
-                    listFavorite = (ArrayList<Product>) resource.data;
-                    favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView(), true);
-                    listFavoriteRv.setLayoutManager(layoutManager);
-                    listFavoriteRv.setAdapter(favProductAdapter);
-                    break;
-                case ERROR:
-                    CustomToast loginErrorToast = new CustomToast();
-                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
-                    break;
+        viewModel.getMldListFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+                listFavoriteRv.setAdapter(favProductAdapter);
             }
         });
     }

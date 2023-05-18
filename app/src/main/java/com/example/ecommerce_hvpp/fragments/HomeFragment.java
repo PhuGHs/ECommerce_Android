@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +29,7 @@ import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -75,7 +78,7 @@ public class HomeFragment extends Fragment {
     ProductAdapter bestSellerAdapter;
     private NavController navController;
     ImageSlider imgSlider;
-    ProductViewModel viewModel = new ProductViewModel();
+    ProductViewModel viewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +102,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
+        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
         listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
@@ -108,6 +112,8 @@ public class HomeFragment extends Fragment {
 
         linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
+        listBestSellerRv.setLayoutManager(linearLayoutManager2);
 
         getListNewArrivals();
         getListBestSeller();
@@ -128,38 +134,20 @@ public class HomeFragment extends Fragment {
         });
     }
     public void getListNewArrivals(){
-        viewModel.getListNewArrivals().observe(requireActivity(), resource -> {
-            switch (resource.status){
-                case LOADING:
-                    break;
-                case SUCCESS:
-                    listNewArrivals.addAll((ArrayList<Product>) resource.data);
-                    newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
-                    listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
-                    listNewArrivalsRv.setAdapter(newArrivalAdapter);
-                    break;
-                case ERROR:
-                    CustomToast loginErrorToast = new CustomToast();
-                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
-                    break;
+        viewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                newArrivalAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+                listNewArrivalsRv.setAdapter(newArrivalAdapter);
             }
         });
     }
     public void getListBestSeller(){
-        viewModel.getListBestSeller().observe(requireActivity(), resource -> {
-            switch (resource.status){
-                case LOADING:
-                    break;
-                case SUCCESS:
-                    listBestSeller = (ArrayList<Product>) resource.data;
-                    bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
-                    listBestSellerRv.setLayoutManager(linearLayoutManager2);
-                    listBestSellerRv.setAdapter(bestSellerAdapter);
-                    break;
-                case ERROR:
-                    CustomToast loginErrorToast = new CustomToast();
-                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
-                    break;
+        viewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                bestSellerAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+                listBestSellerRv.setAdapter(bestSellerAdapter);
             }
         });
     }
