@@ -7,8 +7,8 @@
     android:layout_marginTop="10px"
     android:layout_marginRight="10px"
     android:layout_marginLeft="10px"
-    app:cardCornerRadius="15px"
-    android:elevation="0px"
+    app:cardCornerRadius="25px"
+    app:cardElevation="0px"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20px"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/productPrice"

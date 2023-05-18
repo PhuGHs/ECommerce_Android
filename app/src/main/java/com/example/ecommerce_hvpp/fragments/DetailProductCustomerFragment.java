@@ -5,19 +5,25 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
 
@@ -74,11 +80,13 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
+    TextView detailName, detailSeason, detailPrice, detailPoint;
     ImageButton btnBackToPrevious;
     RatingBar ratingBar;
     String productID;
     private NavController navController;
     ImageSlider detailImgSlider;
+    ProductViewModel viewModel;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,32 +96,50 @@ public class DetailProductCustomerFragment extends Fragment {
         btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBarDetailC);
         detailImgSlider = (ImageSlider) view.findViewById(R.id.detailImageSlider);
+        detailName = (TextView) view.findViewById(R.id.detailNameC);
+        detailSeason = (TextView) view.findViewById(R.id.detailSeasonC);
+        detailPrice = (TextView) view.findViewById(R.id.detailPriceC);
+        detailPoint = (TextView) view.findViewById(R.id.detailPointC);
+
+        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         //set data
         getDataFromPreviousFragment();
-        loadDetailImage();
 
-        btnBackToPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.popBackStack();
-            }
-        });
+        btnBackToPrevious.setOnClickListener(view1 -> navController.popBackStack());
 
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
         if (bundle != null){
             productID = bundle.getString("productID");
-            ratingBar.setRating((float)4.4);
+
+            viewModel.getDetailProduct(productID).observe(getViewLifecycleOwner(), product -> {
+                detailName.setText(product.getName());
+                detailSeason.setText(product.getSeason());
+                detailPrice.setText("$"+Double.toString(product.getPrice()));
+                detailPoint.setText(Double.toString(product.getPointAvg()));
+
+                ratingBar.setRating((float)product.getPointAvg());
+
+                loadDetailImage(product);
+            });
         }
     }
-    public void loadDetailImage(){
+    public void loadDetailImage(Product product){
         ArrayList<SlideModel> listImage = new ArrayList<>();
 
-        listImage.add(new SlideModel(R.drawable.product_pattern, ScaleTypes.FIT));
-        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
-        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
+        SlideModel slideModel1 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+        SlideModel slideModel2 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+        SlideModel slideModel3 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+
+        slideModel1.setImageUrl(product.getURLmain());
+        slideModel2.setImageUrl(product.getURLsub1());
+        slideModel3.setImageUrl(product.getURLsub2());
+
+        listImage.add(slideModel1);
+        listImage.add(slideModel2);
+        listImage.add(slideModel3);
 
         detailImgSlider.setImageList(listImage, ScaleTypes.FIT);
     }

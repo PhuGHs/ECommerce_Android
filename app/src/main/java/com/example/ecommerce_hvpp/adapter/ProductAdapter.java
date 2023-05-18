@@ -51,21 +51,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
     }
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
-        holder.Bind(listProduct.get(position));
+        Product product = listProduct.get(position);
+
+        holder.Bind(product);
 
         if (isFavorite == true) {
             holder.btnFav.setImageResource(R.drawable.full_heart);
         }
+
         //navigate to detail
         NavController navController = Navigation.findNavController(view);
-        holder.productLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("productID","PD001");
+        holder.productLayout.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("productID",product.getID());
 
-                navController.navigate(R.id.detailProductCustomerFragment, bundle);
-            }
+            navController.navigate(R.id.detailProductCustomerFragment, bundle);
         });
     }
 

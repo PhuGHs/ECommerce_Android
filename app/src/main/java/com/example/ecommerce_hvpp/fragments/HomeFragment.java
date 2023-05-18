@@ -71,8 +71,6 @@ public class HomeFragment extends Fragment {
     }
     RecyclerView listNewArrivalsRv;
     RecyclerView listBestSellerRv;
-    ArrayList<Product> listNewArrivals = new ArrayList<>();
-    ArrayList<Product> listBestSeller = new ArrayList<>();
     LinearLayoutManager linearLayoutManager1, linearLayoutManager2;
     ProductAdapter newArrivalAdapter;
     ProductAdapter bestSellerAdapter;
@@ -120,35 +118,21 @@ public class HomeFragment extends Fragment {
 
         ImageButton btnNavToCart = (ImageButton) view.findViewById(R.id.btnNavToCart);
         ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
-        btnNavToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.cartFragment);
-            }
-        });
-        btnNavToMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //navController.navigate(R.id.detailProductCustomerFragment);
-            }
+        btnNavToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
+        btnNavToMessage.setOnClickListener(view12 -> {
+            //navController.navigate(R.id.detailProductCustomerFragment);
         });
     }
     public void getListNewArrivals(){
-        viewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                newArrivalAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
-                listNewArrivalsRv.setAdapter(newArrivalAdapter);
-            }
+        viewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), products -> {
+            newArrivalAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+            listNewArrivalsRv.setAdapter(newArrivalAdapter);
         });
     }
     public void getListBestSeller(){
-        viewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                bestSellerAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
-                listBestSellerRv.setAdapter(bestSellerAdapter);
-            }
+        viewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), products -> {
+            bestSellerAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+            listBestSellerRv.setAdapter(bestSellerAdapter);
         });
     }
     public void loadImageSlider(){

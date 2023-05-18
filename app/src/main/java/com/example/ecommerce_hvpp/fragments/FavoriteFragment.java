@@ -77,7 +77,6 @@ public class FavoriteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favorite, container, false);
     }
     RecyclerView listFavoriteRv;
-    ArrayList<Product> listFavorite = new ArrayList<>();
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
     ProductViewModel viewModel;
@@ -94,12 +93,9 @@ public class FavoriteFragment extends Fragment {
         getListFavorite();
     }
     public void getListFavorite(){
-        viewModel.getMldListFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
-                listFavoriteRv.setAdapter(favProductAdapter);
-            }
+        viewModel.getMldListFavorite().observe(getViewLifecycleOwner(), products -> {
+            favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), true);
+            listFavoriteRv.setAdapter(favProductAdapter);
         });
     }
 }
