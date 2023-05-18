@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
@@ -31,6 +34,7 @@ public class AdminCustomerManagementFragment extends Fragment {
     AdminCustomerManagementRepository repo;
     AdminCustomerManagementViewModel vmAdminCustomerManagement;
     AdminCustomItemCustomerAdapter adapterAdminCustomItemCustomer;
+    MutableLiveData<Resource<List<Customer>>> _mldListCustomer;
 
     @Nullable
     @Override
@@ -40,22 +44,30 @@ public class AdminCustomerManagementFragment extends Fragment {
         vmAdminCustomerManagement = new AdminCustomerManagementViewModel();
         mFragmentAdminManageCustomerBinding.setAdminCustomerManagementViewModel(vmAdminCustomerManagement);
 
-//        AdminCustomerManagementRepository repo = new AdminCustomerManagementRepository();
-//        MutableLiveData<Resource<List<Customer>>> _mldListCustomer = (MutableLiveData<Resource<List<Customer>>>) repo.getAllCustomer();
-//
-//        logCustomer(_mldListCustomer);
+        repo = new AdminCustomerManagementRepository();
+        _mldListCustomer = (MutableLiveData<Resource<List<Customer>>>) repo.getAllCustomer();
+
+        displayAllCustomers(_mldListCustomer);
+
+        mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.popBackStack();
+            }
+        });
 
         return mFragmentAdminManageCustomerBinding.getRoot();
     }
 
-    public void logCustomer(MutableLiveData<Resource<List<Customer>>> mldListCustomer) {
+    public void displayAllCustomers(MutableLiveData<Resource<List<Customer>>> mldListCustomer) {
         if(mldListCustomer.getValue() != null) {
             mldListCustomer.observe(requireActivity(), resource -> {
                 switch(resource.status) {
                     case LOADING:
                         break;
                     case SUCCESS:
-                        adapterAdminCustomItemCustomer = new AdminCustomItemCustomerAdapter(Objects.requireNonNull(resource.data));
+                        adapterAdminCustomItemCustomer = new AdminCustomItemCustomerAdapter(getContext(), Objects.requireNonNull(resource.data));
                         //set up recyclerview
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                         mFragmentAdminManageCustomerBinding.adminCustomerManagementRcvItemCustomer.setLayoutManager(layoutManager);
