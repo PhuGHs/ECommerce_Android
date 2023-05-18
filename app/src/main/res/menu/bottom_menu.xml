@@ -6,11 +6,8 @@
     <item android:title="@string/category2"
         android:id="@+id/categoryFragment"
         android:icon="@drawable/baseline_category_24" />
-    <item android:title="@string/search"
-        android:id="@+id/searchFragment"
-        android:icon="@drawable/baseline_search_24"/>
     <item android:title="@string/wish_list"
-        android:id="@+id/wishListFragment"
+        android:id="@+id/favoriteFragment"
         android:icon="@drawable/baseline_favorite_border_24"/>
     <item android:title="@string/account"
         android:id="@+id/accountFragment"

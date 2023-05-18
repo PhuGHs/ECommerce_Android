@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,11 @@ import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,6 +75,7 @@ public class HomeFragment extends Fragment {
     ProductAdapter bestSellerAdapter;
     private NavController navController;
     ImageSlider imgSlider;
+    ProductViewModel viewModel = new ProductViewModel();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,19 +105,12 @@ public class HomeFragment extends Fragment {
         imgSlider = (ImageSlider) view.findViewById(R.id.autoImageSlider);
 
         loadImageSlider();
-        getListNewArrivals();
-        getListBestSeller();
 
         linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
-        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
 
-        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
-        listNewArrivalsRv.setAdapter(newArrivalAdapter);
-
-        listBestSellerRv.setLayoutManager(linearLayoutManager2);
-        listBestSellerRv.setAdapter(bestSellerAdapter);
+        getListNewArrivals();
+        getListBestSeller();
 
         ImageButton btnNavToCart = (ImageButton) view.findViewById(R.id.btnNavToCart);
         ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
@@ -130,20 +128,40 @@ public class HomeFragment extends Fragment {
         });
     }
     public void getListNewArrivals(){
-        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        viewModel.getListNewArrivals().observe(requireActivity(), resource -> {
+            switch (resource.status){
+                case LOADING:
+                    break;
+                case SUCCESS:
+                    listNewArrivals.addAll((ArrayList<Product>) resource.data);
+                    newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
+                    listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
+                    listNewArrivalsRv.setAdapter(newArrivalAdapter);
+                    break;
+                case ERROR:
+                    CustomToast loginErrorToast = new CustomToast();
+                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
+                    break;
+            }
+        });
     }
     public void getListBestSeller(){
-        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        viewModel.getListBestSeller().observe(requireActivity(), resource -> {
+            switch (resource.status){
+                case LOADING:
+                    break;
+                case SUCCESS:
+                    listBestSeller = (ArrayList<Product>) resource.data;
+                    bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
+                    listBestSellerRv.setLayoutManager(linearLayoutManager2);
+                    listBestSellerRv.setAdapter(bestSellerAdapter);
+                    break;
+                case ERROR:
+                    CustomToast loginErrorToast = new CustomToast();
+                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
+                    break;
+            }
+        });
     }
     public void loadImageSlider(){
         ArrayList<SlideModel> listImage = new ArrayList<>();

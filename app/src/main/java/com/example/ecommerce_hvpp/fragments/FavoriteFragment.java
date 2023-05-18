@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
 
@@ -75,23 +77,33 @@ public class FavoriteFragment extends Fragment {
     ArrayList<Product> listFavorite = new ArrayList<>();
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
+    ProductViewModel viewModel = new ProductViewModel();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
 
-        listFavorite.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-
         layoutManager = new GridLayoutManager(getContext(), 2);
-        favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView(), true);
 
-        listFavoriteRv.setLayoutManager(layoutManager);
-        listFavoriteRv.setAdapter(favProductAdapter);
+        getListFavorite();
+    }
+    public void getListFavorite(){
+        viewModel.getListFavorite().observe(requireActivity(), resource -> {
+            switch (resource.status){
+                case LOADING:
+                    break;
+                case SUCCESS:
+                    listFavorite = (ArrayList<Product>) resource.data;
+                    favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView(), true);
+                    listFavoriteRv.setLayoutManager(layoutManager);
+                    listFavoriteRv.setAdapter(favProductAdapter);
+                    break;
+                case ERROR:
+                    CustomToast loginErrorToast = new CustomToast();
+                    loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
+                    break;
+            }
+        });
     }
 }
