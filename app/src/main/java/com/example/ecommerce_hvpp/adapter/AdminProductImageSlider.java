@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.model.ItemModel;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ import java.util.List;
 public class AdminProductImageSlider extends SliderViewAdapter<AdminProductImageSlider.ProductImageSliderViewHolder> {
 
     private Context context;
-    private List<String> list = new ArrayList<>();
+    private List<ItemModel> list = new ArrayList<>();
 
     public AdminProductImageSlider(Context context) {
         this.context = context;
     }
 
-    public void renewItems(List<String> items) {
+    public void renewItems(List<ItemModel> items) {
         this.list = items;
         notifyDataSetChanged();
     }
@@ -33,11 +34,10 @@ public class AdminProductImageSlider extends SliderViewAdapter<AdminProductImage
         notifyDataSetChanged();
     }
 
-    public void addItem(String item) {
+    public void addItem(ItemModel item) {
         this.list.add(item);
         notifyDataSetChanged();
     }
-
     @Override
     public ProductImageSliderViewHolder onCreateViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image_slider_product_admin, parent, false);
@@ -46,12 +46,20 @@ public class AdminProductImageSlider extends SliderViewAdapter<AdminProductImage
 
     @Override
     public void onBindViewHolder(ProductImageSliderViewHolder viewHolder, int position) {
-        String Url = list.get(position);
+        ItemModel itemModel = list.get(position);
 
-        Glide.with(viewHolder.itemView)
-                .load(Url)
-                .fitCenter()
-                .into(viewHolder.imageViewBackground);
+        if(itemModel.getLink() == null) {
+            Glide.with(viewHolder.itemView)
+                    .load(itemModel.getImageUri())
+                    .fitCenter()
+                    .into(viewHolder.imageViewBackground);
+        } else {
+            Glide.with(viewHolder.itemView)
+                    .load(itemModel.getLink())
+                    .fitCenter()
+                    .into(viewHolder.imageViewBackground);
+        }
+
     }
 
     @Override

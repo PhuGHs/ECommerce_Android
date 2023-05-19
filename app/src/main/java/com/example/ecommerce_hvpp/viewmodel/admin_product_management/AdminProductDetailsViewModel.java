@@ -19,7 +19,7 @@ public class AdminProductDetailsViewModel extends ViewModel {
         return repo.getProduct(Id);
     }
     public void addProduct(Product pd) {
-
+        repo.addProduct(pd);
     }
 
     public void editProduct() {
@@ -29,7 +29,6 @@ public class AdminProductDetailsViewModel extends ViewModel {
     public LiveData<Boolean> getIsEditMode() {
         return isEditMode;
     }
-
     public void setIsEditMode(Boolean isEditMode) {
         this.isEditMode.setValue(isEditMode);
     }

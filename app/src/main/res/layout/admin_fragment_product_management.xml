@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header">
         <SearchView
-            android:focusableInTouchMode="true"
+
             android:id="@+id/svSearch"
             android:layout_width="match_parent"
             android:layout_height="50dp"

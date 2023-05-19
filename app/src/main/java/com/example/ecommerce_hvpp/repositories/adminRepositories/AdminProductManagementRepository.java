@@ -11,6 +11,7 @@ import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -69,6 +70,22 @@ public class AdminProductManagementRepository {
                     }
                 });
         return _mldProduct;
+    }
+
+    public void addProduct(Product pd) {
+        fbHelper.getCollection("Product").add(pd)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with Id: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error adding document");
+                    }
+                });
     }
 }
 

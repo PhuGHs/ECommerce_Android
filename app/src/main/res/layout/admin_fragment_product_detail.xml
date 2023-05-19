@@ -111,8 +111,38 @@
                     android:textColor="@color/primary"
                     android:textSize="30dp"/>
                 <LinearLayout
-                    android:id="@+id/nameField"
+                    android:id="@+id/thumbImageField"
                     android:layout_below="@id/details_header"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thumbnail Image"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"/>
+                    <TextView
+                        android:paddingLeft="10dp"
+                        android:gravity="center_vertical"
+                        style="@style/font_medium"
+                        android:textSize="24dp"
+                        android:clickable="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/primary"
+                        android:id="@+id/tvThumbImageFile"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="350dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/searchview_bg"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/nameField"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/thumbImageField"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -129,7 +159,6 @@
                         android:gravity="center_vertical"
                         style="@style/font_medium"
                         android:textSize="24dp"
-                        android:text="Phu Le"
                         android:textColor="@color/primary"
                         android:id="@+id/etName"
                         android:layout_marginTop="5dp"
