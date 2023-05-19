@@ -1,4 +1,7 @@
 package com.example.ecommerce_hvpp.viewmodel.admin_promotion;
 
-public class AdminCustomItemPromotionViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class AdminCustomItemPromotionViewModel extends ViewModel {
+    
 }

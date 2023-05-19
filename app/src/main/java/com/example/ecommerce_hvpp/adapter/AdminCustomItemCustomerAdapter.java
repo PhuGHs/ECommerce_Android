@@ -22,6 +22,7 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
         this.mContext = context;
         this.mListUsers = listUser;
     }
+
     @NonNull
     @Override
     public AdminCustomItemCustomerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

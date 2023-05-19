@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,9 +13,11 @@ import com.example.ecommerce_hvpp.model.User;
 import java.util.List;
 
 public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminCustomItemPromotionAdapter.AdminCustomItemPromotionViewHolder> {
+    Context mContext;
     List<User> mListUsers;
 
-    public AdminCustomItemPromotionAdapter(List<User> listUser) {
+    public AdminCustomItemPromotionAdapter(Context context, List<User> listUser) {
+        this.mContext = context;
         this.mListUsers = listUser;
     }
     @NonNull
@@ -31,7 +34,7 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mListUsers.size();
     }
 
     public static class AdminCustomItemPromotionViewHolder extends RecyclerView.ViewHolder {

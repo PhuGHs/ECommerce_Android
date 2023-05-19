@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,9 +13,11 @@ import com.example.ecommerce_hvpp.model.User;
 import java.util.List;
 
 public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<AdminCustomItemOrderHistoryAdapter.AdminCustomItemOrderHistoryViewHolder> {
+    Context mContext;
     List<User> mListUsers;
 
-    public AdminCustomItemOrderHistoryAdapter(List<User> listUser) {
+    public AdminCustomItemOrderHistoryAdapter(Context context, List<User> listUser) {
+        this.mContext = context;
         this.mListUsers = listUser;
     }
     @NonNull
@@ -31,7 +34,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mListUsers.size();
     }
 
     public static class AdminCustomItemOrderHistoryViewHolder extends RecyclerView.ViewHolder {

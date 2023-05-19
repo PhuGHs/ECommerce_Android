@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.viewmodel.admin_order_history;
 
-public class AdminOrderHistoryViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class AdminOrderHistoryViewModel extends ViewModel {
     public AdminOrderHistoryViewModel() {}
 }

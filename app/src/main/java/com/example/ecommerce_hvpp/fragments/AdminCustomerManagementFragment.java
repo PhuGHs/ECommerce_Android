@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,26 +42,27 @@ public class AdminCustomerManagementFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mFragmentAdminManageCustomerBinding = AdminFragmentCustomerManagementBinding.inflate(inflater, container, false);
 
-        vmAdminCustomerManagement = new AdminCustomerManagementViewModel();
-        mFragmentAdminManageCustomerBinding.setAdminCustomerManagementViewModel(vmAdminCustomerManagement);
+        // init view model
+        vmAdminCustomerManagement = new ViewModelProvider(requireActivity()).get(AdminCustomerManagementViewModel.class);
 
-        repo = new AdminCustomerManagementRepository();
-        _mldListCustomer = (MutableLiveData<Resource<List<Customer>>>) repo.getAllCustomer();
+        // get data from firebase
+        getData();
 
+        // display data into app
         displayAllCustomers(_mldListCustomer);
 
-        mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.popBackStack();
-            }
-        });
+        // on click back page
+        mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(onClickBackPage());
 
         return mFragmentAdminManageCustomerBinding.getRoot();
     }
 
-    public void displayAllCustomers(MutableLiveData<Resource<List<Customer>>> mldListCustomer) {
+    private void getData() {
+        repo = new AdminCustomerManagementRepository();
+        _mldListCustomer = (MutableLiveData<Resource<List<Customer>>>) repo.getAllCustomer();
+    }
+
+    private void displayAllCustomers(MutableLiveData<Resource<List<Customer>>> mldListCustomer) {
         if(mldListCustomer.getValue() != null) {
             mldListCustomer.observe(requireActivity(), resource -> {
                 switch(resource.status) {
@@ -80,5 +82,15 @@ public class AdminCustomerManagementFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private View.OnClickListener onClickBackPage() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.popBackStack();
+            }
+        };
     }
 }

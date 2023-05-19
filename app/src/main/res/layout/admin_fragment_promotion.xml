@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/ic_back"
+                android:id="@+id/admin_promotion_header_back"
                 android:layout_width="14dp"
                 android:layout_height="23dp"
                 android:layout_centerVertical="true"
