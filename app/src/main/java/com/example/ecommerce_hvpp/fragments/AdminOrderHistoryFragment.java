@@ -96,7 +96,6 @@ public class AdminOrderHistoryFragment extends Fragment {
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
-
                         adapterAdminCustomItemOrderHistory = new AdminCustomItemOrderHistoryAdapter(getContext(), Objects.requireNonNull(resource.data));
                         //set up recyclerview
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

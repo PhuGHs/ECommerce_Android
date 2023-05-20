@@ -39,11 +39,13 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemOrderHistoryViewHolder holder, int position) {
         OrderHistory orderHistory = mListOrderHistory.get(position);
+        if (orderHistory == null) {
+            return;
+        }
 
-//        templateDate = new SimpleDateFormat("dd MMM, yyyy");
-        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIdOrder.setText(orderHistory.getID());
-//        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTimeCreate()));
-//        Log.e("Vu", String.valueOf(orderHistory.getTimeCreate()));
+        templateDate = new SimpleDateFormat("dd MMM, yyyy");
+        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIdOrder.setText(String.valueOf(orderHistory.getID()));
+        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTimeCreate()));
     }
 
     @Override
