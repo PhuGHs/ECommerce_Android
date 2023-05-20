@@ -106,7 +106,7 @@ public class AccountFragment extends Fragment {
                    case LOADING:
                        break;
                    case SUCCESS:
-                       name = userInfoResource.data.getEmail();
+                       name = userInfoResource.data.getUsername();
                        name_tv.setText(name);
                        break;
                    case ERROR:

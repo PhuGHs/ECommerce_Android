@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.viewmodel;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,6 +23,7 @@ public class ProfileViewModel extends ViewModel {
     private MutableLiveData<Resource<UserInfo>> _userInfo = new MutableLiveData<>();
     public LiveData<Resource<User>> showUserName(){
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        Log.e("Phuc", fbUser.getEmail());
         return repo.getUserInfo(fbUser.getUid());
     }
 
