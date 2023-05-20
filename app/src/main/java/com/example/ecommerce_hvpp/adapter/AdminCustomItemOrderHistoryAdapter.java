@@ -1,6 +1,8 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,17 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
+import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<AdminCustomItemOrderHistoryAdapter.AdminCustomItemOrderHistoryViewHolder> {
     Context mContext;
-    List<User> mListUsers;
+    List<OrderHistory> mListOrderHistory;
+    SimpleDateFormat templateDate;
 
-    public AdminCustomItemOrderHistoryAdapter(Context context, List<User> listUser) {
+
+    public AdminCustomItemOrderHistoryAdapter(Context context, List<OrderHistory> listOrderHistory) {
         this.mContext = context;
-        this.mListUsers = listUser;
+        this.mListOrderHistory = listOrderHistory;
+
     }
     @NonNull
     @Override
@@ -28,13 +35,20 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         return new AdminCustomItemOrderHistoryViewHolder(mAdminCustomItemOrderHistoryBinding);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemOrderHistoryViewHolder holder, int position) {
+        OrderHistory orderHistory = mListOrderHistory.get(position);
+
+//        templateDate = new SimpleDateFormat("dd MMM, yyyy");
+        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIdOrder.setText(orderHistory.getID());
+//        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTimeCreate()));
+//        Log.e("Vu", String.valueOf(orderHistory.getTimeCreate()));
     }
 
     @Override
     public int getItemCount() {
-        return mListUsers.size();
+        return mListOrderHistory.size();
     }
 
     public static class AdminCustomItemOrderHistoryViewHolder extends RecyclerView.ViewHolder {

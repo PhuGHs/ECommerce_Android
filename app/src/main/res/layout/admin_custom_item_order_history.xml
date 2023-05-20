@@ -22,10 +22,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/w600_50"
-                android:text="Order #09117147"
+                android:text="Order #"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp" />
+            <TextView
+                android:id="@+id/admin_order_history_component_id_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/admin_order_history_component_title"
+                style="@style/w600_50"
+                android:text="09117147"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:layout_marginTop="11dp" />
 
             <TextView
