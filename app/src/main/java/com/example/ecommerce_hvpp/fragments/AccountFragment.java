@@ -1,27 +1,39 @@
 package com.example.ecommerce_hvpp.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
+import com.example.ecommerce_hvpp.adapters.ChatAdapter;
+import com.example.ecommerce_hvpp.model.UserInfo;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_internal_builders_ActivityComponentBuilder;
 
@@ -65,6 +77,9 @@ public class AccountFragment extends Fragment {
     private NavController navController;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private ProfileViewModel viewModel;
+    private String name;
+    private TextView name_tv;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,24 +95,45 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_account, container, false);
 
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        name_tv = v.findViewById(R.id.name_tv);
+
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        if (viewModel.showUserName() != null){
+           viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
+               switch (userInfoResource.status){
+                   case LOADING:
+                       break;
+                   case SUCCESS:
+                       name = userInfoResource.data.getEmail();
+                       name_tv.setText(name);
+                       break;
+                   case ERROR:
+                       CustomToast loginErrorToast = new CustomToast();
+                       loginErrorToast.ShowToastMessage(requireActivity(), 2, userInfoResource.message);
+                       break;
+               }
+           });
+        }
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+
 
         LinearLayout voucher_btn = (LinearLayout) view.findViewById(R.id.btn_voucher);
         LinearLayout orderprogress_btn = (LinearLayout) view.findViewById(R.id.btn_orderprogress);
         LinearLayout feedback_btn = (LinearLayout) view.findViewById(R.id.btn_feedback);
 
-        Button profile_btn = (Button) view.findViewById(R.id.btn_profile);
-        Button recep_info_btn = (Button) view.findViewById(R.id.btn_recep_info);
-        Button order_history_btn = (Button) view.findViewById(R.id.btn_orderhistory);
+        RelativeLayout profile_btn = (RelativeLayout) view.findViewById(R.id.btn_profile);
+        RelativeLayout recep_info_btn = (RelativeLayout) view.findViewById(R.id.btn_recep_info);
+        RelativeLayout order_history_btn = (RelativeLayout) view.findViewById(R.id.btn_orderhistory);
         //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
-        Button logout_btn = (Button) view.findViewById(R.id.btn_logout);
+        RelativeLayout logout_btn = (RelativeLayout) view.findViewById(R.id.btn_logout);
+
 
         voucher_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,8 +178,9 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                navController.navigate(R.id.homeFragment);
-
+                navController.navigate(R.id.loginFragment);
+                CustomToast signOutToast = new CustomToast();
+                signOutToast.ShowToastMessage(getActivity(), 1, "Đăng xuất thành công");
             }
         });
     }

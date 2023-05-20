@@ -29,7 +29,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="77px"
+        android:id="@+id/name_tv"
+        android:layout_marginBottom="22dp"
         android:text="Hoang Phuc"
         android:textColor="@color/black"
         android:textSize="64px"
@@ -137,79 +138,196 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
+    <!--    Option  -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
-        android:orientation="vertical"
-        android:gravity="center"
-        >
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp">
 
-        <Button
-            android:layout_width="755px"
-            android:layout_height="140px"
-            android:textSize="40px"
-            android:layout_marginBottom="50px"
+        <!--    Customer Management -->
+        <RelativeLayout
             android:id="@+id/btn_profile"
-            android:backgroundTint="@color/white"
-            style="@style/header"
-            android:textColor="@color/primary"
-            android:drawableLeft="@drawable/profile_icon"
-            android:textAllCaps="false"
-            android:text="Profile"/>
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="35dp"
+            android:layout_height="43dp"
+            android:background="@drawable/bg_white_rounded"
+            android:layout_marginBottom="23dp">
 
-        <Button
-            android:layout_width="755px"
-            android:layout_height="140px"
-            android:textSize="40px"
-            android:layout_marginBottom="50px"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/profile_icon"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="21dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="6dp"
+                style="@style/w600_50"
+                android:text="Profile"
+                android:textColor="@color/primary" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_next_icon" />
+
+        </RelativeLayout>
+
+        <!--    Statistics Management -->
+        <RelativeLayout
             android:id="@+id/btn_recep_info"
-            android:backgroundTint="@color/white"
-            style="@style/header"
-            android:textColor="@color/primary"
-            android:textAllCaps="false"
-            android:drawableLeft="@drawable/shopping_cart_icon"
-            android:text="Recipient's information"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginHorizontal="35dp"
+            android:layout_below="@+id/btn_profile"
+            android:background="@drawable/bg_white_rounded"
+            android:layout_marginBottom="23dp">
 
-        <Button
-            android:layout_width="755px"
-            android:layout_height="140px"
-            android:textSize="40px"
-            android:layout_marginBottom="50px"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/shopping_cart_icon"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="6dp"
+                style="@style/w600_50"
+                android:text="Recepient's information"
+                android:textColor="@color/primary" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_next_icon" />
+
+        </RelativeLayout>
+
+        <!--    Order History Management -->
+        <RelativeLayout
             android:id="@+id/btn_orderhistory"
-            android:backgroundTint="@color/white"
-            style="@style/header"
-            android:textColor="@color/primary"
-            android:textAllCaps="false"
-            android:drawableLeft="@drawable/history_icon"
-            android:text="Order history"/>
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="35dp"
+            android:layout_height="43dp"
+            android:layout_below="@+id/btn_recep_info"
+            android:background="@drawable/bg_white_rounded"
+            android:layout_marginBottom="23dp">
 
-        <Button
-            android:layout_width="755px"
-            android:layout_height="140px"
-            android:textSize="40px"
-            android:layout_marginBottom="50px"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/history_icon"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="6dp"
+                style="@style/w600_50"
+                android:text="Order History"
+                android:textColor="@color/primary" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_next_icon" />
+
+        </RelativeLayout>
+
+        <!--    Promotion Management -->
+        <RelativeLayout
             android:id="@+id/btn_chat_with_admin"
-            android:backgroundTint="@color/white"
-            style="@style/header"
-            android:textColor="@color/primary"
-            android:textAllCaps="false"
-            android:drawableLeft="@drawable/chat_icon"
-            android:text="Chat with admin"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginHorizontal="35dp"
+            android:layout_below="@+id/btn_orderhistory"
+            android:background="@drawable/bg_white_rounded"
+            android:layout_marginBottom="23dp">
 
-        <Button
-            android:layout_width="755px"
-            android:layout_height="140px"
-            android:textSize="40px"
-            android:layout_marginBottom="50px"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/chat_icon"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="6dp"
+                style="@style/w600_50"
+                android:text="Chat with admin"
+                android:textColor="@color/primary" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_next_icon" />
+
+        </RelativeLayout>
+
+        <!--    Log out Management -->
+        <RelativeLayout
             android:id="@+id/btn_logout"
-            android:backgroundTint="@color/white"
-            style="@style/header"
-            android:textColor="@color/primary"
-            android:textAllCaps="false"
-            android:drawableLeft="@drawable/logout_icon"
-            android:text="Log out"/>
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginHorizontal="35dp"
+            android:layout_below="@+id/btn_chat_with_admin"
+            android:background="@drawable/bg_white_rounded">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/logout_icon"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="6dp"
+                style="@style/w600_50"
+                android:text="Log out"
+                android:textColor="@color/primary" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_next_icon" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>
