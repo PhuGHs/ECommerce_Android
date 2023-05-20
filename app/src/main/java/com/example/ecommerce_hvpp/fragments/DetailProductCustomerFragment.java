@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,13 +83,17 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
-    TextView detailName, detailSeason, detailPrice, detailPoint;
+    TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable;
     ImageButton btnBackToPrevious;
     RatingBar ratingBar;
     String productID;
     private NavController navController;
     ImageSlider detailImgSlider;
     ProductViewModel viewModel;
+    ImageButton minusQuantity, plusQuantity;
+    RadioGroup sizeGroup;
+    List<Long> listSize;
+    Integer MinQuantity = 1;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -100,14 +107,45 @@ public class DetailProductCustomerFragment extends Fragment {
         detailSeason = (TextView) view.findViewById(R.id.detailSeasonC);
         detailPrice = (TextView) view.findViewById(R.id.detailPriceC);
         detailPoint = (TextView) view.findViewById(R.id.detailPointC);
-
+        detailQuantity = (TextView) view.findViewById(R.id.detailQuantityC);
+        minusQuantity = (ImageButton) view.findViewById(R.id.detailMinusQuantity);
+        plusQuantity = (ImageButton) view.findViewById(R.id.detailPlusQuantity);
+        sizeGroup = (RadioGroup) view.findViewById(R.id.sizeGroup);
+        sizeAvailable = (TextView) view.findViewById(R.id.sizeAvailable);
         viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         //set data
+        detailQuantity.setText("1");
         getDataFromPreviousFragment();
 
         btnBackToPrevious.setOnClickListener(view1 -> navController.popBackStack());
+        minusQuantity.setOnClickListener(view12 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            if (quantity > MinQuantity){
+                quantity--;
+                detailQuantity.setText(String.valueOf(quantity));
+            }
+        });
+        plusQuantity.setOnClickListener(view13 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            quantity++;
+            detailQuantity.setText(String.valueOf(quantity));
+        });
 
+        sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
+            if (listSize != null){
+                if (checkID == R.id.rbtnSizeS)
+                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
+                if (checkID == R.id.rbtnSizeM)
+                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
+                if (checkID == R.id.rbtnSizeL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                if (checkID == R.id.rbtnSizeXL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(3)));
+                if (checkID == R.id.rbtnSize2XL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(4)));
+            }
+        });
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
@@ -121,6 +159,13 @@ public class DetailProductCustomerFragment extends Fragment {
                 detailPoint.setText(Double.toString(product.getPointAvg()));
 
                 ratingBar.setRating((float)product.getPointAvg());
+                listSize = new ArrayList<>();
+                sizeAvailable.setText(String.valueOf(product.getSizeS()));
+                listSize.add(product.getSizeS());
+                listSize.add(product.getSizeM());
+                listSize.add(product.getSizeL());
+                listSize.add(product.getSizeXL());
+                listSize.add(product.getSizeXXL());
 
                 loadDetailImage(product);
             });

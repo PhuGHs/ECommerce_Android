@@ -97,6 +97,7 @@
             android:layout_height="wrap_content">
 
             <RadioGroup
+                android:id="@+id/sizeGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkedButton="@id/rbtnSizeS"
@@ -152,6 +153,25 @@
                     android:textAlignment="center"
                     android:textSize="55px" />
             </RadioGroup>
+            <TextView
+                android:layout_marginTop="20px"
+                android:layout_marginLeft="40px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/font_crimson_regular"
+                android:textColor="@color/primary"
+                android:text="Avail: "
+                android:textSize="55px"/>
+            <TextView
+                android:id="@+id/sizeAvailable"
+                android:layout_marginTop="20px"
+                android:layout_marginLeft="10px"
+                android:layout_width="90px"
+                android:layout_height="wrap_content"
+                style="@style/font_crimson_regular"
+                android:textColor="@color/primary"
+                android:text="10"
+                android:textSize="55px"/>
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
@@ -171,12 +191,14 @@
                 android:layout_height="0px"
                 android:layout_weight="1"/>
             <ImageButton
+                android:id="@+id/detailMinusQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@color/transparent"
                 android:src="@drawable/minus_circle_outline"/>
             <TextView
+                android:id="@+id/detailQuantityC"
                 android:layout_width="90px"
                 android:layout_height="wrap_content"
                 style="@style/font_crimson_bold"
@@ -185,6 +207,7 @@
                 android:textColor="@color/primary"
                 android:text="6"/>
             <ImageButton
+                android:id="@+id/detailPlusQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30px"

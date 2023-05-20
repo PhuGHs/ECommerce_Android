@@ -54,10 +54,15 @@ public class ProductViewModel extends ViewModel {
                         String URLsub1 = documentSnapshot.getString("URLsub1");
                         String URLsub2 = documentSnapshot.getString("URLsub2");
                         String URLthumb = documentSnapshot.getString("URLthumb");
+                        long sizeS = documentSnapshot.getLong("SizeS");
+                        long sizeM = documentSnapshot.getLong("SizeM");
+                        long sizeL = documentSnapshot.getLong("SizeL");
+                        long sizeXL = documentSnapshot.getLong("SizeXL");
+                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
 
                         Log.d(TAG, ID + "--" + Name);
 
-                        listFavorite.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb));
+                        listFavorite.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
                     }
                     mldListFavorite.setValue(listFavorite);
                 });
@@ -81,10 +86,15 @@ public class ProductViewModel extends ViewModel {
                         String URLsub1 = documentSnapshot.getString("URLsub1");
                         String URLsub2 = documentSnapshot.getString("URLsub2");
                         String URLthumb = documentSnapshot.getString("URLthumb");
+                        long sizeS = documentSnapshot.getLong("SizeS");
+                        long sizeM = documentSnapshot.getLong("SizeM");
+                        long sizeL = documentSnapshot.getLong("SizeL");
+                        long sizeXL = documentSnapshot.getLong("SizeXL");
+                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
 
                         Log.d(TAG, ID + "--" + Name);
 
-                        listBestSeller.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb));
+                        listBestSeller.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
                     }
                     mldListBestSeller.setValue(listBestSeller);
                 });
@@ -108,10 +118,15 @@ public class ProductViewModel extends ViewModel {
                         String URLsub1 = documentSnapshot.getString("URLsub1");
                         String URLsub2 = documentSnapshot.getString("URLsub2");
                         String URLthumb = documentSnapshot.getString("URLthumb");
+                        long sizeS = documentSnapshot.getLong("SizeS");
+                        long sizeM = documentSnapshot.getLong("SizeM");
+                        long sizeL = documentSnapshot.getLong("SizeL");
+                        long sizeXL = documentSnapshot.getLong("SizeXL");
+                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
 
                         Log.d(TAG, ID + "--" + Name);
 
-                        listNewArrivals.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb));
+                        listNewArrivals.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
                     }
                     mldListNewArrivals.setValue(listNewArrivals);
                 });
@@ -147,8 +162,13 @@ public class ProductViewModel extends ViewModel {
                         String URLsub1 = documentSnapshot.getString("URLsub1");
                         String URLsub2 = documentSnapshot.getString("URLsub2");
                         String URLthumb = documentSnapshot.getString("URLthumb");
+                        long sizeS = documentSnapshot.getLong("SizeS");
+                        long sizeM = documentSnapshot.getLong("SizeM");
+                        long sizeL = documentSnapshot.getLong("SizeL");
+                        long sizeXL = documentSnapshot.getLong("SizeXL");
+                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
 
-                        Product product = new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb);
+                        Product product = new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL);
                         detailProduct.setValue(product);
                     }
                 });

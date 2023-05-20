@@ -10,12 +10,17 @@ public class Product {
     private double Price;
     private long Quantity;
     private double PointAvg;
+    private long SizeS;
+    private long SizeM;
+    private long SizeL;
+    private long SizeXL;
+    private long SizeXXL;
     private String URLmain;
     private String URLsub1;
     private String URLsub2;
     private String URLthumb;
 
-    public Product(String ID, String name, String club, String nation, String season, double price, long quantity, double markAvg, String URLmain, String URLsub1, String URLsub2, String URLthumb) {
+    public Product(String ID, String name, String club, String nation, String season, double price, long quantity, double markAvg, String URLmain, String URLsub1, String URLsub2, String URLthumb, long sizeS, long sizeM, long sizeL, long sizeXL, long sizeXXL) {
         this.ID = ID;
         Name = name;
         Club = club;
@@ -28,6 +33,11 @@ public class Product {
         this.URLsub1 = URLsub1;
         this.URLsub2 = URLsub2;
         this.URLthumb = URLthumb;
+        this.SizeM = sizeM;
+        this.SizeS = sizeS;
+        this.SizeL = sizeL;
+        this.SizeXL = sizeXL;
+        this.SizeXXL = sizeXXL;
     }
 
     public String getID() {
@@ -124,5 +134,45 @@ public class Product {
 
     public void setURLthumb(String URLthumb) {
         this.URLthumb = URLthumb;
+    }
+
+    public long getSizeS() {
+        return SizeS;
+    }
+
+    public void setSizeS(long sizeS) {
+        SizeS = sizeS;
+    }
+
+    public long getSizeM() {
+        return SizeM;
+    }
+
+    public void setSizeM(long sizeM) {
+        SizeM = sizeM;
+    }
+
+    public long getSizeL() {
+        return SizeL;
+    }
+
+    public void setSizeL(long sizeL) {
+        SizeL = sizeL;
+    }
+
+    public long getSizeXL() {
+        return SizeXL;
+    }
+
+    public void setSizeXL(long sizeXL) {
+        SizeXL = sizeXL;
+    }
+
+    public long getSizeXXL() {
+        return SizeXXL;
+    }
+
+    public void setSizeXXL(long sizeXXL) {
+        SizeXXL = sizeXXL;
     }
 }
