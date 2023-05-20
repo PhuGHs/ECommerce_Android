@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="top|center"
     tools:context=".fragments.AccountFragment"
@@ -17,14 +18,20 @@
         android:textSize="64px"
         android:layout_marginTop="40px"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="23px"
         android:layout_marginBottom="12px"
-        android:background="@drawable/ava_circle"
-        android:src="@drawable/baseline_account_circle_24"/>
+        app:cardCornerRadius="100dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image_of_user"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar_customer"/>
+    </androidx.cardview.widget.CardView>
+
 
     <TextView
         android:layout_width="wrap_content"

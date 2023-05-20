@@ -18,11 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
@@ -79,7 +81,9 @@ public class AccountFragment extends Fragment {
     private FirebaseAuth mAuth;
     private ProfileViewModel viewModel;
     private String name;
+    private String imagePath;
     private TextView name_tv;
+    private ImageView ava_image;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +102,7 @@ public class AccountFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         name_tv = v.findViewById(R.id.name_tv);
+        ava_image = v.findViewById(R.id.image_of_user);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         if (viewModel.showUserName() != null){
@@ -107,6 +112,8 @@ public class AccountFragment extends Fragment {
                        break;
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
+                       imagePath = userInfoResource.data.getImagePath();
+                       Glide.with(this).load(imagePath).into(ava_image);
                        name_tv.setText(name);
                        break;
                    case ERROR:
