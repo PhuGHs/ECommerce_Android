@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".fragments.EditProfileFragment">
+    tools:context=".fragments.EditProfileFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -37,18 +38,24 @@
                     style="@style/header"/>
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="89px"
-                android:background="@drawable/ava_circle"
-                android:src="@drawable/baseline_account_circle_24"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                app:cardCornerRadius="100dp"
+                android:layout_marginTop="89px">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/image_of_user"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar_customer"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30px"
+                android:id="@+id/name_textview"
                 android:text="Hoàng Phúc"
                 android:textColor="@color/black"
                 android:textSize="66px"
@@ -66,9 +73,11 @@
 
                     <EditText
                         android:layout_width="970px"
-                        style="@style/header"
+                        android:id="@+id/name_edittext"
+                        style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:text="Name:"
+                        android:hint="Name:"
+                        android:textColorHint="@color/primary"
                         android:textColor="@color/primary"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -80,36 +89,40 @@
 
                     <EditText
                         android:layout_width="970px"
-                        style="@style/header"
+                        android:id="@+id/datebirth_edittext"
+                        style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:text="Datebirth:"
+                        android:hint="Datebirth:"
+                        android:textColorHint="@color/primary"
                         android:textColor="@color/primary"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
+
+
+
+                    <EditText
+                        android:layout_width="970px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25px"
+                        android:id="@+id/address_edittext"
+                        style="@style/font_crimson_regular"
+                        android:textSize="50px"
+                        android:hint="Address:"
+                        android:textColorHint="@color/primary"
+                        android:textColor="@color/primary"/>
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25px">
-
                     <EditText
                         android:layout_width="970px"
-                        style="@style/header"
+                        android:id="@+id/email_edittext"
+                        style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:text="Address:"
-                        android:textColor="@color/primary"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25px">
-                    <EditText
-                        android:layout_width="970px"
-                        style="@style/header"
-                        android:textSize="50px"
-                        android:text="Email:"
+                        android:hint="Email:"
+                        android:textColorHint="@color/primary"
                         android:textColor="@color/primary"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -119,6 +132,7 @@
                 android:layout_width="500px"
                 android:layout_height="130px"
                 android:layout_marginTop="100px"
+                android:id="@+id/change_ava_btn"
                 android:text="Change avatar"
                 android:textAllCaps="false"
                 style="@style/header"
@@ -130,6 +144,7 @@
                 android:layout_width="500px"
                 android:layout_height="130px"
                 android:layout_marginTop="40px"
+                android:id="@+id/edit_profile_btn"
                 android:text="Edit profile"
                 android:textAllCaps="false"
                 style="@style/header"
@@ -146,6 +161,7 @@
                     android:layout_width="420px"
                     android:layout_height="135px"
                     android:layout_marginLeft="69px"
+                    android:id="@+id/cancel_btn"
                     android:text="Cancel"
                     style="@style/header"
                     android:textColor="@color/white"
@@ -157,6 +173,7 @@
                     android:layout_width="420px"
                     android:layout_height="135px"
                     android:layout_marginLeft="86px"
+                    android:id="@+id/save_btn"
                     android:text="Save"
                     style="@style/header"
                     android:textColor="@color/white"
