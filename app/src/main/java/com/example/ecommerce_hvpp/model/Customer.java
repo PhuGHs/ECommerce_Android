@@ -9,10 +9,10 @@ public class Customer {
     private String Phone;
     private int SumRevenue;
     private String imagePath;
-
+    private String address;
     public Customer() {}
 
-    public Customer(String citizenID, String dob, String email, String ID, String name, String phone, int sumRevenue, String imagePath) {
+    public Customer(String citizenID, String dob, String email, String ID, String name, String phone, int sumRevenue, String imagePath, String address) {
         this.CitizenID = citizenID;
         this.Dob = dob;
         this.Email = email;
@@ -21,6 +21,7 @@ public class Customer {
         this.Phone = phone;
         this.SumRevenue = sumRevenue;
         this.imagePath = imagePath;
+        this.address = address;
     }
 
     public String getCitizenID() {
@@ -85,5 +86,13 @@ public class Customer {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -22,12 +22,15 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class AdminProfileRepository {
@@ -58,7 +61,63 @@ public class AdminProfileRepository {
         }
     }
 
-    public Observable<Resource<List<OrderHistory>>> getDataOrderHistory() {
+    public View.OnClickListener onClickBackPage() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.popBackStack();
+            }
+        };
+    }
+
+    // GET DATA CUSTOMER
+    public Observable<Resource<List<Customer>>> getObservableCustomers() {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper.getCollection("Customer").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<Customer> mListCustomer = new ArrayList<>();
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            Customer customer = snapshot.toObject(Customer.class);
+                            mListCustomer.add(customer);
+                            Log.e("Vucoder", customer.getName());
+                        }
+                        emitter.onNext(Resource.success(mListCustomer));
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
+    }
+
+    public Observable<Resource<Customer>> getObservableCustomerById(String customerID) {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper.getCollection("Customer")
+                    .whereEqualTo("ID", customerID)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<Customer> customers = queryDocumentSnapshots.toObjects(Customer.class);
+                        if (!customers.isEmpty()) {
+                            Customer customer = customers.get(0);
+                            emitter.onNext(Resource.success(customer));
+                        } else {
+                            emitter.onNext(Resource.error("Customer not found", null));
+                        }
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
+    }
+
+    // GET DATA ORDER HISTORY
+    public Observable<Resource<List<OrderHistory>>> getObservableOrderHistory() {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
             firebaseHelper.getCollection("Order").get()
@@ -79,4 +138,8 @@ public class AdminProfileRepository {
                     });
         });
     }
+
+    // GET DATA PROMOTION
+
+
 }

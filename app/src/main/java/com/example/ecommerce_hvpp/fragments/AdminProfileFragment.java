@@ -51,7 +51,7 @@ public class AdminProfileFragment extends Fragment {
 
     private void testData() {
         AdminProfileRepository repo = new AdminProfileRepository();
-        Observable<Resource<List<OrderHistory>>> observable = repo.getDataOrderHistory();
+        Observable<Resource<List<OrderHistory>>> observable = repo.getObservableOrderHistory();
         Observer<Resource<List<OrderHistory>>> observer = getObserverCustomers();
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

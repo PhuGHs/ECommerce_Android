@@ -19,6 +19,7 @@ import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentCustomerManagementBinding;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.repositories.AdminCustomerManagementRepository;
+import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin_customer_management.AdminCustomerManagementViewModel;
 
@@ -34,10 +35,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AdminCustomerManagementFragment extends Fragment {
     AdminFragmentCustomerManagementBinding mFragmentAdminManageCustomerBinding;
-    AdminCustomerManagementRepository repo;
     AdminCustomerManagementViewModel vmAdminCustomerManagement;
     AdminCustomItemCustomerAdapter adapterAdminCustomItemCustomer;
-    MutableLiveData<Resource<List<Customer>>> _mldListCustomer;
+    AdminProfileRepository repo;
 
     @Nullable
     @Override
@@ -47,66 +47,27 @@ public class AdminCustomerManagementFragment extends Fragment {
         // init view model
         vmAdminCustomerManagement = new ViewModelProvider(requireActivity()).get(AdminCustomerManagementViewModel.class);
 
-//        // get data from firebase
-//        getData();
-//
-//        // display data into app
-//        displayAllCustomers(_mldListCustomer);
-        repo = new AdminCustomerManagementRepository();
-        Observable<Resource<List<Customer>>> observable = repo.getDataCustomers();
+        // get data and display in app
+        repo = new AdminProfileRepository();
+        Observable<Resource<List<Customer>>> observable = repo.getObservableCustomers();
         Observer<Resource<List<Customer>>> observer = getObserverCustomers();
+
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
+                .subscribe(observer);
+
         // on click back page
-        mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(onClickBackPage());
+        mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(repo.onClickBackPage());
 
         return mFragmentAdminManageCustomerBinding.getRoot();
     }
 
-    private void getData() {
-        repo = new AdminCustomerManagementRepository();
-        _mldListCustomer = (MutableLiveData<Resource<List<Customer>>>) repo.getAllCustomer();
-    }
-
-    private void displayAllCustomers(MutableLiveData<Resource<List<Customer>>> mldListCustomer) {
-        if(mldListCustomer.getValue() != null) {
-            mldListCustomer.observe(requireActivity(), resource -> {
-                switch(resource.status) {
-                    case LOADING:
-                        break;
-                    case SUCCESS:
-                        adapterAdminCustomItemCustomer = new AdminCustomItemCustomerAdapter(getContext(), Objects.requireNonNull(resource.data));
-                        //set up recyclerview
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                        mFragmentAdminManageCustomerBinding.adminCustomerManagementRcvItemCustomer.setLayoutManager(layoutManager);
-                        mFragmentAdminManageCustomerBinding.adminCustomerManagementRcvItemCustomer.setAdapter(adapterAdminCustomItemCustomer);
-
-                        layoutManager.scrollToPositionWithOffset(adapterAdminCustomItemCustomer.getItemCount() - 1, 0);
-                        break;
-                    case ERROR:
-                        Log.i("VuError", resource.message);
-                }
-            });
-        }
-    }
-
-    private View.OnClickListener onClickBackPage() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.popBackStack();
-            }
-        };
-    }
 
     private Observer<Resource<List<Customer>>> getObserverCustomers() {
         return new Observer<Resource<List<Customer>>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
-                Log.e("Vucoder", "onSubscribe");
             }
 
             @Override

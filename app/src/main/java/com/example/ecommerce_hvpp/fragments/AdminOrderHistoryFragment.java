@@ -36,6 +36,7 @@ public class AdminOrderHistoryFragment extends Fragment {
     AdminFragmentOrderHistoryBinding mAdminFragmentOrderHistoryBinding;
     AdminOrderHistoryViewModel vmAdminOrderHistory;
     AdminCustomItemOrderHistoryAdapter adapterAdminCustomItemOrderHistory;
+    AdminProfileRepository repo;
 
     @Nullable
     @Override
@@ -45,39 +46,19 @@ public class AdminOrderHistoryFragment extends Fragment {
         // init view model
         vmAdminOrderHistory = new ViewModelProvider(requireActivity()).get(AdminOrderHistoryViewModel.class);
 
-        // get data from firestore
-        getData();
-
         // display data into app
-        displayData();
+        repo = new AdminProfileRepository();
 
-        // on click back page
-        mAdminFragmentOrderHistoryBinding.adminOrderHistoryHeaderBack.setOnClickListener(onClickBackPage());
-
-        return mAdminFragmentOrderHistoryBinding.getRoot();
-    }
-
-    private void getData() {
-        AdminProfileRepository repo = new AdminProfileRepository();
-        Observable<Resource<List<OrderHistory>>> observable = repo.getDataOrderHistory();
+        Observable<Resource<List<OrderHistory>>> observable = repo.getObservableOrderHistory();
         Observer<Resource<List<OrderHistory>>> observer = getObserverCustomers();
-        observable.subscribeOn(Schedulers.io())
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-    }
 
-    private void displayData() {
+        // on click back page
+        mAdminFragmentOrderHistoryBinding.adminOrderHistoryHeaderBack.setOnClickListener(repo.onClickBackPage());
 
-    }
-
-    private View.OnClickListener onClickBackPage() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.popBackStack();
-            }
-        };
+        return mAdminFragmentOrderHistoryBinding.getRoot();
     }
 
     private Observer<Resource<List<OrderHistory>>> getObserverCustomers() {
@@ -97,6 +78,7 @@ public class AdminOrderHistoryFragment extends Fragment {
                         break;
                     case SUCCESS:
                         adapterAdminCustomItemOrderHistory = new AdminCustomItemOrderHistoryAdapter(getContext(), Objects.requireNonNull(resource.data));
+
                         //set up recyclerview
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                         mAdminFragmentOrderHistoryBinding.adminOrderHistoryRcvItemOrderHistory.setLayoutManager(layoutManager);
