@@ -2,19 +2,13 @@ package com.example.ecommerce_hvpp.repositories;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.model.UserInfo;
 import com.example.ecommerce_hvpp.util.Resource;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class ProfileRepository {
     private FirebaseHelper firebaseHelper;

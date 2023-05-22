@@ -5,15 +5,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.ProfileViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +62,21 @@ public class EditProfileFrament extends Fragment {
         return fragment;
     }
     private NavController navController;
-    ImageButton back_Account_btn;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private ProfileViewModel viewModel;
+    private ImageButton back_Account_btn;
+    private String name;
+    private String datebirth;
+    private String address;
+    private String email;
+    private String imagePath;
+    private TextView name_tv;
+    private EditText name_edt;
+    private EditText datebirth_edt;
+    private EditText address_edt;
+    private EditText email_edt;
+    private ImageView ava_image;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +90,46 @@ public class EditProfileFrament extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.actitvity_user_editprofile, container, false);
+        View v = inflater.inflate(R.layout.actitvity_user_editprofile, container, false);
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        name_tv = v.findViewById(R.id.name_textview);
+        name_edt = v.findViewById(R.id.name_edittext);
+        datebirth_edt = v.findViewById(R.id.datebirth_edittext);
+        address_edt = v.findViewById(R.id.address_edittext);
+        email_edt = v.findViewById(R.id.email_edittext);
+        ava_image = v.findViewById(R.id.image_of_user);
+
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        if (viewModel.showUserName() != null){
+            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
+                switch (userInfoResource.status){
+                    case LOADING:
+                        break;
+                    case SUCCESS:
+                        name = userInfoResource.data.getUsername();
+                        datebirth = userInfoResource.data.getDatebirth();
+                        address = userInfoResource.data.getAddress();
+                        email = userInfoResource.data.getEmail();
+                        imagePath = userInfoResource.data.getImagePath();
+                        Glide.with(this).load(imagePath).fitCenter().into(ava_image);
+
+                        name_tv.setText(name);
+                        name_edt.setText("Name:     " + name);
+                        datebirth_edt.setText("Datebirth:     " + datebirth);
+                        address_edt.setText("Address:     " + address);
+                        email_edt.setText("Email:     " + email);
+                        break;
+                    case ERROR:
+                        CustomToast loginErrorToast = new CustomToast();
+                        loginErrorToast.ShowToastMessage(requireActivity(), 2, userInfoResource.message);
+                        break;
+                }
+            });
+        }
+
+        return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
