@@ -1,6 +1,7 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -41,6 +42,8 @@ import com.example.ecommerce_hvpp.adapter.AdminProductImageSlider;
 import com.example.ecommerce_hvpp.model.ItemModel;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin_product_management.AdminProductDetailsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -51,8 +54,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminProductDetailsFragment extends Fragment {
+    //region FIELDS
     private static final int PICK_IMAGE_REQUEST_CODE = 456;
     private final String TAG = "AdminProductDetailsFragment";
+    private ProgressDialog progressDialog;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private ActivityResultLauncher<Intent> thumbnailLauncher;
     private ActivityResultLauncher<String> requestPermissionLauncher;
@@ -60,6 +65,7 @@ public class AdminProductDetailsFragment extends Fragment {
     private ArrayAdapter<CharSequence> TypeAdapter, SeasonAdapter;
     private AdminProductImageSlider SlideAdapter;
     private NavController navController;
+    private ContentResolver contentResolver;
     private TextView tvHeader;
     private ImageView btnBack;
     private AppCompatButton btnAddMoreImages;
@@ -69,6 +75,8 @@ public class AdminProductDetailsFragment extends Fragment {
     private EditText etName, etPrice, etDescription;
     private Button btnSave, btnCancel;
     private Spinner spType, spSeason;
+    private Uri thumbnailImage;
+    //endregion
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +110,8 @@ public class AdminProductDetailsFragment extends Fragment {
             if (result.getResultCode() == FragmentActivity.RESULT_OK) {
                 Intent data = result.getData();
                 if (data != null && data.getData() != null) {
-                    tvThumbnailImage.setText(getFileNameFromUri(data.getData()));
+                    thumbnailImage = data.getData();
+                    tvThumbnailImage.setText(getFileNameFromUri(thumbnailImage));
                 }
             }
         });
@@ -114,7 +123,6 @@ public class AdminProductDetailsFragment extends Fragment {
 
         //Initialize viewModel
         viewModel = new ViewModelProvider(this).get(AdminProductDetailsViewModel.class);
-
         //get productId
         if(getArguments() == null) {
             Id = "Add Product";
@@ -124,7 +132,9 @@ public class AdminProductDetailsFragment extends Fragment {
             viewModel.setIsEditMode(true);
         }
 
-        //Initialize view
+        contentResolver = getContext().getContentResolver();
+
+        //region Initialize View
         tvHeader = view.findViewById(R.id.header_title);
         btnBack = view.findViewById(R.id.btnBackProductDetail);
         etName = view.findViewById(R.id.etName);
@@ -137,16 +147,18 @@ public class AdminProductDetailsFragment extends Fragment {
 
         btnSave = view.findViewById(R.id.btnSave);
         btnCancel = view.findViewById(R.id.btnCancel);
+        //endregion
 
-        //initialize spinner adapter
+        //region initialize spinner adapter
         TypeAdapter = ArrayAdapter.createFromResource(getContext() , R.array.type_array, R.layout.simple_spinner_string_item);
         SeasonAdapter = ArrayAdapter.createFromResource(getContext() , R.array.season_array, R.layout.simple_spinner_string_item);
         TypeAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
         SeasonAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
         spType.setAdapter(TypeAdapter);
         spSeason.setAdapter(SeasonAdapter);
+        //endregion
 
-        //Slider view
+        //region sliderView
         sliderView = view.findViewById(R.id.imageSlider);
         SlideAdapter = new AdminProductImageSlider(getContext());
         sliderView.setSliderAdapter(SlideAdapter);
@@ -154,6 +166,7 @@ public class AdminProductDetailsFragment extends Fragment {
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setScrollTimeInSec(3);
         sliderView.stopAutoCycle();
+        //endregion
 
         return view;
     }
@@ -233,13 +246,12 @@ public class AdminProductDetailsFragment extends Fragment {
                         spType.setSelection(TypeAdapter.getPosition("Club"));
                     }
                     spSeason.setSelection(SeasonAdapter.getPosition(resource.data.getSeason()));
-                    tvThumbnailImage.setText(resource.data.getURLthumb());
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getURLmain()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getURLsub1()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getURLsub2()));
+                    tvThumbnailImage.setText(resource.data.getUrlthumb());
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlmain()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub1()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub2()));
                     break;
             }
-
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -249,21 +261,43 @@ public class AdminProductDetailsFragment extends Fragment {
         });
     }
     public void implementAddFunctionality() {
-        String Name, Type, Season, Price, Description;
         btnCancel.setVisibility(View.GONE);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addFunc_addProduct();
+            }
+        });
+    }
+
+    public void addFunc_addProduct() {
+        String Name, Type, Season, Price, Description;
         Name = etName.getText().toString();
         Type = spType.getSelectedItem().toString();
         Season = spSeason.getSelectedItem().toString();
         Price = etPrice.getText().toString();
         Description = etDescription.getText().toString();
 
-//        Product pd = new Product()
+        Product pd = new Product(Name, Season, Price, Description);
 
-//        addFunc_addProduct();
-    }
+        viewModel.addProduct(contentResolver, pd, thumbnailImage , SlideAdapter.getList());
 
-    public void addFunc_addProduct(Product pd) {
-        viewModel.addProduct(pd);
+        viewModel.getCombinedLiveData().observe(getViewLifecycleOwner(), resource -> {
+            if(resource.status == Resource.Status.LOADING) {
+                showProgressDialog();
+            } else {
+                hideProgressDialog();
+
+                if(resource.status == Resource.Status.SUCCESS) {
+                    CustomToast toastShowSuccess = new CustomToast();
+                    toastShowSuccess.ShowToastMessage(requireActivity(), 1, "Add product successfully!!!");
+                } else if (resource.status == Resource.Status.ERROR) {
+                    CustomToast toastShowError = new CustomToast();
+                    toastShowError.ShowToastMessage(requireActivity(), 2, resource.message);
+                }
+            }
+        });
+
     }
 
     private void requestGalleryPermission() {
@@ -321,6 +355,22 @@ public class AdminProductDetailsFragment extends Fragment {
             }
         }
         return fileName;
+    }
+
+
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Adding Product...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +25,20 @@ import java.util.List;
 public class AdminProductManagementRepository {
     private final FirebaseHelper fbHelper;
     private MutableLiveData<Resource<List<Product>>> _mldProductList;
+    private MutableLiveData<Resource<String>> _mldUAddProduct = new MutableLiveData<>();
     private MutableLiveData<Resource<Product>> _mldProduct;
     private final String TAG = "AdminProductManagementRepository";
+    private StorageReference imageRef;
     public AdminProductManagementRepository() {
         fbHelper = FirebaseHelper.getInstance();
         _mldProductList = new MutableLiveData<>();
         _mldProduct = new MutableLiveData<>();
+        imageRef = fbHelper.getImageStorage();
+    }
+
+    public interface OnImageUploadListener {
+        void onImageUploadSuccess(String imageUrl);
+        void onImageUploadFailure(String exception);
     }
 
     public LiveData<Resource<List<Product>>> getAllProductWithNoCriteria() {
@@ -72,20 +83,38 @@ public class AdminProductManagementRepository {
         return _mldProduct;
     }
 
-    public void addProduct(Product pd) {
+    public LiveData<Resource<String>> addProduct(Product pd) {
+        _mldUAddProduct.setValue(Resource.loading(null));
         fbHelper.getCollection("Product").add(pd)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with Id: " + documentReference.getId());
+                        _mldUAddProduct.setValue(Resource.success("added product"));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error adding document");
+                        _mldUAddProduct.setValue(Resource.error("Error adding product", null));
                     }
                 });
+        return _mldUAddProduct;
     }
+
+    public void uploadImage(Uri uri, String fileType, final OnImageUploadListener listener) {
+        String path = System.currentTimeMillis() + "." + fileType;
+        UploadTask uploadTask = imageRef.child(path).putFile(uri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            imageRef.child(path).getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                listener.onImageUploadSuccess(downloadUrl.toString());
+            }).addOnFailureListener(e -> {
+                listener.onImageUploadFailure(e.getMessage());
+            });
+        }).addOnFailureListener(e -> {
+            listener.onImageUploadFailure(e.getMessage());
+        });
+    }
+
+
 }
 

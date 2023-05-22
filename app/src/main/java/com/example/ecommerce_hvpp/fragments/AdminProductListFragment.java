@@ -115,7 +115,7 @@ public class AdminProductListFragment extends Fragment {
                 break;
             case R.id.edit_btn:
                 Bundle bundle = new Bundle();
-                bundle.putString("productId", products.get(mCurrentItemPosition).getID());
+                bundle.putString("productId", products.get(mCurrentItemPosition).getId());
                 navController.navigate(R.id.navigate_to_productDetails, bundle);
                 break;
             default:

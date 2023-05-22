@@ -70,7 +70,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter {
         }
         public void bind(Product pd) {
             Glide.with(itemView)
-                    .load(pd.getURLthumb())
+                    .load(pd.getUrlthumb())
                     .fitCenter()
                     .into(ivProductImage);
             tvProductName.setText(pd.getName());

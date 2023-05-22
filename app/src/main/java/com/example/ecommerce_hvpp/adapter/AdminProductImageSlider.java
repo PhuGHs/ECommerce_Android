@@ -29,6 +29,10 @@ public class AdminProductImageSlider extends SliderViewAdapter<AdminProductImage
         notifyDataSetChanged();
     }
 
+    public List<ItemModel> getList() {
+        return list;
+    }
+
     public void deleteItem(int position) {
         this.list.remove(position);
         notifyDataSetChanged();
@@ -59,7 +63,6 @@ public class AdminProductImageSlider extends SliderViewAdapter<AdminProductImage
                     .fitCenter()
                     .into(viewHolder.imageViewBackground);
         }
-
     }
 
     @Override
