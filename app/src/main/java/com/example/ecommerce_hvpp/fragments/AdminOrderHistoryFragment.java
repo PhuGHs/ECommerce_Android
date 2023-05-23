@@ -1,6 +1,9 @@
 package com.example.ecommerce_hvpp.fragments;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +11,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
+import com.example.ecommerce_hvpp.activities.TestAdminActivity;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemOrderHistoryAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentOrderHistoryBinding;
+import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
@@ -37,6 +46,10 @@ public class AdminOrderHistoryFragment extends Fragment {
     AdminOrderHistoryViewModel vmAdminOrderHistory;
     AdminCustomItemOrderHistoryAdapter adapterAdminCustomItemOrderHistory;
     AdminProfileRepository repo;
+    Observable<Resource<List<OrderHistory>>> observable;
+    Observer<Resource<List<OrderHistory>>> observer;
+    private Disposable disposable;
+    static int PERMISSION_CODE = 100;
 
     @Nullable
     @Override
@@ -49,14 +62,41 @@ public class AdminOrderHistoryFragment extends Fragment {
         // display data into app
         repo = new AdminProfileRepository();
 
-        Observable<Resource<List<OrderHistory>>> observable = repo.getObservableOrderHistory();
-        Observer<Resource<List<OrderHistory>>> observer = getObserverCustomers();
+        observable = repo.getObservableOrderHistory();
+        observer = getObserverCustomers();
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
 
         // on click back page
         mAdminFragmentOrderHistoryBinding.adminOrderHistoryHeaderBack.setOnClickListener(repo.onClickBackPage());
+
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[] {Manifest.permission.CALL_PHONE}, PERMISSION_CODE);
+        }
+
+        // search bar
+        mAdminFragmentOrderHistoryBinding.adminOrderHistorySearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                String strSearch = charSequence.toString();
+//                observer = getObserverAfterSearch(strSearch);
+//
+//                observable.subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(observer);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         return mAdminFragmentOrderHistoryBinding.getRoot();
     }
@@ -67,6 +107,7 @@ public class AdminOrderHistoryFragment extends Fragment {
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
                 Log.e("Vucoder", "onSubscribe");
+                disposable = d;
             }
 
             @Override
@@ -103,5 +144,48 @@ public class AdminOrderHistoryFragment extends Fragment {
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+//    private Observer<Resource<List<Customer>>> getObserverAfterSearch(String strSearch) {
+//        return new Observer<Resource<List<Customer>>>() {
+//            @Override
+//            public void onSubscribe(@NonNull Disposable d) {
+//                // Perform any setup here if needed
+//                disposable = d;
+//            }
+//
+//            @Override
+//            public void onNext(@NonNull Resource<List<Customer>> resource) {
+//                Log.e("VuSearch", "onNext");
+//                switch (resource.status) {
+//                    case LOADING:
+//                        // Handle loading state if needed
+//                        break;
+//                    case SUCCESS:
+//                        adapterAdminCustomItemOrderHistory.filterOrderHistory(strSearch);
+//                        break;
+//                    case ERROR:
+//                        Log.i("VuError", resource.message);
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onError(@NonNull Throwable e) {
+//                // Handle error state if needed
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                // Handle completion if needed
+//                Log.e("Vucoder", "onComplete");
+//            }
+//        };
+//    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.dispose();
     }
 }

@@ -61,6 +61,7 @@ public class AdminProfileRepository {
         }
     }
 
+
     public View.OnClickListener onClickBackPage() {
         return new View.OnClickListener() {
             @Override
@@ -74,6 +75,7 @@ public class AdminProfileRepository {
     // GET DATA CUSTOMER
     public Observable<Resource<List<Customer>>> getObservableCustomers() {
         return Observable.create(emitter -> {
+            Log.e("VucoderSearch", Thread.currentThread().getName());
             emitter.onNext(Resource.loading(null));
             firebaseHelper.getCollection("Customer").get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -81,7 +83,7 @@ public class AdminProfileRepository {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                             Customer customer = snapshot.toObject(Customer.class);
                             mListCustomer.add(customer);
-                            Log.e("Vucoder", customer.getName());
+                            Log.e("VucoderSearch", customer.getName());
                         }
                         emitter.onNext(Resource.success(mListCustomer));
                         emitter.onComplete();

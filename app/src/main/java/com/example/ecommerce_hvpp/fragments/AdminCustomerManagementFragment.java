@@ -1,6 +1,8 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +40,10 @@ public class AdminCustomerManagementFragment extends Fragment {
     AdminCustomerManagementViewModel vmAdminCustomerManagement;
     AdminCustomItemCustomerAdapter adapterAdminCustomItemCustomer;
     AdminProfileRepository repo;
+    Observer<Resource<List<Customer>>> observer;
+    Observable<Resource<List<Customer>>> observable;
+    private Disposable disposable;
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mFragmentAdminManageCustomerBinding = AdminFragmentCustomerManagementBinding.inflate(inflater, container, false);
@@ -49,8 +53,8 @@ public class AdminCustomerManagementFragment extends Fragment {
 
         // get data and display in app
         repo = new AdminProfileRepository();
-        Observable<Resource<List<Customer>>> observable = repo.getObservableCustomers();
-        Observer<Resource<List<Customer>>> observer = getObserverCustomers();
+        observable = repo.getObservableCustomers();
+        observer = getObserverCustomers();
 
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +62,30 @@ public class AdminCustomerManagementFragment extends Fragment {
 
         // on click back page
         mFragmentAdminManageCustomerBinding.adminCustomerManagementHeaderBack.setOnClickListener(repo.onClickBackPage());
+
+        // search bar
+        mFragmentAdminManageCustomerBinding.adminCustomerManagementSearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String strSearch = charSequence.toString();
+                observer = getObserverAfterSearch(strSearch);
+
+                observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+            }
+        });
 
         return mFragmentAdminManageCustomerBinding.getRoot();
     }
@@ -68,11 +96,11 @@ public class AdminCustomerManagementFragment extends Fragment {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
+                disposable = d;
             }
 
             @Override
             public void onNext(@NonNull Resource<List<Customer>> resource) {
-                Log.e("Vucoder", "onNext");
                 switch (resource.status) {
                     case LOADING:
                         // Handle loading state if needed
@@ -102,5 +130,48 @@ public class AdminCustomerManagementFragment extends Fragment {
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+    private Observer<Resource<List<Customer>>> getObserverAfterSearch(String strSearch) {
+        return new Observer<Resource<List<Customer>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(@NonNull Resource<List<Customer>> resource) {
+                Log.e("VuSearch", "onNext");
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        adapterAdminCustomItemCustomer.filterCustomer(strSearch);
+                        break;
+                    case ERROR:
+                        Log.i("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.dispose();
     }
 }

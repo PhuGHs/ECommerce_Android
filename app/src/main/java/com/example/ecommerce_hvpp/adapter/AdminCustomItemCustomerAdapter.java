@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -12,15 +13,18 @@ import com.example.ecommerce_hvpp.databinding.AdminCustomItemCustomerBinding;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCustomItemCustomerAdapter.AdminCustomItemCustomerViewHolder> {
-    List<Customer> mListUsers;
+    List<Customer> mListCustomers;
+    List<Customer> mListCustomersOriginal;
     Context mContext;
 
     public AdminCustomItemCustomerAdapter(Context context, List<Customer> listUser) {
         this.mContext = context;
-        this.mListUsers = listUser;
+        this.mListCustomers = listUser;
+        this.mListCustomersOriginal = listUser;
     }
 
     @NonNull
@@ -33,7 +37,7 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
 
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemCustomerViewHolder holder, int position) {
-        Customer customer = mListUsers.get(position);
+        Customer customer = mListCustomers.get(position);
         if (customer == null) {
             return;
         }
@@ -44,7 +48,25 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
 
     @Override
     public int getItemCount() {
-        return mListUsers.size();
+        return mListCustomers.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterCustomer(String strSearch) {
+        if (strSearch.isEmpty()) {
+            mListCustomers = mListCustomersOriginal;
+            notifyDataSetChanged();
+        } else {
+            List<Customer> listCustomers = new ArrayList<>();
+            for (Customer customer : mListCustomersOriginal) {
+                if (customer.getName().toLowerCase().contains(strSearch.toLowerCase()) ||
+                    customer.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
+                    listCustomers.add(customer);
+                }
+            }
+            mListCustomers = listCustomers;
+            notifyDataSetChanged();
+        }
     }
 
     public static class AdminCustomItemCustomerViewHolder extends RecyclerView.ViewHolder {

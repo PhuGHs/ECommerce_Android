@@ -1,23 +1,32 @@
 package com.example.ecommerce_hvpp.adapter;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.activities.TestAdminActivity;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
+import com.example.ecommerce_hvpp.fragments.AdminOrderHistoryFragment;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.firestore.v1.StructuredQuery;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +39,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<AdminCustomItemOrderHistoryAdapter.AdminCustomItemOrderHistoryViewHolder> {
     Context mContext;
     List<OrderHistory> mListOrderHistory;
+    List<OrderHistory> mListOrderHistoryOriginal;
     SimpleDateFormat templateDate;
     AdminProfileRepository repo;
 
@@ -66,6 +76,13 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+
+        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIconPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeCallPhone();
+            }
+        });
     }
 
     @Override
@@ -111,6 +128,32 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+//    @SuppressLint("NotifyDataSetChanged")
+//    public void filterCustomer(String strSearch) {
+//        if (strSearch.isEmpty()) {
+//            mListOrderHistory = mListOrderHistoryOriginal;
+//            notifyDataSetChanged();
+//        } else {
+//            List<OrderHistory> listOrderHistory = new ArrayList<>();
+//            for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
+//                Customer customer =
+//                if (orderHistory.getCustomerID().toLowerCase().contains(strSearch.toLowerCase()) ||
+//                        orderHistory.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
+//                    listOrderHistory.add(orderHistory);
+//                }
+//            }
+//            mListOrderHistory = listOrderHistory;
+//            notifyDataSetChanged();
+//        }
+//    }
+    private void makeCallPhone() {
+        Log.e("CallPhone", "Hello");
+        String phone = "0814321006";
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phone));
+        mContext.startActivity(intent);
     }
 
     public static class AdminCustomItemOrderHistoryViewHolder extends RecyclerView.ViewHolder {

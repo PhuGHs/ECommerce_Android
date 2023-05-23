@@ -64,12 +64,12 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/admin_customer_management_search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
                 android:ems="10"
                 android:inputType="text"
                 style="@style/w400_50"
-                android:text="Amos Ivor"
                 android:textColor="@color/black"
                 android:hint="Search for ..."
                 android:textColorHint="@android:color/darker_gray"
