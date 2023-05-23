@@ -110,17 +110,6 @@
                         android:textColor="#A86464"
                         android:textSize="70px"
                         style = "@style/font_crimson_bold"/>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-                    <ImageButton
-                        android:layout_marginTop="20px"
-                        android:layout_marginRight="20px"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:src="@drawable/right_arrow"/>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listNewArrivals"
@@ -149,17 +138,6 @@
                         android:textColor="#A86464"
                         android:textSize="70px"
                         style = "@style/font_crimson_bold"/>
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-                    <ImageButton
-                        android:layout_marginTop="20px"
-                        android:layout_marginRight="20px"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:src="@drawable/right_arrow"/>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listBestSeller"

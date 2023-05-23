@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.transition.Slide;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.FeedbackCustomerAdapter;
+import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
@@ -94,6 +98,9 @@ public class DetailProductCustomerFragment extends Fragment {
     RadioGroup sizeGroup;
     List<Long> listSize;
     Integer MinQuantity = 1;
+    RecyclerView feedbackRv;
+    FeedbackCustomerAdapter feedbackAdapter;
+    LinearLayoutManager linearLayoutManager;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -112,6 +119,8 @@ public class DetailProductCustomerFragment extends Fragment {
         plusQuantity = (ImageButton) view.findViewById(R.id.detailPlusQuantity);
         sizeGroup = (RadioGroup) view.findViewById(R.id.sizeGroup);
         sizeAvailable = (TextView) view.findViewById(R.id.sizeAvailable);
+        feedbackRv = (RecyclerView) view.findViewById(R.id.listFeedbackC);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         //set data
@@ -119,33 +128,10 @@ public class DetailProductCustomerFragment extends Fragment {
         getDataFromPreviousFragment();
 
         btnBackToPrevious.setOnClickListener(view1 -> navController.popBackStack());
-        minusQuantity.setOnClickListener(view12 -> {
-            int quantity = Integer.parseInt(detailQuantity.getText().toString());
-            if (quantity > MinQuantity){
-                quantity--;
-                detailQuantity.setText(String.valueOf(quantity));
-            }
-        });
-        plusQuantity.setOnClickListener(view13 -> {
-            int quantity = Integer.parseInt(detailQuantity.getText().toString());
-            quantity++;
-            detailQuantity.setText(String.valueOf(quantity));
-        });
 
-        sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
-            if (listSize != null){
-                if (checkID == R.id.rbtnSizeS)
-                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
-                if (checkID == R.id.rbtnSizeM)
-                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
-                if (checkID == R.id.rbtnSizeL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
-                if (checkID == R.id.rbtnSizeXL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(3)));
-                if (checkID == R.id.rbtnSize2XL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(4)));
-            }
-        });
+        modifyQuantityProduct();
+
+        setSizeQuantity();
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
@@ -169,7 +155,38 @@ public class DetailProductCustomerFragment extends Fragment {
 
                 loadDetailImage(product);
             });
+            viewModel.getFeedbackProduct(productID).observe(getViewLifecycleOwner(), feedbacks -> getDetailFeedbackAndSetFeedbackRecycleView(feedbacks));
         }
+    }
+    public void modifyQuantityProduct(){
+        minusQuantity.setOnClickListener(view12 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            if (quantity > MinQuantity){
+                quantity--;
+                detailQuantity.setText(String.valueOf(quantity));
+            }
+        });
+        plusQuantity.setOnClickListener(view13 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            quantity++;
+            detailQuantity.setText(String.valueOf(quantity));
+        });
+    }
+    public void setSizeQuantity(){
+        sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
+            if (listSize != null){
+                if (checkID == R.id.rbtnSizeS)
+                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
+                if (checkID == R.id.rbtnSizeM)
+                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
+                if (checkID == R.id.rbtnSizeL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                if (checkID == R.id.rbtnSizeXL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(3)));
+                if (checkID == R.id.rbtnSize2XL)
+                    sizeAvailable.setText(String.valueOf(listSize.get(4)));
+            }
+        });
     }
     public void loadDetailImage(Product product){
         ArrayList<SlideModel> listImage = new ArrayList<>();
@@ -187,5 +204,10 @@ public class DetailProductCustomerFragment extends Fragment {
         listImage.add(slideModel3);
 
         detailImgSlider.setImageList(listImage, ScaleTypes.FIT);
+    }
+    public void getDetailFeedbackAndSetFeedbackRecycleView(List<Feedback> listFeedback){
+        feedbackAdapter = new FeedbackCustomerAdapter(getContext(), (ArrayList<Feedback>) listFeedback);
+        feedbackRv.setAdapter(feedbackAdapter);
+        feedbackRv.setLayoutManager(linearLayoutManager);
     }
 }

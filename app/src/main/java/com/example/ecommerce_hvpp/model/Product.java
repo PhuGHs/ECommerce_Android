@@ -39,6 +39,9 @@ public class Product {
         this.SizeXL = sizeXL;
         this.SizeXXL = sizeXXL;
     }
+    public Product(){
+
+    }
 
     public String getID() {
         return ID;

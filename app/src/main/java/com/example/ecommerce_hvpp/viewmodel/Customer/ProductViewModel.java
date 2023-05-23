@@ -7,14 +7,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
     private List<Product> listNewArrivals, listBestSeller, listFavorite;
     private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite;
+    private MutableLiveData<List<Feedback>> mldListFeedback;
     private MutableLiveData<Product> detailProduct;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
@@ -30,6 +34,7 @@ public class ProductViewModel extends ViewModel {
         mldListNewArrivals = new MutableLiveData<>();
         mldListBestSeller = new MutableLiveData<>();
         mldListFavorite = new MutableLiveData<>();
+        mldListFeedback = new MutableLiveData<>();
 
         initListNewArrivalsLiveData();
         initListBestSellerLiveData();
@@ -42,27 +47,12 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String ID = documentSnapshot.getString("ID");
-                        String Name = documentSnapshot.getString("Name");
-                        String Club = documentSnapshot.getString("Club");
-                        String Nation = documentSnapshot.getString("Nation");
-                        String Season = documentSnapshot.getString("Season");
-                        double Price = documentSnapshot.getDouble("Price");
-                        long Quantity = documentSnapshot.getLong("Quantity");
-                        double Point = documentSnapshot.getDouble("Point");
-                        String URLmain = documentSnapshot.getString("URLmain");
-                        String URLsub1 = documentSnapshot.getString("URLsub1");
-                        String URLsub2 = documentSnapshot.getString("URLsub2");
-                        String URLthumb = documentSnapshot.getString("URLthumb");
-                        long sizeS = documentSnapshot.getLong("SizeS");
-                        long sizeM = documentSnapshot.getLong("SizeM");
-                        long sizeL = documentSnapshot.getLong("SizeL");
-                        long sizeXL = documentSnapshot.getLong("SizeXL");
-                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
 
-                        Log.d(TAG, ID + "--" + Name);
+                        Product product = documentSnapshot.toObject(Product.class);
 
-                        listFavorite.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
+                        Log.d(TAG, product.getID() + "--" + product.getName());
+
+                        listFavorite.add(product);
                     }
                     mldListFavorite.setValue(listFavorite);
                 });
@@ -74,27 +64,11 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String ID = documentSnapshot.getString("ID");
-                        String Name = documentSnapshot.getString("Name");
-                        String Club = documentSnapshot.getString("Club");
-                        String Nation = documentSnapshot.getString("Nation");
-                        String Season = documentSnapshot.getString("Season");
-                        double Price = documentSnapshot.getDouble("Price");
-                        long Quantity = documentSnapshot.getLong("Quantity");
-                        double Point = documentSnapshot.getDouble("Point");
-                        String URLmain = documentSnapshot.getString("URLmain");
-                        String URLsub1 = documentSnapshot.getString("URLsub1");
-                        String URLsub2 = documentSnapshot.getString("URLsub2");
-                        String URLthumb = documentSnapshot.getString("URLthumb");
-                        long sizeS = documentSnapshot.getLong("SizeS");
-                        long sizeM = documentSnapshot.getLong("SizeM");
-                        long sizeL = documentSnapshot.getLong("SizeL");
-                        long sizeXL = documentSnapshot.getLong("SizeXL");
-                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
+                        Product product = documentSnapshot.toObject(Product.class);
 
-                        Log.d(TAG, ID + "--" + Name);
+                        Log.d(TAG, product.getID() + "--" + product.getName());
 
-                        listBestSeller.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
+                        listBestSeller.add(product);
                     }
                     mldListBestSeller.setValue(listBestSeller);
                 });
@@ -106,27 +80,11 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String ID = documentSnapshot.getString("ID");
-                        String Name = documentSnapshot.getString("Name");
-                        String Club = documentSnapshot.getString("Club");
-                        String Nation = documentSnapshot.getString("Nation");
-                        String Season = documentSnapshot.getString("Season");
-                        double Price = documentSnapshot.getDouble("Price");
-                        long Quantity = documentSnapshot.getLong("Quantity");
-                        double Point = documentSnapshot.getDouble("Point");
-                        String URLmain = documentSnapshot.getString("URLmain");
-                        String URLsub1 = documentSnapshot.getString("URLsub1");
-                        String URLsub2 = documentSnapshot.getString("URLsub2");
-                        String URLthumb = documentSnapshot.getString("URLthumb");
-                        long sizeS = documentSnapshot.getLong("SizeS");
-                        long sizeM = documentSnapshot.getLong("SizeM");
-                        long sizeL = documentSnapshot.getLong("SizeL");
-                        long sizeXL = documentSnapshot.getLong("SizeXL");
-                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
+                        Product product = documentSnapshot.toObject(Product.class);
 
-                        Log.d(TAG, ID + "--" + Name);
+                        Log.d(TAG, product.getID() + "--" + product.getName());
 
-                        listNewArrivals.add(new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL));
+                        listNewArrivals.add(product);
                     }
                     mldListNewArrivals.setValue(listNewArrivals);
                 });
@@ -150,29 +108,33 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").document(productID).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()){
-                        String ID = documentSnapshot.getString("ID");
-                        String Name = documentSnapshot.getString("Name");
-                        String Club = documentSnapshot.getString("Club");
-                        String Nation = documentSnapshot.getString("Nation");
-                        String Season = documentSnapshot.getString("Season");
-                        double Price = documentSnapshot.getDouble("Price");
-                        long Quantity = documentSnapshot.getLong("Quantity");
-                        double Point = documentSnapshot.getDouble("Point");
-                        String URLmain = documentSnapshot.getString("URLmain");
-                        String URLsub1 = documentSnapshot.getString("URLsub1");
-                        String URLsub2 = documentSnapshot.getString("URLsub2");
-                        String URLthumb = documentSnapshot.getString("URLthumb");
-                        long sizeS = documentSnapshot.getLong("SizeS");
-                        long sizeM = documentSnapshot.getLong("SizeM");
-                        long sizeL = documentSnapshot.getLong("SizeL");
-                        long sizeXL = documentSnapshot.getLong("SizeXL");
-                        long sizeXXL = documentSnapshot.getLong("SizeXXL");
+                        Product product = documentSnapshot.toObject(Product.class);
 
-                        Product product = new Product(ID, Name, Club, Nation, Season, Price, Quantity, Point, URLmain, URLsub1, URLsub2, URLthumb, sizeS, sizeM, sizeL, sizeXL, sizeXXL);
                         detailProduct.setValue(product);
                     }
                 });
 
         return detailProduct;
+    }
+    public MutableLiveData<List<Feedback>> getFeedbackProduct(String productID){
+        List<Feedback> listFeedback = new ArrayList<>();
+
+        helper.getCollection("Feedback").whereEqualTo("product_id", productID).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String name = documentSnapshot.getString("name");
+                        String customerID = documentSnapshot.getString("customer_id");
+                        String product_ID = documentSnapshot.getString("product_id");
+                        String comment = documentSnapshot.getString("comment");
+                        Long point = documentSnapshot.getLong("point");
+                        Timestamp date = documentSnapshot.getTimestamp("date");
+
+                        Log.d(TAG, date.toString());
+
+                        listFeedback.add(new Feedback(customerID, productID, point, date.getSeconds() * 1000, comment));
+                    }
+                    mldListFeedback.setValue(listFeedback);
+                });
+        return mldListFeedback;
     }
 }

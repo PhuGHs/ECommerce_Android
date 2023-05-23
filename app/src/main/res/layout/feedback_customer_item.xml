@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="25px"
+    app:cardElevation="0px"
+    android:layout_marginBottom="25px">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/txtCustomerNameFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/font_crimson_regular"
+            android:text="Anonymous"
+            android:textSize="50px"/>
+        <TextView
+            android:id="@+id/txtFeedbackTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/font_crimson_italic"
+            android:textSize="50px"
+            android:text="09:09 21/05/2023"/>
+        <RatingBar
+            android:id="@+id/ratingBarDetailItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40px"
+            android:layout_marginBottom="-50px"
+            android:layout_marginLeft="-100px"
+            android:scaleY="0.6"
+            android:scaleX="0.6"
+            android:isIndicator="true"
+            android:numStars="5"/>
+        <TextView
+            android:id="@+id/txtFeedbackContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/font_crimson_regular"
+            android:textSize="60px"
+            android:textColor="@color/primary"
+            android:text="No comment yet"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
