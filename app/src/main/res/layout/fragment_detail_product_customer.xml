@@ -239,16 +239,30 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="25px"
                 android:layout_marginBottom="30px"
+                app:cardElevation="0px"
                 android:layout_gravity="center_horizontal">
-                <TextView
-                    android:id="@+id/detailDesc"
-                    android:layout_marginTop="35px"
-                    android:layout_marginLeft="40px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/font_crimson_regular"
-                    android:textSize="55px"
-                    android:text="Material: Cotton\nSize S: 1m50\nSize M: 1m60"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginTop="30px"
+                        android:layout_marginLeft="30px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/font_crimson_bold"
+                        android:textSize="65px"
+                        android:textColor="@color/primary"
+                        android:text="Description"/>
+                    <TextView
+                        android:id="@+id/detailDesc"
+                        android:layout_margin="35px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/font_crimson_regular"
+                        android:textSize="55px"
+                        android:text="Material: Cotton\nSize S: 1m50\nSize M: 1m60"/>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
             <LinearLayout
                 android:layout_marginBottom="30px"
@@ -258,6 +272,13 @@
                 android:padding="25px"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/bg_white_rounded">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/font_crimson_bold"
+                    android:textSize="65px"
+                    android:textColor="@color/primary"
+                    android:text="Feedbacks"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listFeedbackC"
                     android:layout_width="match_parent"

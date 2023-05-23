@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,9 @@ import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.model.User;
+import com.example.ecommerce_hvpp.repositories.UserRepository;
+import com.example.ecommerce_hvpp.util.Resource;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +35,7 @@ import java.util.Locale;
 
 public class FeedbackCustomerAdapter extends RecyclerView.Adapter<FeedbackCustomerAdapter.DataViewHolder> {
     private Context context;
+    private UserRepository repo = new UserRepository();
     private ArrayList<Feedback> listFeedback;
 
     public FeedbackCustomerAdapter(Context context, ArrayList<Feedback> listFeedback) {
@@ -58,6 +64,7 @@ public class FeedbackCustomerAdapter extends RecyclerView.Adapter<FeedbackCustom
         holder.ratingBar.setRating((float) feedback.getPoint());
         holder.Comment.setText(feedback.getComment());
         holder.Time.setText(getDateFeedback(feedback.getDate()));
+        repo.getUserName(feedback.getCustomerID()).observe((LifecycleOwner) context, s -> holder.Name.setText(s));
     }
 
     /**

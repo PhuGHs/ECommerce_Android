@@ -15,6 +15,10 @@ public class User {
     }
 
     private boolean isAdmin;
+    private String datebirth;
+    private String id;
+    private String address;
+    private long sumRevenue;
     private String username = "";
 
     public User(boolean isAdmin, String username, String email, String password, String imagePath) {
