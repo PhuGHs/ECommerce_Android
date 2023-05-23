@@ -115,8 +115,8 @@
                         android:id="@+id/datebirth_edittext"
                         style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:background="@color/transparent"
                         android:textColor="@color/primary"
+                        android:background="@color/transparent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
