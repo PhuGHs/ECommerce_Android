@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragments.EditProfileFragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -64,65 +65,106 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80px"
-                android:paddingLeft="58px"
-                android:orientation="vertical">
+                android:layout_marginTop="85px"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_white_rounded">
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name: "
+                        style="@style/font_crimson_regular"
+                        android:textSize="50px"
+                        android:textColor="@color/primary"/>
 
                     <EditText
-                        android:layout_width="970px"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="48dp"
+                        android:inputType="textVisiblePassword"
                         android:id="@+id/name_edittext"
                         style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:hint="Name:"
-                        android:textColorHint="@color/primary"
                         android:textColor="@color/primary"
+                        android:background="@color/transparent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25px">
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Datebirth: "
+                        style="@style/font_crimson_regular"
+                        android:textSize="50px"
+                        android:textColor="@color/primary"/>
 
                     <EditText
-                        android:layout_width="970px"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:inputType="textVisiblePassword"
                         android:id="@+id/datebirth_edittext"
                         style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:hint="Datebirth:"
-                        android:textColorHint="@color/primary"
+                        android:background="@color/transparent"
                         android:textColor="@color/primary"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
-
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address: "
+                        style="@style/font_crimson_regular"
+                        android:textSize="50px"
+                        android:textColor="@color/primary"/>
 
                     <EditText
-                        android:layout_width="970px"
+                        android:layout_width="match_parent"
+                        android:inputType="textVisiblePassword|textMultiLine"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25px"
+                        android:layout_marginLeft="33dp"
+                        android:background="@color/transparent"
                         android:id="@+id/address_edittext"
                         style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:hint="Address:"
-                        android:textColorHint="@color/primary"
                         android:textColor="@color/primary"/>
-
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25px">
-                    <EditText
-                        android:layout_width="970px"
-                        android:id="@+id/email_edittext"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email: "
                         style="@style/font_crimson_regular"
                         android:textSize="50px"
-                        android:hint="Email:"
-                        android:textColorHint="@color/primary"
+                        android:textColor="@color/primary"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:inputType="textVisiblePassword"
+                        android:id="@+id/email_edittext"
+                        android:layout_marginLeft="50dp"
+                        style="@style/font_crimson_regular"
+                        android:background="@color/transparent"
+                        android:textSize="50px"
                         android:textColor="@color/primary"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
