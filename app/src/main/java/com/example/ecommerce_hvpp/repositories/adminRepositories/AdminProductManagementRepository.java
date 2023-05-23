@@ -89,6 +89,9 @@ public class AdminProductManagementRepository {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        String documentId = documentReference.getId();
+                        pd.setId(documentId);
+                        updateProductWithId(documentReference, pd);
                         _mldUAddProduct.setValue(Resource.success("added product"));
                     }
                 })
@@ -99,6 +102,15 @@ public class AdminProductManagementRepository {
                     }
                 });
         return _mldUAddProduct;
+    }
+
+    private void updateProductWithId(DocumentReference documentReference, Product pd) {
+        documentReference
+                .update("id", pd.getId())
+                .addOnSuccessListener(aVoid -> {
+                })
+                .addOnFailureListener(e -> {
+                });
     }
 
     public void uploadImage(Uri uri, String fileType, final OnImageUploadListener listener) {

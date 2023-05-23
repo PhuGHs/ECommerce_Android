@@ -1,9 +1,11 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +14,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,17 +72,19 @@ public class AdminProductDetailsFragment extends Fragment {
     private NavController navController;
     private ContentResolver contentResolver;
     private TextView tvHeader;
-    private ImageView btnBack;
+    private ImageView btnBack, btnAddSizeXL, btnAddSizeL, btnAddSizeM;
     private AppCompatButton btnAddMoreImages;
     private SliderView sliderView;
     private String Id;
     private TextView tvThumbnailImage;
-    private EditText etName, etPrice, etDescription;
+    private EditText etName, etPrice, etDescription, etSizeXL, etSizeL, etSizeM, etNumXL, etNumL, etNumM, etTypeName;
+    private TextView tvTypeName;
     private Button btnSave, btnCancel;
     private Spinner spType, spSeason;
     private Uri thumbnailImage;
+    private List<EditText> editTextList;
+    private boolean isFieldsModified;
     //endregion
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,9 +151,31 @@ public class AdminProductDetailsFragment extends Fragment {
         spType = view.findViewById(R.id.type_Spinner);
         spSeason = view.findViewById(R.id.season_spinner);
         btnAddMoreImages = view.findViewById(R.id.abtnAddMoreImage);
+        etSizeL = view.findViewById(R.id.etSizeL);
+        etNumL = view.findViewById(R.id.etNumL);
+        etNumM = view.findViewById(R.id.etNumM);
+        etNumXL = view.findViewById(R.id.etNumXL);
+        etSizeXL = view.findViewById(R.id.etSizeXL);
+        etSizeM = view.findViewById(R.id.etSizeM);
+        etTypeName = view.findViewById(R.id.etTypeName);
+        tvTypeName = view.findViewById(R.id.tvHeaderForField);
 
         btnSave = view.findViewById(R.id.btnSave);
         btnCancel = view.findViewById(R.id.btnCancel);
+        btnAddSizeXL = view.findViewById(R.id.btnAddSizeXL);
+        btnAddSizeL = view.findViewById(R.id.btnAddSizeL);
+        btnAddSizeM = view.findViewById(R.id.btnAddSizeM);
+
+
+        editTextList = new ArrayList<>();
+        editTextList.add(etName);
+        editTextList.add(etPrice);
+        editTextList.add(etDescription);
+        editTextList.add(etSizeL);
+        editTextList.add(etSizeXL);
+        editTextList.add(etSizeM);
+        editTextList.add(etSizeM);
+        editTextList.add(etTypeName);
         //endregion
 
         //region initialize spinner adapter
@@ -222,12 +251,17 @@ public class AdminProductDetailsFragment extends Fragment {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isFieldsModified) {
+                    showUnsavedChangesDialog();
+                    return;
+                }
                 navController.popBackStack();
             }
         });
     }
 
     public void implementEditFunctionality() {
+        isFieldsModified = false;
         // set value
         viewModel.getProduct(Id).observe(getViewLifecycleOwner(), resource -> {
             switch(resource.status) {
@@ -239,11 +273,17 @@ public class AdminProductDetailsFragment extends Fragment {
                 case SUCCESS:
                     etName.setText(resource.data.getName());
                     etPrice.setText(CurrencyFormat.getVNDCurrency(resource.data.getPrice()));
+                    etSizeM.setText(String.valueOf(resource.data.getM()));
+                    etSizeXL.setText(String.valueOf(resource.data.getXL()));
+                    etSizeL.setText(String.valueOf(resource.data.getL()));
+                    etDescription.setText(resource.data.getDescription());
                     if(resource.data.getClub() == "") {
                         spType.setSelection(TypeAdapter.getPosition("Nation"));
+                        etTypeName.setText(resource.data.getNation());
                     }
                     else {
                         spType.setSelection(TypeAdapter.getPosition("Club"));
+                        etTypeName.setText(resource.data.getClub());
                     }
                     spSeason.setSelection(SeasonAdapter.getPosition(resource.data.getSeason()));
                     tvThumbnailImage.setText(resource.data.getUrlthumb());
@@ -252,6 +292,11 @@ public class AdminProductDetailsFragment extends Fragment {
                     SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub2()));
                     break;
             }
+
+
+            setTextWatcherToEditTextFields();
+
+
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -260,25 +305,78 @@ public class AdminProductDetailsFragment extends Fragment {
             });
         });
     }
+
+    private void editFunc_saveProduct() {
+
+    }
+
+    private void setTextWatcherToEditTextFields() {
+        for (EditText editText : editTextList) {
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // No implementation needed
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isFieldsModified = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // No implementation needed
+                }
+            });
+        }
+    }
     public void implementAddFunctionality() {
         btnCancel.setVisibility(View.GONE);
+        etNumXL.setVisibility(View.GONE);
+        etNumL.setVisibility(View.GONE);
+        etNumM.setVisibility(View.GONE);
+
+        btnAddSizeXL.setVisibility(View.GONE);
+        btnAddSizeL.setVisibility(View.GONE);
+        btnAddSizeM.setVisibility(View.GONE);
+
+        if(spType.getSelectedItem().toString() == "Club") {
+            tvTypeName.setText("Club Name");
+        } else {
+            tvTypeName.setText("Nation");
+        }
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFunc_addProduct();
+                if(checkIfIsEmpty()) {
+                    CustomToast validationToast = new CustomToast();
+                    validationToast.ShowToastMessage(requireActivity(), 3, "There are fields which have no data! Please check and retry!");
+                } else {
+                    addFunc_addProduct();
+                }
             }
         });
     }
 
     public void addFunc_addProduct() {
-        String Name, Type, Season, Price, Description;
+        String Name, Type, Season, Price, Description, XL, L, M;
         Name = etName.getText().toString();
         Type = spType.getSelectedItem().toString();
         Season = spSeason.getSelectedItem().toString();
         Price = etPrice.getText().toString();
         Description = etDescription.getText().toString();
+        XL = etSizeXL.getText().toString();
+        L = etSizeL.getText().toString();
+        M = etSizeM.getText().toString();
 
-        Product pd = new Product(Name, Season, Price, Description);
+
+        Product pd = new Product(Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+        if(Type == "Club") {
+            pd.setClub(etTypeName.getText().toString());
+        } else {
+            pd.setNation(etTypeName.getText().toString());
+        }
 
         viewModel.addProduct(contentResolver, pd, thumbnailImage , SlideAdapter.getList());
 
@@ -291,6 +389,7 @@ public class AdminProductDetailsFragment extends Fragment {
                 if(resource.status == Resource.Status.SUCCESS) {
                     CustomToast toastShowSuccess = new CustomToast();
                     toastShowSuccess.ShowToastMessage(requireActivity(), 1, "Add product successfully!!!");
+                    Reset();
                 } else if (resource.status == Resource.Status.ERROR) {
                     CustomToast toastShowError = new CustomToast();
                     toastShowError.ShowToastMessage(requireActivity(), 2, resource.message);
@@ -357,6 +456,31 @@ public class AdminProductDetailsFragment extends Fragment {
         return fileName;
     }
 
+    private void showUnsavedChangesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Unsaved Changes");
+        builder.setMessage("You have made changes. Do you want to discard them?");
+
+        builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                navController.popBackStack();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                // Stay on the current fragment
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void showProgressDialog() {
         if (progressDialog == null) {
@@ -373,6 +497,34 @@ public class AdminProductDetailsFragment extends Fragment {
         }
     }
 
+    private void Reset() {
+        etName.setText("");
+        etPrice.setText("");
+        etDescription.setText("");
+        tvThumbnailImage.setText("");
+        etTypeName.setText("");
+        etSizeM.setText("");
+        etSizeL.setText("");
+        etSizeXL.setText("");
+        SlideAdapter.renewItems(null);
+    }
+
+    private boolean checkIfIsEmpty() {
+        if (TextUtils.isEmpty(etName.getText().toString().trim())
+        || TextUtils.isEmpty(etPrice.getText().toString().trim())
+        || TextUtils.isEmpty(etDescription.getText().toString().trim())
+        || TextUtils.isEmpty(tvThumbnailImage.getText().toString().trim())
+        || TextUtils.isEmpty(etTypeName.getText().toString().trim())
+        || TextUtils.isEmpty(etSizeM.getText().toString().trim())
+        || TextUtils.isEmpty(etSizeL.getText().toString().trim())
+        || TextUtils.isEmpty(etSizeXL.getText().toString().trim())
+        || SlideAdapter.getList().size() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -383,6 +535,11 @@ public class AdminProductDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
+        if (isFieldsModified) {
+            showUnsavedChangesDialog();
+        }
+
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.VISIBLE);
     }
