@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,21 +84,25 @@ public class CategoryFragment extends Fragment {
     List<String> listTitle;
     ProductViewModel viewModel;
     HashMap<String, List<String>> listDetailCategory = new HashMap<>();
+    private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         listViewCategory = (ExpandableListView) view.findViewById(R.id.listCategory);
+        navController = Navigation.findNavController(requireView());
 
         viewModel.getCategories().observe(getViewLifecycleOwner(), listDetailCategory -> {
             listTitle = new ArrayList<>(listDetailCategory.keySet());
             adapter = new ExpandableListCategoryAdapter(getContext(), listTitle, listDetailCategory);
             listViewCategory.setAdapter(adapter);
             listViewCategory.setOnChildClickListener((expandableListView, view1, groupPosition, childPosition, l) -> {
-                Toast.makeText(getContext(), listTitle.get(groupPosition)
-                        + "->" + listDetailCategory.get(listTitle.get(groupPosition))
-                        .get(childPosition), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putString("Type", listTitle.get(groupPosition).toLowerCase(Locale.ROOT));
+                bundle.putString("Category", listDetailCategory.get(listTitle.get(groupPosition)).get(childPosition));
+
+                navController.navigate(R.id.detailCategoryFragment, bundle);
                 return false;
             });
         });

@@ -25,7 +25,7 @@ import java.util.List;
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
     private List<Product> listNewArrivals, listBestSeller, listFavorite;
-    private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite;
+    private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite, mldDetailCategory;
     private MutableLiveData<List<Feedback>> mldListFeedback;
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private MutableLiveData<Product> detailProduct;
@@ -75,6 +75,73 @@ public class ProductViewModel extends ViewModel {
                     mldCategories.setValue(categories);
                 });
         return mldCategories;
+    }
+    public MutableLiveData<List<Product>> getDetailCategory(String type, String category){
+        mldDetailCategory = new MutableLiveData<>();
+        List<Product> listDetailCategory = new ArrayList<>();
+
+        if (!type.equals("season")){
+            helper.getCollection("Product").whereEqualTo(type, category).get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            String id = documentSnapshot.getString("id");
+                            String name = documentSnapshot.getString("name");
+                            String club = documentSnapshot.getString("club");
+                            String nation = documentSnapshot.getString("nation");
+                            String season = documentSnapshot.getString("season");
+                            double Price = documentSnapshot.getDouble("price");
+                            double Point = documentSnapshot.getDouble("point");
+                            String urlmain = documentSnapshot.getString("url_main");
+                            String urlsub1 = documentSnapshot.getString("url_sub1");
+                            String urlsub2 = documentSnapshot.getString("url_sub2");
+                            String urlthumb = documentSnapshot.getString("url_thumb");
+                            long sizeM = documentSnapshot.getLong("size_m");
+                            long sizeL = documentSnapshot.getLong("size_l");
+                            long sizeXL = documentSnapshot.getLong("size_xl");
+                            String status = documentSnapshot.getString("status");
+                            Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                            String desc = documentSnapshot.getString("description");
+
+                            Log.d(TAG, id + "--" + name);
+
+                            listDetailCategory.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                        }
+                        mldDetailCategory.setValue(listDetailCategory);
+                    });
+        }
+        else
+        {
+            helper.getCollection("Product").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            String season = documentSnapshot.getString("season");
+                            if (season.equals(category) || category.contains(season)){
+                                String id = documentSnapshot.getString("id");
+                                String name = documentSnapshot.getString("name");
+                                String club = documentSnapshot.getString("club");
+                                String nation = documentSnapshot.getString("nation");
+                                double Price = documentSnapshot.getDouble("price");
+                                double Point = documentSnapshot.getDouble("point");
+                                String urlmain = documentSnapshot.getString("url_main");
+                                String urlsub1 = documentSnapshot.getString("url_sub1");
+                                String urlsub2 = documentSnapshot.getString("url_sub2");
+                                String urlthumb = documentSnapshot.getString("url_thumb");
+                                long sizeM = documentSnapshot.getLong("size_m");
+                                long sizeL = documentSnapshot.getLong("size_l");
+                                long sizeXL = documentSnapshot.getLong("size_xl");
+                                String status = documentSnapshot.getString("status");
+                                Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                                String desc = documentSnapshot.getString("description");
+
+                                Log.d(TAG, id + "--" + name);
+
+                                listDetailCategory.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                            }
+                        }
+                        mldDetailCategory.setValue(listDetailCategory);
+                    });
+        }
+        return mldDetailCategory;
     }
     private void initListFavoriteLiveData() {
         listFavorite = new ArrayList<>();
