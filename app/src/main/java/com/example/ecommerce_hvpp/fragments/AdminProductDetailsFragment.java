@@ -15,12 +15,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,8 +48,8 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminProductImageSlider;
 import com.example.ecommerce_hvpp.model.ItemModel;
 import com.example.ecommerce_hvpp.model.Product;
-import com.example.ecommerce_hvpp.util.CurrencyFormat;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.util.NumberInputFilter;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin_product_management.AdminProductDetailsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -222,6 +224,15 @@ public class AdminProductDetailsFragment extends Fragment {
             }
         });
 
+        etPrice.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumXL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumM.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeM.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeXL.setFilters(new InputFilter[]{new NumberInputFilter()});
+
+
         tvThumbnailImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -237,6 +248,19 @@ public class AdminProductDetailsFragment extends Fragment {
                 } else {
                     implementAddFunctionality();
                 }
+            }
+        });
+
+        spType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = adapterView.getItemAtPosition(i).toString();
+                tvTypeName.setText(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // do nothin
             }
         });
 
@@ -272,10 +296,10 @@ public class AdminProductDetailsFragment extends Fragment {
                     break;
                 case SUCCESS:
                     etName.setText(resource.data.getName());
-                    etPrice.setText(CurrencyFormat.getVNDCurrency(resource.data.getPrice()));
-                    etSizeM.setText(String.valueOf(resource.data.getM()));
-                    etSizeXL.setText(String.valueOf(resource.data.getXL()));
-                    etSizeL.setText(String.valueOf(resource.data.getL()));
+                    etPrice.setText(String.valueOf(resource.data.getPrice()));
+                    etSizeM.setText(String.valueOf(resource.data.getSize_m()));
+                    etSizeXL.setText(String.valueOf(resource.data.getSize_xl()));
+                    etSizeL.setText(String.valueOf(resource.data.getSize_l()));
                     etDescription.setText(resource.data.getDescription());
                     if(resource.data.getClub() == "") {
                         spType.setSelection(TypeAdapter.getPosition("Nation"));
@@ -286,28 +310,95 @@ public class AdminProductDetailsFragment extends Fragment {
                         etTypeName.setText(resource.data.getClub());
                     }
                     spSeason.setSelection(SeasonAdapter.getPosition(resource.data.getSeason()));
-                    tvThumbnailImage.setText(resource.data.getUrlthumb());
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlmain()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub1()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub2()));
+                    tvThumbnailImage.setText(resource.data.getUrl_thumb());
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrl_main()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrl_sub1()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrl_sub2()));
+
+
+                    setTextWatcherToEditTextFields();
                     break;
             }
+            btnAddSizeM.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!etNumM.getText().toString().trim().equals("")) {
+                        etSizeM.setText(String.valueOf(Integer.parseInt(etNumM.getText().toString()) + Integer.parseInt(etSizeM.getText().toString())));
+                        etNumM.setText("");
+                    }
 
+                }
+            });
 
-            setTextWatcherToEditTextFields();
+            btnAddSizeL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!etNumL.getText().toString().trim().equals("")) {
+                        etSizeL.setText(String.valueOf(Integer.parseInt(etNumL.getText().toString()) + Integer.parseInt(etSizeL.getText().toString())));
+                        etNumL.setText("");
+                    }
+                }
+            });
+
+            btnAddSizeXL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!etNumXL.getText().toString().trim().equals("")) {
+                        etSizeXL.setText(String.valueOf(Integer.parseInt(etNumXL.getText().toString()) + Integer.parseInt(etSizeXL.getText().toString())));
+                        etNumXL.setText("");
+                    }
+                }
+            });
 
 
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String Name, Type, Season, Price, Description, XL, L, M;
+                    Name = etName.getText().toString();
+                    Type = spType.getSelectedItem().toString();
+                    Season = spSeason.getSelectedItem().toString();
+                    Price = etPrice.getText().toString();
+                    Description = etDescription.getText().toString();
+                    XL = etSizeXL.getText().toString();
+                    L = etSizeL.getText().toString();
+                    M = etSizeM.getText().toString();
 
+
+                    Product pd = new Product(Id, Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+
+                    if(Type.equals("Club")) {
+                        pd.setClub(etTypeName.getText().toString());
+                    } else {
+                        pd.setNation(etTypeName.getText().toString());
+                    }
+
+                    pd.setUrl_thumb(tvThumbnailImage.getText().toString());
+                    pd.setUrl_main(SlideAdapter.getList().get(0).getLink());
+                    pd.setUrl_sub1(SlideAdapter.getList().get(1).getLink());
+                    pd.setUrl_sub2(SlideAdapter.getList().get(2).getLink());
+                    editFunc_saveProduct(pd);
                 }
             });
         });
     }
 
-    private void editFunc_saveProduct() {
+    private void editFunc_saveProduct(Product pd) {
+        viewModel.editProduct(pd).observe(getViewLifecycleOwner(), resource -> {
+            if(resource.status == Resource.Status.LOADING) {
+                showProgressDialog(false);
+            } else {
+                hideProgressDialog();
 
+                if(resource.status == Resource.Status.SUCCESS) {
+                    CustomToast toastShowSuccess = new CustomToast();
+                    toastShowSuccess.ShowToastMessage(requireActivity(), 1, "Product has been updated successfully!");
+                } else if (resource.status == Resource.Status.ERROR) {
+                    CustomToast toastShowError = new CustomToast();
+                    toastShowError.ShowToastMessage(requireActivity(), 2, resource.message);
+                }
+            }
+        });
     }
 
     private void setTextWatcherToEditTextFields() {
@@ -340,7 +431,7 @@ public class AdminProductDetailsFragment extends Fragment {
         btnAddSizeL.setVisibility(View.GONE);
         btnAddSizeM.setVisibility(View.GONE);
 
-        if(spType.getSelectedItem().toString() == "Club") {
+        if(spType.getSelectedItem().toString().equals("Club")) {
             tvTypeName.setText("Club Name");
         } else {
             tvTypeName.setText("Nation");
@@ -372,7 +463,7 @@ public class AdminProductDetailsFragment extends Fragment {
 
 
         Product pd = new Product(Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
-        if(Type == "Club") {
+        if(Type.equals("Club")) {
             pd.setClub(etTypeName.getText().toString());
         } else {
             pd.setNation(etTypeName.getText().toString());
@@ -382,7 +473,7 @@ public class AdminProductDetailsFragment extends Fragment {
 
         viewModel.getCombinedLiveData().observe(getViewLifecycleOwner(), resource -> {
             if(resource.status == Resource.Status.LOADING) {
-                showProgressDialog();
+                showProgressDialog(true);
             } else {
                 hideProgressDialog();
 
@@ -482,10 +573,10 @@ public class AdminProductDetailsFragment extends Fragment {
     }
 
 
-    private void showProgressDialog() {
+    private void showProgressDialog(boolean isAddFunc) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("Adding Product...");
+            progressDialog.setMessage(isAddFunc ? "Adding Product..." : "Saving Product");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }

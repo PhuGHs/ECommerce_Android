@@ -19,6 +19,7 @@ public class AdminProductDetailsViewModel extends ViewModel {
     private AdminProductManagementRepository repo;
     private MutableLiveData<Boolean> isEditMode = new MutableLiveData<>();
     private MutableLiveData<Resource<String>> combinedLiveData = new MutableLiveData<>();
+    private MutableLiveData<Resource<String>> _mldEdit = new MutableLiveData<>();
 
     int uploadCount;
     int totalUploads;
@@ -41,7 +42,7 @@ public class AdminProductDetailsViewModel extends ViewModel {
         repo.uploadImage(uriThumb, getFileExtension(contentResolver, uriThumb), new AdminProductManagementRepository.OnImageUploadListener() {
             @Override
             public void onImageUploadSuccess(String imageUrl) {
-                pd.setUrlthumb(imageUrl);
+                pd.setUrl_thumb(imageUrl);
             }
 
             @Override
@@ -57,11 +58,11 @@ public class AdminProductDetailsViewModel extends ViewModel {
                     @Override
                     public void onImageUploadSuccess(String imageUrl) {
                         if(j == 0) {
-                            pd.setUrlmain(imageUrl);
+                            pd.setUrl_main(imageUrl);
                         } else if (j == 1) {
-                            pd.setUrlsub1(imageUrl);
+                            pd.setUrl_sub1(imageUrl);
                         } else {
-                            pd.setUrlsub2(imageUrl);
+                            pd.setUrl_sub2(imageUrl);
                         }
                         checkAllUploadsCompleted(pd);
                     }
@@ -75,8 +76,8 @@ public class AdminProductDetailsViewModel extends ViewModel {
         }
     }
 
-    public void editProduct() {
-
+    public LiveData<Resource<String>> editProduct(Product pd) {
+        return repo.updateProduct(pd);
     }
 
     public LiveData<Boolean> getIsEditMode() {

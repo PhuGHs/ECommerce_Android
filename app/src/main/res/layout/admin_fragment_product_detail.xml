@@ -249,7 +249,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Price"
+                        android:text="Price ($)"
                         android:textSize="25dp"
                         android:textStyle="bold"
                         android:textColor="@color/primary"
@@ -303,6 +303,8 @@
                         android:layout_marginStart="10dp"
                         android:layout_width="80dp"
                         android:layout_height="50dp"
+                        android:textColor="@color/primary"
+                        android:paddingStart="10dp"
                         android:background="@drawable/searchview_bg"
                         android:layout_gravity="bottom"
                         android:id="@+id/etNumXL"/>
@@ -352,6 +354,8 @@
                     </LinearLayout>
                     <EditText
                         android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:textColor="@color/primary"
                         android:layout_width="80dp"
                         android:layout_height="50dp"
                         android:background="@drawable/searchview_bg"
@@ -403,6 +407,8 @@
                     </LinearLayout>
                     <EditText
                         android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:textColor="@color/primary"
                         android:layout_width="80dp"
                         android:layout_height="50dp"
                         android:background="@drawable/searchview_bg"

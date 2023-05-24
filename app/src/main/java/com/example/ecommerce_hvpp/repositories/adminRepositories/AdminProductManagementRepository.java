@@ -20,11 +20,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminProductManagementRepository {
     private final FirebaseHelper fbHelper;
     private MutableLiveData<Resource<List<Product>>> _mldProductList;
+    private MutableLiveData<Resource<String>> _mldEdit;
     private MutableLiveData<Resource<String>> _mldUAddProduct = new MutableLiveData<>();
     private MutableLiveData<Resource<Product>> _mldProduct;
     private final String TAG = "AdminProductManagementRepository";
@@ -34,6 +37,7 @@ public class AdminProductManagementRepository {
         _mldProductList = new MutableLiveData<>();
         _mldProduct = new MutableLiveData<>();
         imageRef = fbHelper.getImageStorage();
+        _mldEdit = new MutableLiveData<>();
     }
 
     public interface OnImageUploadListener {
@@ -111,6 +115,42 @@ public class AdminProductManagementRepository {
                 })
                 .addOnFailureListener(e -> {
                 });
+    }
+
+    public LiveData<Resource<String>> updateProduct(Product pd) {
+        _mldEdit.setValue(Resource.loading(null));
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("club", pd.getClub());
+        updates.put("description", pd.getDescription());
+        updates.put("name", pd.getName());
+        updates.put("nation", pd.getNation());
+        updates.put("point", pd.getPoint());
+        updates.put("price", pd.getPrice());
+        updates.put("season", pd.getSeason());
+        updates.put("size_l", pd.getSize_l());
+        updates.put("size_m", pd.getSize_m());
+        updates.put("size_xl", pd.getSize_xl());
+        updates.put("url_thumb", pd.getUrl_thumb());
+        updates.put("url_main", pd.getUrl_main());
+        updates.put("url_sub1", pd.getUrl_sub1());
+        updates.put("url_sub2", pd.getUrl_sub2());
+        updates.put("status", pd.getStatus());
+
+        fbHelper.getCollection("Product").document(pd.getId())
+                .update(updates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        _mldEdit.setValue(Resource.success("Product is modified successfully!"));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        _mldEdit.setValue(Resource.error(e.getMessage(), null));
+                    }
+                });
+        return _mldEdit;
     }
 
     public void uploadImage(Uri uri, String fileType, final OnImageUploadListener listener) {

@@ -2,101 +2,190 @@ package com.example.ecommerce_hvpp.model;
 
 
 public class Product {
-    private String ID;
-    private String Name;
-    private String Color;
-    private String Club;
-    private String Nation;
-    private String Season;
-    private double Price;
-    private int Quantity;
-    private double Point;
-    private String URLmain, URLsub1, URLsub2, URLthumb;
+    private String id = "";
+    private String name = "";
+    private String club = "";
+    private String nation = "";
+    private String season = "";
+    private String description = "";
+    private double price;
+    private int size_xl;
+    private int size_l;
+    private int size_m;
+    private double point;
+    private String url_main = "", url_sub1 = "", url_sub2 = "", url_thumb = "";
 
-    public Product(String ID, String name, String color, String club, String nation, String season, double price, int quantity, double markAvg) {
-        this.ID = ID;
-        Name = name;
-        Color = color;
-        Club = club;
-        Nation = nation;
-        Season = season;
-        Price = price;
-        Quantity = quantity;
-        Point = markAvg;
+    private String status = "";
+
+    public Product(String id, String name, String club, String nation, String season, String description, double price, int size_xl, int size_l, int size_m, double point, String url_main, String url_sub1, String url_sub2, String url_thumb, String status) {
+        this.id = id;
+        this.name = name;
+        this.club = club;
+        this.nation = nation;
+        this.season = season;
+        this.description = description;
+        this.price = price;
+        this.size_xl = size_xl;
+        this.size_l = size_l;
+        this.size_m = size_m;
+        this.point = point;
+        this.url_main = url_main;
+        this.url_sub1 = url_sub1;
+        this.url_sub2 = url_sub2;
+        this.url_thumb = url_thumb;
+        this.status = status;
     }
 
     public Product() {
     }
 
-    public String getID() {
-        return ID;
+    public Product(String Id, String name, String season, String price, String description, int XL, int L, int M) {
+        this.id = Id;
+        this.name = name;
+        this.season = season;
+        this.price = Double.parseDouble(price);
+        this.description = description;
+        this.size_xl = XL;
+        this.size_l = L;
+        this.size_m = M;
+    }
+
+    public Product(String name, String season, String price, String description, int XL, int L, int M) {
+        this.name = name;
+        this.season = season;
+        this.price = Double.parseDouble(price);
+        this.description = description;
+        this.size_xl = XL;
+        this.size_l = L;
+        this.size_m = M;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public String getColor() {
-        return Color;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getClub() {
-        return Club;
+        return club;
+    }
+
+    public void setClub(String club) {
+        this.club = club;
     }
 
     public String getNation() {
-        return Nation;
+        return nation;
+    }
+
+    public void setNation(String nation) {
+        this.nation = nation;
     }
 
     public String getSeason() {
-        return Season;
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice() {
-        return Price;
+        return price;
     }
 
-    public int getQuantity() {
-        return Quantity;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public double getPoint() {
-        return Point;
-    }
-
-    public String getURLmain() {
-        return URLmain;
-    }
-
-    public void setURLmain(String URLmain) {
-        this.URLmain = URLmain;
-    }
-
-    public String getURLsub1() {
-        return URLsub1;
-    }
-
-    public void setURLsub1(String URLsub1) {
-        this.URLsub1 = URLsub1;
-    }
-
-    public String getURLsub2() {
-        return URLsub2;
-    }
-
-    public void setURLsub2(String URLsub2) {
-        this.URLsub2 = URLsub2;
-    }
-
-    public String getURLthumb() {
-        return URLthumb;
-    }
-
-    public void setURLthumb(String URLthumb) {
-        this.URLthumb = URLthumb;
+        return point;
     }
 
     public void setPoint(double point) {
-        Point = point;
+        this.point = point;
+    }
+
+
+    public int getSize_xl() {
+        return size_xl;
+    }
+
+    public void setSize_xl(int size_xl) {
+        this.size_xl = size_xl;
+    }
+
+    public int getSize_l() {
+        return size_l;
+    }
+
+    public void setSize_l(int size_l) {
+        this.size_l = size_l;
+    }
+
+    public int getSize_m() {
+        return size_m;
+    }
+
+    public void setSize_m(int size_m) {
+        this.size_m = size_m;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUrl_main() {
+        return url_main;
+    }
+
+    public void setUrl_main(String url_main) {
+        this.url_main = url_main;
+    }
+
+    public String getUrl_sub1() {
+        return url_sub1;
+    }
+
+    public void setUrl_sub1(String url_sub1) {
+        this.url_sub1 = url_sub1;
+    }
+
+    public String getUrl_sub2() {
+        return url_sub2;
+    }
+
+    public void setUrl_sub2(String url_sub2) {
+        this.url_sub2 = url_sub2;
+    }
+
+    public String getUrl_thumb() {
+        return url_thumb;
+    }
+
+    public void setUrl_thumb(String url_thumb) {
+        this.url_thumb = url_thumb;
     }
 }
