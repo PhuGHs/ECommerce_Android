@@ -47,6 +47,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     public AdminCustomItemOrderHistoryAdapter(Context context, List<OrderHistory> listOrderHistory) {
         this.mContext = context;
         this.mListOrderHistory = listOrderHistory;
+        this.mListOrderHistoryOriginal = listOrderHistory;
     }
     @NonNull
     @Override
@@ -56,7 +57,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         return new AdminCustomItemOrderHistoryViewHolder(mAdminCustomItemOrderHistoryBinding);
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint({"SimpleDateFormat", "NotifyDataSetChanged"})
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemOrderHistoryViewHolder holder, int position) {
         OrderHistory orderHistory = mListOrderHistory.get(position);
@@ -70,12 +71,15 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
 
         // get customer by Id and set data into UI
         repo = new AdminProfileRepository();
-        Observable<Resource<Customer>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomerID()));
-        Observer<Resource<Customer>> observer = getObserverCustomer(holder);
+        Observable<Resource<User>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomerID()));
+        Observer<Resource<Customer>> observer = getObserverCustomer(holder, orderHistory);
 
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        // add customer into order history
+        mListOrderHistory.set(position, orderHistory);
+
+//        observable.subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(observer);
 
         holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIconPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +94,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         return mListOrderHistory.size();
     }
 
-    private Observer<Resource<Customer>> getObserverCustomer(@NonNull AdminCustomItemOrderHistoryViewHolder holder) {
+    private Observer<Resource<Customer>> getObserverCustomer(@NonNull AdminCustomItemOrderHistoryViewHolder holder, OrderHistory orderHistory) {
         return new Observer<Resource<Customer>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -106,6 +110,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
                         break;
                     case SUCCESS:
                         Customer customer = Objects.requireNonNull(resource.data);
+                        orderHistory.setCustomer(customer);
                         holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentNameCustomer.setText(customer.getName());
                         Glide.with(mContext).load(customer.getImagePath()).into(holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentAvatarCustomer);
                         holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentPhoneCustomer.setText(customer.getPhone());
@@ -130,24 +135,26 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         };
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    public void filterCustomer(String strSearch) {
-//        if (strSearch.isEmpty()) {
-//            mListOrderHistory = mListOrderHistoryOriginal;
-//            notifyDataSetChanged();
-//        } else {
-//            List<OrderHistory> listOrderHistory = new ArrayList<>();
-//            for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
-//                Customer customer =
-//                if (orderHistory.getCustomerID().toLowerCase().contains(strSearch.toLowerCase()) ||
-//                        orderHistory.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
-//                    listOrderHistory.add(orderHistory);
-//                }
-//            }
-//            mListOrderHistory = listOrderHistory;
-//            notifyDataSetChanged();
-//        }
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterOrderHistory(String strSearch) {
+        if (strSearch.isEmpty()) {
+            mListOrderHistory = mListOrderHistoryOriginal;
+            notifyDataSetChanged();
+        } else {
+            List<OrderHistory> listOrderHistory = new ArrayList<>();
+            for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
+                if (String.valueOf(orderHistory.getID()).toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getCustomer().getName().toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getCustomer().getPhone().toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getCustomer().getAddress().toLowerCase().contains(strSearch.toLowerCase())) {
+                    listOrderHistory.add(orderHistory);
+                }
+            }
+            mListOrderHistory = listOrderHistory;
+            notifyDataSetChanged();
+        }
+    }
+
     private void makeCallPhone() {
         Log.e("CallPhone", "Hello");
         String phone = "0814321006";

@@ -21,6 +21,8 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
+import com.example.ecommerce_hvpp.model.Promotion;
+import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -72,20 +74,20 @@ public class AdminProfileRepository {
         };
     }
 
-    // GET DATA CUSTOMER
-    public Observable<Resource<List<Customer>>> getObservableCustomers() {
+//  GET DATA CUSTOMER
+    public Observable<Resource<List<User>>> getObservableCustomers() {
         return Observable.create(emitter -> {
             Log.e("VucoderSearch", Thread.currentThread().getName());
             emitter.onNext(Resource.loading(null));
-            firebaseHelper.getCollection("Customer").get()
+            firebaseHelper.getCollection("users").get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<Customer> mListCustomer = new ArrayList<>();
+                        List<User> mListUser = new ArrayList<>();
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            Customer customer = snapshot.toObject(Customer.class);
-                            mListCustomer.add(customer);
-                            Log.e("VucoderSearch", customer.getName());
+                            User user = snapshot.toObject(User.class);
+                            mListUser.add(user);
+                            Log.e("VucoderSearch", user.getUsername());
                         }
-                        emitter.onNext(Resource.success(mListCustomer));
+                        emitter.onNext(Resource.success(mListUser));
                         emitter.onComplete();
                     })
                     .addOnFailureListener(e -> {
@@ -95,19 +97,19 @@ public class AdminProfileRepository {
         });
     }
 
-    public Observable<Resource<Customer>> getObservableCustomerById(String customerID) {
+    public Observable<Resource<User>> getObservableCustomerById(String userID) {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
-            firebaseHelper.getCollection("Customer")
-                    .whereEqualTo("ID", customerID)
+            firebaseHelper.getCollection("users")
+                    .whereEqualTo("id", userID)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<Customer> customers = queryDocumentSnapshots.toObjects(Customer.class);
-                        if (!customers.isEmpty()) {
-                            Customer customer = customers.get(0);
+                        List<User> users = queryDocumentSnapshots.toObjects(User.class);
+                        if (!users.isEmpty()) {
+                            User customer = users.get(0);
                             emitter.onNext(Resource.success(customer));
                         } else {
-                            emitter.onNext(Resource.error("Customer not found", null));
+                            emitter.onNext(Resource.error("User not found", null));
                         }
                         emitter.onComplete();
                     })
@@ -143,5 +145,25 @@ public class AdminProfileRepository {
 
     // GET DATA PROMOTION
 
+    public Observable<Resource<List<Promotion>>> getObservablePromotion() {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper.getCollection("Voucher").get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<Promotion> mListPromotion = new ArrayList<>();
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            Promotion promotion = snapshot.toObject(Promotion.class);
+                            mListPromotion.add(promotion);
+                            Log.e("Vucoder", String.valueOf(promotion.getName()));
+                        }
+                        emitter.onNext(Resource.success(mListPromotion));
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
+    }
 
 }

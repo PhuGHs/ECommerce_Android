@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentCustomerManagementBinding;
 import com.example.ecommerce_hvpp.model.Customer;
+import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.AdminCustomerManagementRepository;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
@@ -40,8 +41,8 @@ public class AdminCustomerManagementFragment extends Fragment {
     AdminCustomerManagementViewModel vmAdminCustomerManagement;
     AdminCustomItemCustomerAdapter adapterAdminCustomItemCustomer;
     AdminProfileRepository repo;
-    Observer<Resource<List<Customer>>> observer;
-    Observable<Resource<List<Customer>>> observable;
+    Observer<Resource<List<User>>> observer;
+    Observable<Resource<List<User>>> observable;
     private Disposable disposable;
 
     @Override
@@ -54,7 +55,7 @@ public class AdminCustomerManagementFragment extends Fragment {
         // get data and display in app
         repo = new AdminProfileRepository();
         observable = repo.getObservableCustomers();
-        observer = getObserverCustomers();
+        observer = getObserverUsers();
 
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,8 +92,8 @@ public class AdminCustomerManagementFragment extends Fragment {
     }
 
 
-    private Observer<Resource<List<Customer>>> getObserverCustomers() {
-        return new Observer<Resource<List<Customer>>>() {
+    private Observer<Resource<List<User>>> getObserverUsers() {
+        return new Observer<Resource<List<User>>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
@@ -100,7 +101,7 @@ public class AdminCustomerManagementFragment extends Fragment {
             }
 
             @Override
-            public void onNext(@NonNull Resource<List<Customer>> resource) {
+            public void onNext(@NonNull Resource<List<User>> resource) {
                 switch (resource.status) {
                     case LOADING:
                         // Handle loading state if needed
@@ -132,8 +133,8 @@ public class AdminCustomerManagementFragment extends Fragment {
         };
     }
 
-    private Observer<Resource<List<Customer>>> getObserverAfterSearch(String strSearch) {
-        return new Observer<Resource<List<Customer>>>() {
+    private Observer<Resource<List<User>>> getObserverAfterSearch(String strSearch) {
+        return new Observer<Resource<List<User>>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
@@ -141,14 +142,14 @@ public class AdminCustomerManagementFragment extends Fragment {
             }
 
             @Override
-            public void onNext(@NonNull Resource<List<Customer>> resource) {
+            public void onNext(@NonNull Resource<List<User>> resource) {
                 Log.e("VuSearch", "onNext");
                 switch (resource.status) {
                     case LOADING:
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
-                        adapterAdminCustomItemCustomer.filterCustomer(strSearch);
+                        adapterAdminCustomItemCustomer.filterUser(strSearch);
                         break;
                     case ERROR:
                         Log.i("VuError", resource.message);

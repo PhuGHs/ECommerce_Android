@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,17 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemPromotionBinding;
+import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminCustomItemPromotionAdapter.AdminCustomItemPromotionViewHolder> {
     Context mContext;
-    List<User> mListUsers;
+    List<Promotion> mListPromotion;
+    SimpleDateFormat templateDate;
 
-    public AdminCustomItemPromotionAdapter(Context context, List<User> listUser) {
+    public AdminCustomItemPromotionAdapter(Context context, List<Promotion> listPromotion) {
         this.mContext = context;
-        this.mListUsers = listUser;
+        this.mListPromotion = listPromotion;
     }
     @NonNull
     @Override
@@ -28,13 +32,30 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         return new AdminCustomItemPromotionViewHolder(mAdminCustomItemPromotionBinding);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemPromotionViewHolder holder, int position) {
+        Promotion promotion = mListPromotion.get(position);
+        if (promotion == null) {
+            return;
+        }
+
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentName.setText(promotion.getName());
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentCode.setText(promotion.getId());
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentDiscount.setText(String.valueOf(promotion.getValue()));
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentCondition.setText(String.valueOf(promotion.getCondition()));
+
+        templateDate = new SimpleDateFormat("dd MMM, yyyy");
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentStartDate.setText(templateDate.format(promotion.getDate_begin()));
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentEndDate.setText(templateDate.format(promotion.getDate_end()));
+
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentApply.setText(promotion.getApply_for());
+
     }
 
     @Override
     public int getItemCount() {
-        return mListUsers.size();
+        return mListPromotion.size();
     }
 
     public static class AdminCustomItemPromotionViewHolder extends RecyclerView.ViewHolder {

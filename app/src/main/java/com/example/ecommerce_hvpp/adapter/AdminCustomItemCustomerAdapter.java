@@ -2,6 +2,7 @@ package com.example.ecommerce_hvpp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemCustomerBinding;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.User;
@@ -17,14 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCustomItemCustomerAdapter.AdminCustomItemCustomerViewHolder> {
-    List<Customer> mListCustomers;
-    List<Customer> mListCustomersOriginal;
+    List<User> mListUsers;
+    List<User> mListUsersOriginal;
     Context mContext;
+    AdminCustomItemCustomerBinding m;
 
-    public AdminCustomItemCustomerAdapter(Context context, List<Customer> listUser) {
+    public AdminCustomItemCustomerAdapter(Context context, List<User> listUser) {
         this.mContext = context;
-        this.mListCustomers = listUser;
-        this.mListCustomersOriginal = listUser;
+        this.mListUsers = listUser;
+        this.mListUsersOriginal = listUser;
     }
 
     @NonNull
@@ -37,34 +40,41 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
 
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemCustomerViewHolder holder, int position) {
-        Customer customer = mListCustomers.get(position);
-        if (customer == null) {
+        User user = mListUsers.get(position);
+        if (user == null) {
             return;
         }
-        holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentNameCustomer.setText(customer.getName());
-        holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentEmailCustomer.setText(customer.getEmail());
-        Glide.with(mContext).load(customer.getImagePath()).into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
+        holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentNameCustomer.setText(user.getUsername());
+        holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentEmailCustomer.setText(user.getEmail());
+
+        if (user.getImagePath() == null || user.getImagePath().equals("")) {
+            Glide.with(mContext).load(R.drawable.baseline_no_avatar).into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
+        } else {
+            // null
+            Glide.with(mContext).load(user.getImagePath()).into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return mListCustomers.size();
+        return mListUsers.size();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void filterCustomer(String strSearch) {
+    public void filterUser(String strSearch) {
         if (strSearch.isEmpty()) {
-            mListCustomers = mListCustomersOriginal;
+            mListUsers = mListUsersOriginal;
             notifyDataSetChanged();
         } else {
-            List<Customer> listCustomers = new ArrayList<>();
-            for (Customer customer : mListCustomersOriginal) {
-                if (customer.getName().toLowerCase().contains(strSearch.toLowerCase()) ||
-                    customer.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
-                    listCustomers.add(customer);
+            List<User> listUsers = new ArrayList<>();
+            for (User user : mListUsersOriginal) {
+                if (user.getUsername().toLowerCase().contains(strSearch.toLowerCase()) ||
+                    user.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
+                    listUsers.add(user);
                 }
             }
-            mListCustomers = listCustomers;
+            mListUsers = listUsers;
             notifyDataSetChanged();
         }
     }

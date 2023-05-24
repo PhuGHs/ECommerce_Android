@@ -84,12 +84,12 @@ public class AdminOrderHistoryFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                String strSearch = charSequence.toString();
-//                observer = getObserverAfterSearch(strSearch);
-//
-//                observable.subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(observer);
+                String strSearch = charSequence.toString();
+                observer = getObserverAfterSearch(strSearch);
+
+                observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
             }
 
             @Override
@@ -97,6 +97,8 @@ public class AdminOrderHistoryFragment extends Fragment {
 
             }
         });
+
+
 
         return mAdminFragmentOrderHistoryBinding.getRoot();
     }
@@ -146,42 +148,42 @@ public class AdminOrderHistoryFragment extends Fragment {
         };
     }
 
-//    private Observer<Resource<List<Customer>>> getObserverAfterSearch(String strSearch) {
-//        return new Observer<Resource<List<Customer>>>() {
-//            @Override
-//            public void onSubscribe(@NonNull Disposable d) {
-//                // Perform any setup here if needed
-//                disposable = d;
-//            }
-//
-//            @Override
-//            public void onNext(@NonNull Resource<List<Customer>> resource) {
-//                Log.e("VuSearch", "onNext");
-//                switch (resource.status) {
-//                    case LOADING:
-//                        // Handle loading state if needed
-//                        break;
-//                    case SUCCESS:
-//                        adapterAdminCustomItemOrderHistory.filterOrderHistory(strSearch);
-//                        break;
-//                    case ERROR:
-//                        Log.i("VuError", resource.message);
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onError(@NonNull Throwable e) {
-//                // Handle error state if needed
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                // Handle completion if needed
-//                Log.e("Vucoder", "onComplete");
-//            }
-//        };
-//    }
+    private Observer<Resource<List<OrderHistory>>> getObserverAfterSearch(String strSearch) {
+        return new Observer<Resource<List<OrderHistory>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(@NonNull Resource<List<OrderHistory>> resource) {
+                Log.e("VuSearch", "onNext");
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        adapterAdminCustomItemOrderHistory.filterOrderHistory(strSearch);
+                        break;
+                    case ERROR:
+                        Log.i("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
 
     @Override
     public void onDestroyView() {

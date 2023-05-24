@@ -6,6 +6,7 @@ public class OrderHistory {
     private String CustomerID;
     private int ID;
     private Date TimeCreate;
+    private Customer customer;
 
     public OrderHistory() {}
 
@@ -37,5 +38,13 @@ public class OrderHistory {
 
     public void setTimeCreate(Date timeCreate) {
         TimeCreate = timeCreate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
