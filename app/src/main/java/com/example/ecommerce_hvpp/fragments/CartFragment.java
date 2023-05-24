@@ -114,11 +114,6 @@ public class CartFragment extends Fragment {
         });
     }
     public void getCartData(){
-        listCart.add(new Pair<>(new Product("P001", "Real Madrid Home", "Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
-        listCart.add(new Pair<>(new Product("P002", "Real Madrid Away", "Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
-        listCart.add(new Pair<>(new Product("P003", "AC Milan Home", "Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
-        listCart.add(new Pair<>(new Product("P004", "Bayern Munich Home","Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
-        listCart.add(new Pair<>(new Product("P005", "Liverpool Home","Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
-        listCart.add(new Pair<>(new Product("P006", "Atletico Madrid Away","Real Madrid", "", "1999/2000", 17.99,9,5,"","","","", 3, 4, 5 ,6 ,7), 2));
+
     }
 }

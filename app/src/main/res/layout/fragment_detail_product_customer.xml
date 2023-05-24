@@ -108,18 +108,8 @@
                         android:id="@+id/sizeGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checkedButton="@id/rbtnSizeS"
+                        android:checkedButton="@id/rbtnSizeM"
                         android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/rbtnSizeS"
-                            style="@style/logo_header_signup"
-                            android:layout_width="46dp"
-                            android:layout_height="46dp"
-                            android:background="@drawable/size_s_selector"
-                            android:button="@null"
-                            android:textAlignment="center"
-                            android:textSize="55px"/>
 
                         <RadioButton
                             android:id="@+id/rbtnSizeM"
@@ -150,25 +140,15 @@
                             android:button="@null"
                             android:textAlignment="center"
                             android:textSize="55px" />
-
-                        <RadioButton
-                            android:id="@+id/rbtnSize2XL"
-                            style="@style/logo_header_signup"
-                            android:layout_width="46dp"
-                            android:layout_height="46dp"
-                            android:background="@drawable/size_xxl_selector"
-                            android:button="@null"
-                            android:textAlignment="center"
-                            android:textSize="55px" />
                     </RadioGroup>
                     <TextView
                         android:layout_marginTop="20px"
-                        android:layout_marginLeft="40px"
+                        android:layout_marginLeft="90px"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/font_crimson_regular"
                         android:textColor="@color/primary"
-                        android:text="Avail: "
+                        android:text="Available: "
                         android:textSize="55px"/>
                     <TextView
                         android:id="@+id/sizeAvailable"

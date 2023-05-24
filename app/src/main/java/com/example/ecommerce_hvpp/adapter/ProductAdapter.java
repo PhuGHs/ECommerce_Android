@@ -63,7 +63,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         NavController navController = Navigation.findNavController(view);
         holder.productLayout.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString("productID",product.getID());
+            bundle.putString("productID",product.getId());
 
             navController.navigate(R.id.detailProductCustomerFragment, bundle);
         });
@@ -96,7 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
 
             Glide.with(itemView)
                     .asBitmap()
-                    .load(product.getURLthumb())
+                    .load(product.getUrlthumb())
                     .fitCenter()
                     .into(URLthumb);
         }

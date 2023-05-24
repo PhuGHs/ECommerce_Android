@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProductViewModel extends ViewModel {
@@ -26,6 +27,7 @@ public class ProductViewModel extends ViewModel {
     private List<Product> listNewArrivals, listBestSeller, listFavorite;
     private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite;
     private MutableLiveData<List<Feedback>> mldListFeedback;
+    private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private MutableLiveData<Product> detailProduct;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
@@ -35,24 +37,72 @@ public class ProductViewModel extends ViewModel {
         mldListBestSeller = new MutableLiveData<>();
         mldListFavorite = new MutableLiveData<>();
         mldListFeedback = new MutableLiveData<>();
-
-        initListNewArrivalsLiveData();
-        initListBestSellerLiveData();
-        initListFavoriteLiveData();
     }
+    public MutableLiveData<HashMap<String, List<String>>> getCategories(){
+        mldCategories = new MutableLiveData<>();
+        List<String> listClub = new ArrayList<>();
+        List<String> listNation = new ArrayList<>();
+        List<String> listSeason = new ArrayList<>();
+        HashMap<String, List<String>> categories = new HashMap<>();
 
+        helper.getCollection("Product").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
+                        String club = document.getString("club");
+                        String nation = document.getString("nation");
+                        String season = document.getString("season");
+                        if (!club.isEmpty() && !listClub.contains(club)){
+                            listClub.add(club);
+                        }
+                        if (!nation.isEmpty() && !listNation.contains(nation)){
+                            listNation.add(nation);
+                        }
+                        if (!season.isEmpty() && !listSeason.contains(season)){
+                            if (season.length() < 5){ // it's a single season
+                                long singleSeason = Long.parseLong(season);
+                                String season1 = (singleSeason - 1) + "/" + singleSeason;
+                                String season2 = singleSeason + "/" + (singleSeason + 1);
+                                if (!listSeason.contains(season1)) listSeason.add(season1);
+                                if (!listSeason.contains(season2)) listSeason.add(season2);
+                            }
+                            else listSeason.add(season);
+                        }
+                    }
+                    categories.put("Club", listClub);
+                    categories.put("Nation", listNation);
+                    categories.put("Season", listSeason);
+
+                    mldCategories.setValue(categories);
+                });
+        return mldCategories;
+    }
     private void initListFavoriteLiveData() {
         listFavorite = new ArrayList<>();
 
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("point");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
 
-                        Product product = documentSnapshot.toObject(Product.class);
+                        Log.d(TAG, id + "--" + name);
 
-                        Log.d(TAG, product.getID() + "--" + product.getName());
-
-                        listFavorite.add(product);
+                        listFavorite.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
                     }
                     mldListFavorite.setValue(listFavorite);
                 });
@@ -64,11 +114,27 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        Product product = documentSnapshot.toObject(Product.class);
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("point");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
 
-                        Log.d(TAG, product.getID() + "--" + product.getName());
+                        Log.d(TAG, id + "--" + name);
 
-                        listBestSeller.add(product);
+                        listBestSeller.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
                     }
                     mldListBestSeller.setValue(listBestSeller);
                 });
@@ -77,28 +143,48 @@ public class ProductViewModel extends ViewModel {
     private void initListNewArrivalsLiveData() {
         listNewArrivals = new ArrayList<>();
 
-        helper.getCollection("Product").get()
+        helper.getCollection("Product").orderBy("time_added").limit(4).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        Product product = documentSnapshot.toObject(Product.class);
 
-                        Log.d(TAG, product.getID() + "--" + product.getName());
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("point");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
 
-                        listNewArrivals.add(product);
+                        Log.d(TAG, id + "--" + name);
+
+                        listNewArrivals.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
                     }
                     mldListNewArrivals.setValue(listNewArrivals);
                 });
     }
 
     public MutableLiveData<List<Product>> getMldListNewArrivals() {
+        initListNewArrivalsLiveData();
         return mldListNewArrivals;
     }
 
     public MutableLiveData<List<Product>> getMldListBestSeller() {
+        initListBestSellerLiveData();
         return mldListBestSeller;
     }
 
     public MutableLiveData<List<Product>> getMldListFavorite() {
+        initListFavoriteLiveData();
         return mldListFavorite;
     }
 
@@ -108,9 +194,25 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").document(productID).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()){
-                        Product product = documentSnapshot.toObject(Product.class);
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("point");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
 
-                        detailProduct.setValue(product);
+                        detailProduct.setValue(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
                     }
                 });
 

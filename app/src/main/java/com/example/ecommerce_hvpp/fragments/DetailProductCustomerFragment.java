@@ -87,7 +87,7 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
-    TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable;
+    TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable, detailDesc;
     ImageButton btnBackToPrevious;
     RatingBar ratingBar;
     String productID;
@@ -120,6 +120,7 @@ public class DetailProductCustomerFragment extends Fragment {
         sizeGroup = (RadioGroup) view.findViewById(R.id.sizeGroup);
         sizeAvailable = (TextView) view.findViewById(R.id.sizeAvailable);
         feedbackRv = (RecyclerView) view.findViewById(R.id.listFeedbackC);
+        detailDesc = (TextView) view.findViewById(R.id.detailDesc);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
@@ -143,15 +144,14 @@ public class DetailProductCustomerFragment extends Fragment {
                 detailSeason.setText(product.getSeason());
                 detailPrice.setText("$"+Double.toString(product.getPrice()));
                 detailPoint.setText(Double.toString(product.getPointAvg()));
+                detailDesc.setText(product.getDescription());
 
                 ratingBar.setRating((float)product.getPointAvg());
                 listSize = new ArrayList<>();
-                sizeAvailable.setText(String.valueOf(product.getSizeS()));
-                listSize.add(product.getSizeS());
+                sizeAvailable.setText(String.valueOf(product.getSizeM()));
                 listSize.add(product.getSizeM());
                 listSize.add(product.getSizeL());
                 listSize.add(product.getSizeXL());
-                listSize.add(product.getSizeXXL());
 
                 loadDetailImage(product);
             });
@@ -175,16 +175,12 @@ public class DetailProductCustomerFragment extends Fragment {
     public void setSizeQuantity(){
         sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
             if (listSize != null){
-                if (checkID == R.id.rbtnSizeS)
-                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
                 if (checkID == R.id.rbtnSizeM)
-                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
+                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
                 if (checkID == R.id.rbtnSizeL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
                 if (checkID == R.id.rbtnSizeXL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(3)));
-                if (checkID == R.id.rbtnSize2XL)
-                    sizeAvailable.setText(String.valueOf(listSize.get(4)));
+                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
             }
         });
     }
@@ -195,9 +191,9 @@ public class DetailProductCustomerFragment extends Fragment {
         SlideModel slideModel2 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
         SlideModel slideModel3 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
 
-        slideModel1.setImageUrl(product.getURLmain());
-        slideModel2.setImageUrl(product.getURLsub1());
-        slideModel3.setImageUrl(product.getURLsub2());
+        slideModel1.setImageUrl(product.getUrlmain());
+        slideModel2.setImageUrl(product.getUrlsub1());
+        slideModel3.setImageUrl(product.getUrlsub2());
 
         listImage.add(slideModel1);
         listImage.add(slideModel2);

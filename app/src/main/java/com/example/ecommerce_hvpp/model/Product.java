@@ -2,180 +2,177 @@ package com.example.ecommerce_hvpp.model;
 
 
 public class Product {
-    private String ID;
-    private String Name;
-    private String Club;
-    private String Nation;
-    private String Season;
-    private double Price;
-    private long Quantity;
-    private double PointAvg;
-    private long SizeS;
-    private long SizeM;
-    private long SizeL;
-    private long SizeXL;
-    private long SizeXXL;
-    private String URLmain;
-    private String URLsub1;
-    private String URLsub2;
-    private String URLthumb;
+    private String id;
+    private String name;
+    private String club;
+    private String nation;
+    private String season;
+    private String description;
+    private double price;
+    private double point;
+    private long sizeM, sizeL, sizeXL;
+    private String urlmain, urlsub1, urlsub2, urlthumb;
+    private String status;
+    private long timeAdded;
 
-    public Product(String ID, String name, String club, String nation, String season, double price, long quantity, double markAvg, String URLmain, String URLsub1, String URLsub2, String URLthumb, long sizeS, long sizeM, long sizeL, long sizeXL, long sizeXXL) {
-        this.ID = ID;
-        Name = name;
-        Club = club;
-        Nation = nation;
-        Season = season;
-        Price = price;
-        Quantity = quantity;
-        PointAvg = markAvg;
-        this.URLmain = URLmain;
-        this.URLsub1 = URLsub1;
-        this.URLsub2 = URLsub2;
-        this.URLthumb = URLthumb;
-        this.SizeM = sizeM;
-        this.SizeS = sizeS;
-        this.SizeL = sizeL;
-        this.SizeXL = sizeXL;
-        this.SizeXXL = sizeXXL;
-    }
     public Product(){
 
     }
 
-    public String getID() {
-        return ID;
+    public Product(String id, String name, String club, String nation, String season, String description, double price, double point, long sizeM, long sizeL, long sizeXL, String urlmain, String urlsub1, String urlsub2, String urlthumb, String status, long timeAdded) {
+        this.id = id;
+        this.name = name;
+        this.club = club;
+        this.nation = nation;
+        this.season = season;
+        this.description = description;
+        this.price = price;
+        this.point = point;
+        this.sizeM = sizeM;
+        this.sizeL = sizeL;
+        this.sizeXL = sizeXL;
+        this.urlmain = urlmain;
+        this.urlsub1 = urlsub1;
+        this.urlsub2 = urlsub2;
+        this.urlthumb = urlthumb;
+        this.status = status;
+        this.timeAdded = timeAdded;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getClub() {
-        return Club;
+        return club;
     }
 
     public void setClub(String club) {
-        Club = club;
+        this.club = club;
     }
 
     public String getNation() {
-        return Nation;
+        return nation;
     }
 
     public void setNation(String nation) {
-        Nation = nation;
+        this.nation = nation;
     }
 
     public String getSeason() {
-        return Season;
+        return season;
     }
 
     public void setSeason(String season) {
-        Season = season;
+        this.season = season;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(double price) {
-        Price = price;
-    }
-
-    public long getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        Quantity = quantity;
+        this.price = price;
     }
 
     public double getPointAvg() {
-        return PointAvg;
+        return point;
     }
 
-    public void setPointAvg(double pointAvg) {
-        PointAvg = pointAvg;
-    }
-
-    public String getURLmain() {
-        return URLmain;
-    }
-
-    public void setURLmain(String URLmain) {
-        this.URLmain = URLmain;
-    }
-
-    public String getURLsub1() {
-        return URLsub1;
-    }
-
-    public void setURLsub1(String URLsub1) {
-        this.URLsub1 = URLsub1;
-    }
-
-    public String getURLsub2() {
-        return URLsub2;
-    }
-
-    public void setURLsub2(String URLsub2) {
-        this.URLsub2 = URLsub2;
-    }
-
-    public String getURLthumb() {
-        return URLthumb;
-    }
-
-    public void setURLthumb(String URLthumb) {
-        this.URLthumb = URLthumb;
-    }
-
-    public long getSizeS() {
-        return SizeS;
-    }
-
-    public void setSizeS(long sizeS) {
-        SizeS = sizeS;
+    public void setPointAvg(double point) {
+        this.point = point;
     }
 
     public long getSizeM() {
-        return SizeM;
+        return sizeM;
     }
 
     public void setSizeM(long sizeM) {
-        SizeM = sizeM;
+        this.sizeM = sizeM;
     }
 
     public long getSizeL() {
-        return SizeL;
+        return sizeL;
     }
 
     public void setSizeL(long sizeL) {
-        SizeL = sizeL;
+        this.sizeL = sizeL;
     }
 
     public long getSizeXL() {
-        return SizeXL;
+        return sizeXL;
     }
 
     public void setSizeXL(long sizeXL) {
-        SizeXL = sizeXL;
+        this.sizeXL = sizeXL;
     }
 
-    public long getSizeXXL() {
-        return SizeXXL;
+    public String getUrlmain() {
+        return urlmain;
     }
 
-    public void setSizeXXL(long sizeXXL) {
-        SizeXXL = sizeXXL;
+    public void setUrlmain(String urlmain) {
+        this.urlmain = urlmain;
+    }
+
+    public String getUrlsub1() {
+        return urlsub1;
+    }
+
+    public void setUrlsub1(String urlsub1) {
+        this.urlsub1 = urlsub1;
+    }
+
+    public String getUrlsub2() {
+        return urlsub2;
+    }
+
+    public void setUrlsub2(String urlsub2) {
+        this.urlsub2 = urlsub2;
+    }
+
+    public String getUrlthumb() {
+        return urlthumb;
+    }
+
+    public void setUrlthumb(String urlthumb) {
+        this.urlthumb = urlthumb;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getTimeAdded() {
+        return timeAdded;
+    }
+
+    public void setTimeAdded(long timeAdded) {
+        this.timeAdded = timeAdded;
     }
 }
