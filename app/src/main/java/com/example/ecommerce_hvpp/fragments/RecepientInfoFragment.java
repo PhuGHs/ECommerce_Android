@@ -9,10 +9,20 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
+import com.example.ecommerce_hvpp.model.RecepInfo;
+import com.example.ecommerce_hvpp.util.Resource;
+import com.example.ecommerce_hvpp.viewmodel.RecepInfoViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecepientInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +56,11 @@ public class RecepientInfoFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
-    ImageButton back_Account_btn;
+    private ImageButton back_Account_btn;
+    private RecepInfoViewModel viewModel;
+    private RecyclerView recyclerview;
+    private RecepInfoAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +73,11 @@ public class RecepientInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_user_recipientinfo, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerview = v.findViewById(R.id.recepinfo_rcv_recepient_info);
+        viewModel = new ViewModelProvider(this).get(RecepInfoViewModel.class);
 
+        viewModel.showRecepInfoList().observe(getViewLifecycleOwner(), recepInfos -> getRecepInfoAndSetRecepInfoRecycleView(recepInfos));
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -75,5 +93,10 @@ public class RecepientInfoFragment extends Fragment {
             }
         });
 
+    }
+    public void getRecepInfoAndSetRecepInfoRecycleView(List<RecepInfo> listRecepInfo){
+        adapter = new RecepInfoAdapter(getContext(), (ArrayList<RecepInfo>) listRecepInfo);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
     }
 }

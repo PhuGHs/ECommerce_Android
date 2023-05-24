@@ -9,10 +9,22 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
+import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
+import com.example.ecommerce_hvpp.model.RecepInfo;
+import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.viewmodel.RecepInfoViewModel;
+import com.example.ecommerce_hvpp.viewmodel.VoucherViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VoucherFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +58,11 @@ public class VoucherFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
-    ImageButton back_Account_btn;
+    private ImageButton back_Account_btn;
+    private VoucherViewModel viewModel;
+    private RecyclerView recyclerview;
+    private VoucherListAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +76,13 @@ public class VoucherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_voucher, container, false);
+        View v = inflater.inflate(R.layout.activity_voucher, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerview = v.findViewById(R.id.list_voucher);
+        viewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
+
+        viewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> getVoucherAndSetVoucherRecycleView(vouchers));
+        return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
@@ -74,5 +96,10 @@ public class VoucherFragment extends Fragment {
                 navController.navigate(R.id.accountFragment);
             }
         });
+    }
+    public void getVoucherAndSetVoucherRecycleView(List<Voucher> listVoucher){
+        adapter = new VoucherListAdapter(getContext(), (ArrayList<Voucher>) listVoucher);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
     }
 }

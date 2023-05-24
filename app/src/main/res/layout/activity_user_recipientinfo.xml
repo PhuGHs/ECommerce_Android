@@ -52,9 +52,19 @@
             android:backgroundTint="@color/primary"
             android:src="@drawable/delete_ic"/>
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="66px"
+        android:orientation="vertical"
         android:paddingLeft="50px"
-        android:layout_marginTop="66px"/>
+        android:paddingRight="50px">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recepinfo_rcv_recepient_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            
+            />
+    </ScrollView>
+
 </LinearLayout>
