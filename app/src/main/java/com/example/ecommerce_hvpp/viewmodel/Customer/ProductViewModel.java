@@ -2,25 +2,25 @@ package com.example.ecommerce_hvpp.viewmodel.Customer;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
-import com.example.ecommerce_hvpp.util.Resource;
+import com.example.ecommerce_hvpp.model.Revenue;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
@@ -177,7 +177,10 @@ public class ProductViewModel extends ViewModel {
 
     private void initListBestSellerLiveData() {
         listBestSeller = new ArrayList<>();
+        List<Revenue> listRevenue = new ArrayList<>();
+        List<Product> listNew = new ArrayList<>();
 
+        //get all product
         helper.getCollection("Product").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
@@ -201,10 +204,51 @@ public class ProductViewModel extends ViewModel {
 
                         Log.d(TAG, id + "--" + name);
 
-                        listBestSeller.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                        listNew.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
                     }
-                    mldListBestSeller.setValue(listBestSeller);
                 });
+        helper.getCollection("OrderDetail").orderBy("product_id").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //get all product revenue
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String product_id = documentSnapshot.getString("product_id");
+                        long quantity = documentSnapshot.getLong("quantity");
+
+                        if (listRevenue.size() < 1){
+                            listRevenue.add(new Revenue(product_id, quantity));
+                        }
+                        else {
+                            if (product_id.equals(listRevenue.get(listRevenue.size() - 1).getProduct_id())){
+                                listRevenue.get(listRevenue.size() - 1).setQuantity(quantity);
+                            }
+                            else {
+                                Log.d(listRevenue.get(listRevenue.size() - 1).getProduct_id(), listRevenue.get(listRevenue.size() - 1).getQuantity() + "/");
+
+                                listRevenue.add(new Revenue(product_id, quantity));
+                            }
+                        }
+                    }
+                    // find top 3 best seller
+                    for (int j = 0; j < 3; j++){
+                        long max = 0;
+                        int maxIndex = 0;
+                        String best = "";
+                        for (int i = 0; i < listRevenue.size(); i++){
+                            if (listRevenue.get(i).getQuantity() > max){
+                                max = listRevenue.get(i).getQuantity();
+                                best = listRevenue.get(i).getProduct_id();
+                                maxIndex = i;
+                            }
+                        }
+                        listRevenue.get(maxIndex).resetQuantity();
+                        for (Product product : listNew){
+                            if (product.getId().equals(best)){
+                                listBestSeller.add(product);
+                            }
+                        }
+                    }
+                });
+        mldListBestSeller.setValue(listBestSeller);
     }
 
     private void initListNewArrivalsLiveData() {
