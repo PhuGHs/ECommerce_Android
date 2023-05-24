@@ -3,7 +3,9 @@ package com.example.ecommerce_hvpp.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +52,13 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentEndDate.setText(templateDate.format(promotion.getDate_end()));
 
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentApply.setText(promotion.getApply_for());
+
+        holder.mAdminCustomItemPromotionBinding.adminPromotionComponentIcEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Hello", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

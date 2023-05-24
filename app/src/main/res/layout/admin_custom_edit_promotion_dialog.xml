@@ -15,10 +15,10 @@
 
         <!--    Title   -->
         <TextView
-            android:id="@+id/dialog_add_promotion_title_label"
+            android:id="@+id/dialog_edit_promotion_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Promotion"
+            android:text="Edit Promotion"
             android:textColor="@color/primary"
             style="@style/header_title"
             android:textSize="30sp"
@@ -28,10 +28,10 @@
 
         <!--    Name   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_name_container"
+            android:id="@+id/dialog_edit_promotion_name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_title_label">
+            android:layout_below="@+id/dialog_edit_promotion_title_label">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_name"
+                    android:id="@+id/dialog_edit_promotion_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -52,10 +52,10 @@
 
         <!--    Code   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_code_container"
+            android:id="@+id/dialog_edit_promotion_code_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_name_container">
+            android:layout_below="@+id/dialog_edit_promotion_name_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_code"
+                    android:id="@+id/dialog_edit_promotion_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -76,10 +76,10 @@
 
         <!--    Discount   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_discount_container"
+            android:id="@+id/dialog_edit_promotion_discount_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_code_container">
+            android:layout_below="@+id/dialog_edit_promotion_code_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_discount"
+                    android:id="@+id/dialog_edit_promotion_discount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -102,10 +102,10 @@
 
         <!--    Condition   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_minimum_container"
+            android:id="@+id/dialog_edit_promotion_minimum_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_discount_container">
+            android:layout_below="@+id/dialog_edit_promotion_discount_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -117,7 +117,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_minimum"
+                    android:id="@+id/dialog_edit_promotion_minimum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -128,10 +128,10 @@
 
         <!--    Start Date   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_start_date_container"
+            android:id="@+id/dialog_edit_promotion_start_date_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_minimum_container">
+            android:layout_below="@+id/dialog_edit_promotion_minimum_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_start_date"
+                    android:id="@+id/dialog_edit_promotion_start_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="22/12/2023"
@@ -155,10 +155,10 @@
         </RelativeLayout>
         <!--    End Date   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_end_date_container"
+            android:id="@+id/dialog_edit_promotion_end_date_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_start_date_container">
+            android:layout_below="@+id/dialog_edit_promotion_start_date_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -170,7 +170,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_end_date"
+                    android:id="@+id/dialog_edit_promotion_end_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -181,10 +181,10 @@
 
         <!--    Apply to   -->
         <RelativeLayout
-            android:id="@+id/dialog_add_promotion_apply_container"
+            android:id="@+id/dialog_edit_promotion_apply_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_end_date_container">
+            android:layout_below="@+id/dialog_edit_promotion_end_date_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dialog_add_promotion_apply"
+                    android:id="@+id/dialog_edit_promotion_apply"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Man"
@@ -210,25 +210,25 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dialog_add_promotion_apply_container"
+            android:layout_below="@id/dialog_edit_promotion_apply_container"
             android:gravity="center_horizontal"
             android:layout_marginTop="12dp">
 
             <Button
-                android:id="@+id/dialog_add_promotion_button_add"
+                android:id="@+id/dialog_edit_promotion_button_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/primary"
                 style="@style/w400_60"
                 android:letterSpacing="0"
                 android:textAllCaps="false"
-                android:text="Add" />
+                android:text="Save" />
 
             <Button
-                android:id="@+id/dialog_add_promotion_button_cancel"
+                android:id="@+id/dialog_edit_promotion_button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/dialog_add_promotion_button_add"
+                android:layout_toEndOf="@id/dialog_edit_promotion_button_add"
                 android:layout_marginStart="46dp"
                 style="@style/w400_60"
                 android:letterSpacing="0"

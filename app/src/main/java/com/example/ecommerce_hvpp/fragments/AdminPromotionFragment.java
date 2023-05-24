@@ -1,10 +1,18 @@
 package com.example.ecommerce_hvpp.fragments;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +67,14 @@ public class AdminPromotionFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
 
+        // on click btn add promotion
+        mAdminFragmentPromotionBinding.adminPromotionBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCustomDialogAddPromotion();
+//                Toast.makeText(requireActivity(), "Hello Fragment", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         // on click back page
@@ -110,6 +126,49 @@ public class AdminPromotionFragment extends Fragment {
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+    private void openCustomDialogAddPromotion() {
+        final Dialog dialog = new Dialog(requireActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.admin_custom_add_promotion_dialog);
+
+        Window window = dialog.getWindow();
+
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+
+//        dialog.setCancelable(Gravity.BOTTOM == gravity);
+
+//        Button btnCancel = dialog.findViewById(R.id.dialog_add_promotion_button_cancel);
+//
+//        Button btnAdd = dialog.findViewById(R.id.dialog_add_promotion_button_add);
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(requireActivity(), "Hello Fragment", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.dispose();
     }
 
 }
