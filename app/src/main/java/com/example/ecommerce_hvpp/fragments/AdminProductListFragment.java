@@ -1,6 +1,8 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +42,7 @@ public class AdminProductListFragment extends Fragment {
     private NavController navController;
     private List<Product> products;
     private int mCurrentItemPosition;
+    private EditText etSearchText;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,9 +51,10 @@ public class AdminProductListFragment extends Fragment {
 
         products = new ArrayList<>();
         //Initialize view
-        svSearch = view.findViewById(R.id.svSearch);
+//        svSearch = view.findViewById(R.id.svSearch);
         rclProductList = view.findViewById(R.id.RclProductList);
         btnAdd = view.findViewById(R.id.btnAdd);
+        etSearchText = view.findViewById(R.id.etSearchText);
 
         //Initialize ViewModel
         viewModel = new ViewModelProvider(getActivity()).get(AdminProductManagementViewModel.class);
@@ -95,6 +100,23 @@ public class AdminProductListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.navigate_to_productDetails);
+            }
+        });
+
+        etSearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //no action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //no action needed
             }
         });
     }

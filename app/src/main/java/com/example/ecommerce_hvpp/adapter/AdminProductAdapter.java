@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,22 +17,64 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdminProductAdapter extends RecyclerView.Adapter {
+public class AdminProductAdapter extends RecyclerView.Adapter implements Filterable {
     private List<Product> list;
+    private List<Product> filteredList;
+    private List<Product> original;
     private Context context;
     private OnLongItemClickListener mOnLongItemClickListener;
 
     public void setOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener) {
         mOnLongItemClickListener = onLongItemClickListener;
     }
+
+    @Override
+    public Filter getFilter() {
+        return productFilter;
+    }
+
+    private Filter productFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            filteredList = new ArrayList<>();
+            String charString = charSequence.toString();
+
+            if(charString.isEmpty()) {
+                filteredList.addAll(original);
+            } else {
+                List<Product> sample = new ArrayList<>();
+                for(Product pd : list) {
+                    if(pd.getName().toLowerCase().contains(charString.toLowerCase())) {
+                        sample.add(pd);
+                    }
+                }
+                filteredList.addAll(sample);
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list = (ArrayList<Product>) filterResults.values;
+
+            notifyDataSetChanged();
+        }
+    };
+
     public interface OnLongItemClickListener {
         void itemLongClicked(View v, int position);
     }
 
     public AdminProductAdapter(Context context, List<Product> list) {
         this.list = list;
+        original = new ArrayList<>(list);
         this.context = context;
     }
     @NonNull

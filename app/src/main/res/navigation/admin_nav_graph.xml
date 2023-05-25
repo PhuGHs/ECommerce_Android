@@ -12,7 +12,11 @@
         tools:layout="@layout/admin_fragment_product_management" >
         <action
             android:id="@+id/navigate_to_productDetails"
-            app:destination="@id/adminProductDetailsFragment" />
+            app:destination="@id/adminProductDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/adminProductDetailsFragment"

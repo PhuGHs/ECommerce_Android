@@ -244,6 +244,7 @@ public class AdminProductDetailsFragment extends Fragment {
             @Override
             public void onChanged(Boolean isEditMode) {
                 if(isEditMode) {
+                    //getData
                     implementEditFunctionality();
                 } else {
                     implementAddFunctionality();
@@ -378,11 +379,41 @@ public class AdminProductDetailsFragment extends Fragment {
                     pd.setUrl_sub1(SlideAdapter.getList().get(1).getLink());
                     pd.setUrl_sub2(SlideAdapter.getList().get(2).getLink());
                     editFunc_saveProduct(pd);
+                    isFieldsModified = false;
                 }
             });
         });
     }
+    public void implementAddFunctionality() {
+        btnCancel.setVisibility(View.GONE);
+        etNumXL.setVisibility(View.GONE);
+        etNumL.setVisibility(View.GONE);
+        etNumM.setVisibility(View.GONE);
 
+        btnAddSizeXL.setVisibility(View.GONE);
+        btnAddSizeL.setVisibility(View.GONE);
+        btnAddSizeM.setVisibility(View.GONE);
+
+        if(spType.getSelectedItem().toString().equals("Club")) {
+            tvTypeName.setText("Club Name");
+        } else {
+            tvTypeName.setText("Nation");
+        }
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkIfIsEmpty()) {
+                    CustomToast validationToast = new CustomToast();
+                    validationToast.ShowToastMessage(requireActivity(), 3, "There are fields which have no data! Please check and retry!");
+                } else {
+                    addFunc_addProduct();
+                }
+            }
+        });
+    }
+
+    //region sub methods
     private void editFunc_saveProduct(Product pd) {
         viewModel.editProduct(pd).observe(getViewLifecycleOwner(), resource -> {
             if(resource.status == Resource.Status.LOADING) {
@@ -420,34 +451,6 @@ public class AdminProductDetailsFragment extends Fragment {
                 }
             });
         }
-    }
-    public void implementAddFunctionality() {
-        btnCancel.setVisibility(View.GONE);
-        etNumXL.setVisibility(View.GONE);
-        etNumL.setVisibility(View.GONE);
-        etNumM.setVisibility(View.GONE);
-
-        btnAddSizeXL.setVisibility(View.GONE);
-        btnAddSizeL.setVisibility(View.GONE);
-        btnAddSizeM.setVisibility(View.GONE);
-
-        if(spType.getSelectedItem().toString().equals("Club")) {
-            tvTypeName.setText("Club Name");
-        } else {
-            tvTypeName.setText("Nation");
-        }
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkIfIsEmpty()) {
-                    CustomToast validationToast = new CustomToast();
-                    validationToast.ShowToastMessage(requireActivity(), 3, "There are fields which have no data! Please check and retry!");
-                } else {
-                    addFunc_addProduct();
-                }
-            }
-        });
     }
 
     public void addFunc_addProduct() {
@@ -576,7 +579,7 @@ public class AdminProductDetailsFragment extends Fragment {
     private void showProgressDialog(boolean isAddFunc) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage(isAddFunc ? "Adding Product..." : "Saving Product");
+            progressDialog.setMessage(isAddFunc ? "Adding Product..." : "Saving Product...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -615,7 +618,6 @@ public class AdminProductDetailsFragment extends Fragment {
         return false;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -634,5 +636,6 @@ public class AdminProductDetailsFragment extends Fragment {
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.VISIBLE);
     }
+    //endregion
 
 }
