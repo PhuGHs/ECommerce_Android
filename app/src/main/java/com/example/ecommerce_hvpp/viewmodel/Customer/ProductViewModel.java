@@ -29,13 +29,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Delayed;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
     private List<Product> listNewArrivals, listBestSeller, listFavorite;
+    private HashMap<String, Product> listAllProduct;
     private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite, mldDetailCategory;
     private MutableLiveData<List<Feedback>> mldListFeedback;
+    private MutableLiveData<List<Cart>> mldListCart;
+    private List<Cart> listCart;
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
@@ -46,9 +51,50 @@ public class ProductViewModel extends ViewModel {
         mldListFavorite = new MutableLiveData<>();
         mldListFeedback = new MutableLiveData<>();
         mldCategories = new MutableLiveData<>();
+        mldListCart = new MutableLiveData<>();
+
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> getAllProduct()); // wait get all product
+        future.join();
+    }
+    public void initData(){
         initCategories();
         initListNewArrivalsLiveData();
         initListBestSellerLiveData();
+        initListFavoriteLiveData();
+        initUserCart();
+    }
+    private void getAllProduct(){
+        listAllProduct = new HashMap<>();
+
+        helper.getCollection("Product")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("Get all product", "Success");
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("point");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
+
+                        Log.d("Get all", id + "--" + name);
+
+                        listAllProduct.put(id, new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                    }
+                })
+                .addOnFailureListener(e -> Log.d("Get all", "Failure"));
     }
     public void addToWishList(String product_id){
         Map<String, Object> data = new HashMap<>();
@@ -60,6 +106,8 @@ public class ProductViewModel extends ViewModel {
                 .set(data)
                 .addOnSuccessListener(unused -> Log.d("WishList","add Success"))
                 .addOnFailureListener(e -> Log.d("WishList","add Failure"));
+        listFavorite.add(listAllProduct.get(product_id));
+        mldListFavorite.setValue(listFavorite);
     }
     public void removeFromWishList(String product_id){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -68,6 +116,9 @@ public class ProductViewModel extends ViewModel {
                 .delete()
                 .addOnSuccessListener(unused -> Log.d("WishList", "delete Success"))
                 .addOnFailureListener(e -> Log.d("WishList", "delete Failure"));
+        listFavorite.remove(listAllProduct.get(product_id));
+        Log.d("Remove",product_id);
+        mldListFavorite.setValue(listFavorite);
     }
     public void addToCart(String product_id, String size, long quantity){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -81,19 +132,23 @@ public class ProductViewModel extends ViewModel {
                 .set(data)
                 .addOnSuccessListener(unused -> Log.d("Cart", "add Success"))
                 .addOnFailureListener(e -> Log.d("Cart", "add Failure"));
+        listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
+        mldListCart.setValue(listCart);
     }
-    public void removeFromCart(String product_id, String size){
+    public void removeFromCart(String product_id, long quantity, String size){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
 
         helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
                 .delete()
                 .addOnSuccessListener(unused -> Log.d("Cart", "delete Success"))
                 .addOnFailureListener(e -> Log.d("Cart", "delete Failure"));
+        Cart cart = new Cart(listAllProduct.get(product_id), quantity, size);
+        listCart.remove(cart);
+        mldListCart.setValue(listCart);
     }
-    public LiveData<List<Cart>> getUserCart(){
-        MutableLiveData<List<Cart>> mldListCart = new MutableLiveData<>();
-        List<Cart> listCart = new ArrayList<>();
-        List<String> listID = new ArrayList<>();
+    private void initUserCart(){
+        mldListCart = new MutableLiveData<>();
+        listCart = new ArrayList<>();
         String customer_id = helper.getAuth().getCurrentUser().getUid();
 
         helper.getCollection("Cart").whereEqualTo("customer_id", customer_id)
@@ -104,14 +159,21 @@ public class ProductViewModel extends ViewModel {
                         String size = documentSnapshot.getString("size");
                         long quantity = documentSnapshot.getLong("quantity");
 
-                        listID.add(product_id);
-                        listCart.add(new Cart(product_id, size, quantity));
+                        listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
                         Log.d("Product", product_id + "/" + size);
                     }
                     Log.d("Cart", "get Success");
                     mldListCart.setValue(listCart);
                 });
-
+    }
+    public double getTotalPriceCart(){
+        double sum = 0;
+        for (Cart cart : listCart){
+            sum += cart.getProduct().getPrice() * cart.getQuantity();
+        }
+        return sum;
+    }
+    public LiveData<List<Cart>> getUserCart(){
         return mldListCart;
     }
     public LiveData<Boolean> isFavorite(String product_id){
@@ -135,36 +197,38 @@ public class ProductViewModel extends ViewModel {
         List<String> listNation = new ArrayList<>();
         List<String> listSeason = new ArrayList<>();
         HashMap<String, List<String>> categories = new HashMap<>();
+        List<String> listProductID = new ArrayList<>(listAllProduct.keySet());
 
-        helper.getCollection("Product").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
-                        String club = document.getString("club");
-                        String nation = document.getString("nation");
-                        String season = document.getString("season");
-                        if (!club.isEmpty() && !listClub.contains(club)){
-                            listClub.add(club);
-                        }
-                        if (!nation.isEmpty() && !listNation.contains(nation)){
-                            listNation.add(nation);
-                        }
-                        if (!season.isEmpty() && !listSeason.contains(season)){
-                            if (season.length() < 5){ // it's a single season
-                                long singleSeason = Long.parseLong(season);
-                                String season1 = (singleSeason - 1) + "/" + singleSeason;
-                                String season2 = singleSeason + "/" + (singleSeason + 1);
-                                if (!listSeason.contains(season1)) listSeason.add(season1);
-                                if (!listSeason.contains(season2)) listSeason.add(season2);
-                            }
-                            else listSeason.add(season);
-                        }
-                    }
-                    categories.put("Club", listClub);
-                    categories.put("Nation", listNation);
-                    categories.put("Season", listSeason);
+        for (String id : listProductID){
+            Product product = listAllProduct.get(id);
+            String club = product.getClub();
+            String nation = product.getNation();
+            String season = product.getSeason();
 
-                    mldCategories.setValue(categories);
-                });
+            Log.d("Categories", club + nation + season);
+
+            if (!club.isEmpty() && !listClub.contains(club)){
+                listClub.add(club);
+            }
+            if (!nation.isEmpty() && !listNation.contains(nation)){
+                listNation.add(nation);
+            }
+            if (!season.isEmpty() && !listSeason.contains(season)){
+                if (season.length() < 5){ // it's a single season
+                    long singleSeason = Long.parseLong(season);
+                    String season1 = (singleSeason - 1) + "/" + singleSeason;
+                    String season2 = singleSeason + "/" + (singleSeason + 1);
+                    if (!listSeason.contains(season1)) listSeason.add(season1);
+                    if (!listSeason.contains(season2)) listSeason.add(season2);
+                }
+                else listSeason.add(season);
+            }
+        }
+        categories.put("Club", listClub);
+        categories.put("Nation", listNation);
+        categories.put("Season", listSeason);
+
+        mldCategories.setValue(categories);
     }
     public MutableLiveData<HashMap<String, List<String>>> getMldCategories(){
         return mldCategories;
@@ -172,73 +236,25 @@ public class ProductViewModel extends ViewModel {
     public MutableLiveData<List<Product>> getDetailCategory(String type, String category){
         mldDetailCategory = new MutableLiveData<>();
         List<Product> listDetailCategory = new ArrayList<>();
+        List<String> listProductID = new ArrayList<>(listAllProduct.keySet());
 
-        if (!type.equals("season")){
-            helper.getCollection("Product").whereEqualTo(type, category).get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            String id = documentSnapshot.getString("id");
-                            String name = documentSnapshot.getString("name");
-                            String club = documentSnapshot.getString("club");
-                            String nation = documentSnapshot.getString("nation");
-                            String season = documentSnapshot.getString("season");
-                            double Price = documentSnapshot.getDouble("price");
-                            double Point = documentSnapshot.getDouble("point");
-                            String urlmain = documentSnapshot.getString("url_main");
-                            String urlsub1 = documentSnapshot.getString("url_sub1");
-                            String urlsub2 = documentSnapshot.getString("url_sub2");
-                            String urlthumb = documentSnapshot.getString("url_thumb");
-                            long sizeM = documentSnapshot.getLong("size_m");
-                            long sizeL = documentSnapshot.getLong("size_l");
-                            long sizeXL = documentSnapshot.getLong("size_xl");
-                            String status = documentSnapshot.getString("status");
-                            Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                            String desc = documentSnapshot.getString("description");
-
-                            Log.d(TAG, id + "--" + name);
-
-                            listDetailCategory.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                        }
-                        mldDetailCategory.setValue(listDetailCategory);
-                    });
+        for (String id : listProductID){
+            if (type.equals("club")){
+                if (listAllProduct.get(id).getClub().equals(category)) listDetailCategory.add(listAllProduct.get(id));
+            }
+            if (type.equals("nation")){
+                if (listAllProduct.get(id).getNation().equals(category)) listDetailCategory.add(listAllProduct.get(id));
+            }
+            if (type.equals("season")){
+                if (category.contains(listAllProduct.get(id).getSeason())) listDetailCategory.add(listAllProduct.get(id));
+            }
         }
-        else
-        {
-            helper.getCollection("Product").get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            String season = documentSnapshot.getString("season");
-                            if (season.equals(category) || category.contains(season)){
-                                String id = documentSnapshot.getString("id");
-                                String name = documentSnapshot.getString("name");
-                                String club = documentSnapshot.getString("club");
-                                String nation = documentSnapshot.getString("nation");
-                                double Price = documentSnapshot.getDouble("price");
-                                double Point = documentSnapshot.getDouble("point");
-                                String urlmain = documentSnapshot.getString("url_main");
-                                String urlsub1 = documentSnapshot.getString("url_sub1");
-                                String urlsub2 = documentSnapshot.getString("url_sub2");
-                                String urlthumb = documentSnapshot.getString("url_thumb");
-                                long sizeM = documentSnapshot.getLong("size_m");
-                                long sizeL = documentSnapshot.getLong("size_l");
-                                long sizeXL = documentSnapshot.getLong("size_xl");
-                                String status = documentSnapshot.getString("status");
-                                Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                                String desc = documentSnapshot.getString("description");
+        mldDetailCategory.setValue(listDetailCategory);
 
-                                Log.d(TAG, id + "--" + name);
-
-                                listDetailCategory.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                            }
-                        }
-                        mldDetailCategory.setValue(listDetailCategory);
-                    });
-        }
         return mldDetailCategory;
     }
     private void initListFavoriteLiveData() {
         listFavorite = new ArrayList<>();
-        List<String> listProductId = new ArrayList<>();
 
         String customer_id = helper.getAuth().getCurrentUser().getUid();
 
@@ -246,74 +262,17 @@ public class ProductViewModel extends ViewModel {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Log.d("Get WishList", "Success");
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        listProductId.add(documentSnapshot.getString("product_id"));
+                        String product_id = documentSnapshot.getString("product_id");
+                        listFavorite.add(listAllProduct.get(product_id));
                     }
-
-                    if (listProductId.size() > 0){
-                        helper.getCollection("Product").whereIn("id", listProductId).get()
-                                .addOnSuccessListener(queryDocumentSnapshots1 -> {
-                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots1){
-                                        String id = documentSnapshot.getString("id");
-                                        String name = documentSnapshot.getString("name");
-                                        String club = documentSnapshot.getString("club");
-                                        String nation = documentSnapshot.getString("nation");
-                                        String season = documentSnapshot.getString("season");
-                                        double Price = documentSnapshot.getDouble("price");
-                                        double Point = documentSnapshot.getDouble("point");
-                                        String urlmain = documentSnapshot.getString("url_main");
-                                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                                        String urlthumb = documentSnapshot.getString("url_thumb");
-                                        long sizeM = documentSnapshot.getLong("size_m");
-                                        long sizeL = documentSnapshot.getLong("size_l");
-                                        long sizeXL = documentSnapshot.getLong("size_xl");
-                                        String status = documentSnapshot.getString("status");
-                                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                                        String desc = documentSnapshot.getString("description");
-
-                                        Log.d(TAG, id + "--" + name);
-
-                                        listFavorite.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                                    }
-                                    mldListFavorite.setValue(listFavorite);
-                                });
-                    }
-                    else mldListFavorite.setValue(listFavorite);
+                    mldListFavorite.setValue(listFavorite);
                 });
     }
 
     private void initListBestSellerLiveData() {
         listBestSeller = new ArrayList<>();
         List<Revenue> listRevenue = new ArrayList<>();
-        List<Product> listNew = new ArrayList<>();
 
-        //get all product
-        helper.getCollection("Product").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String id = documentSnapshot.getString("id");
-                        String name = documentSnapshot.getString("name");
-                        String club = documentSnapshot.getString("club");
-                        String nation = documentSnapshot.getString("nation");
-                        String season = documentSnapshot.getString("season");
-                        double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("point");
-                        String urlmain = documentSnapshot.getString("url_main");
-                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                        String urlthumb = documentSnapshot.getString("url_thumb");
-                        long sizeM = documentSnapshot.getLong("size_m");
-                        long sizeL = documentSnapshot.getLong("size_l");
-                        long sizeXL = documentSnapshot.getLong("size_xl");
-                        String status = documentSnapshot.getString("status");
-                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                        String desc = documentSnapshot.getString("description");
-
-                        Log.d(TAG, id + "--" + name);
-
-                        listNew.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                    }
-                });
         helper.getCollection("OrderDetail").orderBy("product_id").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     //get all product revenue
@@ -348,11 +307,7 @@ public class ProductViewModel extends ViewModel {
                             }
                         }
                         listRevenue.get(maxIndex).resetQuantity();
-                        for (Product product : listNew){
-                            if (product.getId().equals(best)){
-                                listBestSeller.add(product);
-                            }
-                        }
+                        listBestSeller.add(listAllProduct.get(best));
                     }
                     mldListBestSeller.setValue(listBestSeller);
                 });
@@ -364,28 +319,8 @@ public class ProductViewModel extends ViewModel {
         helper.getCollection("Product").orderBy("time_added").limit(4).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-
                         String id = documentSnapshot.getString("id");
-                        String name = documentSnapshot.getString("name");
-                        String club = documentSnapshot.getString("club");
-                        String nation = documentSnapshot.getString("nation");
-                        String season = documentSnapshot.getString("season");
-                        double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("point");
-                        String urlmain = documentSnapshot.getString("url_main");
-                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                        String urlthumb = documentSnapshot.getString("url_thumb");
-                        long sizeM = documentSnapshot.getLong("size_m");
-                        long sizeL = documentSnapshot.getLong("size_l");
-                        long sizeXL = documentSnapshot.getLong("size_xl");
-                        String status = documentSnapshot.getString("status");
-                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                        String desc = documentSnapshot.getString("description");
-
-                        Log.d(TAG, id + "--" + name);
-
-                        listNewArrivals.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                        listNewArrivals.add(listAllProduct.get(id));
                     }
                     mldListNewArrivals.setValue(listNewArrivals);
                 });
@@ -400,36 +335,12 @@ public class ProductViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<Product>> getMldListFavorite() {
-        initListFavoriteLiveData();
         return mldListFavorite;
     }
     public MutableLiveData<Product> getDetailProduct(String productID) {
         MutableLiveData<Product> detailProduct = new MutableLiveData<>();
 
-        helper.getCollection("Product").document(productID).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()){
-                        String id = documentSnapshot.getString("id");
-                        String name = documentSnapshot.getString("name");
-                        String club = documentSnapshot.getString("club");
-                        String nation = documentSnapshot.getString("nation");
-                        String season = documentSnapshot.getString("season");
-                        double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("point");
-                        String urlmain = documentSnapshot.getString("url_main");
-                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                        String urlthumb = documentSnapshot.getString("url_thumb");
-                        long sizeM = documentSnapshot.getLong("size_m");
-                        long sizeL = documentSnapshot.getLong("size_l");
-                        long sizeXL = documentSnapshot.getLong("size_xl");
-                        String status = documentSnapshot.getString("status");
-                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                        String desc = documentSnapshot.getString("description");
-
-                        detailProduct.setValue(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                    }
-                });
+        detailProduct.setValue(listAllProduct.get(productID));
 
         return detailProduct;
     }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
@@ -28,7 +29,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
     private Context context;
     private View view;
     private boolean isFavorite;
-    private ProductViewModel viewModel = new ProductViewModel();
 
     public ProductAdapter(Context context, ArrayList<Product> listProduct, View view, Boolean isFavorite) {
         this.context = context;
@@ -60,20 +60,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         if (isFavorite == true) {
             holder.btnFav.setImageResource(R.drawable.full_heart);
         }
-        viewModel.isFavorite(product.getId()).observe((LifecycleOwner) context, Favorite -> {
+        MainActivity.PDviewModel.isFavorite(product.getId()).observe((LifecycleOwner) context, Favorite -> {
             if (Favorite) holder.btnFav.setImageResource(R.drawable.full_heart);
             else holder.btnFav.setImageResource(R.drawable.outline_heart);
             holder.btnFav.setOnClickListener(view -> {
                 if (Favorite) {
-                    viewModel.removeFromWishList(product.getId());
+                    MainActivity.PDviewModel.removeFromWishList(product.getId());
                     holder.btnFav.setImageResource(R.drawable.outline_heart);
-                    if (isFavorite == true){
-                        holder.adapter.listProduct.remove(position);
-                        holder.adapter.notifyItemRemoved(position);
-                    }
                 }
                 else {
-                    viewModel.addToWishList(product.getId());
+                    MainActivity.PDviewModel.addToWishList(product.getId());
                     holder.btnFav.setImageResource(R.drawable.full_heart);
                 }
             });

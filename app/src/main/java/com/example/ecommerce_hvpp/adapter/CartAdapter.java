@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
@@ -31,7 +32,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
     private List<Cart> listCart;
     public static MutableLiveData<Double> mldTotalPrice = new MutableLiveData<>((double) 0);
     private Context context;
-    private ProductViewModel viewModel = new ProductViewModel();
 
     public CartAdapter(Context context, List<Cart> listCart) {
         this.context = context;
@@ -55,31 +55,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartAdapter.DataViewHolder holder, int position) {
         Cart cart = listCart.get(position);
+        Product product = cart.getProduct();
         int p = position;
 
-        viewModel.getDetailProduct(cart.getProduct_id()).observe((LifecycleOwner) context, product -> {
-            holder.productName.setText(product.getName());
-            holder.productSeason.setText(product.getSeason());
-            holder.productPrice.setText("$"+ product.getPrice());
-            double totalPrice = mldTotalPrice.getValue();
-            mldTotalPrice.setValue(totalPrice + product.getPrice());
+        holder.productName.setText(product.getName());
+        holder.productSeason.setText(product.getSeason());
+        holder.productPrice.setText("$"+ product.getPrice());
+        mldTotalPrice.setValue(MainActivity.PDviewModel.getTotalPriceCart());
 
-            Log.d("In cart", product.getName());
-            holder.size.setText(cart.getSize());
-            holder.quantity.setText(String.valueOf(cart.getQuantity()));
+        Log.d("In cart", product.getName());
+        holder.size.setText(cart.getSize());
+        holder.quantity.setText(String.valueOf(cart.getQuantity()));
 
-            Glide.with(context)
-                    .asBitmap()
-                    .load(product.getUrlthumb())
-                    .fitCenter()
-                    .into(holder.thumb);
-            holder.btnRemove.setOnClickListener(view -> {
-                viewModel.removeFromCart(product.getId(), cart.getSize());
-                double currentPrice = mldTotalPrice.getValue();
-                mldTotalPrice.setValue(currentPrice - product.getPrice());
-                holder.adapter.listCart.remove(p);
-                holder.adapter.notifyItemRemoved(p);
-            });
+        Glide.with(context)
+                .asBitmap()
+                .load(product.getUrlthumb())
+                .fitCenter()
+                .into(holder.thumb);
+        holder.btnRemove.setOnClickListener(view -> {
+            MainActivity.PDviewModel.removeFromCart(product.getId(), cart.getQuantity(), cart.getSize());
+            mldTotalPrice.setValue(MainActivity.PDviewModel.getTotalPriceCart());
+            holder.adapter.listCart.remove(p);
+            holder.adapter.notifyItemRemoved(p);
         });
 
         //change quantity

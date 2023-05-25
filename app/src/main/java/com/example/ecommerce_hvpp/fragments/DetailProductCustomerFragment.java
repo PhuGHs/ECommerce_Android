@@ -27,6 +27,7 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.FeedbackCustomerAdapter;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
@@ -95,7 +96,6 @@ public class DetailProductCustomerFragment extends Fragment {
     String productID;
     private NavController navController;
     ImageSlider detailImgSlider;
-    ProductViewModel viewModel;
     ImageButton minusQuantity, plusQuantity;
     RadioGroup sizeGroup;
     List<Long> listSize;
@@ -126,7 +126,6 @@ public class DetailProductCustomerFragment extends Fragment {
         feedbackRv = (RecyclerView) view.findViewById(R.id.listFeedbackC);
         detailDesc = (TextView) view.findViewById(R.id.detailDesc);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         //set data
         detailQuantity.setText("1");
@@ -143,7 +142,7 @@ public class DetailProductCustomerFragment extends Fragment {
         if (bundle != null){
             productID = bundle.getString("productID");
 
-            viewModel.getDetailProduct(productID).observe(getViewLifecycleOwner(), product -> {
+            MainActivity.PDviewModel.getDetailProduct(productID).observe(getViewLifecycleOwner(), product -> {
                 detailName.setText(product.getName());
                 detailSeason.setText(product.getSeason());
                 detailPrice.setText("$"+Double.toString(product.getPrice()));
@@ -159,23 +158,23 @@ public class DetailProductCustomerFragment extends Fragment {
 
                 loadDetailImage(product);
             });
-            viewModel.isFavorite(productID).observe(getViewLifecycleOwner(), favorite -> {
+            MainActivity.PDviewModel.isFavorite(productID).observe(getViewLifecycleOwner(), favorite -> {
                 if (favorite){
                     btnFav.setImageResource(R.drawable.full_heart);
                 }
                 else btnFav.setImageResource(R.drawable.outline_heart);
                 btnFav.setOnClickListener(view -> {
                     if (favorite){
-                        viewModel.removeFromWishList(productID);
+                        MainActivity.PDviewModel.removeFromWishList(productID);
                         btnFav.setImageResource(R.drawable.outline_heart);
                     }
                     else {
-                        viewModel.addToWishList(productID);
+                        MainActivity.PDviewModel.addToWishList(productID);
                         btnFav.setImageResource(R.drawable.full_heart);
                     }
                 });
             });
-            viewModel.getFeedbackProduct(productID).observe(getViewLifecycleOwner(), feedbacks -> getDetailFeedbackAndSetFeedbackRecycleView(feedbacks));
+            MainActivity.PDviewModel.getFeedbackProduct(productID).observe(getViewLifecycleOwner(), feedbacks -> getDetailFeedbackAndSetFeedbackRecycleView(feedbacks));
         }
     }
     public void modifyQuantityProduct(){
@@ -210,7 +209,7 @@ public class DetailProductCustomerFragment extends Fragment {
                 }
                 String finalSizeChosen = sizeChosen;
                 if (!finalSizeChosen.isEmpty()){
-                    btnAddToCart.setOnClickListener(view -> viewModel.addToCart(productID, finalSizeChosen, Long.parseLong(detailQuantity.getText().toString())));
+                    btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, finalSizeChosen, Long.parseLong(detailQuantity.getText().toString())));
                 }
             }
         });

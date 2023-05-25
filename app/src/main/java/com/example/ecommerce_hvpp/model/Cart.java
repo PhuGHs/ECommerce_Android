@@ -9,14 +9,22 @@ import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 public class Cart {
-    private String product_id;
+    private Product product;
     private long quantity;
     private String size;
-    private ProductViewModel viewModel = new ProductViewModel();
-    public Cart(String product_id, String size, long quantity) {
-        this.product_id = product_id;
+
+    public Cart(Product product, long quantity, String size) {
+        this.product = product;
         this.quantity = quantity;
         this.size = size;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public long getQuantity() {
@@ -33,13 +41,5 @@ public class Cart {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public String getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(String product_id) {
-        this.product_id = product_id;
     }
 }

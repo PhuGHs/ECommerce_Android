@@ -112,7 +112,14 @@ public class CartFragment extends Fragment {
             listCartRv.setLayoutManager(linearLayoutManager);
             listCartRv.setAdapter(adapter);
 
-            CartAdapter.mldTotalPrice.observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + total));
+            CartAdapter.mldTotalPrice.observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + Math.round(total * 100.0) / 100.0));
         });
+    }
+    public double getTotalPrice(List<Cart> carts){
+        double sum = 0;
+        for (Cart cart : carts){
+            sum += cart.getProduct().getPrice();
+        }
+        return sum;
     }
 }
