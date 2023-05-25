@@ -168,7 +168,7 @@ public class EditProfileFrament extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
-        back_Account_btn = (ImageButton) view.findViewById(R.id.btn_backtoAccount);
+        back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
 
         edit_profile_btn = (Button) view.findViewById(R.id.edit_profile_btn);
         cancel_btn = (Button) view.findViewById(R.id.cancel_btn);

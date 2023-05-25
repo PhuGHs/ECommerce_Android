@@ -9,24 +9,16 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.OrderProgressAdapter;
-import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
-import com.example.ecommerce_hvpp.model.Order;
-import com.example.ecommerce_hvpp.model.Voucher;
-import com.example.ecommerce_hvpp.viewmodel.OrderViewModel;
-import com.example.ecommerce_hvpp.viewmodel.VoucherViewModel;
+import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
+import com.example.ecommerce_hvpp.viewmodel.RecepInfoViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrderProgressFragment extends Fragment {
+public class UnreviewedFeedbackFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +28,7 @@ public class OrderProgressFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public OrderProgressFragment() {
+    public UnreviewedFeedbackFragment() {
         // Required empty public constructor
     }
 
@@ -46,11 +38,11 @@ public class OrderProgressFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFrament.
+     * @return A new instance of fragment AccountFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditProfileFrament newInstance(String param1, String param2) {
-        EditProfileFrament fragment = new EditProfileFrament();
+    public static UnreviewedFeedbackFragment newInstance(String param1, String param2) {
+        UnreviewedFeedbackFragment fragment = new UnreviewedFeedbackFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,9 +51,9 @@ public class OrderProgressFragment extends Fragment {
     }
     private NavController navController;
     private ImageButton back_Account_btn;
-    private OrderViewModel viewModel;
+    private RecepInfoViewModel viewModel;
     private RecyclerView recyclerview;
-    private OrderProgressAdapter adapter;
+    private RecepInfoAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,17 +63,12 @@ public class OrderProgressFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.activity_orderprogress, container, false);
+        View v = inflater.inflate(R.layout.activity_feedback_unreviewed, container, false);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerview = v.findViewById(R.id.list_orderprogress);
-        viewModel = new ViewModelProvider(this).get(OrderViewModel.class);
-
-        viewModel.showOrderList().observe(getViewLifecycleOwner(), orders -> getOrderAndSetOrderRecycleView(orders));
+        recyclerview = v.findViewById(R.id.list_unreviewed);
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -96,10 +83,6 @@ public class OrderProgressFragment extends Fragment {
                 navController.navigate(R.id.accountFragment);
             }
         });
-    }
-    public void getOrderAndSetOrderRecycleView(List<Order> listOrder){
-        adapter = new OrderProgressAdapter(getContext(), (ArrayList<Order>) listOrder);
-        recyclerview.setAdapter(adapter);
-        recyclerview.setLayoutManager(linearLayoutManager);
+
     }
 }

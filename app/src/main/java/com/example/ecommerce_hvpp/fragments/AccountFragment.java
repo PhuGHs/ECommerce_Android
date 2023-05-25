@@ -165,7 +165,7 @@ public class AccountFragment extends Fragment {
         feedback_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.FeedbackFragment);
+                navController.navigate(R.id.FeedbackFragment_Reviewed);
             }
         });
 

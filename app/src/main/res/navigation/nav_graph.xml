@@ -63,11 +63,21 @@
     <fragment
         android:id="@+id/OrderProgressFragment"
         android:name="com.example.ecommerce_hvpp.fragments.OrderProgressFragment"
-        android:label="fragment_voucher"
+        android:label="fragment_orderprogress"
         tools:layout="@layout/activity_orderprogress"/>
     <fragment
         android:id="@+id/FeedbackFragment"
         android:name="com.example.ecommerce_hvpp.fragments.FeedbackFragment"
-        android:label="fragment_voucher"
+        android:label="fragment_feedback"
         tools:layout="@layout/activity_feedback"/>
+    <fragment
+        android:id="@+id/FeedbackFragment_Reviewed"
+        android:name="com.example.ecommerce_hvpp.fragments.ReviewedFeedbackFragment"
+        android:label="fragment_reviewed_feedback"
+        tools:layout="@layout/activity_feedback_reviewed"/>
+    <fragment
+        android:id="@+id/FeedbackFragment_Unreviewed"
+        android:name="com.example.ecommerce_hvpp.fragments.UnreviewedFeedbackFragment"
+        android:label="fragment_unreviewed_feedback"
+        tools:layout="@layout/activity_feedback_unreviewed"/>
 </navigation>
