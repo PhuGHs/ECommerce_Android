@@ -6,6 +6,7 @@
     android:layout_marginBottom="20px"
     android:orientation="horizontal">
     <ImageView
+        android:id="@+id/cartThumb"
         android:layout_width="280px"
         android:layout_height="290px"
         android:background="@drawable/bg_white_rounded"
@@ -46,6 +47,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
             <ImageButton
+                android:id="@+id/btnRemoveFromCart"
+                android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/close_rounded"
@@ -62,12 +65,27 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/cart_productPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 style="@style/font_crimson_bold"
                 android:textSize="70px"
                 android:textColor="#A86464"
                 android:text="$14.99"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Size: "
+                android:textColor="@color/primary"
+                style="@style/font_crimson_regular"
+                android:textSize="65px"/>
+            <TextView
+                android:id="@+id/sizeChosen"
+                android:layout_width="90px"
+                android:layout_height="wrap_content"
+                android:text="XL"
+                android:textColor="@color/primary"
+                style="@style/font_crimson_regular"
+                android:textSize="65px"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -81,15 +99,14 @@
                 android:clickable="true"/>
             <TextView
                 android:id="@+id/cart_quantity"
-                android:layout_width="wrap_content"
+                android:textAlignment="center"
+                android:layout_width="70px"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px"
                 android:layout_marginBottom="10px"
                 style="@style/font_crimson_bold"
                 android:textSize="70px"
                 android:textColor="#A86464"
-                android:text="4"/>
+                android:text="1"/>
             <ImageButton
                 android:id="@+id/plusQuantity"
                 android:layout_width="wrap_content"

@@ -1,6 +1,7 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
@@ -18,9 +20,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +37,6 @@ public class ProductViewModel extends ViewModel {
     private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite, mldDetailCategory;
     private MutableLiveData<List<Feedback>> mldListFeedback;
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
-    private MutableLiveData<Product> detailProduct;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
         //init
@@ -61,6 +64,51 @@ public class ProductViewModel extends ViewModel {
                 .delete()
                 .addOnSuccessListener(unused -> Log.d("WishList", "delete Success"))
                 .addOnFailureListener(e -> Log.d("WishList", "delete Failure"));
+    }
+    public void addToCart(String product_id, String size, long quantity){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+        Map<String, Object> data = new HashMap<>();
+        data.put("product_id", product_id);
+        data.put("customer_id", customer_id);
+        data.put("quantity", quantity);
+        data.put("size", size);
+
+        helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
+                .set(data)
+                .addOnSuccessListener(unused -> Log.d("Cart", "add Success"))
+                .addOnFailureListener(e -> Log.d("Cart", "add Failure"));
+    }
+    public void removeFromCart(String product_id, String size){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+
+        helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
+                .delete()
+                .addOnSuccessListener(unused -> Log.d("Cart", "delete Success"))
+                .addOnFailureListener(e -> Log.d("Cart", "delete Failure"));
+    }
+    public LiveData<List<Cart>> getUserCart(){
+        MutableLiveData<List<Cart>> mldListCart = new MutableLiveData<>();
+        List<Cart> listCart = new ArrayList<>();
+        List<String> listID = new ArrayList<>();
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+
+        helper.getCollection("Cart").whereEqualTo("customer_id", customer_id)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String product_id = documentSnapshot.getString("product_id");
+                        String size = documentSnapshot.getString("size");
+                        long quantity = documentSnapshot.getLong("quantity");
+
+                        listID.add(product_id);
+                        listCart.add(new Cart(product_id, size, quantity));
+                        Log.d("Product", product_id + "/" + size);
+                    }
+                    Log.d("Cart", "get Success");
+                    mldListCart.setValue(listCart);
+                });
+
+        return mldListCart;
     }
     public LiveData<Boolean> isFavorite(String product_id){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -352,9 +400,8 @@ public class ProductViewModel extends ViewModel {
         initListFavoriteLiveData();
         return mldListFavorite;
     }
-
     public MutableLiveData<Product> getDetailProduct(String productID) {
-        detailProduct = new MutableLiveData<>();
+        MutableLiveData<Product> detailProduct = new MutableLiveData<>();
 
         helper.getCollection("Product").document(productID).get()
                 .addOnSuccessListener(documentSnapshot -> {

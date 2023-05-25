@@ -16,6 +16,7 @@ import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -88,7 +89,8 @@ public class DetailProductCustomerFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
     TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable, detailDesc;
-    ImageButton btnBackToPrevious;
+    ImageButton btnBackToPrevious, btnFav;
+    Button btnAddToCart;
     RatingBar ratingBar;
     String productID;
     private NavController navController;
@@ -108,6 +110,8 @@ public class DetailProductCustomerFragment extends Fragment {
         //initialize
         navController = Navigation.findNavController(requireView());
         btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
+        btnFav = (ImageButton) view.findViewById(R.id.btnModifyWishList);
+        btnAddToCart = (Button) view.findViewById(R.id.btnAddToCart);
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBarDetailC);
         detailImgSlider = (ImageSlider) view.findViewById(R.id.detailImageSlider);
         detailName = (TextView) view.findViewById(R.id.detailNameC);
@@ -155,6 +159,22 @@ public class DetailProductCustomerFragment extends Fragment {
 
                 loadDetailImage(product);
             });
+            viewModel.isFavorite(productID).observe(getViewLifecycleOwner(), favorite -> {
+                if (favorite){
+                    btnFav.setImageResource(R.drawable.full_heart);
+                }
+                else btnFav.setImageResource(R.drawable.outline_heart);
+                btnFav.setOnClickListener(view -> {
+                    if (favorite){
+                        viewModel.removeFromWishList(productID);
+                        btnFav.setImageResource(R.drawable.outline_heart);
+                    }
+                    else {
+                        viewModel.addToWishList(productID);
+                        btnFav.setImageResource(R.drawable.full_heart);
+                    }
+                });
+            });
             viewModel.getFeedbackProduct(productID).observe(getViewLifecycleOwner(), feedbacks -> getDetailFeedbackAndSetFeedbackRecycleView(feedbacks));
         }
     }
@@ -175,12 +195,23 @@ public class DetailProductCustomerFragment extends Fragment {
     public void setSizeQuantity(){
         sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
             if (listSize != null){
-                if (checkID == R.id.rbtnSizeM)
+                String sizeChosen = "";
+                if (checkID == R.id.rbtnSizeM){
                     sizeAvailable.setText(String.valueOf(listSize.get(0)));
-                if (checkID == R.id.rbtnSizeL)
+                    sizeChosen = "M";
+                }
+                if (checkID == R.id.rbtnSizeL){
                     sizeAvailable.setText(String.valueOf(listSize.get(1)));
-                if (checkID == R.id.rbtnSizeXL)
+                    sizeChosen = "L";
+                }
+                if (checkID == R.id.rbtnSizeXL){
                     sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                    sizeChosen = "XL";
+                }
+                String finalSizeChosen = sizeChosen;
+                if (!finalSizeChosen.isEmpty()){
+                    btnAddToCart.setOnClickListener(view -> viewModel.addToCart(productID, finalSizeChosen, Long.parseLong(detailQuantity.getText().toString())));
+                }
             }
         });
     }
