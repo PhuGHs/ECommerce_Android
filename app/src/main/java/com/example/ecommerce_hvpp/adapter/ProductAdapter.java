@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.fragments.DetailProductCustomerFragment;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
     private Context context;
     private View view;
     private boolean isFavorite;
+    private ProductViewModel viewModel = new ProductViewModel();
 
     public ProductAdapter(Context context, ArrayList<Product> listProduct, View view, Boolean isFavorite) {
         this.context = context;
@@ -35,6 +39,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         this.view = view;
         this.isFavorite = isFavorite;
     }
+
 
     @Override
     public int getItemCount() {
@@ -47,7 +52,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
 
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
 
-        return new DataViewHolder(itemView);
+        return new DataViewHolder(itemView).linkAdapter(this);
     }
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
@@ -58,6 +63,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         if (isFavorite == true) {
             holder.btnFav.setImageResource(R.drawable.full_heart);
         }
+        viewModel.isFavorite(product.getId()).observe((LifecycleOwner) context, Favorite -> {
+            if (Favorite) holder.btnFav.setImageResource(R.drawable.full_heart);
+            else holder.btnFav.setImageResource(R.drawable.outline_heart);
+            holder.btnFav.setOnClickListener(view -> {
+                if (Favorite) {
+                    viewModel.removeFromWishList(product.getId());
+                    holder.btnFav.setImageResource(R.drawable.outline_heart);
+                    if (isFavorite == true){
+                        holder.adapter.listProduct.remove(position);
+                        holder.adapter.notifyItemRemoved(position);
+                    }
+                }
+                else {
+                    viewModel.addToWishList(product.getId());
+                    holder.btnFav.setImageResource(R.drawable.full_heart);
+                }
+            });
+        });
+
 
         //navigate to detail
         NavController navController = Navigation.findNavController(view);
@@ -78,6 +102,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
         private ImageButton btnFav;
         private CardView productLayout;
         private ImageView URLthumb;
+        private ProductAdapter adapter;
         public DataViewHolder(View itemView) {
             super(itemView);
 
@@ -99,6 +124,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
                     .load(product.getUrlthumb())
                     .fitCenter()
                     .into(URLthumb);
+        }
+        public DataViewHolder linkAdapter(ProductAdapter adapter){
+            this.adapter = adapter;
+            return this;
         }
     }
 }

@@ -74,31 +74,43 @@
                     android:textSize="85px"
                     style="@style/font_crimson_bold"
                     android:textColor="@color/primary"/>
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <RatingBar
                         android:id="@+id/ratingBarDetailC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleX="0.7"
-                        android:scaleY="0.7"
                         android:layout_marginLeft="-90px"
                         android:layout_marginTop="-25px"
-                        android:layout_marginBottom="-30px"
                         android:layout_marginRight="-60px"
+                        android:layout_marginBottom="-30px"
                         android:isIndicator="true"
-                        android:numStars="5"/>
+                        android:numStars="5"
+                        android:scaleX="0.7"
+                        android:scaleY="0.7" />
+
                     <TextView
                         android:id="@+id/detailPointC"
+                        style="@style/font_crimson_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.9"
-                        style="@style/font_crimson_regular"
                         android:textColor="@color/primary"
-                        android:textSize="60px"/>
+                        android:textSize="60px" />
+                    <ImageButton
+                        android:layout_marginLeft="185px"
+                        android:id="@+id/btnModifyWishList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="35px"
+                        android:background="@color/transparent"
+                        android:src="@drawable/outline_heart"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -143,7 +155,7 @@
                     </RadioGroup>
                     <TextView
                         android:layout_marginTop="20px"
-                        android:layout_marginLeft="90px"
+                        android:layout_marginLeft="160px"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/font_crimson_regular"

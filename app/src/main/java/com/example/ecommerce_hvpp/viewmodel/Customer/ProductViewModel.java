@@ -2,7 +2,9 @@ package com.example.ecommerce_hvpp.viewmodel.Customer;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -12,14 +14,17 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ProductViewModel extends ViewModel {
@@ -37,6 +42,41 @@ public class ProductViewModel extends ViewModel {
         mldListBestSeller = new MutableLiveData<>();
         mldListFavorite = new MutableLiveData<>();
         mldListFeedback = new MutableLiveData<>();
+    }
+    public void addToWishList(String product_id){
+        Map<String, Object> data = new HashMap<>();
+        data.put("product_id", product_id);
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+        data.put("customer_id", customer_id);
+
+        helper.getDb().collection("WishList").document(customer_id + "_" + product_id)
+                .set(data)
+                .addOnSuccessListener(unused -> Log.d("WishList","add Success"))
+                .addOnFailureListener(e -> Log.d("WishList","add Failure"));
+    }
+    public void removeFromWishList(String product_id){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+
+        helper.getDb().collection("WishList").document(customer_id + "_" + product_id)
+                .delete()
+                .addOnSuccessListener(unused -> Log.d("WishList", "delete Success"))
+                .addOnFailureListener(e -> Log.d("WishList", "delete Failure"));
+    }
+    public LiveData<Boolean> isFavorite(String product_id){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+        MutableLiveData<Boolean> whetherFavorite = new MutableLiveData<>();
+
+        helper.getCollection("WishList").whereEqualTo("customer_id", customer_id)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    whetherFavorite.setValue(false);
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        if (product_id.equals(documentSnapshot.getString("product_id"))){
+                            whetherFavorite.setValue(true);
+                        }
+                    }
+                });
+        return whetherFavorite;
     }
     public MutableLiveData<HashMap<String, List<String>>> getCategories(){
         mldCategories = new MutableLiveData<>();
@@ -145,33 +185,47 @@ public class ProductViewModel extends ViewModel {
     }
     private void initListFavoriteLiveData() {
         listFavorite = new ArrayList<>();
+        List<String> listProductId = new ArrayList<>();
 
-        helper.getCollection("Product").get()
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+
+        helper.getCollection("WishList").whereEqualTo("customer_id", customer_id).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("Get WishList", "Success");
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String id = documentSnapshot.getString("id");
-                        String name = documentSnapshot.getString("name");
-                        String club = documentSnapshot.getString("club");
-                        String nation = documentSnapshot.getString("nation");
-                        String season = documentSnapshot.getString("season");
-                        double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("point");
-                        String urlmain = documentSnapshot.getString("url_main");
-                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                        String urlthumb = documentSnapshot.getString("url_thumb");
-                        long sizeM = documentSnapshot.getLong("size_m");
-                        long sizeL = documentSnapshot.getLong("size_l");
-                        long sizeXL = documentSnapshot.getLong("size_xl");
-                        String status = documentSnapshot.getString("status");
-                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                        String desc = documentSnapshot.getString("description");
-
-                        Log.d(TAG, id + "--" + name);
-
-                        listFavorite.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                        listProductId.add(documentSnapshot.getString("product_id"));
                     }
-                    mldListFavorite.setValue(listFavorite);
+
+                    if (listProductId.size() > 0){
+                        helper.getCollection("Product").whereIn("id", listProductId).get()
+                                .addOnSuccessListener(queryDocumentSnapshots1 -> {
+                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots1){
+                                        String id = documentSnapshot.getString("id");
+                                        String name = documentSnapshot.getString("name");
+                                        String club = documentSnapshot.getString("club");
+                                        String nation = documentSnapshot.getString("nation");
+                                        String season = documentSnapshot.getString("season");
+                                        double Price = documentSnapshot.getDouble("price");
+                                        double Point = documentSnapshot.getDouble("point");
+                                        String urlmain = documentSnapshot.getString("url_main");
+                                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                                        String urlthumb = documentSnapshot.getString("url_thumb");
+                                        long sizeM = documentSnapshot.getLong("size_m");
+                                        long sizeL = documentSnapshot.getLong("size_l");
+                                        long sizeXL = documentSnapshot.getLong("size_xl");
+                                        String status = documentSnapshot.getString("status");
+                                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                                        String desc = documentSnapshot.getString("description");
+
+                                        Log.d(TAG, id + "--" + name);
+
+                                        listFavorite.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
+                                    }
+                                    mldListFavorite.setValue(listFavorite);
+                                });
+                    }
+                    else mldListFavorite.setValue(listFavorite);
                 });
     }
 
@@ -247,8 +301,8 @@ public class ProductViewModel extends ViewModel {
                             }
                         }
                     }
+                    mldListBestSeller.setValue(listBestSeller);
                 });
-        mldListBestSeller.setValue(listBestSeller);
     }
 
     private void initListNewArrivalsLiveData() {

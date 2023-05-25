@@ -62,7 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="35px"
                 android:background="@color/transparent"
-                android:src="@drawable/outline_heart"/>
+                android:src="@drawable/outline_heart"
+                android:clickable="true"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
