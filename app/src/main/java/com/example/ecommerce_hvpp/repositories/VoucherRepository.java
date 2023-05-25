@@ -7,6 +7,7 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.RecepInfo;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,9 +30,12 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Voucher> vouchers = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        String name = snapshot.
-                        Voucher voucher = snapshot.toObject(Voucher.class);
-                        vouchers.add(voucher);
+                        String name = snapshot.getString("name");
+                        String code = snapshot.getString("id");
+                        long value = snapshot.getLong("value");
+
+                        Timestamp date_end = snapshot.getTimestamp("date_end");
+                        vouchers.add(new Voucher(name, code, value, date_end.getSeconds()*1000));
                     }
                     _mldListVoucher.setValue(vouchers);
                 })

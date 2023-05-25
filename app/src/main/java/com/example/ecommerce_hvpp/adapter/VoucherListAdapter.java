@@ -50,9 +50,9 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
 
         holder.name_tv.setText(voucher.getName());
         holder.code_tv.setText("Code:   " + voucher.getId());
-        holder.discount_value_tv.setText("Discount:     " + Integer.toString(voucher.getValue()) + "%");
+        holder.discount_value_tv.setText(Long.toString(voucher.getValue()) + "%");
 
-        //holder.date_end_tv.setText(getDate(voucher.getDate_end()));
+        holder.date_end_tv.setText(getDate(voucher.getDate_end()));
     }
     /**
      * Data ViewHolder class.
