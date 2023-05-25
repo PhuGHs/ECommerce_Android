@@ -9,9 +9,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    public static ProductViewModel PDviewModel = new ProductViewModel();
     private BottomNavigationView bottomNav;
     private NavController navController;
     @Override

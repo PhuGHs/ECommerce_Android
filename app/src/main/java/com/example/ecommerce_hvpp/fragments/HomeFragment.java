@@ -23,6 +23,7 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
@@ -76,7 +77,6 @@ public class HomeFragment extends Fragment {
     ProductAdapter bestSellerAdapter;
     private NavController navController;
     ImageSlider imgSlider;
-    ProductViewModel viewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +100,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(requireView());
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
         listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
@@ -124,13 +123,13 @@ public class HomeFragment extends Fragment {
         });
     }
     public void getListNewArrivals(){
-        viewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), products -> {
+        MainActivity.PDviewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), products -> {
             newArrivalAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
             listNewArrivalsRv.setAdapter(newArrivalAdapter);
         });
     }
     public void getListBestSeller(){
-        viewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), products -> {
+        MainActivity.PDviewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), products -> {
             bestSellerAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
             listBestSellerRv.setAdapter(bestSellerAdapter);
         });

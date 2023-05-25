@@ -45,6 +45,10 @@ public class ProductViewModel extends ViewModel {
         mldListBestSeller = new MutableLiveData<>();
         mldListFavorite = new MutableLiveData<>();
         mldListFeedback = new MutableLiveData<>();
+        mldCategories = new MutableLiveData<>();
+        initCategories();
+        initListNewArrivalsLiveData();
+        initListBestSellerLiveData();
     }
     public void addToWishList(String product_id){
         Map<String, Object> data = new HashMap<>();
@@ -126,8 +130,7 @@ public class ProductViewModel extends ViewModel {
                 });
         return whetherFavorite;
     }
-    public MutableLiveData<HashMap<String, List<String>>> getCategories(){
-        mldCategories = new MutableLiveData<>();
+    private void initCategories(){
         List<String> listClub = new ArrayList<>();
         List<String> listNation = new ArrayList<>();
         List<String> listSeason = new ArrayList<>();
@@ -162,6 +165,8 @@ public class ProductViewModel extends ViewModel {
 
                     mldCategories.setValue(categories);
                 });
+    }
+    public MutableLiveData<HashMap<String, List<String>>> getMldCategories(){
         return mldCategories;
     }
     public MutableLiveData<List<Product>> getDetailCategory(String type, String category){
@@ -387,12 +392,10 @@ public class ProductViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<Product>> getMldListNewArrivals() {
-        initListNewArrivalsLiveData();
         return mldListNewArrivals;
     }
 
     public MutableLiveData<List<Product>> getMldListBestSeller() {
-        initListBestSellerLiveData();
         return mldListBestSeller;
     }
 

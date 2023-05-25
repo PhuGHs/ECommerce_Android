@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
@@ -79,13 +80,11 @@ public class FavoriteFragment extends Fragment {
     RecyclerView listFavoriteRv;
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
-    ProductViewModel viewModel;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         layoutManager = new GridLayoutManager(getContext(), 2);
         listFavoriteRv.setLayoutManager(layoutManager);
@@ -93,7 +92,7 @@ public class FavoriteFragment extends Fragment {
         getListFavorite();
     }
     public void getListFavorite(){
-        viewModel.getMldListFavorite().observe(getViewLifecycleOwner(), products -> {
+        MainActivity.PDviewModel.getMldListFavorite().observe(getViewLifecycleOwner(), products -> {
             favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), true);
             listFavoriteRv.setAdapter(favProductAdapter);
         });

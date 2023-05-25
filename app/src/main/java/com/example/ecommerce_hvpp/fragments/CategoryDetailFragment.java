@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
@@ -87,13 +88,11 @@ public class CategoryDetailFragment extends Fragment {
     ProductAdapter adapter;
     GridLayoutManager layoutManager;
     private NavController navController;
-    ProductViewModel viewModel;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //init
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         navController = Navigation.findNavController(requireView());
         back = (ImageButton) view.findViewById(R.id.btnBackToCategory);
         title = (TextView) view.findViewById(R.id.categoryDetailTitle);
@@ -109,7 +108,7 @@ public class CategoryDetailFragment extends Fragment {
         if (bundle != null){
             String type = bundle.getString("Type");
             String category = bundle.getString("Category");
-            viewModel.getDetailCategory(type, category).observe(getViewLifecycleOwner(), listDetailCategory -> {
+            MainActivity.PDviewModel.getDetailCategory(type, category).observe(getViewLifecycleOwner(), listDetailCategory -> {
                 title.setText(category);
 
                 Log.d("Size", listDetailCategory.size() + "/");

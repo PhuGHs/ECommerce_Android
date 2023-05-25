@@ -17,6 +17,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ExpandableListCategoryAdapter;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
@@ -82,18 +83,15 @@ public class CategoryFragment extends Fragment {
     ExpandableListView listViewCategory;
     ExpandableListCategoryAdapter adapter;
     List<String> listTitle;
-    ProductViewModel viewModel;
-    HashMap<String, List<String>> listDetailCategory = new HashMap<>();
     private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         listViewCategory = (ExpandableListView) view.findViewById(R.id.listCategory);
         navController = Navigation.findNavController(requireView());
 
-        viewModel.getCategories().observe(getViewLifecycleOwner(), listDetailCategory -> {
+        MainActivity.PDviewModel.getMldCategories().observe(getViewLifecycleOwner(), listDetailCategory -> {
             listTitle = new ArrayList<>(listDetailCategory.keySet());
             adapter = new ExpandableListCategoryAdapter(getContext(), listTitle, listDetailCategory);
             listViewCategory.setAdapter(adapter);

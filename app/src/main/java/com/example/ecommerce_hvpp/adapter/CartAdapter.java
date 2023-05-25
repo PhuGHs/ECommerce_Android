@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,12 +29,14 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder>{
     private List<Cart> listCart;
+    public static MutableLiveData<Double> mldTotalPrice = new MutableLiveData<>((double) 0);
     private Context context;
     private ProductViewModel viewModel = new ProductViewModel();
 
     public CartAdapter(Context context, List<Cart> listCart) {
         this.context = context;
         this.listCart = listCart;
+        mldTotalPrice.setValue((double) 0);
     }
 
     @Override
@@ -58,6 +61,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
             holder.productName.setText(product.getName());
             holder.productSeason.setText(product.getSeason());
             holder.productPrice.setText("$"+ product.getPrice());
+            double totalPrice = mldTotalPrice.getValue();
+            mldTotalPrice.setValue(totalPrice + product.getPrice());
 
             Log.d("In cart", product.getName());
             holder.size.setText(cart.getSize());
@@ -70,6 +75,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
                     .into(holder.thumb);
             holder.btnRemove.setOnClickListener(view -> {
                 viewModel.removeFromCart(product.getId(), cart.getSize());
+                double currentPrice = mldTotalPrice.getValue();
+                mldTotalPrice.setValue(currentPrice - product.getPrice());
                 holder.adapter.listCart.remove(p);
                 holder.adapter.notifyItemRemoved(p);
             });

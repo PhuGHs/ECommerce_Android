@@ -17,8 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.CartAdapter;
 import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Product;
@@ -85,14 +87,15 @@ public class CartFragment extends Fragment {
     CartAdapter adapter;
     ImageButton btnBackToHome;
     Button btnNavToCheckout;
+    TextView totalPrice;
     private NavController navController;
-    private ProductViewModel viewModel = new ProductViewModel();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //initialize
         navController = Navigation.findNavController(requireView());
+        totalPrice = (TextView) view.findViewById(R.id.totalPrice);
         listCartRv = (RecyclerView) view.findViewById(R.id.listCart);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         getCartData();
@@ -104,10 +107,12 @@ public class CartFragment extends Fragment {
         btnNavToCheckout.setOnClickListener(view12 -> navController.navigate(R.id.checkoutFragment));
     }
     public void getCartData(){
-        viewModel.getUserCart().observe(getViewLifecycleOwner(), carts -> {
+        MainActivity.PDviewModel.getUserCart().observe(getViewLifecycleOwner(), carts -> {
             adapter = new CartAdapter(getContext(), carts);
             listCartRv.setLayoutManager(linearLayoutManager);
             listCartRv.setAdapter(adapter);
+
+            CartAdapter.mldTotalPrice.observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + total));
         });
     }
 }
