@@ -5,7 +5,7 @@
     android:paddingTop="53px"
     android:paddingLeft="39px"
     android:paddingRight="66px"
-    android:layout_marginTop="88px"
+    android:layout_marginBottom="88px"
     android:background="@drawable/bg_white_rounded">
 
         <ImageView

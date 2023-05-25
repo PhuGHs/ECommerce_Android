@@ -110,7 +110,6 @@ public class AccountFragment extends Fragment {
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         ava_image = v.findViewById(R.id.image_of_user);
-        num_of_voucher = setQuantityofVoucher();
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         if (viewModel.showUserName() != null){
@@ -123,7 +122,7 @@ public class AccountFragment extends Fragment {
                        imagePath = userInfoResource.data.getImagePath();
                        Glide.with(this).load(imagePath).fitCenter().into(ava_image);
                        name_tv.setText(name);
-                       number_of_voucher_tv.setText(num_of_voucher);
+                       setQuantityofVoucher(number_of_voucher_tv, "Voucher");
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -216,8 +215,8 @@ public class AccountFragment extends Fragment {
             }
         });
     }
-    public String setQuantityofVoucher(){
-        db.collection("Voucher")
+    public void setQuantityofVoucher(TextView textView, String path){
+        db.collection(path)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -228,12 +227,12 @@ public class AccountFragment extends Fragment {
                                 count++;
                             }
                             size_text = Integer.toString(count);
+                            textView.setText(size_text);
                             Log.d(TAG, "So voucher la " + size_text);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        return size_text;
     }
 }
