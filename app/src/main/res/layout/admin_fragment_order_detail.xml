@@ -13,6 +13,7 @@
         android:layout_height="90dp">
 
         <ImageView
+            android:id="@+id/btnBackOrderDetail"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -150,7 +151,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Shipping method: "
+                        android:text="Delivery method: "
                         android:textColor="@color/primary"
                         style="@style/font_medium"
                         android:textSize="20dp"/>

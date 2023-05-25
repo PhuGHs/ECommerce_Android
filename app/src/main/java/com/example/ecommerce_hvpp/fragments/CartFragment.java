@@ -1,6 +1,12 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,13 +15,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Pair;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.CartAdapter;
@@ -114,11 +113,11 @@ public class CartFragment extends Fragment {
         });
     }
     public void getCartData(){
-        listCart.add(new Pair<>(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-        listCart.add(new Pair<>(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-        listCart.add(new Pair<>(new Product("P003", "AC Milan Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-        listCart.add(new Pair<>(new Product("P004", "Bayern Munich Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-        listCart.add(new Pair<>(new Product("P005", "Liverpool Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-        listCart.add(new Pair<>(new Product("P006", "Atletico Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P003", "AC Milan Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P004", "Bayern Munich Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P005", "Liverpool Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+//        listCart.add(new Pair<>(new Product("P006", "Atletico Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
     }
 }

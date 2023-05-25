@@ -1,16 +1,15 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
@@ -81,12 +80,12 @@ public class FavoriteFragment extends Fragment {
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
 
-        listFavorite.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
 
         layoutManager = new GridLayoutManager(getContext(), 2);
         favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView(), true);

@@ -1,6 +1,10 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,12 +13,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -130,20 +128,20 @@ public class HomeFragment extends Fragment {
         });
     }
     public void getListNewArrivals(){
-        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
     }
     public void getListBestSeller(){
-        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+//        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
     }
     public void loadImageSlider(){
         ArrayList<SlideModel> listImage = new ArrayList<>();
