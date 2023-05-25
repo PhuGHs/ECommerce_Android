@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_discount_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_condition"
-                android:text="VNĐ"
+                android:text="$"
                 android:textColor="@color/black"
                 style="@style/w400_50"
                 android:layout_marginStart="5dp"/>

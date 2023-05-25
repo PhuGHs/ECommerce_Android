@@ -13,7 +13,7 @@ public class Promotion {
 
     public Promotion() {}
 
-    public Promotion(String name, String id, int value, Date date_begin, Date date_end, String apply_for, int condition) {
+    public Promotion(String name, String id, int value, int condition, Date date_begin, Date date_end, String apply_for) {
         this.name = name;
         this.id = id;
         this.value = value;

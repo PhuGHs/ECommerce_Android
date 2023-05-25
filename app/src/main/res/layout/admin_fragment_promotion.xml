@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="AdminPromotionViewModel"
+            type="com.example.ecommerce_hvpp.viewmodel.admin_promotion.AdminPromotionViewModel" />
     </data>
 
     <LinearLayout
@@ -177,15 +179,19 @@
 
             <Button
                 android:id="@+id/admin_promotion_btn_add"
+                style="@style/w600_50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:text="Add"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                style="@style/w600_50" />
+                android:onClick="@{(view) -> AdminPromotionViewModel.onClickAddPromotion(view)}"
+                />
+
 
         </RelativeLayout>
 

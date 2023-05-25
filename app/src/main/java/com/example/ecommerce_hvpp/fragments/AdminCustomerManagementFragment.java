@@ -11,24 +11,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentCustomerManagementBinding;
-import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.repositories.AdminCustomerManagementRepository;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin_customer_management.AdminCustomerManagementViewModel;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
