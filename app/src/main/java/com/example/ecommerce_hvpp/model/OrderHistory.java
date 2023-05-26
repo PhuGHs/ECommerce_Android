@@ -3,48 +3,78 @@ package com.example.ecommerce_hvpp.model;
 import java.util.Date;
 
 public class OrderHistory {
-    private String CustomerID;
-    private int ID;
-    private Date TimeCreate;
-    private Customer customer;
+    private String customer_id;
+    private int id;
+    private Date time_create;
+    private String phone;
+    private String address;
+    private String name;
+    private User user;
 
     public OrderHistory() {}
 
-    public OrderHistory(String customerID, int ID, Date timeCreate) {
-        CustomerID = customerID;
-        this.ID = ID;
-        TimeCreate = timeCreate;
+    public OrderHistory(String customer_id, int id, Date time_create, String phone, String address, String name) {
+        this.customer_id = customer_id;
+        this.id = id;
+        this.time_create = time_create;
+        this.phone = phone;
+        this.address = address;
+        this.name = name;
     }
 
-    public String getCustomerID() {
-        return CustomerID;
+    public String getCustomer_id() {
+        return customer_id;
     }
 
-    public void setCustomerID(String customerID) {
-        CustomerID = customerID;
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Date getTimeCreate() {
-        return TimeCreate;
+    public Date getTime_create() {
+        return time_create;
     }
 
-    public void setTimeCreate(Date timeCreate) {
-        TimeCreate = timeCreate;
+    public void setTime_create(Date time_create) {
+        this.time_create = time_create;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

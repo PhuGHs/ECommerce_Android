@@ -48,10 +48,16 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
         holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentEmailCustomer.setText(user.getEmail());
 
         if (user.getImagePath() == null || user.getImagePath().equals("")) {
-            Glide.with(mContext).load(R.drawable.baseline_no_avatar).into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
+            Glide
+                    .with(mContext)
+                    .load(R.drawable.baseline_no_avatar)
+                    .into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
         } else {
             // null
-            Glide.with(mContext).load(user.getImagePath()).into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
+            Glide
+                    .with(mContext)
+                    .load(user.getImagePath())
+                    .into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
         }
 
     }

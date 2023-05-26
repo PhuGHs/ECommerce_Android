@@ -6,6 +6,7 @@ import static com.example.ecommerce_hvpp.util.constant.DATA_STATISTICS;
 import static com.example.ecommerce_hvpp.util.constant.LOG_OUT;
 import static com.example.ecommerce_hvpp.util.constant.ORDER_HISTORY;
 import static com.example.ecommerce_hvpp.util.constant.PROMOTION_MANAGEMENT;
+import static com.example.ecommerce_hvpp.util.constant.templateDate;
 
 import android.content.Intent;
 import android.text.Layout;
@@ -100,14 +101,13 @@ public class AdminProfileRepository {
     public Observable<Resource<User>> getObservableCustomerById(String userID) {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
-            firebaseHelper.getCollection("users")
-                    .whereEqualTo("id", userID)
+            firebaseHelper.getCollection("users").document(userID)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<User> users = queryDocumentSnapshots.toObjects(User.class);
-                        if (!users.isEmpty()) {
-                            User customer = users.get(0);
-                            emitter.onNext(Resource.success(customer));
+                        if (queryDocumentSnapshots.exists()) {
+                            User user = queryDocumentSnapshots.toObject(User.class);
+                            Log.e("VuAdapter", user.getUsername());
+                            emitter.onNext(Resource.success(user));
                         } else {
                             emitter.onNext(Resource.error("User not found", null));
                         }
@@ -126,14 +126,13 @@ public class AdminProfileRepository {
             emitter.onNext(Resource.loading(null));
             firebaseHelper.getCollection("Order").get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<OrderHistory> mListCustomer = new ArrayList<>();
+                        List<OrderHistory> mListOrderHistory = new ArrayList<>();
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            OrderHistory customer = snapshot.toObject(OrderHistory.class);
-                            mListCustomer.add(customer);
-                            Log.e("Vucoder", String.valueOf(customer.getID()));
-                            Log.e("Vucoder", String.valueOf(customer.getTimeCreate()));
+                            OrderHistory orderHistory = snapshot.toObject(OrderHistory.class);
+                            mListOrderHistory.add(orderHistory);
+                            Log.e("Vucoder", String.valueOf(orderHistory.getId()));
                         }
-                        emitter.onNext(Resource.success(mListCustomer));
+                        emitter.onNext(Resource.success(mListOrderHistory));
                         emitter.onComplete();
                     })
                     .addOnFailureListener(e -> {
@@ -144,7 +143,6 @@ public class AdminProfileRepository {
     }
 
     // GET DATA PROMOTION
-
     public Observable<Resource<List<Promotion>>> getObservablePromotion() {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
@@ -154,7 +152,7 @@ public class AdminProfileRepository {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                             Promotion promotion = snapshot.toObject(Promotion.class);
                             mListPromotion.add(promotion);
-                            Log.e("Vucoder", String.valueOf(promotion.getName()));
+                            Log.e("Vucoder", String.valueOf(promotion.getDate_begin()));
                         }
                         emitter.onNext(Resource.success(mListPromotion));
                         emitter.onComplete();

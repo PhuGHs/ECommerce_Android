@@ -1,6 +1,8 @@
 package com.example.ecommerce_hvpp.adapter;
 
 
+import static com.example.ecommerce_hvpp.util.constant.templateDate;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.activities.TestAdminActivity;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
@@ -40,7 +43,6 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     Context mContext;
     List<OrderHistory> mListOrderHistory;
     List<OrderHistory> mListOrderHistoryOriginal;
-    SimpleDateFormat templateDate;
     AdminProfileRepository repo;
 
 
@@ -61,27 +63,30 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     @Override
     public void onBindViewHolder(@NonNull AdminCustomItemOrderHistoryViewHolder holder, int position) {
         OrderHistory orderHistory = mListOrderHistory.get(position);
+
         if (orderHistory == null) {
             return;
         }
 
-        templateDate = new SimpleDateFormat("dd MMM, yyyy");
-        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIdOrder.setText(String.valueOf(orderHistory.getID()));
-        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTimeCreate()));
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentIdOrder.setText(String.valueOf(orderHistory.getId()));
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTime_create()));
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentNameCustomer.setText(orderHistory.getName());
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentPhoneCustomer.setText(orderHistory.getPhone());
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentAddressCustomer.setText(orderHistory.getAddress());
 
-        // get customer by Id and set data into UI
+//         get user by Id and set data into UI
         repo = new AdminProfileRepository();
-        Observable<Resource<User>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomerID()));
-        Observer<Resource<Customer>> observer = getObserverCustomer(holder, orderHistory);
-
-        // add customer into order history
+        Observable<Resource<User>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomer_id()));
+        Observer<Resource<User>> observer = getObserverUser(holder, orderHistory);
+//
+//        // add customer into order history
         mListOrderHistory.set(position, orderHistory);
 
-//        observable.subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(observer);
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
 
-        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentIconPhone.setOnClickListener(new View.OnClickListener() {
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentIconPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 makeCallPhone();
@@ -94,8 +99,8 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         return mListOrderHistory.size();
     }
 
-    private Observer<Resource<Customer>> getObserverCustomer(@NonNull AdminCustomItemOrderHistoryViewHolder holder, OrderHistory orderHistory) {
-        return new Observer<Resource<Customer>>() {
+    private Observer<Resource<User>> getObserverUser(@NonNull AdminCustomItemOrderHistoryViewHolder holder, OrderHistory orderHistory) {
+        return new Observer<Resource<User>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
@@ -103,18 +108,26 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
             }
 
             @Override
-            public void onNext(@NonNull Resource<Customer> resource) {
+            public void onNext(@NonNull Resource<User> resource) {
                 switch (resource.status) {
                     case LOADING:
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
-                        Customer customer = Objects.requireNonNull(resource.data);
-                        orderHistory.setCustomer(customer);
-                        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentNameCustomer.setText(customer.getName());
-                        Glide.with(mContext).load(customer.getImagePath()).into(holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentAvatarCustomer);
-                        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentPhoneCustomer.setText(customer.getPhone());
-                        holder.mAdminCustomItemCustomerBinding.adminOrderHistoryComponentAddressCustomer.setText(customer.getAddress());
+                        User user = Objects.requireNonNull(resource.data);
+                        orderHistory.setUser(user);
+                        if (user.getImagePath() == null || user.getImagePath().equals("")) {
+                            Glide
+                                    .with(mContext)
+                                    .load(R.drawable.baseline_no_avatar)
+                                    .into(holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentAvatarCustomer);
+                        } else {
+                            // null
+                            Glide
+                                    .with(mContext)
+                                    .load(user.getImagePath())
+                                    .into(holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentAvatarCustomer);
+                        }
                         break;
                     case ERROR:
                         Log.i("VuError", resource.message);
@@ -143,10 +156,10 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         } else {
             List<OrderHistory> listOrderHistory = new ArrayList<>();
             for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
-                if (String.valueOf(orderHistory.getID()).toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getCustomer().getName().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getCustomer().getPhone().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getCustomer().getAddress().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (String.valueOf(orderHistory.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getName().toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getPhone().toLowerCase().contains(strSearch.toLowerCase()) ||
+                        orderHistory.getAddress().toLowerCase().contains(strSearch.toLowerCase())) {
                     listOrderHistory.add(orderHistory);
                 }
             }
@@ -164,11 +177,11 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     }
 
     public static class AdminCustomItemOrderHistoryViewHolder extends RecyclerView.ViewHolder {
-        AdminCustomItemOrderHistoryBinding mAdminCustomItemCustomerBinding;
+        AdminCustomItemOrderHistoryBinding mAdminCustomItemOrderHistoryBinding;
 
         public AdminCustomItemOrderHistoryViewHolder(@NonNull AdminCustomItemOrderHistoryBinding itemOrderHistoryBinding) {
             super(itemOrderHistoryBinding.getRoot());
-            this.mAdminCustomItemCustomerBinding = itemOrderHistoryBinding;
+            this.mAdminCustomItemOrderHistoryBinding = itemOrderHistoryBinding;
         }
     }
 }

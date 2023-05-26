@@ -71,7 +71,7 @@ public class AdminProfileFragment extends Fragment {
 
                         List<OrderHistory> orderHistory = resource.data;
                         for (OrderHistory order : orderHistory) {
-                            Log.e("Vu", String.valueOf(order.getID()));
+                            Log.e("Vu", String.valueOf(order.getId()));
                         }
                         break;
                     case ERROR:

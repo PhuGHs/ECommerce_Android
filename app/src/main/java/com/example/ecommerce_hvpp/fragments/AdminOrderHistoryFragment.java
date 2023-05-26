@@ -64,6 +64,7 @@ public class AdminOrderHistoryFragment extends Fragment {
 
         observable = repo.getObservableOrderHistory();
         observer = getObserverCustomers();
+
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
