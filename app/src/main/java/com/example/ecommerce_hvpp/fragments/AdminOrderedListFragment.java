@@ -17,6 +17,8 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminOrderManagementAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.OrderDetail;
+import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.OrderStatus;
 
 import java.util.ArrayList;
@@ -36,10 +38,17 @@ public class AdminOrderedListFragment extends Fragment {
         rclOrder.setLayoutManager(new LinearLayoutManager(getContext()));
         rclOrder.addItemDecoration(new VerticalItemDecoration(40));
         orders = new ArrayList<>();
-        orders.add(new Order("1", "43 Tan Lap, Di An, Binh Duong", "CUS001", "HVPPXpress", "Cash", "Lê Văn Phú", "please", "0814321006", OrderStatus.PENDING, System.currentTimeMillis(), System.currentTimeMillis(), 485.2, null));
-        orders.add(new Order("2", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", OrderStatus.DELIVERING, System.currentTimeMillis(), System.currentTimeMillis(), 325.2, null));
-        orders.add(new Order("3", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", OrderStatus.CANCELED, System.currentTimeMillis(), System.currentTimeMillis(), 325.2, null));
-        orders.add(new Order("3", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", OrderStatus.DELIVERED, System.currentTimeMillis(), System.currentTimeMillis(), 325.2, null));
+        List<Voucher> vouchers = new ArrayList<>();
+        vouchers.add(new Voucher("England, France, Germany, Spain", 6, "voucher1", "FES", 4.2, System.currentTimeMillis(), System.currentTimeMillis()));
+        vouchers.add(new Voucher("England, France, Germany, Spain", 6, "voucher1", "FES", 4.2, System.currentTimeMillis(), System.currentTimeMillis()));
+
+        List<OrderDetail> items = new ArrayList<>();
+        String image = "https://firebasestorage.googleapis.com/v0/b/ecommerce-hvpp.appspot.com/o/uploads%2F1684920025553.jpg?alt=media&token=4c680f30-2475-4322-87c2-4190cae39b58";
+        items.add(new OrderDetail("item1", image, "Bayern Munich Away", (float) 35.2, 2, OrderDetail.SIZE.L));
+        items.add(new OrderDetail("item2", image, "Bayern Munich Home", (float) 32.2, 2, OrderDetail.SIZE.XL));
+        orders.add(new Order("1", "43 Tan Lap, Di An, Binh Duong", "CUS001", "HVPPXpress", "Cash", "Lê Văn Phú", "please", "0814321006", OrderStatus.PENDING, System.currentTimeMillis(), System.currentTimeMillis(), (float) 485.2, vouchers, items));
+        orders.add(new Order("2", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", OrderStatus.DELIVERING, System.currentTimeMillis(), System.currentTimeMillis(), (float) 325.2, vouchers, items));
+        orders.add(new Order("3", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", OrderStatus.CANCELED, System.currentTimeMillis(), System.currentTimeMillis(), (float) 325.2, vouchers, items));
         adapter = new AdminOrderManagementAdapter(orders, this);
         rclOrder.setAdapter(adapter);
         return view;

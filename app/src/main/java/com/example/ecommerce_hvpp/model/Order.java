@@ -1,18 +1,37 @@
 package com.example.ecommerce_hvpp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.ecommerce_hvpp.util.OrderStatus;
 
 import java.util.List;
 
-public class Order {
+public class Order implements Parcelable {
     private String id, address, customerId, deliverMethod, paymentMethod, recipientName, note, phone_number;
     private OrderStatus status;
     private long createdDate, receiveDate;
-    private double totalPrice;
+    private float totalPrice;
     private List<Voucher> voucherList;
+    private List<OrderDetail> items;
 
+    protected Order(Parcel in) {
+        id = in.readString();
+        address = in.readString();
+        customerId = in.readString();
+        deliverMethod = in.readString();
+        paymentMethod = in.readString();
+        recipientName = in.readString();
+        note = in.readString();
+        phone_number = in.readString();
+        createdDate = in.readLong();
+        receiveDate = in.readLong();
+        totalPrice = in.readFloat();
+        voucherList = in.createTypedArrayList(Voucher.CREATOR);
+        items = in.createTypedArrayList(OrderDetail.CREATOR);
+    }
 
-    public Order(String id, String address, String customerId, String deliverMethod, String paymentMethod, String recipientName, String note, String phone_number, OrderStatus status, long createdDate, long receiveDate, double totalPrice, List<Voucher> voucherList) {
+    public Order(String id, String address, String customerId, String deliverMethod, String paymentMethod, String recipientName, String note, String phone_number, OrderStatus status, long createdDate, long receiveDate, float totalPrice, List<Voucher> voucherList, List<OrderDetail> items) {
         this.id = id;
         this.address = address;
         this.customerId = customerId;
@@ -26,6 +45,57 @@ public class Order {
         this.receiveDate = receiveDate;
         this.totalPrice = totalPrice;
         this.voucherList = voucherList;
+        this.items = items;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(address);
+        dest.writeString(customerId);
+        dest.writeString(deliverMethod);
+        dest.writeString(paymentMethod);
+        dest.writeString(recipientName);
+        dest.writeString(note);
+        dest.writeString(phone_number);
+        dest.writeLong(createdDate);
+        dest.writeLong(receiveDate);
+        dest.writeFloat(totalPrice);
+        dest.writeTypedList(voucherList);
+        dest.writeTypedList(items);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
+
+    public float getTotalDiscount() {
+        float x = 0;
+        for(Voucher voucher : voucherList) {
+            x += voucher.getDiscountedValue();
+        }
+        return x;
+    }
+
+    public float getSubtotal() {
+        float x = 0;
+        for (OrderDetail orderDetail : items) {
+            x += orderDetail.getTotal();
+        }
+        return x;
     }
 
     public String getId() {
@@ -92,6 +162,14 @@ public class Order {
         this.phone_number = phone_number;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     public long getCreatedDate() {
         return createdDate;
     }
@@ -108,11 +186,11 @@ public class Order {
         this.receiveDate = receiveDate;
     }
 
-    public double getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -124,11 +202,11 @@ public class Order {
         this.voucherList = voucherList;
     }
 
-    public OrderStatus getStatus() {
-        return status;
+    public List<OrderDetail> getItems() {
+        return items;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public void setItems(List<OrderDetail> items) {
+        this.items = items;
     }
 }

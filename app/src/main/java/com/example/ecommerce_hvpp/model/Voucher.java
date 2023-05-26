@@ -1,20 +1,61 @@
 package com.example.ecommerce_hvpp.model;
 
-public class Voucher {
-    private String applyFor, condition, id, name, voucherName;
-    private double discountedValue;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Voucher implements Parcelable {
+    private String applyFor, id, voucherName;
+    private double discountedValue, condition;
     private long startDate, endDate;
 
-    public Voucher(String applyFor, String condition, String id, String name, String voucherName, double discountedValue, long startDate, long endDate) {
+
+    protected Voucher(Parcel in) {
+        applyFor = in.readString();
+        condition = in.readDouble();
+        id = in.readString();
+        voucherName = in.readString();
+        discountedValue = in.readDouble();
+        startDate = in.readLong();
+        endDate = in.readLong();
+    }
+
+    public Voucher(String applyFor, double condition, String id, String voucherName, double discountedValue, long startDate, long endDate) {
         this.applyFor = applyFor;
         this.condition = condition;
         this.id = id;
-        this.name = name;
         this.voucherName = voucherName;
         this.discountedValue = discountedValue;
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(applyFor);
+        dest.writeDouble(condition);
+        dest.writeString(id);
+        dest.writeString(voucherName);
+        dest.writeDouble(discountedValue);
+        dest.writeLong(startDate);
+        dest.writeLong(endDate);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Voucher> CREATOR = new Creator<Voucher>() {
+        @Override
+        public Voucher createFromParcel(Parcel in) {
+            return new Voucher(in);
+        }
+
+        @Override
+        public Voucher[] newArray(int size) {
+            return new Voucher[size];
+        }
+    };
 
     public String getApplyFor() {
         return applyFor;
@@ -24,11 +65,11 @@ public class Voucher {
         this.applyFor = applyFor;
     }
 
-    public String getCondition() {
+    public double getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(double condition) {
         this.condition = condition;
     }
 
@@ -38,14 +79,6 @@ public class Voucher {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getVoucherName() {

@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,9 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
         Order order = list.get(position);
         holder.bind(order, "ORDER#" + String.valueOf(position));
         holder.itemView.setOnClickListener(i -> {
-            parent.getNavController().navigate(R.id.navigate_to_orderdetails);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("orderInfo", order);
+            parent.getNavController().navigate(R.id.navigate_to_orderdetails, bundle);
         });
     }
 

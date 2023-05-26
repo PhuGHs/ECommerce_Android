@@ -40,29 +40,101 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvFoundtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Found 2 types of clothes"
-                android:textColor="@color/primary"
-                android:layout_marginStart="20dp"
-                style="@style/font_medium"
-                android:textSize="20dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
+            <RelativeLayout
+                android:id="@+id/address_layout"
                 android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:id="@+id/RclOrderItemList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvFoundtext"
-                android:padding="20dp"/>
+                android:background="@color/white"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+                <LinearLayout
+                    android:id="@+id/address_layout_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/address_icon"
+                        app:tint="@color/primary"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/baseline_location_on_24" />
+                    <TextView
+                        android:id="@+id/address_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recipient Information"
+                        android:layout_toEndOf="@id/imgMoney"
+                        style="@style/font_medium"
+                        android:textColor="@color/primary"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:layout_centerVertical="true"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_below="@id/address_layout_linear"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvRecipientName"
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"
+                        android:textSize="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lê Văn Phú"/>
+                    <TextView
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"
+                        android:textSize="20dp"
+                        android:id="@+id/tvPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0814 321 006"
+                        />
+                    <TextView
+                        android:id="@+id/tvAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        style="@style/font_medium"
+                        android:textSize="20dp"
+                        android:text="43 Tân Lập, Đông Hoà, Dĩ An, Bình Dương."/>
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="10dp"
+                android:id="@+id/item_layout"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/address_layout">
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/tvFoundtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Found 2 types of clothes"
+                    android:textColor="@color/primary"
+                    android:layout_marginStart="20dp"
+                    style="@style/font_medium"
+                    android:textSize="20dp"/>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/RclOrderItemList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvFoundtext"
+                    android:padding="20dp"/>
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/promotion_layout"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/RclOrderItemList"
+                android:layout_below="@id/item_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -86,7 +158,7 @@
                         android:id="@+id/discount_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Discounts"
+                        android:text="Vouchers"
                         android:layout_toEndOf="@id/imgMoney"
                         style="@style/font_medium"
                         android:textColor="@color/primary"
@@ -95,6 +167,7 @@
                         android:layout_centerVertical="true"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/tvNumberOfVouchers"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
@@ -156,6 +229,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvDeliveryMethod"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -179,6 +253,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvPaymentMethod"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -202,6 +277,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvNote"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -261,6 +337,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvSubtotal"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -284,6 +361,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvDeliveryFee"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -307,6 +385,7 @@
                         style="@style/font_medium"
                         android:textSize="20dp"/>
                     <TextView
+                        android:id="@+id/tvTotal"
                         android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -334,6 +413,7 @@
                     android:text="Decline"/>
 
                 <Button
+                    android:id="@+id/btnMarkAs"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:backgroundTint="#68B984"

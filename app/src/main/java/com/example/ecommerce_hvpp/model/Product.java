@@ -1,7 +1,12 @@
 package com.example.ecommerce_hvpp.model;
 
 
-public class Product {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Product implements Parcelable {
     private String id = "";
     private String name = "";
     private String club = "";
@@ -59,6 +64,37 @@ public class Product {
         this.size_l = L;
         this.size_m = M;
     }
+
+    protected Product(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        club = in.readString();
+        nation = in.readString();
+        season = in.readString();
+        description = in.readString();
+        price = in.readDouble();
+        size_xl = in.readInt();
+        size_l = in.readInt();
+        size_m = in.readInt();
+        point = in.readDouble();
+        url_main = in.readString();
+        url_sub1 = in.readString();
+        url_sub2 = in.readString();
+        url_thumb = in.readString();
+        status = in.readString();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -187,5 +223,30 @@ public class Product {
 
     public void setUrl_thumb(String url_thumb) {
         this.url_thumb = url_thumb;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeString(club);
+        parcel.writeString(nation);
+        parcel.writeString(season);
+        parcel.writeString(description);
+        parcel.writeDouble(price);
+        parcel.writeInt(size_xl);
+        parcel.writeInt(size_l);
+        parcel.writeInt(size_m);
+        parcel.writeDouble(point);
+        parcel.writeString(url_main);
+        parcel.writeString(url_sub1);
+        parcel.writeString(url_sub2);
+        parcel.writeString(url_thumb);
+        parcel.writeString(status);
     }
 }
