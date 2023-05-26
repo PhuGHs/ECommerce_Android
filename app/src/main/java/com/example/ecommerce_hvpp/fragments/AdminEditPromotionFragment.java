@@ -51,6 +51,10 @@ public class AdminEditPromotionFragment extends Fragment {
             }
         });
 
+        // show date picker dialog
+        mAdminFragmentEditPromotionBinding.adminEditPromotionStartDate.setOnClickListener(repo.createDatePickerDialog(getContext()));
+        mAdminFragmentEditPromotionBinding.adminEditPromotionEndDate.setOnClickListener(repo.createDatePickerDialog(getContext()));
+
         // on click back page
         mAdminFragmentEditPromotionBinding.adminEditPromotionButtonCancel.setOnClickListener(repo.onClickBackPage());
         mAdminFragmentEditPromotionBinding.adminEditPromotionHeaderBack.setOnClickListener(repo.onClickBackPage());

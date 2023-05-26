@@ -3,10 +3,13 @@ package com.example.ecommerce_hvpp.fragments;
 import static com.example.ecommerce_hvpp.util.constant.templateDate;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +23,9 @@ import com.example.ecommerce_hvpp.repositories.AdminPromotionRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class AdminAddPromotionFragment extends Fragment {
     AdminFragmentAddPromotionBinding mAdminFragmentAddPromotionBinding;
@@ -46,6 +51,10 @@ public class AdminAddPromotionFragment extends Fragment {
                 }
             }
         });
+
+        // set date
+        mAdminFragmentAddPromotionBinding.adminAddPromotionStartDate.setOnClickListener(repo.createDatePickerDialog(getContext()));
+        mAdminFragmentAddPromotionBinding.adminAddPromotionEndDate.setOnClickListener(repo.createDatePickerDialog(getContext()));
 
         // on click back page
         mAdminFragmentAddPromotionBinding.adminAddPromotionButtonCancel.setOnClickListener(repo.onClickBackPage());
@@ -74,4 +83,6 @@ public class AdminAddPromotionFragment extends Fragment {
     private void handleAddButton() throws ParseException {
         repo.insertPromotionDatabase(convertPromotionObject());
     }
+
+
 }

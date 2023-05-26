@@ -100,7 +100,6 @@ public class AdminOrderHistoryFragment extends Fragment {
         });
 
 
-
         return mAdminFragmentOrderHistoryBinding.getRoot();
     }
 

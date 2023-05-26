@@ -1,6 +1,8 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemPromotionAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentPromotionBinding;
+import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
@@ -60,7 +63,27 @@ public class AdminPromotionFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
 
-        // on click btn add promotion
+        mAdminFragmentPromotionBinding.adminPromotionSearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String strSearch = charSequence.toString();
+                observer = getObserverAfterSearch(strSearch);
+
+                observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
         // on click back page
@@ -95,6 +118,42 @@ public class AdminPromotionFragment extends Fragment {
                         mAdminFragmentPromotionBinding.adminPromotionRcvItemPromotion.setAdapter(adapterAdminCustomItemPromotion);
 
                         layoutManager.scrollToPositionWithOffset(adapterAdminCustomItemPromotion.getItemCount() - 1, 0);
+                        break;
+                    case ERROR:
+                        Log.i("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    private Observer<Resource<List<Promotion>>> getObserverAfterSearch(String strSearch) {
+        return new Observer<Resource<List<Promotion>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(@NonNull Resource<List<Promotion>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        adapterAdminCustomItemPromotion.filterPromotion(strSearch);
                         break;
                     case ERROR:
                         Log.i("VuError", resource.message);

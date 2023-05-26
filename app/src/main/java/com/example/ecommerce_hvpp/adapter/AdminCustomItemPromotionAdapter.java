@@ -20,20 +20,24 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemPromotionBinding;
 import com.example.ecommerce_hvpp.fragments.AdminEditPromotionFragment;
 import com.example.ecommerce_hvpp.fragments.AdminPromotionFragment;
+import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.repositories.AdminPromotionRepository;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminCustomItemPromotionAdapter.AdminCustomItemPromotionViewHolder> {
     Context mContext;
     List<Promotion> mListPromotion;
+    List<Promotion> mListPromotionOriginal;
     AdminPromotionFragment parent;
 
     public AdminCustomItemPromotionAdapter(Context context, List<Promotion> listPromotion, AdminPromotionFragment parent) {
         this.mContext = context;
         this.mListPromotion = listPromotion;
+        this.mListPromotionOriginal = listPromotion;
         this.parent = parent;
     }
     @NonNull
@@ -75,6 +79,24 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
     @Override
     public int getItemCount() {
         return mListPromotion.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterPromotion(String strSearch) {
+        if (strSearch.isEmpty()) {
+            mListPromotion = mListPromotionOriginal;
+            notifyDataSetChanged();
+        } else {
+            List<Promotion> listOrderHistory = new ArrayList<>();
+            for (Promotion promotion : mListPromotionOriginal) {
+                if (String.valueOf(promotion.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
+                        promotion.getName().toLowerCase().contains(strSearch.toLowerCase())) {
+                    listOrderHistory.add(promotion);
+                }
+            }
+            mListPromotion = listOrderHistory;
+            notifyDataSetChanged();
+        }
     }
 
     public static class AdminCustomItemPromotionViewHolder extends RecyclerView.ViewHolder {

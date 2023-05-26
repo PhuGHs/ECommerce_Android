@@ -22,7 +22,6 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
     List<User> mListUsers;
     List<User> mListUsersOriginal;
     Context mContext;
-    AdminCustomItemCustomerBinding m;
 
     public AdminCustomItemCustomerAdapter(Context context, List<User> listUser) {
         this.mContext = context;
