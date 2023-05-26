@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_adminPromotionFragment_to_adminAddPromotionFragment"
             app:destination="@id/adminAddPromotionFragment" />
+        <action
+            android:id="@+id/action_adminPromotionFragment_to_adminEditPromotionFragment"
+            app:destination="@id/adminEditPromotionFragment" />
     </fragment>
     <fragment
         android:id="@+id/adminCustomerManagementFragment"
@@ -82,4 +85,9 @@
         android:name="com.example.ecommerce_hvpp.fragments.AdminAddPromotionFragment"
         android:label="admin_fragment_add_promotion"
         tools:layout="@layout/admin_fragment_add_promotion" />
+    <fragment
+        android:id="@+id/adminEditPromotionFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.AdminEditPromotionFragment"
+        android:label="admin_fragment_edit_promotion"
+        tools:layout="@layout/admin_fragment_edit_promotion" />
 </navigation>

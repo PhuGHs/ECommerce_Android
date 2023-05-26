@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.repositories;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -60,6 +61,25 @@ public class AdminPromotionRepository {
 
         // set the data in Firestore
         promotionsRef.document(promotion.getId()).set(convertObjectToMap(promotion), SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FirestoreDemo", "Promotion added/updated with ID: " + promotion.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FirestoreDemo", "Error adding/updating promotion", e);
+                    }
+                });
+    }
+
+    public void updatePromotionDatabase(Promotion promotion) {
+        CollectionReference promotionsRef = firebaseHelper.getCollection("Voucher");
+
+        // update the data in Firestore
+        promotionsRef.document(promotion.getId()).update(convertObjectToMap(promotion))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

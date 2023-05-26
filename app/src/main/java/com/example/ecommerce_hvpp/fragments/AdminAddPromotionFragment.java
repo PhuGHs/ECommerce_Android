@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.fragments;
 
+import static com.example.ecommerce_hvpp.util.constant.templateDate;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +25,6 @@ import java.util.Date;
 public class AdminAddPromotionFragment extends Fragment {
     AdminFragmentAddPromotionBinding mAdminFragmentAddPromotionBinding;
     AdminPromotionRepository repo;
-    SimpleDateFormat template;
 
     @SuppressLint("SimpleDateFormat")
     @Nullable
@@ -33,8 +34,8 @@ public class AdminAddPromotionFragment extends Fragment {
 
         // init repo
         repo = new AdminPromotionRepository();
-        template = new SimpleDateFormat("dd/MM/yyyy");
 
+        // button add
         mAdminFragmentAddPromotionBinding.adminAddPromotionButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,21 +55,20 @@ public class AdminAddPromotionFragment extends Fragment {
     }
 
     Promotion convertPromotionObject() throws ParseException {
-        Promotion currPromotion;
         String name = String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionName.getText());
         String code = String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionCode.getText());
         int discount = Integer.parseInt(String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionDiscount.getText()));
         int minimum = Integer.parseInt(String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionMinimum.getText()));
 
         String strStartDate = String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionStartDate.getText());
-        Date startDate = template.parse(strStartDate);
+        Date startDate = templateDate.parse(strStartDate);
 
         String strEndDate = String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionEndDate.getText());
-        Date endDate = template.parse(strEndDate);
+        Date endDate = templateDate.parse(strEndDate);
 
         String apply = String.valueOf(mAdminFragmentAddPromotionBinding.adminAddPromotionApply.getText());
 
-        return currPromotion = new Promotion(name, code, discount, minimum, startDate, endDate, apply);
+        return new Promotion(name, code, discount, minimum, startDate, endDate, apply);
     }
 
     private void handleAddButton() throws ParseException {

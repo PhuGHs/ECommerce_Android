@@ -1,8 +1,9 @@
 package com.example.ecommerce_hvpp.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Promotion {
+public class Promotion implements Serializable {
     private String name;
     private String id;
     private int value;

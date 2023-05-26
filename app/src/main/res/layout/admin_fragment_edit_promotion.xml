@@ -90,6 +90,8 @@
                 android:id="@+id/admin_edit_promotion_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:enabled="false"
                 style="@style/w400_50"
                 android:inputType="text" />
 
@@ -235,7 +237,7 @@
         android:layout_marginTop="24dp">
 
         <Button
-            android:id="@+id/admin_edit_promotion_button_add"
+            android:id="@+id/admin_edit_promotion_button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary"
@@ -248,7 +250,7 @@
             android:id="@+id/admin_edit_promotion_button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/admin_edit_promotion_button_add"
+            android:layout_toEndOf="@id/admin_edit_promotion_button_save"
             android:layout_marginStart="46dp"
             style="@style/w400_60"
             android:letterSpacing="0"

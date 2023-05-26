@@ -1,18 +1,10 @@
 package com.example.ecommerce_hvpp.fragments;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +14,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.AdminCustomItemOrderHistoryAdapter;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemPromotionAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentPromotionBinding;
-import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
-import com.example.ecommerce_hvpp.repositories.AdminPromotionRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin_promotion.AdminPromotionViewModel;
 
@@ -50,6 +38,7 @@ public class AdminPromotionFragment extends Fragment {
     Observable<Resource<List<Promotion>>> observable;
     Observer<Resource<List<Promotion>>> observer;
     private Disposable disposable;
+    private AdminPromotionFragment mFragment;
 
     @Nullable
     @Override
@@ -62,9 +51,11 @@ public class AdminPromotionFragment extends Fragment {
 
         // get and display data
         repo = new AdminProfileRepository();
+        mFragment = this;
 
         observable = repo.getObservablePromotion();
         observer = getObserverPromotion();
+
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
@@ -77,6 +68,7 @@ public class AdminPromotionFragment extends Fragment {
 
         return mAdminFragmentPromotionBinding.getRoot();
     }
+
 
     private Observer<Resource<List<Promotion>>> getObserverPromotion() {
         return new Observer<Resource<List<Promotion>>>() {
@@ -95,7 +87,7 @@ public class AdminPromotionFragment extends Fragment {
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
-                        adapterAdminCustomItemPromotion = new AdminCustomItemPromotionAdapter(getContext(), Objects.requireNonNull(resource.data));
+                        adapterAdminCustomItemPromotion = new AdminCustomItemPromotionAdapter(getContext(), Objects.requireNonNull(resource.data), mFragment);
 
                         //set up recyclerview
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -129,5 +121,6 @@ public class AdminPromotionFragment extends Fragment {
         super.onDestroyView();
         disposable.dispose();
     }
+
 
 }
