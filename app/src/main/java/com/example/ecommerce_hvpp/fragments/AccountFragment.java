@@ -30,6 +30,7 @@ import com.example.ecommerce_hvpp.viewmodel.ProfileViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,6 +88,7 @@ public class AccountFragment extends Fragment {
     private String imagePath;
     private TextView name_tv;
     private TextView number_of_voucher_tv;
+    private TextView number_of_orderprogress_tv;
     private ImageView ava_image;
     private String size_text = "";
     @Override
@@ -109,6 +111,7 @@ public class AccountFragment extends Fragment {
 
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
+        number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
         ava_image = v.findViewById(R.id.image_of_user);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -123,6 +126,7 @@ public class AccountFragment extends Fragment {
                        Glide.with(this).load(imagePath).fitCenter().into(ava_image);
                        name_tv.setText(name);
                        setQuantityofVoucher(number_of_voucher_tv, "Voucher");
+                       setQuantityofOrder(number_of_orderprogress_tv, "Order");
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -228,7 +232,30 @@ public class AccountFragment extends Fragment {
                             }
                             size_text = Integer.toString(count);
                             textView.setText(size_text);
-                            Log.d(TAG, "So voucher la " + size_text);
+                            Log.d(TAG, path + ": " + size_text);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    public void setQuantityofOrder(TextView textView, String path){
+        FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
+        db.collection(path)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int count = 0;
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.getString("customer_id").equals(fbUser.getUid())){
+                                    count++;
+                                }
+                            }
+                            size_text = Integer.toString(count);
+                            textView.setText(size_text);
+                            Log.d(TAG, path + ": " + size_text);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

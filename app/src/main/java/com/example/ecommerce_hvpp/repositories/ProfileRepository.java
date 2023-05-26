@@ -10,6 +10,8 @@ import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileRepository {
     private FirebaseHelper firebaseHelper;
@@ -39,13 +41,14 @@ public class ProfileRepository {
         return _mldUserInfo;
     }
     public void updateUser(String UID, String name, String datebirth, String address, String email) {
-        ref = FirebaseDatabase.getInstance().getReference("users");
-
-        ref.child(UID).child("username").setValue(name);
-        ref.child(UID).child("datebirth").setValue(datebirth);
-        ref.child(UID).child("address").setValue(address);
-        ref.child(UID).child("email").setValue(email);
-
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        DocumentReference ref = fs.collection("users").document(UID);
+        ref.update(
+                "username", name,
+                "datebirth", datebirth,
+                "address", address,
+                "email", email
+        );
     }
 
 }

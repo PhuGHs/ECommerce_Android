@@ -9,10 +9,21 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.OrderHistoryAdapter;
+import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
+import com.example.ecommerce_hvpp.model.OrderHistoryItem;
+import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.viewmodel.OrderHistoryViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderHistoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +57,11 @@ public class OrderHistoryFragment extends Fragment {
         return fragment;
     }
     private NavController navController;
-    ImageButton back_Account_btn;
+    private ImageButton back_Account_btn;
+    private OrderHistoryViewModel viewModel;
+    private OrderHistoryAdapter adapter;
+    private RecyclerView recyclerview;
+    private LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +74,10 @@ public class OrderHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_user_orderhistory, container, false);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerview = v.findViewById(R.id.list_order_history);
+        viewModel = new ViewModelProvider(this).get(OrderHistoryViewModel.class);
+        viewModel.showOrderHistoryList().observe(getViewLifecycleOwner(), orderhistories -> getOrderHistoryAndSetOrderHistoryRecycleView(orderhistories));
 
         return v;
     }
@@ -75,5 +94,10 @@ public class OrderHistoryFragment extends Fragment {
             }
         });
 
+    }
+    public void getOrderHistoryAndSetOrderHistoryRecycleView(List<OrderHistoryItem> listOrderHistory){
+        adapter = new OrderHistoryAdapter(getContext(), (ArrayList<OrderHistoryItem>) listOrderHistory);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
     }
 }

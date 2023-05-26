@@ -23,7 +23,7 @@ public class ProfileViewModel extends ViewModel {
     public void updateUser(User user){
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         repo.updateUser(fbUser.getUid(), user.getUsername(), user.getDatebirth(), user.getAddress(), user.getEmail());
-        Log.e("Phuc", user.getUsername());
+        Log.e("Phuc", "Da cap nhat " + user.getUsername() + fbUser.getUid());
     }
 
 }

@@ -24,8 +24,6 @@ import java.util.Locale;
 
 public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.DataViewHolder> {
     private Context context;
-    private RecepInfoRepository repo = new RecepInfoRepository();
-    private UserRepository user_repo = new UserRepository();
     private ArrayList<Voucher> listVoucher;
 
     public VoucherListAdapter(Context context, ArrayList<Voucher> listVoucher) {

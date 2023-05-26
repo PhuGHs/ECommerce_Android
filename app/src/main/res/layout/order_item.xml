@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="20dp">
+    <ImageView
+        android:layout_width="151px"
+        android:layout_height="146px"
+        android:id="@+id/image_of_item_orderhistory"
+        android:src="@drawable/ic_launcher_background"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36px"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_of_ordereditem"
+            android:text="Retro Manchester UTD Away 2006/07"
+            style="@style/header"
+            android:textColor="@color/black"
+            android:textSize="40px"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35px">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/quantity_of_ordereditem"
+                android:text="Quantity: 1"
+                style="@style/regularfont"
+                android:textColor="@color/black"
+                android:textSize="40px"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/total_money_ordereditem"
+            android:text="$90.00"
+            android:textSize="50px"
+            android:textColor="#FF3030"
+            style="@style/regularfont"/>
+    </LinearLayout>
+</LinearLayout>

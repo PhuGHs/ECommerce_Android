@@ -28,8 +28,7 @@
                 android:layout_width="60px"
                 android:layout_height="64px"
                 android:layout_marginEnd="25px"
-                android:id="@+id/isApplied_image"
-                android:src="@drawable/checked"/>
+                android:id="@+id/isApplied_image"/>
         </LinearLayout>
 
     </LinearLayout>
