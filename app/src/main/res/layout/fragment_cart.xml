@@ -28,12 +28,33 @@
             android:textSize="70px"
             android:gravity="center"/>
     </FrameLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listCart"
-        android:layout_margin="30px"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listCart"
+            android:layout_margin="30px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/textEmptyCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="730px"
+            style="@style/font_crimson_italic"
+            android:text="Empty cart!!"
+            android:textSize="70px"
+            android:textAlignment="center"/>
+        <ImageView
+            android:id="@+id/imgEmptyCart"
+            android:layout_marginTop="300px"
+            android:layout_marginLeft="300px"
+            android:layout_width="400px"
+            android:layout_height="430px"
+            android:background="@color/transparent"
+            android:src="@drawable/empty_cart"/>
+    </FrameLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_margin="60px"
@@ -59,6 +80,15 @@
                 android:layout_height="0px"
                 android:layout_weight="1"/>
             <TextView
+                android:id="@+id/totalItems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10px"
+                style="@style/font_crimson_italic"
+                android:textSize="50px"
+                android:textColor="@color/black"
+                android:text="(0 item)"/>
+            <TextView
                 android:id="@+id/totalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,7 +96,7 @@
                 style="@style/font_crimson_bold"
                 android:textSize="70px"
                 android:textColor="@color/black"
-                android:text="$56.99"/>
+                android:text="$0.00"/>
         </LinearLayout>
         <Button
             android:id="@+id/btnNavToCheckout"

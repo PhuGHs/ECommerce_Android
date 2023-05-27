@@ -18,9 +18,9 @@ import java.util.List;
 
 public class VoucherAdapter extends ArrayAdapter {
     private Context context;
-    private ArrayList<Pair<String, String>> listVoucher;
+    private ArrayList<Pair<String, Double>> listVoucher;
 
-    public VoucherAdapter(@NonNull Context context, int resource, ArrayList<Pair<String, String>> listVoucher) {
+    public VoucherAdapter(@NonNull Context context, int resource, ArrayList<Pair<String, Double>> listVoucher) {
         super(context, resource, listVoucher);
         this.context = context;
         this.listVoucher = listVoucher;
@@ -38,7 +38,7 @@ public class VoucherAdapter extends ArrayAdapter {
         TextView voucherValue = (TextView) v.findViewById(R.id.voucherValue);
 
         voucherCode.setText(listVoucher.get(position).first);
-        voucherValue.setText("-" + listVoucher.get(position).second);
+        voucherValue.setText("-$" + listVoucher.get(position).second);
 
         return v;
     }

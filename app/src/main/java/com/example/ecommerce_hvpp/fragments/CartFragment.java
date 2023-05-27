@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
@@ -87,7 +88,8 @@ public class CartFragment extends Fragment {
     CartAdapter adapter;
     ImageButton btnBackToHome;
     Button btnNavToCheckout;
-    TextView totalPrice;
+    TextView totalPrice, totalItems, txtEmptyCart;
+    ImageView imgEmptyCart;
     private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -96,30 +98,50 @@ public class CartFragment extends Fragment {
         //initialize
         navController = Navigation.findNavController(requireView());
         totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+        totalItems = (TextView) view.findViewById(R.id.totalItems);
+        txtEmptyCart = (TextView) view.findViewById(R.id.textEmptyCart);
+        imgEmptyCart = (ImageView) view.findViewById(R.id.imgEmptyCart);
         listCartRv = (RecyclerView) view.findViewById(R.id.listCart);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        listCartRv.setLayoutManager(linearLayoutManager);
         getCartData();
         btnBackToHome = (ImageButton) view.findViewById(R.id.btnBackToHome);
         btnNavToCheckout = (Button) view.findViewById(R.id.btnNavToCheckout);
 
         //navigate
         btnBackToHome.setOnClickListener(view1 -> navController.navigate(R.id.homeFragment));
-        btnNavToCheckout.setOnClickListener(view12 -> navController.navigate(R.id.checkoutFragment));
-    }
-    public void getCartData(){
-        MainActivity.PDviewModel.getUserCart().observe(getViewLifecycleOwner(), carts -> {
-            adapter = new CartAdapter(getContext(), carts);
-            listCartRv.setLayoutManager(linearLayoutManager);
-            listCartRv.setAdapter(adapter);
+        btnNavToCheckout.setOnClickListener(view12 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Total price", totalPrice.getText().toString());
+            bundle.putString("Total item", totalItems.getText().toString());
 
-            CartAdapter.mldTotalPrice.observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + Math.round(total * 100.0) / 100.0));
+            navController.navigate(R.id.checkoutFragment, bundle);
         });
     }
-    public double getTotalPrice(List<Cart> carts){
-        double sum = 0;
-        for (Cart cart : carts){
-            sum += cart.getProduct().getPrice();
-        }
-        return sum;
+    public void getCartData(){
+        MainActivity.PDviewModel.getMldUserCart().observe(getViewLifecycleOwner(), carts -> {
+            adapter = new CartAdapter(getContext(), carts);
+            listCartRv.setAdapter(adapter);
+
+            MainActivity.PDviewModel.getTotalCartItems().observe(getViewLifecycleOwner(), items -> {
+                String text = "";
+                if (items > 1) text = " items)"; else text = " item)";
+                totalItems.setText("(" + items + text);
+
+                if (items > 0){
+                    txtEmptyCart.setEnabled(false);
+                    imgEmptyCart.setEnabled(false);
+                    txtEmptyCart.setVisibility(View.INVISIBLE);
+                    imgEmptyCart.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    txtEmptyCart.setEnabled(true);
+                    imgEmptyCart.setEnabled(true);
+                    txtEmptyCart.setVisibility(View.VISIBLE);
+                    imgEmptyCart.setVisibility(View.VISIBLE);
+                }
+            });
+            MainActivity.PDviewModel.getTotalPriceCart().observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + Math.round(total * 100.0) / 100.0));
+        });
     }
 }

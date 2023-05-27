@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
@@ -80,11 +82,15 @@ public class FavoriteFragment extends Fragment {
     RecyclerView listFavoriteRv;
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
+    TextView txtEmptyWL;
+    ImageView imgEmptyWL;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
+        txtEmptyWL = (TextView) view.findViewById(R.id.txtEmptyWL);
+        imgEmptyWL = (ImageView) view.findViewById(R.id.imgEmptyWL);
 
         layoutManager = new GridLayoutManager(getContext(), 2);
         listFavoriteRv.setLayoutManager(layoutManager);
@@ -93,6 +99,18 @@ public class FavoriteFragment extends Fragment {
     }
     public void getListFavorite(){
         MainActivity.PDviewModel.getMldListFavorite().observe(getViewLifecycleOwner(), products -> {
+            if (products.size() > 0){
+                txtEmptyWL.setEnabled(false);
+                imgEmptyWL.setEnabled(false);
+                txtEmptyWL.setVisibility(View.INVISIBLE);
+                imgEmptyWL.setVisibility(View.INVISIBLE);
+            }
+            else {
+                txtEmptyWL.setEnabled(true);
+                imgEmptyWL.setEnabled(true);
+                txtEmptyWL.setVisibility(View.VISIBLE);
+                imgEmptyWL.setVisibility(View.VISIBLE);
+            }
             favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), true);
             listFavoriteRv.setAdapter(favProductAdapter);
         });

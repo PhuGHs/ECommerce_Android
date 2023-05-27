@@ -30,13 +30,11 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder>{
     private List<Cart> listCart;
-    public static MutableLiveData<Double> mldTotalPrice = new MutableLiveData<>((double) 0);
     private Context context;
 
     public CartAdapter(Context context, List<Cart> listCart) {
         this.context = context;
         this.listCart = listCart;
-        mldTotalPrice.setValue((double) 0);
     }
 
     @Override
@@ -61,7 +59,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
         holder.productName.setText(product.getName());
         holder.productSeason.setText(product.getSeason());
         holder.productPrice.setText("$"+ product.getPrice());
-        mldTotalPrice.setValue(MainActivity.PDviewModel.getTotalPriceCart());
 
         Log.d("In cart", product.getName());
         holder.size.setText(cart.getSize());
@@ -73,10 +70,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
                 .fitCenter()
                 .into(holder.thumb);
         holder.btnRemove.setOnClickListener(view -> {
-            MainActivity.PDviewModel.removeFromCart(product.getId(), cart.getQuantity(), cart.getSize());
-            mldTotalPrice.setValue(MainActivity.PDviewModel.getTotalPriceCart());
+            Log.d("Remove from cart",product.getName());
             holder.adapter.listCart.remove(p);
             holder.adapter.notifyItemRemoved(p);
+            MainActivity.PDviewModel.removeFromCart(product.getId(), cart.getQuantity(), cart.getSize());
         });
 
         //change quantity

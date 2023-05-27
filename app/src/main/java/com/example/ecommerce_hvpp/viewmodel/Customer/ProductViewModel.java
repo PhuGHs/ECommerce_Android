@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,6 +42,8 @@ public class ProductViewModel extends ViewModel {
     private MutableLiveData<List<Feedback>> mldListFeedback;
     private MutableLiveData<List<Cart>> mldListCart;
     private List<Cart> listCart;
+    private MutableLiveData<Integer> totalCartItems = new MutableLiveData<>(0);
+    private MutableLiveData<Double> totalPriceCart = new MutableLiveData<>((double)0);
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
@@ -96,6 +99,17 @@ public class ProductViewModel extends ViewModel {
                 })
                 .addOnFailureListener(e -> Log.d("Get all", "Failure"));
     }
+    public List<Product> getListFound(String queryName){
+        List<Product> listFound = new ArrayList<>();
+        Set<String> keySet = listAllProduct.keySet();
+
+        for (String key : keySet){
+            if (listAllProduct.get(key).getName().contains(queryName)){
+                listFound.add(listAllProduct.get(key));
+            }
+        }
+        return listFound;
+    }
     public void addToWishList(String product_id){
         Map<String, Object> data = new HashMap<>();
         data.put("product_id", product_id);
@@ -134,6 +148,7 @@ public class ProductViewModel extends ViewModel {
                 .addOnFailureListener(e -> Log.d("Cart", "add Failure"));
         listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
         mldListCart.setValue(listCart);
+        calcTotalItemAndPriceCart();
     }
     public void removeFromCart(String product_id, long quantity, String size){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -145,6 +160,7 @@ public class ProductViewModel extends ViewModel {
         Cart cart = new Cart(listAllProduct.get(product_id), quantity, size);
         listCart.remove(cart);
         mldListCart.setValue(listCart);
+        calcTotalItemAndPriceCart();
     }
     private void initUserCart(){
         mldListCart = new MutableLiveData<>();
@@ -164,16 +180,26 @@ public class ProductViewModel extends ViewModel {
                     }
                     Log.d("Cart", "get Success");
                     mldListCart.setValue(listCart);
+                    calcTotalItemAndPriceCart();
                 });
     }
-    public double getTotalPriceCart(){
+    private void calcTotalItemAndPriceCart(){
         double sum = 0;
+        int count = 0;
         for (Cart cart : listCart){
             sum += cart.getProduct().getPrice() * cart.getQuantity();
+            count += cart.getQuantity();
         }
-        return sum;
+        totalCartItems.setValue(count);
+        totalPriceCart.setValue(sum);
     }
-    public LiveData<List<Cart>> getUserCart(){
+    public MutableLiveData<Double> getTotalPriceCart(){
+        return totalPriceCart;
+    }
+    public MutableLiveData<Integer> getTotalCartItems(){
+        return totalCartItems;
+    }
+    public LiveData<List<Cart>> getMldUserCart(){
         return mldListCart;
     }
     public LiveData<Boolean> isFavorite(String product_id){

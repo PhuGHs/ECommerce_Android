@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -101,6 +102,7 @@ public class DetailProductCustomerFragment extends Fragment {
     List<Long> listSize;
     Integer MinQuantity = 1;
     RecyclerView feedbackRv;
+    MutableLiveData<String> sizeChosen = new MutableLiveData<>("M");
     FeedbackCustomerAdapter feedbackAdapter;
     LinearLayoutManager linearLayoutManager;
     @Override
@@ -135,7 +137,7 @@ public class DetailProductCustomerFragment extends Fragment {
 
         modifyQuantityProduct();
 
-        setSizeQuantity();
+        setSizeQuantityAndSizeChosen();
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
@@ -191,27 +193,25 @@ public class DetailProductCustomerFragment extends Fragment {
             detailQuantity.setText(String.valueOf(quantity));
         });
     }
-    public void setSizeQuantity(){
+    public void setSizeQuantityAndSizeChosen(){
         sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
             if (listSize != null){
-                String sizeChosen = "";
                 if (checkID == R.id.rbtnSizeM){
                     sizeAvailable.setText(String.valueOf(listSize.get(0)));
-                    sizeChosen = "M";
+                    sizeChosen.setValue("M");
                 }
                 if (checkID == R.id.rbtnSizeL){
                     sizeAvailable.setText(String.valueOf(listSize.get(1)));
-                    sizeChosen = "L";
+                    sizeChosen.setValue("L");
                 }
                 if (checkID == R.id.rbtnSizeXL){
                     sizeAvailable.setText(String.valueOf(listSize.get(2)));
-                    sizeChosen = "XL";
-                }
-                String finalSizeChosen = sizeChosen;
-                if (!finalSizeChosen.isEmpty()){
-                    btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, finalSizeChosen, Long.parseLong(detailQuantity.getText().toString())));
+                    sizeChosen.setValue("XL");
                 }
             }
+        });
+        sizeChosen.observe(getViewLifecycleOwner(), size -> {
+            btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, size, Long.parseLong(detailQuantity.getText().toString())));
         });
     }
     public void loadDetailImage(Product product){
