@@ -26,6 +26,7 @@ public class AdminStatisticsFragment extends Fragment {
 
         // init view model
         vmAdminStatistics = new ViewModelProvider(requireActivity()).get(AdminStatisticsViewModel.class);
+        mAdminFragmentStatisticsBinding.setAdminStatisticsViewModel(vmAdminStatistics);
 
         // get data
         getData();

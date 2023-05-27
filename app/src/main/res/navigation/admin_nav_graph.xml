@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav_graph"
-    app:startDestination="@id/adminProfileFragment">
+    app:startDestination="@id/adminStatisticsFragment">
 
 
     <fragment
@@ -79,15 +79,54 @@
         android:id="@+id/adminStatisticsFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AdminStatisticsFragment"
         android:label="admin_fragment_statistics"
-        tools:layout="@layout/admin_fragment_statistics" />
+        tools:layout="@layout/admin_fragment_statistics" >
+        <action
+            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticProductSoldFragment"
+            app:destination="@id/adminStatisticProductSoldFragment" />
+        <action
+            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticRevenueFragment"
+            app:destination="@id/adminStatisticRevenueFragment" />
+        <action
+            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticOrdersFragment"
+            app:destination="@id/adminStatisticOrdersFragment" />
+        <action
+            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticVisitorsFragment"
+            app:destination="@id/adminStatisticVisitorsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/adminAddPromotionFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AdminAddPromotionFragment"
         android:label="admin_fragment_add_promotion"
         tools:layout="@layout/admin_fragment_add_promotion" />
+
     <fragment
         android:id="@+id/adminEditPromotionFragment"
         android:name="com.example.ecommerce_hvpp.fragments.AdminEditPromotionFragment"
         android:label="admin_fragment_edit_promotion"
         tools:layout="@layout/admin_fragment_edit_promotion" />
+
+    <fragment
+        android:id="@+id/adminStatisticVisitorsFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticVisitorsFragment"
+        android:label="admin_fragment_statistic_visitors"
+        tools:layout="@layout/admin_fragment_statistic_visitors" />
+
+    <fragment
+        android:id="@+id/adminStatisticOrdersFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticOrdersFragment"
+        android:label="admin_fragment_statistic_orders"
+        tools:layout="@layout/admin_fragment_statistic_orders" />
+
+    <fragment
+        android:id="@+id/adminStatisticRevenueFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticRevenueFragment"
+        android:label="admin_fragment_statistic_revenue"
+        tools:layout="@layout/admin_fragment_statistic_revenue" />
+
+    <fragment
+        android:id="@+id/adminStatisticProductSoldFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticProductSoldFragment"
+        android:label="admin_fragment_statistic_product_sold"
+        tools:layout="@layout/admin_fragment_statistic_product_sold" />
+
 </navigation>

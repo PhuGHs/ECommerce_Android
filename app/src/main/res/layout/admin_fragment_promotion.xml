@@ -29,7 +29,7 @@
                 android:src="@drawable/baseline_back_34" />
 
             <TextView
-                android:id="@+id/customer_list_title"
+                android:id="@+id/admin_promotion_title"
                 style="@style/header_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

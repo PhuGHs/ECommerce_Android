@@ -11,6 +11,12 @@ public class constant {
     public static final int PROMOTION_MANAGEMENT = 103;
     public static final int LOG_OUT = 0;
 
+
+    public static final int STATISTIC_VISITORS = 200;
+    public static final int STATISTIC_ORDERS = 201;
+    public static final int STATISTIC_REVENUE = 202;
+    public static final int STATISTIC_PRODUCT_SOLD = 203;
+
     public static final String KEY_INTENT_PROMOTION = "KEY_INTENT_PROMOTION";
 
     @SuppressLint("SimpleDateFormat")
