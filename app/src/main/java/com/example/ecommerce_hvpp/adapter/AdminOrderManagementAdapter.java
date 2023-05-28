@@ -14,7 +14,6 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.fragments.AdminOrderedListFragment;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
-import com.example.ecommerce_hvpp.util.OrderStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,13 +69,13 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
             tvAddress.setText(order.getAddress());
             tvPrice.setText(CurrencyFormat.getVNDCurrency(order.getTotalPrice()));
             tvOrderDate.setText(formatDate(order.getCreatedDate()));
-            if(order.getStatus() == OrderStatus.PENDING) {
+            if(order.getStatus() == "PENDING") {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pending));
-            } else if (order.getStatus() == OrderStatus.DELIVERING) {
+            } else if (order.getStatus() == "DELIVERING") {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.delivering));
-            } else if (order.getStatus() == OrderStatus.CANCELED) {
+            } else if (order.getStatus() == "CANCELED") {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.canceled));
-            } else if (order.getStatus() == OrderStatus.DELIVERED) {
+            } else if (order.getStatus() == "DELIVERED") {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.delivered));
             }
             tvOrderStatus.setText(order.getStatus().toString());

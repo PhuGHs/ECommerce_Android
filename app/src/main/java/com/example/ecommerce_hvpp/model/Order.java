@@ -3,15 +3,13 @@ package com.example.ecommerce_hvpp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.ecommerce_hvpp.util.OrderStatus;
-
 import java.util.List;
 
 public class Order implements Parcelable {
-    private String id, address, customerId, deliverMethod, paymentMethod, recipientName, note, phone_number;
-    private OrderStatus status;
+    private String id, address, customerId, deliveryMethod, paymentMethod, recipientName, note, phone_number;
+    private String status;
     private long createdDate, receiveDate;
-    private float totalPrice;
+    private double totalPrice;
     private List<Voucher> voucherList;
     private List<OrderDetail> items;
 
@@ -19,7 +17,7 @@ public class Order implements Parcelable {
         id = in.readString();
         address = in.readString();
         customerId = in.readString();
-        deliverMethod = in.readString();
+        deliveryMethod = in.readString();
         paymentMethod = in.readString();
         recipientName = in.readString();
         note = in.readString();
@@ -31,11 +29,11 @@ public class Order implements Parcelable {
         items = in.createTypedArrayList(OrderDetail.CREATOR);
     }
 
-    public Order(String id, String address, String customerId, String deliverMethod, String paymentMethod, String recipientName, String note, String phone_number, OrderStatus status, long createdDate, long receiveDate, float totalPrice, List<Voucher> voucherList, List<OrderDetail> items) {
+    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice, List<Voucher> voucherList, List<OrderDetail> items) {
         this.id = id;
         this.address = address;
         this.customerId = customerId;
-        this.deliverMethod = deliverMethod;
+        this.deliveryMethod = deliveryMethod;
         this.paymentMethod = paymentMethod;
         this.recipientName = recipientName;
         this.note = note;
@@ -48,19 +46,35 @@ public class Order implements Parcelable {
         this.items = items;
     }
 
+    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice, List<Voucher> voucherList) {
+        this.id = id;
+        this.address = address;
+        this.customerId = customerId;
+        this.deliveryMethod = deliveryMethod;
+        this.paymentMethod = paymentMethod;
+        this.recipientName = recipientName;
+        this.note = note;
+        this.phone_number = phone_number;
+        this.status = status;
+        this.createdDate = createdDate;
+        this.receiveDate = receiveDate;
+        this.totalPrice = totalPrice;
+        this.voucherList = voucherList;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(address);
         dest.writeString(customerId);
-        dest.writeString(deliverMethod);
+        dest.writeString(deliveryMethod);
         dest.writeString(paymentMethod);
         dest.writeString(recipientName);
         dest.writeString(note);
         dest.writeString(phone_number);
         dest.writeLong(createdDate);
         dest.writeLong(receiveDate);
-        dest.writeFloat(totalPrice);
+        dest.writeDouble(totalPrice);
         dest.writeTypedList(voucherList);
         dest.writeTypedList(items);
     }
@@ -123,11 +137,11 @@ public class Order implements Parcelable {
     }
 
     public String getDeliverMethod() {
-        return deliverMethod;
+        return deliveryMethod;
     }
 
     public void setDeliverMethod(String deliverMethod) {
-        this.deliverMethod = deliverMethod;
+        this.deliveryMethod = deliverMethod;
     }
 
     public String getPaymentMethod() {
@@ -162,11 +176,11 @@ public class Order implements Parcelable {
         this.phone_number = phone_number;
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -186,11 +200,11 @@ public class Order implements Parcelable {
         this.receiveDate = receiveDate;
     }
 
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(float totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
