@@ -62,7 +62,6 @@ public class AdminProfileRepository {
         }
     }
 
-
     public View.OnClickListener onClickBackPage() {
         return new View.OnClickListener() {
             @Override

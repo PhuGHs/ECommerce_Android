@@ -17,18 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.activities.MainActivity;
-import com.example.ecommerce_hvpp.activities.TestAdminActivity;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
-import com.example.ecommerce_hvpp.fragments.AdminOrderHistoryFragment;
-import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
-import com.google.firestore.v1.StructuredQuery;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
