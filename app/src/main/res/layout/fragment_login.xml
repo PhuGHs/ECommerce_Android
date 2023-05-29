@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng nhập"
+            android:text="Sign in,"
             android:textSize="50sp"
             android:transitionName="logo_text"
             android:layout_marginTop="-20dp"
@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chất lượng làm nên thương hiệu!"
+            android:text="Login to get more experience!"
             android:textSize="18sp"
             android:transitionName="logo_desc"/>
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:id="@+id/log_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mật khẩu"
+                android:hint="Password"
                 app:passwordToggleEnabled="true"
                 android:transitionName="password_tran"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -74,7 +74,7 @@
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ĐĂNG NHẬP"
+            android:text="Sign in"
             android:textSize="18dp"
             android:layout_marginBottom="10dp"
             android:background="#000"
@@ -87,7 +87,7 @@
             android:layout_height="49dp"
             android:clickable="true"
             android:background="@android:color/transparent"
-            android:text="Quên mật khẩu?"
+            android:text="Forgot password?"
             android:textSize="17dp" />
 
         <TextView
@@ -96,7 +96,7 @@
             android:layout_height="49dp"
             android:clickable="true"
             android:background="@android:color/transparent"
-            android:text="Chưa có tài khoản? Đăng ký"
+            android:text="No account? Let's create one!"
             android:textSize="17dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

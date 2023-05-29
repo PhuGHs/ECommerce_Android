@@ -1,4 +1,4 @@
-package com.example.ecommerce_hvpp.adapters;
+package com.example.ecommerce_hvpp.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

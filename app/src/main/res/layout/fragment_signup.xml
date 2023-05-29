@@ -26,15 +26,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chào bạn,"
-            android:textSize="40sp"
+            android:text="Sign up,"
+            android:textSize="50sp"
             android:transitionName="logo_text"
             android:layout_marginTop="-20dp"
             android:textColor="#000"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hãy đăng ký để có thể trải nghiệm!"
+            android:text="A reliable ecommerce app!"
             android:textSize="18sp"
             android:transitionName="logo_desc"/>
         <LinearLayout
@@ -47,7 +47,7 @@
                 android:id="@+id/reg_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Họ và tên"
+                android:hint="Full name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                 android:id="@+id/reg_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mật khẩu"
+                android:hint="Password"
                 app:passwordToggleEnabled="true"
                 android:transitionName="password_tran"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -83,7 +83,7 @@
                 android:id="@+id/reg_confirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Xác nhận mật khẩu"
+                android:hint="Confirmed password"
                 app:passwordToggleEnabled="true"
                 android:transitionName="password_tran"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -98,7 +98,7 @@
             android:id="@+id/reg_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ĐĂNG KÝ"
+            android:text="REGISTER"
             android:layout_marginBottom="10dp"
             android:textSize="18dp"
             android:background="#000"
@@ -112,7 +112,7 @@
             android:onClick="onClick"
             android:clickable="true"
             android:background="@android:color/transparent"
-            android:text="Bạn đã có tài khoản? Đăng nhập."
+            android:text="Already a member? Login"
             android:textSize="15dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

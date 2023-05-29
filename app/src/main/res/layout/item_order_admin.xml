@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/searchview_bg"
-    android:backgroundTint="@color/background"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -34,7 +34,7 @@
         android:text="PENDING" />
     <TextView
         android:layout_below="@id/tvOrderId"
-        android:id="@+id/tvOrderedName"
+        android:id="@+id/tvRecipientName"
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,15 +44,16 @@
         android:textColor="@color/black"/>
     <TextView
         android:id="@+id/tvAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:text="Gemini PathLiverpool, New York(NY)"
-        android:maxLines="1"
-        android:layout_below="@id/tvOrderedName"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_below="@id/tvRecipientName"
         android:layout_marginTop="5dp"
         style="@style/font_medium"
         android:textSize="17dp" />
-    
+
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"

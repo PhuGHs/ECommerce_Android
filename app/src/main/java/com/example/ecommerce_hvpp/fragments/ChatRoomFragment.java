@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapters.ChatRoomAdapter;
+import com.example.ecommerce_hvpp.adapter.ChatRoomAdapter;
 import com.example.ecommerce_hvpp.model.ChatRoom;
 import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 

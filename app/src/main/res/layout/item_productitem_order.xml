@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="10dp"
     android:layout_width="match_parent"
-    android:background="@color/background"
+    android:background="@color/white"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/imgItem"
@@ -31,6 +31,7 @@
             style="@style/font_medium"
             android:textSize="18dp"/>
         <TextView
+            android:id="@+id/tvType"
             android:text="Type: Manchester City, XL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,6 +39,7 @@
             android:textSize="18dp"
             />
         <TextView
+            android:id="@+id/tvPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="250.000đ"

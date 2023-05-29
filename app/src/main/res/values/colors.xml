@@ -27,12 +27,15 @@
     <color name="btn_logut_bg">#ff6861</color>
     <color name="background_fragment">#EBEAEF</color>
     <color name="g_black">#33405f</color>
-
+    <color name="pending">#FF7A00</color>
+    <color name="delivering">#18B344</color>
+    <color name="delivered">#0041A2</color>
+    <color name="canceled">#FF0000</color>
     <color name="bg_primary">#EBEAEF</color>
     <color name="bg_calendar">#0D000000</color>
-
     <color name="text_sub_color">#776363</color>
-
+    <color name="uncompleted_text_color">#EEEEEE</color>
+    <color name="completed_text_color">#D8D8D8</color>
     <color name="increase_percent">#537FE7</color>
     <color name="decrease_percent">#A86464</color>
 </resources>
