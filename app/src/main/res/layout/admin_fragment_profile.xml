@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="AdminProfileViewModel"
+            type="com.example.ecommerce_hvpp.viewmodel.AdminProfileViewModel" />
+        <import type="com.example.ecommerce_hvpp.util.constant" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="35dp"
+        android:background="@color/bg_primary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            style="@style/header_title"
+            android:textSize="26sp"
+            android:text="Admin"
+            android:textColor="@color/primary" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="143dp"
+            android:layout_height="143dp"
+            android:layout_marginTop="11dp"
+            app:cardCornerRadius="100dp">
+
+            <ImageView
+                android:id="@+id/admin_profile_avatar_admin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/avatar_customer"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/admin_profile_name_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+            style="@style/header_title"
+            android:text="Amos Ivor"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <!--    Option  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="34dp">
+
+            <!--    Customer Management -->
+            <RelativeLayout
+                android:id="@+id/admin_profile_customer_management_container"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:background="@drawable/round_option_profile"
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.CUSTOMER_MANAGEMENT)}">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_customer_management"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="21dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/w600_50"
+                    android:text="Customer Management"
+                    android:textColor="@color/primary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_next" />
+
+            </RelativeLayout>
+
+            <!--    Statistics Management -->
+            <RelativeLayout
+                android:id="@+id/admin_profile_statistic_container"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_below="@+id/admin_profile_customer_management_container"
+                android:background="@drawable/round_option_profile"
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.DATA_STATISTICS)}">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_data_statistics"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/w600_50"
+                    android:text="Data Statistics"
+                    android:textColor="@color/primary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_next" />
+
+            </RelativeLayout>
+
+            <!--    Order History Management -->
+            <RelativeLayout
+                android:id="@+id/admin_profile_order_history_container"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_below="@+id/admin_profile_statistic_container"
+                android:background="@drawable/round_option_profile"
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.ORDER_HISTORY)}">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_order_history"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/w600_50"
+                    android:text="Order History"
+                    android:textColor="@color/primary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_next" />
+
+            </RelativeLayout>
+
+            <!--    Promotion Management -->
+            <RelativeLayout
+                android:id="@+id/admin_profile_promotion_container"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_below="@+id/admin_profile_order_history_container"
+                android:background="@drawable/round_option_profile"
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.PROMOTION_MANAGEMENT)}">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_promotion"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/w600_50"
+                    android:text="Promotion Management"
+                    android:textColor="@color/primary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_next" />
+
+            </RelativeLayout>
+
+            <!--    Log out Management -->
+            <RelativeLayout
+                android:id="@+id/admin_profile_logout_container"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_below="@+id/admin_profile_promotion_container"
+                android:background="@drawable/round_option_profile"
+                android:layout_marginBottom="23dp"
+                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.LOG_OUT)}">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_logout"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="8dp"
+                    style="@style/w600_50"
+                    android:text="Log out"
+                    android:textColor="@color/primary" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_next" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

@@ -32,4 +32,7 @@
     <color name="bg_calendar">#0D000000</color>
 
     <color name="text_sub_color">#776363</color>
+
+    <color name="increase_percent">#537FE7</color>
+    <color name="decrease_percent">#A86464</color>
 </resources>

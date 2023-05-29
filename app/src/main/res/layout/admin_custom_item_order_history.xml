@@ -9,23 +9,36 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="190dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        >
 
         <!--    Order Component     -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:background="@drawable/round_item_order">
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_item_order"
+            android:paddingBottom="11dp">
 
             <TextView
                 android:id="@+id/admin_order_history_component_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/w600_50"
-                android:text="Order #09117147"
+                android:text="Order #"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp" />
+            <TextView
+                android:id="@+id/admin_order_history_component_id_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/admin_order_history_component_title"
+                style="@style/w600_50"
+                android:text="09117147"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:layout_marginTop="11dp" />
 
             <TextView
@@ -94,7 +107,7 @@
                 android:id="@+id/admin_order_history_component_phone_customer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0332541875"
+                android:text="0945342561"
                 android:textColor="@color/black"
                 style="@style/w400_40"
                 android:layout_marginStart="55dp"
