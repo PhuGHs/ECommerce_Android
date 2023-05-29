@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-$3.00"
-        style="@style/font_crimson_regular"
+        style="@style/font_crimson_italic"
         android:textSize="60px"
         android:textColor="#A86464"/>
 </LinearLayout>

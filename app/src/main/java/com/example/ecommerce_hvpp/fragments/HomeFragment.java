@@ -1,27 +1,42 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,15 +75,16 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    RecyclerView listNewArrivalsRv;
-    RecyclerView listBestSellerRv;
-    ArrayList<Product> listNewArrivals = new ArrayList<>();
-    ArrayList<Product> listBestSeller = new ArrayList<>();
+    RecyclerView listNewArrivalsRv, listBestSellerRv, listFoundRv;
     LinearLayoutManager linearLayoutManager1, linearLayoutManager2;
-    ProductAdapter newArrivalAdapter;
-    ProductAdapter bestSellerAdapter;
+    GridLayoutManager gridLayoutManager;
+    ProductAdapter newArrivalAdapter, bestSellerAdapter, foundAdapter;
     private NavController navController;
     ImageSlider imgSlider;
+    SearchView searchView;
+    TextView productFound;
+    ScrollView scrollHome;
+    LinearLayout layoutSearch;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,57 +107,87 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //init
         navController = Navigation.findNavController(requireView());
-
         listNewArrivalsRv = (RecyclerView) view.findViewById(R.id.listNewArrivals);
         listBestSellerRv = (RecyclerView) view.findViewById(R.id.listBestSeller);
+        listFoundRv = (RecyclerView) view.findViewById(R.id.listFound);
         imgSlider = (ImageSlider) view.findViewById(R.id.autoImageSlider);
+        searchView = (SearchView) view.findViewById(R.id.searchViewHome);
+        productFound = (TextView) view.findViewById(R.id.productFound);
+        scrollHome = (ScrollView) view.findViewById(R.id.scrollHome);
+        layoutSearch = (LinearLayout) view.findViewById(R.id.layoutSearch);
+        layoutSearch.setEnabled(false);
+        layoutSearch.setVisibility(View.INVISIBLE);
+        linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
+        listBestSellerRv.setLayoutManager(linearLayoutManager2);
+        listFoundRv.setLayoutManager(gridLayoutManager);
 
+        //load data
         loadImageSlider();
         getListNewArrivals();
         getListBestSeller();
 
-        linearLayoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        newArrivalAdapter = new ProductAdapter(getContext(), listNewArrivals, requireView(), false);
-        bestSellerAdapter = new ProductAdapter(getContext(), listBestSeller, requireView(), false);
-
-        listNewArrivalsRv.setLayoutManager(linearLayoutManager1);
-        listNewArrivalsRv.setAdapter(newArrivalAdapter);
-
-        listBestSellerRv.setLayoutManager(linearLayoutManager2);
-        listBestSellerRv.setAdapter(bestSellerAdapter);
-
+        //navigate
         ImageButton btnNavToCart = (ImageButton) view.findViewById(R.id.btnNavToCart);
         ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
-        btnNavToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.cartFragment);
-            }
+        btnNavToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
+        btnNavToMessage.setOnClickListener(view12 -> {
+            //navController.navigate(R.id.detailProductCustomerFragment);
         });
-        btnNavToMessage.setOnClickListener(new View.OnClickListener() {
+
+        //search
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                //navController.navigate(R.id.detailProductCustomerFragment);
+            public boolean onQueryTextSubmit(String s) {
+                int result = MainActivity.PDviewModel.getListFound(s).size();
+                String text = "";
+                if (result > 1) text = " results"; else text = " result";
+                productFound.setText("Found " + result + text);
+                foundAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) MainActivity.PDviewModel.getListFound(s), requireView(), false);
+                listFoundRv.setAdapter(foundAdapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.isEmpty()){
+                    scrollHome.setEnabled(true);
+                    layoutSearch.setEnabled(false);
+                    scrollHome.setVisibility(View.VISIBLE);
+                    layoutSearch.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    scrollHome.setEnabled(false);
+                    layoutSearch.setEnabled(true);
+                    scrollHome.setVisibility(View.INVISIBLE);
+                    layoutSearch.setVisibility(View.VISIBLE);
+
+                    int result = MainActivity.PDviewModel.getListFound(s).size();
+                    String text = "";
+                    if (result > 1) text = " results"; else text = " result";
+                    productFound.setText("Found " + result + text);
+                    foundAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) MainActivity.PDviewModel.getListFound(s), requireView(), false);
+                    listFoundRv.setAdapter(foundAdapter);
+                }
+                return false;
             }
         });
     }
     public void getListNewArrivals(){
-//        listNewArrivals.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-//        listNewArrivals.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-//        listNewArrivals.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-//        listNewArrivals.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-//        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-//        listNewArrivals.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        MainActivity.PDviewModel.getMldListNewArrivals().observe(getViewLifecycleOwner(), products -> {
+            newArrivalAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+            listNewArrivalsRv.setAdapter(newArrivalAdapter);
+        });
     }
     public void getListBestSeller(){
-//        listBestSeller.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-//        listBestSeller.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-//        listBestSeller.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-//        listBestSeller.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-//        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-//        listBestSeller.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        MainActivity.PDviewModel.getMldListBestSeller().observe(getViewLifecycleOwner(), products -> {
+            bestSellerAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), false);
+            listBestSellerRv.setAdapter(bestSellerAdapter);
+        });
     }
     public void loadImageSlider(){
         ArrayList<SlideModel> listImage = new ArrayList<>();

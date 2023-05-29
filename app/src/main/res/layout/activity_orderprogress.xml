@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/list_orderprogress"
         android:layout_marginTop="80px"
-        android:layout_marginLeft="40px"/>
+        android:paddingLeft="40px"
+        android:paddingRight="40px"/>
 
 </LinearLayout>

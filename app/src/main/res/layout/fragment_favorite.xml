@@ -18,12 +18,32 @@
         android:textColor="#A86464"
         android:textSize="70px"
         android:gravity="center"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listFavorite"
-        android:background="#EBEAEF"
-        android:layout_gravity="center"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="33px"
-        android:scrollbars="vertical"/>
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listFavorite"
+            android:background="#EBEAEF"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="33px"
+            android:scrollbars="vertical"/>
+        <ImageView
+            android:id="@+id/imgEmptyWL"
+            android:layout_width="300px"
+            android:layout_height="300px"
+            android:layout_marginTop="400px"
+            android:layout_marginLeft="390px"
+            android:src="@drawable/sad_face"/>
+        <TextView
+            android:id="@+id/txtEmptyWL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="690px"
+            style="@style/font_crimson_italic"
+            android:textSize="70px"
+            android:textAlignment="center"
+            android:text="Your wishlist is empty!!"/>
+    </FrameLayout>
 </LinearLayout>

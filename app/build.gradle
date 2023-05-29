@@ -37,6 +37,9 @@ android {
     dataBinding {
         enabled = true
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -84,7 +87,14 @@ dependencies {
     implementation 'br.com.simplepass:loading-button-android:2.2.0'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation ("com.github.bumptech.glide:glide:4.13.0") {
+        exclude group: "com.android.support"
+    }
+    annotationProcessor 'androidx.annotation:annotation:1.6.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+    implementation ("com.github.bumptech.glide:glide:4.13.0@aar") {
+        transitive = true
+    }
 
     //auto image slider
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
@@ -92,4 +102,11 @@ dependencies {
     //skeleton loading content
     implementation 'com.ethanhua:skeleton:1.1.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+    
+    // reactivex
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+
+    // chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

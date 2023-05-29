@@ -66,4 +66,12 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
+    <style name="w500_50">
+        <item name="fontFamily">@font/crimson_pro_medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="w400_90">
+        <item name="fontFamily">@font/crimson_pro</item>
+        <item name="android:textSize">36sp</item>
+    </style>
 </resources>

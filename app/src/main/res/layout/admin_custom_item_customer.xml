@@ -12,14 +12,15 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="65dp"
+        android:layout_marginBottom="13dp">
 
         <!-- Customer Component-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="@drawable/round_item_customer"
-            android:layout_marginBottom="13dp">
+            >
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/admin_customer_management_component_avatar_customer_container"
@@ -51,7 +52,7 @@
                 style="@style/w400_50" />
 
             <TextView
-                android:id="@+id/admin_customer_management_email_customer"
+                android:id="@+id/admin_customer_management_component_email_customer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/admin_customer_management_component_avatar_customer_container"

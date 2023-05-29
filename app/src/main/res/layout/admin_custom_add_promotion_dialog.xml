@@ -41,6 +41,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -64,6 +65,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -89,6 +91,33 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/w400_50"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <!--    Condition   -->
+        <RelativeLayout
+            android:id="@+id/dialog_add_promotion_minimum_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dialog_add_promotion_discount_container">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="21dp"
+                app:endIconMode="custom"
+                android:hint="Minimum"
+                app:endIconDrawable="@drawable/baseline_unit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_minimum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -102,7 +131,7 @@
             android:id="@+id/dialog_add_promotion_start_date_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialog_add_promotion_discount_container">
+            android:layout_below="@+id/dialog_add_promotion_minimum_container">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -114,6 +143,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_start_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="22/12/2023"
@@ -140,6 +170,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_end_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/w400_50"
@@ -165,6 +196,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_add_promotion_apply"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Man"

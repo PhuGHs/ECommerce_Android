@@ -1,26 +1,34 @@
 package com.example.ecommerce_hvpp.fragments;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.CartAdapter;
+import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,11 +84,12 @@ public class CartFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_cart, container, false);
     }
     RecyclerView listCartRv;
-    ArrayList<Pair<Product, Integer>> listCart = new ArrayList<>();
     LinearLayoutManager linearLayoutManager;
     CartAdapter adapter;
     ImageButton btnBackToHome;
     Button btnNavToCheckout;
+    TextView totalPrice, totalItems, txtEmptyCart;
+    ImageView imgEmptyCart;
     private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -88,36 +97,51 @@ public class CartFragment extends Fragment {
 
         //initialize
         navController = Navigation.findNavController(requireView());
+        totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+        totalItems = (TextView) view.findViewById(R.id.totalItems);
+        txtEmptyCart = (TextView) view.findViewById(R.id.textEmptyCart);
+        imgEmptyCart = (ImageView) view.findViewById(R.id.imgEmptyCart);
         listCartRv = (RecyclerView) view.findViewById(R.id.listCart);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        listCartRv.setLayoutManager(linearLayoutManager);
         getCartData();
-        adapter = new CartAdapter(getContext(), listCart);
         btnBackToHome = (ImageButton) view.findViewById(R.id.btnBackToHome);
         btnNavToCheckout = (Button) view.findViewById(R.id.btnNavToCheckout);
 
-        listCartRv.setLayoutManager(linearLayoutManager);
-        listCartRv.setAdapter(adapter);
-
         //navigate
-        btnBackToHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.homeFragment);
-            }
-        });
-        btnNavToCheckout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.checkoutFragment);
-            }
+        btnBackToHome.setOnClickListener(view1 -> navController.navigate(R.id.homeFragment));
+        btnNavToCheckout.setOnClickListener(view12 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Total price", totalPrice.getText().toString());
+            bundle.putString("Total item", totalItems.getText().toString());
+
+            navController.navigate(R.id.checkoutFragment, bundle);
         });
     }
     public void getCartData(){
-//        listCart.add(new Pair<>(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-//        listCart.add(new Pair<>(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-//        listCart.add(new Pair<>(new Product("P003", "AC Milan Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-//        listCart.add(new Pair<>(new Product("P004", "Bayern Munich Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-//        listCart.add(new Pair<>(new Product("P005", "Liverpool Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
-//        listCart.add(new Pair<>(new Product("P006", "Atletico Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5), 2));
+        MainActivity.PDviewModel.getMldUserCart().observe(getViewLifecycleOwner(), carts -> {
+            adapter = new CartAdapter(getContext(), carts);
+            listCartRv.setAdapter(adapter);
+
+            MainActivity.PDviewModel.getTotalCartItems().observe(getViewLifecycleOwner(), items -> {
+                String text = "";
+                if (items > 1) text = " items)"; else text = " item)";
+                totalItems.setText("(" + items + text);
+
+                if (items > 0){
+                    txtEmptyCart.setEnabled(false);
+                    imgEmptyCart.setEnabled(false);
+                    txtEmptyCart.setVisibility(View.INVISIBLE);
+                    imgEmptyCart.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    txtEmptyCart.setEnabled(true);
+                    imgEmptyCart.setEnabled(true);
+                    txtEmptyCart.setVisibility(View.VISIBLE);
+                    imgEmptyCart.setVisibility(View.VISIBLE);
+                }
+            });
+            MainActivity.PDviewModel.getTotalPriceCart().observe(getViewLifecycleOwner(), total -> totalPrice.setText("$" + Math.round(total * 100.0) / 100.0));
+        });
     }
 }

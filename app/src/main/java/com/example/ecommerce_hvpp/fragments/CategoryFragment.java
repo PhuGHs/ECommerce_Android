@@ -5,6 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +17,14 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ExpandableListCategoryAdapter;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,47 +83,26 @@ public class CategoryFragment extends Fragment {
     ExpandableListView listViewCategory;
     ExpandableListCategoryAdapter adapter;
     List<String> listTitle;
-    HashMap<String, List<String>> listDetailCategory = new HashMap<>();
+    private NavController navController;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listViewCategory = (ExpandableListView) view.findViewById(R.id.listCategory);
-        getCategories();
-        listTitle = new ArrayList<>(listDetailCategory.keySet());
-        adapter = new ExpandableListCategoryAdapter(getContext(), listTitle, listDetailCategory);
-        listViewCategory.setAdapter(adapter);
-        listViewCategory.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                Toast.makeText(getContext(), listTitle.get(groupPosition)
-                        + "->" + listDetailCategory.get(listTitle.get(groupPosition))
-                        .get(childPosition), Toast.LENGTH_SHORT).show();
+        navController = Navigation.findNavController(requireView());
+
+        MainActivity.PDviewModel.getMldCategories().observe(getViewLifecycleOwner(), listDetailCategory -> {
+            listTitle = new ArrayList<>(listDetailCategory.keySet());
+            adapter = new ExpandableListCategoryAdapter(getContext(), listTitle, listDetailCategory);
+            listViewCategory.setAdapter(adapter);
+            listViewCategory.setOnChildClickListener((expandableListView, view1, groupPosition, childPosition, l) -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("Type", listTitle.get(groupPosition).toLowerCase(Locale.ROOT));
+                bundle.putString("Category", listDetailCategory.get(listTitle.get(groupPosition)).get(childPosition));
+
+                navController.navigate(R.id.detailCategoryFragment, bundle);
                 return false;
-            }
+            });
         });
-    }
-    public void getCategories(){
-        List<String> Club = new ArrayList<>();
-        Club.add("Real Madrid");
-        Club.add("AC Milan");
-        Club.add("Man City");
-        Club.add("Arsenal");
-
-        List<String> Nation = new ArrayList<>();
-        Nation.add("Croatia");
-        Nation.add("Spain");
-        Nation.add("Belgium");
-        Nation.add("Brazil");
-        Nation.add("Argentina");
-
-        List<String> Season = new ArrayList<>();
-        Season.add("1996/1997");
-        Season.add("2000/2001");
-        Season.add("2001/2002");
-
-        listDetailCategory.put("Club", Club);
-        listDetailCategory.put("Nation", Nation);
-        listDetailCategory.put("Season", Season);
     }
 }
