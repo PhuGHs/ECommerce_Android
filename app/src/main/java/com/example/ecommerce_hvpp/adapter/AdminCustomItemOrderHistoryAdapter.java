@@ -20,7 +20,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 
 import java.util.ArrayList;

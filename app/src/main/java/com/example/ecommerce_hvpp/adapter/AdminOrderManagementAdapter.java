@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.fragments.AdminOrderedListFragment;
+import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminOrderedListFragment;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
 

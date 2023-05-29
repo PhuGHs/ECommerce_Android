@@ -5,7 +5,7 @@
     <data>
         <variable
             name="AdminStatisticsViewModel"
-            type="com.example.ecommerce_hvpp.viewmodel.AdminStatisticsViewModel" />
+            type="com.example.ecommerce_hvpp.viewmodel.admin.AdminStatisticsViewModel" />
         <import type="com.example.ecommerce_hvpp.util.constant" />
     </data>
 

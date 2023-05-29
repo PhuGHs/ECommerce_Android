@@ -9,10 +9,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.fragments.LoginFragment;
-import com.example.ecommerce_hvpp.fragments.SignUpFragment;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.LoginFragment;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.SignUpFragment;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
-import com.example.ecommerce_hvpp.viewmodel.RegisterLoginViewModel;
+import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 
 public class RegisterLoginActivity extends AppCompatActivity {
     private NavController navController;

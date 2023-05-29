@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticProductSoldBinding;
-import com.example.ecommerce_hvpp.repositories.AdminStatisticsRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 
 public class AdminStatisticProductSoldFragment extends Fragment {
     AdminFragmentStatisticProductSoldBinding mAdminFragmentStatisticProductSoldBinding;

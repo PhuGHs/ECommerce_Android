@@ -7,87 +7,87 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.HomeFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.FavoriteFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CategoryFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.AccountFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CartFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/checkoutFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CheckoutFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CheckoutFragment"
         android:label="fragment_checkout"
         tools:layout="@layout/fragment_checkout" />
     <fragment
         android:id="@+id/detailCategoryFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.CategoryDetailFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CategoryDetailFragment"
         android:label="fragment_category_detail"
         tools:layout="@layout/fragment_category_detail" />
     <fragment
         android:id="@+id/detailProductCustomerFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.DetailProductCustomerFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.DetailProductCustomerFragment"
         android:label="fragment_detail_product_customer"
         tools:layout="@layout/fragment_detail_product_customer" />
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.EditProfileFrament"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.EditProfileFrament"
         android:label="fragment_edit_user_profile"
         tools:layout="@layout/actitvity_user_editprofile"/>
     <fragment
         android:id="@+id/RecepientInfoFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.RecepientInfoFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.RecepientInfoFragment"
         android:label="fragment_recepient_info"
         tools:layout="@layout/activity_user_recipientinfo"/>
     <fragment
         android:id="@+id/OrderHistoryFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.OrderHistoryFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment"
         android:label="fragment_order_history"
         tools:layout="@layout/activity_user_orderhistory"/>
     <fragment
         android:id="@+id/VoucherFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.VoucherFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.VoucherFragment"
         android:label="fragment_voucher"
         tools:layout="@layout/activity_voucher"/>
     <fragment
         android:id="@+id/OrderProgressFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.OrderProgressFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderProgressFragment"
         android:label="fragment_orderprogress"
         tools:layout="@layout/activity_orderprogress"/>
     <fragment
         android:id="@+id/FeedbackFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.FeedbackFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.FeedbackFragment"
         android:label="fragment_feedback"
         tools:layout="@layout/activity_feedback"/>
     <fragment
         android:id="@+id/FeedbackFragment_Reviewed"
-        android:name="com.example.ecommerce_hvpp.fragments.ReviewedFeedbackFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.ReviewedFeedbackFragment"
         android:label="fragment_reviewed_feedback"
         tools:layout="@layout/activity_feedback_reviewed"/>
     <fragment
         android:id="@+id/FeedbackFragment_Unreviewed"
-        android:name="com.example.ecommerce_hvpp.fragments.UnreviewedFeedbackFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.UnreviewedFeedbackFragment"
         android:label="fragment_unreviewed_feedback"
         tools:layout="@layout/activity_feedback_unreviewed"/>
     <fragment
         android:id="@+id/OrderHistoryDetailFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.OrderHistoryDetailFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryDetailFragment"
         android:label="fragment_orderhistory_detail"
         tools:layout="@layout/activity_orderhistory_detail"/>
 </navigation>

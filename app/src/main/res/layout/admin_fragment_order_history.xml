@@ -6,11 +6,11 @@
     <data>
         <variable
             name="AdminOrderHistoryViewModel"
-            type="com.example.ecommerce_hvpp.viewmodel.admin_order_history.AdminOrderHistoryViewModel" />
+            type="com.example.ecommerce_hvpp.viewmodel.admin.admin_order_history.AdminOrderHistoryViewModel" />
     </data>
 
     <LinearLayout
-        tools:context=".fragments.AdminOrderHistoryFragment"
+        tools:context=".fragments.admin_fragments.AdminOrderHistoryFragment"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

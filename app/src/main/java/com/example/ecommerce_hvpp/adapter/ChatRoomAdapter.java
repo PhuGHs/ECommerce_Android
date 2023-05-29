@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.fragments.ChatRoomFragment;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.ChatRoomFragment;
 import com.example.ecommerce_hvpp.model.ChatRoom;
 import com.google.android.material.imageview.ShapeableImageView;
 

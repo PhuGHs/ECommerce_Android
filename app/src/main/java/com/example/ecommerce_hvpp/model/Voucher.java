@@ -29,6 +29,9 @@ public class Voucher implements Parcelable {
         this.endDate = endDate;
     }
 
+    public Voucher(String name, String code, long value, long l) {
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(applyFor);

@@ -9,19 +9,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.ecommerce_hvpp.adapter.AdminCustomItemCustomerAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticVisitorsBinding;
 import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
-import com.example.ecommerce_hvpp.repositories.AdminStatisticsRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;

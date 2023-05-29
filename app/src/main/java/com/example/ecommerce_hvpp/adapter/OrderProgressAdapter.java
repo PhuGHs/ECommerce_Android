@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Order;
-import com.example.ecommerce_hvpp.model.Voucher;
-import com.example.ecommerce_hvpp.repositories.RecepInfoRepository;
-import com.example.ecommerce_hvpp.repositories.UserRepository;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.RecepInfoRepository;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 
 import java.util.ArrayList;
 
@@ -44,9 +43,9 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
     public void onBindViewHolder(@NonNull OrderProgressAdapter.DataViewHolder holder, int position) {
         Order order = listOrder.get(position);
 
-        holder.id_tv.setText("ID: #" + Long.toString(order.getID()));
-        holder.title_tv.setText(order.getTitle());
-        holder.time_remain_tv.setText("Remaining day:     " + Integer.toString(order.getRemaining_day()) + " day");
+        holder.id_tv.setText("ID: #" + order.getId());
+//        holder.title_tv.setText(order.getTitle());
+//        holder.time_remain_tv.setText("Remaining day:     " + Integer.toString(order.getRemaining_day()) + " day");
 
     }
     /**

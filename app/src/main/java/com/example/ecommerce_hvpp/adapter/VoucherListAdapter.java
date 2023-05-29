@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Voucher;
-import com.example.ecommerce_hvpp.repositories.RecepInfoRepository;
-import com.example.ecommerce_hvpp.repositories.UserRepository;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -46,11 +42,11 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
     public void onBindViewHolder(@NonNull VoucherListAdapter.DataViewHolder holder, int position) {
         Voucher voucher = listVoucher.get(position);
 
-        holder.name_tv.setText(voucher.getName());
+        holder.name_tv.setText(voucher.getVoucherName());
         holder.code_tv.setText("Code:   " + voucher.getId());
-        holder.discount_value_tv.setText(Long.toString(voucher.getValue()) + "%");
+        holder.discount_value_tv.setText(String.valueOf(voucher.getDiscountedValue()));
 
-        holder.date_end_tv.setText(getDate(voucher.getDate_end()));
+        holder.date_end_tv.setText(getDate(voucher.getEndDate()));
     }
     /**
      * Data ViewHolder class.

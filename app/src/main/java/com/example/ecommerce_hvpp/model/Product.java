@@ -39,6 +39,13 @@ public class Product {
         this.timeAdded = timeAdded;
     }
 
+    public Product(String name, String season, String price, String description, int parseInt, int parseInt1, int parseInt2) {
+        
+    }
+
+    public Product(String id, String name, String season, String price, String description, int parseInt, int parseInt1, int parseInt2) {
+    }
+
 
     public String getId() {
         return id;

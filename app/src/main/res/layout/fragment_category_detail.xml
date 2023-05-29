@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#EBEAEF"
-    tools:context=".fragments.FavoriteFragment">
+    tools:context=".fragments.customer_fragments.FavoriteFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

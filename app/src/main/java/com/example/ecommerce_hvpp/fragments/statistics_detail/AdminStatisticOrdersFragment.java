@@ -13,9 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticOrdersBinding;
 import com.example.ecommerce_hvpp.model.OrderHistory;
-import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.repositories.AdminProfileRepository;
-import com.example.ecommerce_hvpp.repositories.AdminStatisticsRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.github.mikephil.charting.data.BarEntry;
 

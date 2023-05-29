@@ -62,6 +62,9 @@ public class Order implements Parcelable {
         this.voucherList = voucherList;
     }
 
+    public Order(long id, String title, int day_remaining) {
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);

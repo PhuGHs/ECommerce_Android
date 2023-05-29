@@ -114,7 +114,7 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
         }
         public void bind(Product pd) {
             Glide.with(itemView)
-                    .load(pd.getUrl_thumb())
+                    .load(pd.getUrlthumb())
                     .fitCenter()
                     .into(ivProductImage);
             tvProductName.setText(pd.getName());

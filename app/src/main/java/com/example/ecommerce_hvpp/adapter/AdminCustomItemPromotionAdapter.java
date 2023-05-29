@@ -5,12 +5,10 @@ import static com.example.ecommerce_hvpp.util.constant.templateDate;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,13 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemPromotionBinding;
-import com.example.ecommerce_hvpp.fragments.AdminEditPromotionFragment;
-import com.example.ecommerce_hvpp.fragments.AdminPromotionFragment;
-import com.example.ecommerce_hvpp.model.OrderHistory;
+import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminPromotionFragment;
 import com.example.ecommerce_hvpp.model.Promotion;
-import com.example.ecommerce_hvpp.repositories.AdminPromotionRepository;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

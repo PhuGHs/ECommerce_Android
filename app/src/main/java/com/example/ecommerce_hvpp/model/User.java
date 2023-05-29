@@ -39,9 +39,9 @@ public class User {
     }
 
     private boolean isAdmin;
-    private String datebirth;
+    private String datebirth = "";
     private String id;
-    private String address;
+    private String address = "";
     private long sumRevenue;
     private String username = "";
 
@@ -71,12 +71,10 @@ public class User {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-    private String address = "";
 
     public String getAddress() {
         return address;
     }
-    private String datebirth = "";
 
     public String getDatebirth() {
         return datebirth;

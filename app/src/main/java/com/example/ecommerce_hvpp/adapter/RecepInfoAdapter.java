@@ -10,16 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.RecepInfo;
-import com.example.ecommerce_hvpp.repositories.RecepInfoRepository;
-import com.example.ecommerce_hvpp.repositories.UserRepository;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.RecepInfoRepository;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.DataViewHolder> {
     private Context context;

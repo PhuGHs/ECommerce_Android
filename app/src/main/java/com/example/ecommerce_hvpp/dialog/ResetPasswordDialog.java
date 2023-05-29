@@ -15,7 +15,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.util.Validator;
-import com.example.ecommerce_hvpp.viewmodel.RegisterLoginViewModel;
+import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 

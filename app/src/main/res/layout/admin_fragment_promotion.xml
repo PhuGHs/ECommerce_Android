@@ -5,7 +5,7 @@
     <data>
         <variable
             name="AdminPromotionViewModel"
-            type="com.example.ecommerce_hvpp.viewmodel.admin_promotion.AdminPromotionViewModel" />
+            type="com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminPromotionViewModel" />
     </data>
 
     <LinearLayout

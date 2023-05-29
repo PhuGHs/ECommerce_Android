@@ -124,16 +124,16 @@ public class AdminProductManagementRepository {
         updates.put("description", pd.getDescription());
         updates.put("name", pd.getName());
         updates.put("nation", pd.getNation());
-        updates.put("point", pd.getPoint());
+        updates.put("point", pd.getPointAvg());
         updates.put("price", pd.getPrice());
         updates.put("season", pd.getSeason());
-        updates.put("size_l", pd.getSize_l());
-        updates.put("size_m", pd.getSize_m());
-        updates.put("size_xl", pd.getSize_xl());
-        updates.put("url_thumb", pd.getUrl_thumb());
-        updates.put("url_main", pd.getUrl_main());
-        updates.put("url_sub1", pd.getUrl_sub1());
-        updates.put("url_sub2", pd.getUrl_sub2());
+        updates.put("size_l", pd.getSizeL());
+        updates.put("size_m", pd.getSizeM());
+        updates.put("size_xl", pd.getSizeXL());
+        updates.put("url_thumb", pd.getUrlthumb());
+        updates.put("url_main", pd.getUrlmain());
+        updates.put("url_sub1", pd.getUrlsub1());
+        updates.put("url_sub2", pd.getUrlsub2());
         updates.put("status", pd.getStatus());
 
         fbHelper.getCollection("Product").document(pd.getId())
