@@ -91,4 +91,11 @@ dependencies {
 
     //material design
     implementation 'com.google.android.material:material:1.8.0'
+
+    //steppers
+    implementation 'moe.feng:MaterialStepperView:latest-version'
+
+    //skeleton loading content
+    implementation 'com.ethanhua:skeleton:1.1.2'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
 }
