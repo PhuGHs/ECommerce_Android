@@ -21,6 +21,9 @@ import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.viewmodel.OrderHistoryViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +77,7 @@ public class OrderHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_user_orderhistory, container, false);
+
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_order_history);
         viewModel = new ViewModelProvider(this).get(OrderHistoryViewModel.class);
@@ -100,4 +104,5 @@ public class OrderHistoryFragment extends Fragment {
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
     }
+
 }

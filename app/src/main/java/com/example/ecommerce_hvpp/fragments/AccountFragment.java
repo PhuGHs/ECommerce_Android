@@ -91,6 +91,7 @@ public class AccountFragment extends Fragment {
     private TextView number_of_orderprogress_tv;
     private ImageView ava_image;
     private String size_text = "";
+    private String id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

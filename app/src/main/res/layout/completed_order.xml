@@ -7,11 +7,69 @@
     android:layout_marginBottom="58px"
     android:orientation="vertical"
     android:background="@drawable/bg_white_rounded">
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="151px"
+            android:layout_height="146px"
+            android:id="@+id/image_of_1st_item_orderhistory"
+            android:src="@drawable/ic_launcher_background"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name_of_ordereditem"
+                android:text="Retro Manchester UTD Away 2006/07"
+                style="@style/header"
+                android:textColor="@color/black"
+                android:textSize="40px"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35px">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quantity_of_ordereditem"
+                    android:text="Quantity: 1"
+                    style="@style/regularfont"
+                    android:textColor="@color/black"
+                    android:textSize="40px"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/total_money_ordereditem"
+                android:text="$90.00"
+                android:textSize="50px"
+                android:textColor="#FF3030"
+                style="@style/regularfont"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:id="@+id/list_order_item"/>
+        android:gravity="right">
+        <Button
+            android:layout_width="450px"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            style="@style/header_title"
+            android:text="Xem thêm"
+            android:textSize="45px"
+            />
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_marginTop="18px"
@@ -69,20 +127,35 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
             android:id="@+id/day_of_order"
-            android:text="Ngày mua:     20/05/2003"
+            android:text="Ngày mua:  20/05/2003"
             style="@style/header"
             android:textColor="#838383"
             android:textSize="40px"/>
-
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rebuy_btn"
-            android:textAllCaps="false"
-            style="@style/header_title"
-            android:textSize="45px"
-            android:layout_marginLeft="340px"
-            android:text="Mua lại"/>
+            android:layout_marginLeft="20px"
+            android:gravity="right">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rebuy_btn"
+                android:layout_marginRight="20px"
+                android:textAllCaps="false"
+                style="@style/header_title"
+                android:textSize="45px"
+                android:backgroundTint="#FF8B13"
+                android:text="Đánh giá" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/review_btn"
+                android:textAllCaps="false"
+                style="@style/header_title"
+                android:textSize="45px"
+                android:text="Mua lại"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

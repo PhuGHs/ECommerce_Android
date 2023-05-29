@@ -22,6 +22,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,56 +37,17 @@ public class OrderHistoryRepository {
     private FirebaseHelper firebaseHelper;
     private FirebaseFirestore db;
     private MutableLiveData<List<OrderHistoryItem>> _mldListOrderHistory = new MutableLiveData<>();
-    private List<OrderHistorySubItem> _mldListSubOrderHistory = new ArrayList<>();
+    private MutableLiveData<List<OrderHistorySubItem>> _mldListSubOrderHistory = new MutableLiveData<>();
+    private MutableLiveData<Long> _mldQuantity = new MutableLiveData<>();
     private final String TAG = "OrderHistoryRepository";
     private String imagepath;
     private String name;
     private double price;
-    private long ID_of_order;
     private long count = 0;
     public OrderHistoryRepository(){
         _mldListOrderHistory = new MutableLiveData<>();
-        _mldListSubOrderHistory = new ArrayList<>();
+        _mldListSubOrderHistory = new MutableLiveData<>();
         firebaseHelper = FirebaseHelper.getInstance();
-    }
-    public List<OrderHistorySubItem> getAll_Items(long ID) {
-        firebaseHelper.getCollection("OrderDetail").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getLong("order_id").equals(ID)){
-                            long quantity = snapshot.getLong("quantity");
-                            firebaseHelper.getCollection("Product").document(snapshot.getString("product_id")).get()
-                                    .addOnSuccessListener(documentSnapshots -> {
-                                        if (documentSnapshots.exists()){
-                                            imagepath = documentSnapshots.getString("url_main");
-                                            name = documentSnapshots.getString("name");
-                                            price = documentSnapshots.getDouble("price");
-                                        }
-                                    });
-                            Log.d(TAG, "lay thanh cong");
-                            _mldListSubOrderHistory.add(new OrderHistorySubItem(imagepath, name, quantity, quantity*price));
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d(TAG, "lay items that bai");
-                });
-        return _mldListSubOrderHistory;
-    }
-    public long getID_ofOrder(String UID){
-        firebaseHelper.getCollection("Order").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(UID)){
-                            ID_of_order = snapshot.getLong("id");
-                            Log.d(TAG, "Lay id thanh cong " + ID_of_order);
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d(TAG, "Khong co id ");
-                });
-        return ID_of_order;
     }
     public LiveData<List<OrderHistoryItem>> getAll_OrderHistories(String UID) {
         firebaseHelper.getCollection("Order").get()
@@ -92,11 +55,12 @@ public class OrderHistoryRepository {
                     List<OrderHistoryItem> orderhistories = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customer_id").equals(UID)){
+                            Log.d(TAG, "get id document: " + snapshot.getId());
                             Timestamp time_order = snapshot.getTimestamp("time_create");
-                            long all_quantity = setQuantityofItem(snapshot.getLong("id"));
+                            long all_quantity = getQuantityofItem(snapshot.getId()).getValue();
                             String sum_of_order = snapshot.getString("value");
-                            List<OrderHistorySubItem> list_items = getAll_Items(snapshot.getLong("id"));
-                            orderhistories.add(new OrderHistoryItem(all_quantity, sum_of_order, time_order.getSeconds()*1000, list_items));
+                            Log.d(TAG,  "Tong san pham: " + all_quantity);
+                            orderhistories.add(new OrderHistoryItem(all_quantity, sum_of_order, time_order.getSeconds()*1000));
                         }
                     }
                     _mldListOrderHistory.setValue(orderhistories);
@@ -106,19 +70,47 @@ public class OrderHistoryRepository {
                 });
         return _mldListOrderHistory;
     }
-    public long setQuantityofItem(long order_id){
-        firebaseHelper.getCollection("OrderDetail").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getLong("order_id").equals(order_id)){
-                            long quantity = snapshot.getLong("quantity");
-                            count = count + quantity;
+    public void setQuantityofItem(String document_id){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Order").document(document_id).collection("products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                String quantity = document.getString("quantity");
+                                count = count + Long.valueOf(quantity);
+                            }
+                            _mldQuantity.setValue(count);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
+                });
+    }
+    public LiveData<Long> getQuantityofItem(String document_id){
+        firebaseHelper.getCollection("Order")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getId().equals(document_id)){
+                            CollectionReference collectionReference = snapshot.getReference().collection("products");
+                            collectionReference.get()
+                                    .addOnSuccessListener(nestedTask ->{
+                                        for(QueryDocumentSnapshot nestedDocument : queryDocumentSnapshots){
+                                            String quantity = nestedDocument.getString("quantity");
+                                            count = count + Long.valueOf(quantity);
+                                        }
+                                    });
+                        }
+                    }
+                    _mldQuantity.setValue(count);
                 })
                 .addOnFailureListener(e -> {
-                    count = 0;
+                    _mldQuantity.setValue(null);
                 });
-        return count;
+        return _mldQuantity;
     }
+
 }

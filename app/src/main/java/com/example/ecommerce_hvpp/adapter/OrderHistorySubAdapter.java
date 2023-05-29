@@ -42,7 +42,7 @@ public class OrderHistorySubAdapter extends RecyclerView.Adapter<OrderHistorySub
         OrderHistorySubItem subItem = subItemList.get(position);
 
         holder.name_tv.setText(subItem.getName_subItem());
-        holder.quantity_tv.setText(Long.toString(subItem.getQuantity_subItem()));
+        holder.quantity_tv.setText(subItem.getQuantity_subItem());
         holder.sum_of_sub_tv.setText(Double.toString(subItem.getSum_subItem()));
         Glide.with(holder.itemView).load(subItem.getImagePath_subItem()).fitCenter().into(holder.image);
     }

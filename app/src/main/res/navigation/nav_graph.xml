@@ -80,4 +80,9 @@
         android:name="com.example.ecommerce_hvpp.fragments.UnreviewedFeedbackFragment"
         android:label="fragment_unreviewed_feedback"
         tools:layout="@layout/activity_feedback_unreviewed"/>
+    <fragment
+        android:id="@+id/OrderHistoryDetailFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.OrderHistoryDetailFragment"
+        android:label="fragment_orderhistory_detail"
+        tools:layout="@layout/activity_orderhistory_detail"/>
 </navigation>
