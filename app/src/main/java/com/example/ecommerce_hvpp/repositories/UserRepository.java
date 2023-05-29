@@ -20,7 +20,7 @@ public class UserRepository {
     private final String TAG = "UserRepository";
 
     public void addUser(User user) {
-        firebaseHelper.getDatabaseReference().child("users").push().setValue(user);
+        firebaseHelper.getCollection("users").add(user);
     }
 
     public void updateUser(User user) {

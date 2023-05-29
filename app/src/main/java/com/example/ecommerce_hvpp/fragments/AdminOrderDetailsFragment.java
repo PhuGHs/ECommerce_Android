@@ -102,9 +102,13 @@ public class AdminOrderDetailsFragment extends Fragment {
         tvTotal.setText(CurrencyFormat.getVNDCurrency(order.getSubtotal() - order.getTotalDiscount()));
         //endregion
 
+        //region btn click event handlers
         btnBack.setOnClickListener(v -> {
             navController.popBackStack();
         });
+        //endregion
+
+
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

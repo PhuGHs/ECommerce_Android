@@ -36,4 +36,6 @@
     <color name="bg_calendar">#0D000000</color>
 
     <color name="text_sub_color">#776363</color>
+    <color name="uncompleted_text_color">#EEEEEE</color>
+    <color name="completed_text_color">#D8D8D8</color>
 </resources>
