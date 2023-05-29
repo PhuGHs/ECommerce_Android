@@ -5,21 +5,37 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.transition.Slide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.adapter.FeedbackCustomerAdapter;
+import com.example.ecommerce_hvpp.model.Feedback;
+import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,11 +90,21 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
-    ImageButton btnBackToPrevious;
+    TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable, detailDesc;
+    ImageButton btnBackToPrevious, btnFav;
+    Button btnAddToCart;
     RatingBar ratingBar;
     String productID;
     private NavController navController;
     ImageSlider detailImgSlider;
+    ImageButton minusQuantity, plusQuantity;
+    RadioGroup sizeGroup;
+    List<Long> listSize;
+    Integer MinQuantity = 1;
+    RecyclerView feedbackRv;
+    MutableLiveData<String> sizeChosen = new MutableLiveData<>("M");
+    FeedbackCustomerAdapter feedbackAdapter;
+    LinearLayoutManager linearLayoutManager;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,35 +112,128 @@ public class DetailProductCustomerFragment extends Fragment {
         //initialize
         navController = Navigation.findNavController(requireView());
         btnBackToPrevious = (ImageButton) view.findViewById(R.id.btnBackToPrevious);
+        btnFav = (ImageButton) view.findViewById(R.id.btnModifyWishList);
+        btnAddToCart = (Button) view.findViewById(R.id.btnAddToCart);
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBarDetailC);
         detailImgSlider = (ImageSlider) view.findViewById(R.id.detailImageSlider);
+        detailName = (TextView) view.findViewById(R.id.detailNameC);
+        detailSeason = (TextView) view.findViewById(R.id.detailSeasonC);
+        detailPrice = (TextView) view.findViewById(R.id.detailPriceC);
+        detailPoint = (TextView) view.findViewById(R.id.detailPointC);
+        detailQuantity = (TextView) view.findViewById(R.id.detailQuantityC);
+        minusQuantity = (ImageButton) view.findViewById(R.id.detailMinusQuantity);
+        plusQuantity = (ImageButton) view.findViewById(R.id.detailPlusQuantity);
+        sizeGroup = (RadioGroup) view.findViewById(R.id.sizeGroup);
+        sizeAvailable = (TextView) view.findViewById(R.id.sizeAvailable);
+        feedbackRv = (RecyclerView) view.findViewById(R.id.listFeedbackC);
+        detailDesc = (TextView) view.findViewById(R.id.detailDesc);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         //set data
+        detailQuantity.setText("1");
         getDataFromPreviousFragment();
-        loadDetailImage();
 
-        btnBackToPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.popBackStack();
-            }
-        });
+        btnBackToPrevious.setOnClickListener(view1 -> navController.popBackStack());
 
+        modifyQuantityProduct();
+
+        setSizeQuantityAndSizeChosen();
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
         if (bundle != null){
             productID = bundle.getString("productID");
-            ratingBar.setRating((float)4.4);
+
+            MainActivity.PDviewModel.getDetailProduct(productID).observe(getViewLifecycleOwner(), product -> {
+                detailName.setText(product.getName());
+                detailSeason.setText(product.getSeason());
+                detailPrice.setText("$"+Double.toString(product.getPrice()));
+                detailPoint.setText(Double.toString(product.getPointAvg()));
+                detailDesc.setText(product.getDescription());
+
+                ratingBar.setRating((float)product.getPointAvg());
+                listSize = new ArrayList<>();
+                sizeAvailable.setText(String.valueOf(product.getSizeM()));
+                listSize.add(product.getSizeM());
+                listSize.add(product.getSizeL());
+                listSize.add(product.getSizeXL());
+
+                loadDetailImage(product);
+            });
+            MainActivity.PDviewModel.isFavorite(productID).observe(getViewLifecycleOwner(), favorite -> {
+                if (favorite){
+                    btnFav.setImageResource(R.drawable.full_heart);
+                }
+                else btnFav.setImageResource(R.drawable.outline_heart);
+                btnFav.setOnClickListener(view -> {
+                    if (favorite){
+                        MainActivity.PDviewModel.removeFromWishList(productID);
+                        btnFav.setImageResource(R.drawable.outline_heart);
+                    }
+                    else {
+                        MainActivity.PDviewModel.addToWishList(productID);
+                        btnFav.setImageResource(R.drawable.full_heart);
+                    }
+                });
+            });
+            MainActivity.PDviewModel.getFeedbackProduct(productID).observe(getViewLifecycleOwner(), feedbacks -> getDetailFeedbackAndSetFeedbackRecycleView(feedbacks));
         }
     }
-    public void loadDetailImage(){
+    public void modifyQuantityProduct(){
+        minusQuantity.setOnClickListener(view12 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            if (quantity > MinQuantity){
+                quantity--;
+                detailQuantity.setText(String.valueOf(quantity));
+            }
+        });
+        plusQuantity.setOnClickListener(view13 -> {
+            int quantity = Integer.parseInt(detailQuantity.getText().toString());
+            quantity++;
+            detailQuantity.setText(String.valueOf(quantity));
+        });
+    }
+    public void setSizeQuantityAndSizeChosen(){
+        sizeGroup.setOnCheckedChangeListener((radioGroup, checkID) -> {
+            if (listSize != null){
+                if (checkID == R.id.rbtnSizeM){
+                    sizeAvailable.setText(String.valueOf(listSize.get(0)));
+                    sizeChosen.setValue("M");
+                }
+                if (checkID == R.id.rbtnSizeL){
+                    sizeAvailable.setText(String.valueOf(listSize.get(1)));
+                    sizeChosen.setValue("L");
+                }
+                if (checkID == R.id.rbtnSizeXL){
+                    sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                    sizeChosen.setValue("XL");
+                }
+            }
+        });
+        sizeChosen.observe(getViewLifecycleOwner(), size -> {
+            btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, size, Long.parseLong(detailQuantity.getText().toString())));
+        });
+    }
+    public void loadDetailImage(Product product){
         ArrayList<SlideModel> listImage = new ArrayList<>();
 
-        listImage.add(new SlideModel(R.drawable.product_pattern, ScaleTypes.FIT));
-        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
-        listImage.add(new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT));
+        SlideModel slideModel1 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+        SlideModel slideModel2 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+        SlideModel slideModel3 = new SlideModel(R.drawable.product_pattern_with_bg, ScaleTypes.FIT);
+
+        slideModel1.setImageUrl(product.getUrlmain());
+        slideModel2.setImageUrl(product.getUrlsub1());
+        slideModel3.setImageUrl(product.getUrlsub2());
+
+        listImage.add(slideModel1);
+        listImage.add(slideModel2);
+        listImage.add(slideModel3);
 
         detailImgSlider.setImageList(listImage, ScaleTypes.FIT);
+    }
+    public void getDetailFeedbackAndSetFeedbackRecycleView(List<Feedback> listFeedback){
+        feedbackAdapter = new FeedbackCustomerAdapter(getContext(), (ArrayList<Feedback>) listFeedback);
+        feedbackRv.setAdapter(feedbackAdapter);
+        feedbackRv.setLayoutManager(linearLayoutManager);
     }
 }

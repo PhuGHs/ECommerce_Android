@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/favoriteFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#EBEAEF"
+    tools:context=".fragments.FavoriteFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btnBackToCategory"
+            android:layout_marginTop="35px"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:src="@drawable/left_arrow"
+            android:clickable="true"/>
+        <TextView
+            android:id="@+id/categoryDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category Name"
+            android:layout_marginTop="20px"
+            style="@style/font_crimson_bold"
+            android:textColor="#A86464"
+            android:textSize="70px"
+            android:gravity="center"/>
+    </FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listCategoryDetail"
+        android:background="#EBEAEF"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="33px"
+        android:scrollbars="vertical"/>
+</LinearLayout>

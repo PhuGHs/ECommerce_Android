@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.CheckoutAdapter;
 import com.example.ecommerce_hvpp.adapter.VoucherAdapter;
 import com.google.android.recaptcha.Recaptcha;
@@ -82,8 +83,9 @@ public class CheckoutFragment extends Fragment {
     }
     private ImageButton btnBackToCart;
     private ListView listVoucherAppliedLv;
-    private ArrayList<Pair<String, String>> listVoucherApplied;
-    private TextView addressApplied;
+    private ArrayList<Pair<String, Double>> listVoucherApplied;
+    private TextView addressApplied, cartItems, cartPrice, totalOrder;
+    Double shipping = 1.99;
     Spinner spinnerTypeCheckout;
     ArrayList<String> listTypeCheckout;
     private NavController navController;
@@ -97,12 +99,17 @@ public class CheckoutFragment extends Fragment {
         listVoucherApplied = new ArrayList<>();
         btnBackToCart = (ImageButton) view.findViewById(R.id.btnBackToCart);
         addressApplied = (TextView) view.findViewById(R.id.addressApplied);
+        cartItems = (TextView) view.findViewById(R.id.cartItems);
+        cartPrice = (TextView) view.findViewById(R.id.cartPrice);
+        totalOrder = (TextView) view.findViewById(R.id.totalOrder);
         spinnerTypeCheckout = (Spinner) view.findViewById(R.id.typeCheckout);
         listTypeCheckout = new ArrayList<>();
 
         getListVoucherApplied();
         getTypeCheckout();
         addressApplied.setText(getAddressApplied());
+        getCartItemsAndPrice();
+        calcTotalOrder();
 
         CheckoutAdapter checkoutAdapter = new CheckoutAdapter(getContext(), R.layout.simple_spinner_string_item, listTypeCheckout);
         checkoutAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
@@ -112,17 +119,12 @@ public class CheckoutFragment extends Fragment {
         listVoucherAppliedLv.setAdapter(voucherAdapter);
 
         //navigate
-        btnBackToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.cartFragment);
-            }
-        });
+        btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
     }
     private void getListVoucherApplied(){
-        listVoucherApplied.add(new Pair<>("RF001", "$3.00"));
-        listVoucherApplied.add(new Pair<>("RF002", "$4.00"));
-        listVoucherApplied.add(new Pair<>("RF003", "$5.00"));
+        //listVoucherApplied.add(new Pair<>("RF001", 3.00));
+        //listVoucherApplied.add(new Pair<>("RF002", 4.00));
+        listVoucherApplied.add(new Pair<>("RF003", 1.99));
     }
     private void getTypeCheckout(){
         listTypeCheckout.add("Visa");
@@ -131,5 +133,20 @@ public class CheckoutFragment extends Fragment {
     }
     private String getAddressApplied(){
         return "Santigo Bernabeu Stadium, Madrid, Spain - Hala Madrid, Fede Valverde";
+    }
+    private void getCartItemsAndPrice(){
+        int items = MainActivity.PDviewModel.getTotalCartItems().getValue();
+        String text = "";
+        if (items > 1) text = " items)"; else text = " item)";
+        cartItems.setText("(" + items + text);
+        cartPrice.setText("$" + Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0);
+    }
+    public void calcTotalOrder(){
+        double total = shipping;
+        total += Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0;
+        for (int i = 0; i < listVoucherApplied.size(); i++){
+            total -= listVoucherApplied.get(i).second;
+        }
+        totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
     }
 }

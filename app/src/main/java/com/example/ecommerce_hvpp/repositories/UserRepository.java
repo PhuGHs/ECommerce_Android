@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -80,5 +82,22 @@ public class UserRepository {
                     _mldListUser.setValue(Resource.error(e.getMessage(), null));
                 });
         return _mldListUser;
+    }
+    public LiveData<String> getUserName(String ID){
+        MutableLiveData<String> userName = new MutableLiveData<>();
+
+        firebaseHelper.getCollection("users").document(ID).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()){
+                            String Name = documentSnapshot.getString("username");
+
+                            userName.setValue(Name);
+                        }
+                        else userName.setValue(null);
+                    }
+                });
+        return userName;
     }
 }

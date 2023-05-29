@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.fragments.LoginFragment;
 import com.example.ecommerce_hvpp.fragments.SignUpFragment;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.RegisterLoginViewModel;
 
 public class RegisterLoginActivity extends AppCompatActivity {
@@ -31,6 +32,8 @@ public class RegisterLoginActivity extends AppCompatActivity {
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
+
+        MainActivity.PDviewModel = new ProductViewModel();
     }
 
     @Override

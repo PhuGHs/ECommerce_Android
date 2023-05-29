@@ -5,18 +5,26 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,26 +80,39 @@ public class FavoriteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favorite, container, false);
     }
     RecyclerView listFavoriteRv;
-    ArrayList<Product> listFavorite = new ArrayList<>();
     GridLayoutManager layoutManager;
     ProductAdapter favProductAdapter;
+    TextView txtEmptyWL;
+    ImageView imgEmptyWL;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listFavoriteRv = (RecyclerView) view.findViewById(R.id.listFavorite);
-
-        listFavorite.add(new Product("P001", "Real Madrid Home", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P002", "Real Madrid Away", "white", "Real Madrid", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P003", "AC Milan Home", "white", "AC Milan", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P004", "Arsenal Home", "white", "Arsenal", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
-        listFavorite.add(new Product("P005", "MU Away", "white", "Manchester United", "", "1999/2000", 17.99,9,5));
+        txtEmptyWL = (TextView) view.findViewById(R.id.txtEmptyWL);
+        imgEmptyWL = (ImageView) view.findViewById(R.id.imgEmptyWL);
 
         layoutManager = new GridLayoutManager(getContext(), 2);
-        favProductAdapter = new ProductAdapter(getContext(), listFavorite, requireView(), true);
-
         listFavoriteRv.setLayoutManager(layoutManager);
-        listFavoriteRv.setAdapter(favProductAdapter);
+
+        getListFavorite();
+    }
+    public void getListFavorite(){
+        MainActivity.PDviewModel.getMldListFavorite().observe(getViewLifecycleOwner(), products -> {
+            if (products.size() > 0){
+                txtEmptyWL.setEnabled(false);
+                imgEmptyWL.setEnabled(false);
+                txtEmptyWL.setVisibility(View.INVISIBLE);
+                imgEmptyWL.setVisibility(View.INVISIBLE);
+            }
+            else {
+                txtEmptyWL.setEnabled(true);
+                imgEmptyWL.setEnabled(true);
+                txtEmptyWL.setVisibility(View.VISIBLE);
+                imgEmptyWL.setVisibility(View.VISIBLE);
+            }
+            favProductAdapter = new ProductAdapter(getContext(), (ArrayList<Product>) products, requireView(), true);
+            listFavoriteRv.setAdapter(favProductAdapter);
+        });
     }
 }
