@@ -49,7 +49,7 @@
             android:text="Time remaining:       1 day"
             android:textColor="@color/black"
             android:textSize="45px"
-            style="@style/regularfont"/>
+            style="@style/font_crimson_italic"/>
 
         <Button
             android:layout_width="284px"

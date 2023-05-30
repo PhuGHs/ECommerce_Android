@@ -29,7 +29,11 @@ public class Voucher implements Parcelable {
         this.endDate = endDate;
     }
 
-    public Voucher(String name, String code, long value, long l) {
+    public Voucher(String name, String code, long value, long endDate) {
+        this.voucherName = name;
+        this.id = code;
+        this.discountedValue = value;
+        this.endDate = endDate;
     }
 
     @Override

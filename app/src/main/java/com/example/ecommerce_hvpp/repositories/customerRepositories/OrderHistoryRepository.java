@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.OrderDetail;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.model.User;
@@ -40,10 +41,8 @@ public class OrderHistoryRepository {
     private MutableLiveData<List<OrderHistorySubItem>> _mldListSubOrderHistory = new MutableLiveData<>();
     private MutableLiveData<Long> _mldQuantity = new MutableLiveData<>();
     private final String TAG = "OrderHistoryRepository";
-    private String imagepath;
-    private String name;
-    private double price;
     private long count = 0;
+    private long all_quantity = 0;
     public OrderHistoryRepository(){
         _mldListOrderHistory = new MutableLiveData<>();
         _mldListSubOrderHistory = new MutableLiveData<>();
@@ -55,10 +54,9 @@ public class OrderHistoryRepository {
                     List<OrderHistoryItem> orderhistories = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customer_id").equals(UID)){
-                            Log.d(TAG, "get id document: " + snapshot.getId());
-                            Timestamp time_order = snapshot.getTimestamp("time_create");
-                            long all_quantity = getQuantityofItem(snapshot.getId()).getValue();
-                            String sum_of_order = snapshot.getString("value");
+                            Timestamp time_order = snapshot.getTimestamp("createdDate");
+                            long all_quantity = snapshot.getLong("totalQuantity");
+                            double sum_of_order = snapshot.getDouble("totalPrice");
                             Log.d(TAG,  "Tong san pham: " + all_quantity);
                             orderhistories.add(new OrderHistoryItem(all_quantity, sum_of_order, time_order.getSeconds()*1000));
                         }
@@ -71,7 +69,7 @@ public class OrderHistoryRepository {
         return _mldListOrderHistory;
     }
     public void setQuantityofItem(String document_id){
-        db = FirebaseFirestore.getInstance();
+
         db.collection("Order").document(document_id).collection("products")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -112,5 +110,29 @@ public class OrderHistoryRepository {
                 });
         return _mldQuantity;
     }
+    public interface MyCallBack{
+        void onCallBack(long quantity);
+    }
+    public void readQuantity(MyCallBack myCallBack, String document_id){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Order").document(document_id).collection("products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                String quantity = document.getString("quantity");
+                                count = count + Long.valueOf(quantity);
+                            }
+                            myCallBack.onCallBack(count);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
 
 }

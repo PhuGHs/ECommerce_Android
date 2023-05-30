@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.OrderHistoryRepository;
+import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

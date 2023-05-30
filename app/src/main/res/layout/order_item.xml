@@ -5,15 +5,15 @@
     android:orientation="horizontal"
     android:layout_marginBottom="20dp">
     <ImageView
-        android:layout_width="151px"
-        android:layout_height="146px"
+        android:layout_width="160px"
+        android:layout_height="160px"
         android:id="@+id/image_of_item_orderhistory"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/mc"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="36px"
+        android:layout_marginLeft="30px"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"

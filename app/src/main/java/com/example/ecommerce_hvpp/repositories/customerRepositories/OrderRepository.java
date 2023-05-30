@@ -38,7 +38,7 @@ public class OrderRepository {
                             int day_remaining = getDayRemaining(date_end);
 
                             Log.d(TAG, "Them thanh cong " + id);
-                            orders.add(new Order(id, title, day_remaining));
+                            orders.add(new Order(Long.toString(id), title, day_remaining));
                         }
                     }
                     _mldListOrder.setValue(orders);

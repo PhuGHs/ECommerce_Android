@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.viewmodel.Customer.OrderHistoryViewModel;
@@ -32,20 +33,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.DataViewHolder>{
-    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
     private Context context;
     private ArrayList<OrderHistoryItem> itemList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private OrderHistorySubItem subitem = new OrderHistorySubItem();
     private FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
-    private OrderHistoryViewModel viewModel;
-    private OrderHistorySubAdapter adapter;
-    private RecyclerView recyclerview;
-    private LinearLayoutManager linearLayoutManager;
 
     public OrderHistoryAdapter(Context context, ArrayList<OrderHistoryItem> listOrderHistory) {
         this.context = context;
@@ -67,15 +63,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(@NonNull OrderHistoryAdapter.DataViewHolder holder, int position) {
         OrderHistoryItem item = itemList.get(position);
 
-        holder.quantity_tv.setText(Long.toString(item.getQuantity_of_product()));
-        holder.day_of_order_tv.setText(getDate(item.getDayCreate_subItem()));
-        holder.sum_of_order_tv.setText(item.getSum_of_order());
+        if (item.getQuantity_of_product() < 2){
+            holder.quantity_tv.setText(Long.toString(item.getQuantity_of_product()) + " product");
+        }
+        else{
+            holder.quantity_tv.setText(Long.toString(item.getQuantity_of_product()) + " products");
+        }
 
-        subitem = getFirst_Item();
-        Glide.with(holder.itemView.getContext()).load(subitem.getImagePath_subItem()).fitCenter().into(holder.image_item);
-        holder.name_item_tv.setText(subitem.getName_subItem());
-        holder.quantity_item_tv.setText(subitem.getQuantity_subItem());
-        holder.price_item_tv.setText(Double.toString(subitem.getSum_subItem()));
+        holder.day_of_order_tv.setText("Day order: " + getDate(item.getDayCreate_subItem()));
+        holder.sum_of_order_tv.setText(Double.toString(item.getSum_of_order()));
+
+        getFirst_Item(holder.itemView.getContext(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);
+
 
     }
     /**
@@ -85,8 +84,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         private TextView quantity_tv, day_of_order_tv, sum_of_order_tv;
         private ImageView image_item;
         private TextView name_item_tv, quantity_item_tv, price_item_tv;
+        private TextView total_order_tv, total_money;
         public DataViewHolder(View itemView){
             super(itemView);
+
+            
 
             quantity_tv = (TextView) itemView.findViewById(R.id.quantity_of_ordereditem_tiengviet);
             day_of_order_tv = (TextView) itemView.findViewById(R.id.day_of_order);
@@ -106,14 +108,15 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         return formattedTime;
     }
-    public OrderHistorySubItem getFirst_Item(){
+    public void getFirst_Item(Context view, ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
         FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
         firebaseHelper.getCollection("Order").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customer_id").equals(fbUser.getUid())){
-                            db.collection("Order").document(snapshot.getId()).collection("products")
+                            db.collection("Order").document(snapshot.getId()).collection("items")
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -123,9 +126,15 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                                                     String image_path = document.getString("image");
                                                     String name = document.getString("name");
                                                     long price = document.getLong("price");
-                                                    String quantity = document.getString("quantity");
-                                                    subitem = new OrderHistorySubItem(image_path, name, quantity, price);
+                                                    long quantity = document.getLong("quantity");
+
+                                                    Glide.with(view).load(image_path).fitCenter().into(image_item);
+                                                    name_item_tv.setText(name);
+                                                    quantity_item_tv.setText("Quantity: " + Long.toString(quantity));
+                                                    price_item_tv.setText("$" + Double.toString(price));
                                                     Log.d(TAG,  "Lay 1 san pham thanh cong ");
+
+                                                    break;
                                                 }
 
                                             } else {
@@ -138,8 +147,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                     }
                 })
                 .addOnFailureListener(e -> {
-
+                    Log.d(TAG, "Lay that bai");
                 });
-        return subitem;
     }
 }

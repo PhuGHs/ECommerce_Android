@@ -44,8 +44,8 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
         Order order = listOrder.get(position);
 
         holder.id_tv.setText("ID: #" + order.getId());
-//        holder.title_tv.setText(order.getTitle());
-//        holder.time_remain_tv.setText("Remaining day:     " + Integer.toString(order.getRemaining_day()) + " day");
+        holder.title_tv.setText(order.getTitle());
+        holder.time_remain_tv.setText("Remaining day:     " + Integer.toString(order.getRemaining_day()) + " day");
 
     }
     /**

@@ -90,4 +90,7 @@ public class User {
         this.password = password;
         this.imagePath = imagePath;
     }
+
+    public void setUrlthumb(String imageUrl) {
+    }
 }

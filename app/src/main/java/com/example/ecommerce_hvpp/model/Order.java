@@ -8,6 +8,8 @@ import java.util.List;
 public class Order implements Parcelable {
     private String id, address, customerId, deliveryMethod, paymentMethod, recipientName, note, phone_number;
     private String status;
+    private String title;
+    private int remaining_day;
     private long createdDate, receiveDate;
     private double totalPrice;
     private List<Voucher> voucherList;
@@ -62,7 +64,10 @@ public class Order implements Parcelable {
         this.voucherList = voucherList;
     }
 
-    public Order(long id, String title, int day_remaining) {
+    public Order(String id, String title, int day_remaining) {
+        this.id = id;
+        this.title = title;
+        this.remaining_day = day_remaining;
     }
 
     @Override
@@ -225,5 +230,17 @@ public class Order implements Parcelable {
 
     public void setItems(List<OrderDetail> items) {
         this.items = items;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getRemaining_day() {
+        return remaining_day;
     }
 }

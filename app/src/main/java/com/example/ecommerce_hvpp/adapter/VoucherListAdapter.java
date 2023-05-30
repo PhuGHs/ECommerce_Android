@@ -1,6 +1,9 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +47,10 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
 
         holder.name_tv.setText(voucher.getVoucherName());
         holder.code_tv.setText("Code:   " + voucher.getId());
-        holder.discount_value_tv.setText(String.valueOf(voucher.getDiscountedValue()));
+        holder.discount_value_tv.setText("-" + String.valueOf(voucher.getDiscountedValue()));
 
         holder.date_end_tv.setText(getDate(voucher.getEndDate()));
+
     }
     /**
      * Data ViewHolder class.
