@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminOrderManagementRepository {
     private final FirebaseHelper fbHelper;
@@ -43,13 +44,21 @@ public class AdminOrderManagementRepository {
                                 String note = documentSnapshot.getString("note");
                                 String phoneNumber = documentSnapshot.getString("phoneNumber");
                                 String orderStatus = documentSnapshot.getString("status");
-//                                long createdDate = documentSnapshot.getLong("createdDate");
-//                                long updateDate = snapshot.getLong("updateDate");
-//                                long receiveDate = documentSnapshot.getLong("receiveDate");
+                                long createdDate = documentSnapshot.getTimestamp("createdDate").toDate().getTime();
+                                long updateDate = documentSnapshot.getTimestamp("updateDate").toDate().getTime();
+                                long receiveDate = documentSnapshot.getTimestamp("receiveDate").toDate().getTime();
                                 double totalPrice = documentSnapshot.getDouble("totalPrice");
-                                List<Voucher> vouchers = documentSnapshot.get("voucherList", List.class);
-
-                                order = new Order(documentId, address, customerId, deliveryMethod, paymentMethod, recipientName, note, phoneNumber, orderStatus, 1, 1, totalPrice, vouchers);
+                                List<Voucher> vouchers = new ArrayList<>();
+                                List<Map<String, Object>> voucherList = (List<Map<String, Object>>) documentSnapshot.get("voucherList");
+                                if (voucherList != null) {
+                                    for (Map<String, Object> voucherMap : voucherList) {
+                                        // Create a new Voucher object using the voucherMap
+                                        // and add it to the vouchers list
+                                        Voucher voucher = new Voucher(voucherMap.get("applyFor").toString(), Double.parseDouble(voucherMap.get("condition").toString()), voucherMap.get("Id").toString(), voucherMap.get("voucherName").toString(),  Double.parseDouble(voucherMap.get("discountedValue").toString()));
+                                        vouchers.add(voucher);
+                                    }
+                                }
+                                order = new Order(documentId, address, customerId, deliveryMethod, paymentMethod, recipientName, note, phoneNumber, orderStatus, createdDate, receiveDate, totalPrice, vouchers);
                                 List<OrderDetail> orderDetails = new ArrayList<>();
                                 CollectionReference nestedCol = documentSnapshot.getReference().collection("items");
                                 nestedCol.get()

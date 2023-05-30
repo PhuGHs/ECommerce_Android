@@ -1,7 +1,10 @@
 package com.example.ecommerce_hvpp.model;
 
 
-public class Product {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Product implements Parcelable {
     private String id;
     private String name;
     private String club = "";
@@ -60,6 +63,64 @@ public class Product {
         this.size_m = size_m;
     }
 
+
+    protected Product(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        club = in.readString();
+        nation = in.readString();
+        season = in.readString();
+        description = in.readString();
+        price = in.readDouble();
+        pointAvg = in.readDouble();
+        size_m = in.readLong();
+        size_l = in.readLong();
+        size_xl = in.readLong();
+        url_main = in.readString();
+        url_sub1 = in.readString();
+        url_sub2 = in.readString();
+        url_thumb = in.readString();
+        status = in.readString();
+        timeAdded = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(club);
+        dest.writeString(nation);
+        dest.writeString(season);
+        dest.writeString(description);
+        dest.writeDouble(price);
+        dest.writeDouble(pointAvg);
+        dest.writeLong(size_m);
+        dest.writeLong(size_l);
+        dest.writeLong(size_xl);
+        dest.writeString(url_main);
+        dest.writeString(url_sub1);
+        dest.writeString(url_sub2);
+        dest.writeString(url_thumb);
+        dest.writeString(status);
+        dest.writeLong(timeAdded);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public String getId() {
         return id;

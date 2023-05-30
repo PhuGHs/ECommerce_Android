@@ -32,6 +32,13 @@ public class Voucher implements Parcelable {
     public Voucher(String name, String code, long value, long l) {
     }
 
+    public Voucher(String applyFor, double condition, String id, String voucherName, double discountedValue) {
+        this.applyFor = applyFor;
+        this.condition = condition;
+        this.voucherName = voucherName;
+        this.discountedValue = discountedValue;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(applyFor);

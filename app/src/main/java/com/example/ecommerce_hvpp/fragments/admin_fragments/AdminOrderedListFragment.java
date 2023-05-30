@@ -18,6 +18,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminOrderManagementAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_management.AdminOrderManagementViewModel;
 
 import java.util.ArrayList;
@@ -49,23 +50,23 @@ public class AdminOrderedListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(requireView());
-//        viewModel.getOrders().observe(getViewLifecycleOwner(), resource -> {
-//            switch(resource.status) {
-//                case LOADING:
-//                    break;
-//                case ERROR:
-//                    CustomToast toastShowSuccess = new CustomToast();
-//                    toastShowSuccess.ShowToastMessage(requireActivity(), 2, resource.message);
-//                    break;
-//                case SUCCESS:
-//                    orders.addAll(resource.data);
-//                    adapter = new AdminOrderManagementAdapter(orders, this);
-//                    rclOrder.setAdapter(adapter);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        });
+        viewModel.getOrders().observe(getViewLifecycleOwner(), resource -> {
+            switch(resource.status) {
+                case LOADING:
+                    break;
+                case ERROR:
+                    CustomToast toastShowSuccess = new CustomToast();
+                    toastShowSuccess.ShowToastMessage(requireActivity(), 2, resource.message);
+                    break;
+                case SUCCESS:
+                    orders.addAll(resource.data);
+                    adapter = new AdminOrderManagementAdapter(orders, this);
+                    rclOrder.setAdapter(adapter);
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     public NavController getNavController() {
