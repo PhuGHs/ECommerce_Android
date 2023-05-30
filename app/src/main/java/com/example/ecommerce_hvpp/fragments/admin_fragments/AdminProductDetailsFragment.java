@@ -298,9 +298,9 @@ public class AdminProductDetailsFragment extends Fragment {
                 case SUCCESS:
                     etName.setText(resource.data.getName());
                     etPrice.setText(String.valueOf(resource.data.getPrice()));
-                    etSizeM.setText(String.valueOf(resource.data.getSizeM()));
-                    etSizeXL.setText(String.valueOf(resource.data.getSizeXL()));
-                    etSizeL.setText(String.valueOf(resource.data.getSizeL()));
+                    etSizeM.setText(String.valueOf(resource.data.getSize_m()));
+                    etSizeXL.setText(String.valueOf(resource.data.getSize_xl()));
+                    etSizeL.setText(String.valueOf(resource.data.getSize_l()));
                     etDescription.setText(resource.data.getDescription());
                     if(resource.data.getClub() == "") {
                         spType.setSelection(TypeAdapter.getPosition("Nation"));
@@ -366,7 +366,7 @@ public class AdminProductDetailsFragment extends Fragment {
                     M = etSizeM.getText().toString();
 
 
-                    Product pd = new Product(Id, Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+                    Product pd = new Product(Id, Name, Season, Double.parseDouble(Price), Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
 
                     if(Type.equals("Club")) {
                         pd.setClub(etTypeName.getText().toString());
@@ -465,7 +465,7 @@ public class AdminProductDetailsFragment extends Fragment {
         M = etSizeM.getText().toString();
 
 
-        Product pd = new Product(Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+        Product pd = new Product(Name, Season, Double.parseDouble(Price), Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
         if(Type.equals("Club")) {
             pd.setClub(etTypeName.getText().toString());
         } else {
