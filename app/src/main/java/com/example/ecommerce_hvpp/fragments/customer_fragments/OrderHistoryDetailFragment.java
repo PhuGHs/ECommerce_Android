@@ -21,8 +21,11 @@ import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.OrderHistoryAdapter;
+import com.example.ecommerce_hvpp.adapter.OrderHistorySubAdapter;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.OrderHistoryItem;
+import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.OrderHistoryViewModel;
@@ -30,6 +33,7 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.OrderHistoryViewModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class OrderHistoryDetailFragment extends Fragment {
@@ -56,6 +60,7 @@ public class OrderHistoryDetailFragment extends Fragment {
     private NavController navController;
     private ImageButton back_Account_btn;
     private OrderHistoryViewModel viewModel;
+    private OrderHistorySubAdapter adapter;
     private RecyclerView recyclerview;
     private LinearLayoutManager linearLayoutManager;
     private TextView type_of_delivery;
@@ -63,14 +68,7 @@ public class OrderHistoryDetailFragment extends Fragment {
     private TextView name_of_recep_delivery;
     private TextView phonenumber_of_recep_delivery;
     private TextView address_of_recep_delivery;
-    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -95,9 +93,9 @@ public class OrderHistoryDetailFragment extends Fragment {
             name_of_recep_delivery.setText(OrderInfo.getRecipientName());
             phonenumber_of_recep_delivery.setText(OrderInfo.getPhone_number());
             address_of_recep_delivery.setText(OrderInfo.getAddress());
-
-            Log.d("Ngay nhan ", OrderInfo.getDeliveryMethod() + "/");
         });
+        
+        viewModel.showItemsofOrder(id).observe(getViewLifecycleOwner(), items -> getItemAndSetItemRecycleView(items));
 
         return v;
     }
@@ -121,6 +119,14 @@ public class OrderHistoryDetailFragment extends Fragment {
         String formattedTime = dateFormat.format(new Date(timeStamp));
 
         return formattedTime;
+    }
+    public void getItemAndSetItemRecycleView(List<OrderHistorySubItem> listItems){
+        adapter = new OrderHistorySubAdapter(this, (ArrayList<OrderHistorySubItem>) listItems);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 
 }

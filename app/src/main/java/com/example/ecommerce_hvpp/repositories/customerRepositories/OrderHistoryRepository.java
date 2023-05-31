@@ -36,10 +36,11 @@ import java.util.List;
 
 public class OrderHistoryRepository {
     private FirebaseHelper firebaseHelper;
-    private FirebaseFirestore db;
     private MutableLiveData<List<OrderHistoryItem>> _mldListOrderHistory = new MutableLiveData<>();
     private MutableLiveData<List<OrderHistorySubItem>> _mldListSubOrderHistory = new MutableLiveData<>();
     private MutableLiveData<Order> orderInfo = new MutableLiveData<>();
+    private MutableLiveData<Integer> num_of_completeorder = new MutableLiveData<>();
+    private MutableLiveData<Double> total_moneypaid = new MutableLiveData<>();
     private final String TAG = "OrderHistoryRepository";
     private long count = 0;
     private long all_quantity = 0;
@@ -68,6 +69,25 @@ public class OrderHistoryRepository {
                 });
         return _mldListOrderHistory;
     }
+    public LiveData<List<OrderHistorySubItem>> getAll_ItemsOfOrder(String UID){
+        firebaseHelper.getCollection("Order").document(UID).collection("items")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    List<OrderHistorySubItem> items = new ArrayList<>();
+                    for (QueryDocumentSnapshot snapshot : documentSnapshot){
+                        String image = snapshot.getString("image");
+                        String name = snapshot.getString("name");
+                        double price = snapshot.getDouble("price");
+                        long quantity = snapshot.getLong("quantity");
+                        items.add(new OrderHistorySubItem(image, name, Long.toString(quantity), price));
+                    }
+                    _mldListSubOrderHistory.setValue(items);
+                })
+                .addOnFailureListener(e -> {
+                    _mldListSubOrderHistory.setValue(null);
+                });
+        return _mldListSubOrderHistory;
+    }
     public LiveData<Order> getOrderInfo(String UID){
         firebaseHelper.getCollection("Order").document(UID).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -85,5 +105,42 @@ public class OrderHistoryRepository {
                     }
                 });
         return orderInfo;
+    }
+    public LiveData<Integer> getNum_of_completeOrder(String UID){
+        firebaseHelper.getCollection("Order").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    int count = 0;
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("customer_id").equals(UID)){
+                            count++;
+                        }
+                    }
+                    num_of_completeorder.setValue(count);
+                    Log.d(TAG, "num order " + count);
+                })
+                .addOnFailureListener(e -> {
+                    num_of_completeorder.setValue(0);
+                    Log.d(TAG, "khong lay duoc so luong order");
+                });
+        return num_of_completeorder;
+    }
+    public LiveData<Double> getTotal_of_MoneyPaid(String UID){
+        firebaseHelper.getCollection("Order").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    double total_sum = 0;
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("customer_id").equals(UID)){
+                            double price = snapshot.getDouble("totalPrice");
+                            total_sum = total_sum + price;
+                        }
+                    }
+                    total_moneypaid.setValue(total_sum);
+                    Log.d(TAG, "total sum " + total_sum);
+                })
+                .addOnFailureListener(e -> {
+                    total_moneypaid.setValue(null);
+                    Log.d(TAG, "khong lay duoc tong tien order");
+                });
+        return total_moneypaid;
     }
 }

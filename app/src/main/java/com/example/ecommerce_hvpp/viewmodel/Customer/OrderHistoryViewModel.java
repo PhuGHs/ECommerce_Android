@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
+import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.OrderHistoryRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,5 +24,16 @@ public class OrderHistoryViewModel extends ViewModel {
     }
     public LiveData<Order> showOrderInfo(String order_id){
         return repo.getOrderInfo(order_id);
+    }
+    public LiveData<List<OrderHistorySubItem>> showItemsofOrder(String order_id){
+        return repo.getAll_ItemsOfOrder(order_id);
+    }
+    public LiveData<Integer> showNumofOrder(){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getNum_of_completeOrder(fbUser.getUid());
+    }
+    public LiveData<Double> showTotalSum(){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getTotal_of_MoneyPaid(fbUser.getUid());
     }
 }

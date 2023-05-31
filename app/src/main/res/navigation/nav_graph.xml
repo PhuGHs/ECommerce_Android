@@ -54,7 +54,16 @@
         android:id="@+id/RecepientInfoFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.RecepientInfoFragment"
         android:label="fragment_recepient_info"
-        tools:layout="@layout/activity_user_recipientinfo"/>
+        tools:layout="@layout/activity_user_recipientinfo">
+        <action
+            android:id="@+id/navigate_to_editrecepinfo"
+            app:destination="@id/RecepientInfoDetailFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/RecepientInfoDetailFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.EditRecepInfoFragment"
+        android:label="fragment_recepient_info_detail"
+        tools:layout="@layout/activity_edit_recepientinfo"/>
     <fragment
         android:id="@+id/OrderHistoryFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment"
@@ -93,5 +102,10 @@
         android:id="@+id/OrderHistoryDetailFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryDetailFragment"
         android:label="fragment_orderhistory_detail"
-        tools:layout="@layout/activity_orderhistory_detail"/>
+        tools:layout="@layout/activity_orderhistory_detail">
+        <action
+            android:id="@+id/navigate_to_feedback"
+            app:destination="@id/FeedbackFragment"/>
+    </fragment>
+
 </navigation>

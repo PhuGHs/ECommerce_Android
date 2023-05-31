@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/bg_white_rounded">
     <ImageView
         android:layout_width="160px"
         android:layout_height="160px"
@@ -26,15 +27,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35px">
+            android:layout_marginTop="15px">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:id="@+id/quantity_of_ordereditem"
                 android:text="Quantity: 1"
                 style="@style/regularfont"
                 android:textColor="@color/black"
                 android:textSize="40px"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100px"
+                    android:id="@+id/review_btn"
+                    android:textAllCaps="false"
+                    style="@style/header_title"
+                    android:backgroundTint="#FF8B13"
+                    android:text="Review"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

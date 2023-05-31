@@ -50,7 +50,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
-    private NavController navController;
     private OrderHistoryFragment parent;
 
     public OrderHistoryAdapter(OrderHistoryFragment parent, ArrayList<OrderHistoryItem> listOrderHistory) {
@@ -94,6 +93,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 parent.getNavController().navigate(R.id.navigate_to_orderhistorydetail, bundle);
             }
         });
+        holder.review_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("order_id", item.getID_of_Order());
+                parent.getNavController().navigate(R.id.navigate_to_orderhistorydetail, bundle);
+            }
+        });
     }
     /**
      * Data ViewHolder class.
@@ -102,11 +109,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         private TextView quantity_tv, day_of_order_tv, sum_of_order_tv;
         private ImageView image_item;
         private TextView name_item_tv, quantity_item_tv, price_item_tv;
-        private Button more_detail_btn;
+        private Button more_detail_btn, review_btn;
         public DataViewHolder(View itemView){
             super(itemView);
 
             more_detail_btn = (Button) itemView.findViewById(R.id.more_detail_btn);
+            review_btn = (Button) itemView.findViewById(R.id.review_btn);
 
             quantity_tv = (TextView) itemView.findViewById(R.id.quantity_of_ordereditem_tiengviet);
             day_of_order_tv = (TextView) itemView.findViewById(R.id.day_of_order);

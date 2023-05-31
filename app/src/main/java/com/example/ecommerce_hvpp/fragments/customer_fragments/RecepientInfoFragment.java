@@ -94,8 +94,11 @@ public class RecepientInfoFragment extends Fragment {
 
     }
     public void getRecepInfoAndSetRecepInfoRecycleView(List<RecepInfo> listRecepInfo){
-        adapter = new RecepInfoAdapter(getContext(), (ArrayList<RecepInfo>) listRecepInfo);
+        adapter = new RecepInfoAdapter(this, (ArrayList<RecepInfo>) listRecepInfo);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 }
