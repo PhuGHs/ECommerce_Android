@@ -76,15 +76,25 @@
                 </LinearLayout>
                 <com.shuhart.stepview.StepView
                     android:layout_below="@id/order_status_layout_linear"
+                    android:id="@+id/step_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    app:sv_selectedCircleColor="@color/primary"
-                    app:sv_selectedTextColor="@color/white"
+                    app:sv_selectedCircleColor="@color/colorAccent"
+                    app:sv_selectedTextColor="@color/colorAccent"
                     app:sv_stepLineWidth="1dp"
                     app:sv_stepPadding="4dp"
-                    app:sv_nextTextColor="@color/white"
-                    app:sv_doneCircleColor="@color/primary"/>
+                    app:sv_nextTextColor="@color/colorAccent"
+                    app:sv_nextStepLineColor="@color/colorAccent"
+                    app:sv_doneCircleColor="@color/colorAccent"
+                    app:sv_doneStepLineColor="@color/colorAccent"
+                    app:sv_doneCircleRadius="12dp"
+                    app:sv_selectedCircleRadius="12dp"
+                    app:sv_selectedStepNumberColor="@color/colorPrimary"
+                    app:sv_stepViewStyle="@style/StepView"
+                    app:sv_doneStepMarkColor="@color/colorPrimary"
+                    app:sv_stepNumberTextSize="12sp"
+                    app:sv_animationType="Line" />
 
             </RelativeLayout>
             <RelativeLayout
@@ -451,27 +461,18 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/btnDecline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    style="@style/font_medium"
-                    android:textSize="20dp"
-                    android:textAllCaps="false"
-                    android:text="Decline"/>
 
                 <Button
                     android:id="@+id/btnMarkAs"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:backgroundTint="#68B984"
-                    android:text="Mark as packaged"
+                    android:text="Next Step"
                     style="@style/font_medium"
                     android:textAllCaps="false"
                     android:textSize="20dp"
                     android:layout_alignParentEnd="true"/>
             </RelativeLayout>
-
         </RelativeLayout>
     </ScrollView>
 

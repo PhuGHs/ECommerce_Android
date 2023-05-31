@@ -18,6 +18,7 @@ import com.example.ecommerce_hvpp.util.CurrencyFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrderManagementAdapter.OrderManagementViewHolder> {
     private List<Order> list;
@@ -37,6 +38,9 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
     @Override
     public void onBindViewHolder(@NonNull OrderManagementViewHolder holder, int position) {
         Order order = list.get(position);
+        if(order == null) {
+            return;
+        }
         holder.bind(order, "ORDER#" + String.valueOf(position));
         holder.itemView.setOnClickListener(i -> {
             Bundle bundle = new Bundle();
@@ -69,13 +73,13 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
             tvAddress.setText(order.getAddress());
             tvPrice.setText(CurrencyFormat.getVNDCurrency(order.getTotalPrice()));
             tvOrderDate.setText(formatDate(order.getCreatedDate()));
-            if(order.getStatus() == "PENDING") {
+            if(Objects.equals(order.getStatus(), "Pending")) {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pending));
-            } else if (order.getStatus() == "DELIVERING") {
-                tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.delivering));
-            } else if (order.getStatus() == "CANCELED") {
-                tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.canceled));
-            } else if (order.getStatus() == "DELIVERED") {
+            } else if (Objects.equals(order.getStatus(), "Packaged")) {
+                tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.packaged));
+            } else if (Objects.equals(order.getStatus(), "Confirmed")) {
+                tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.confirmed));
+            } else if (Objects.equals(order.getStatus(), "Delivered")) {
                 tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.delivered));
             }
             tvOrderStatus.setText(order.getStatus().toString());

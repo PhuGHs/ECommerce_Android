@@ -5,12 +5,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -24,8 +27,13 @@ import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.DividerItemDeco
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_management.AdminOrderManagementViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.shuhart.stepview.StepView;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class AdminOrderDetailsFragment extends Fragment {
     //region Variables
@@ -36,6 +44,8 @@ public class AdminOrderDetailsFragment extends Fragment {
     private AdminOrderItemAdapter adapter;
     private AdminOrderManagementViewModel viewModel;
     private Order order;
+    private StepView stepView;
+    private Button btnMarkAs;
     //endregion
     @Nullable
     @Override
@@ -45,6 +55,7 @@ public class AdminOrderDetailsFragment extends Fragment {
         //region Initialization
         //Initialize view
         btnBack = view.findViewById(R.id.btnBackOrderDetail);
+        btnMarkAs = view.findViewById(R.id.btnMarkAs);
         tvHeader = view.findViewById(R.id.header_title);
         tvFoundText = view.findViewById(R.id.tvFoundtext);
         tvNumberOfVouchers = view.findViewById(R.id.tvNumberOfVouchers);
@@ -58,6 +69,7 @@ public class AdminOrderDetailsFragment extends Fragment {
         tvDeliveryFee = view.findViewById(R.id.tvDeliveryFee);
         tvTotal = view.findViewById(R.id.tvTotal);
         rclProductItem = view.findViewById(R.id.RclOrderItemList);
+        stepView = view.findViewById(R.id.step_view);
 
         //initialize viewModel
         viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
@@ -76,10 +88,44 @@ public class AdminOrderDetailsFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
 
+
         if(order == null) {
             Log.e("AdminOrderDetailsFragment", "Order null");
         } else {
             Log.i("list", String.valueOf(order.getItems().size()));
+        }
+
+        //custom stepView
+        stepView.getState()
+                .selectedTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent))
+                .animationType(StepView.ANIMATION_CIRCLE)
+                .selectedCircleColor(ContextCompat.getColor(getContext(), R.color.colorAccent))
+                .selectedCircleRadius(getResources().getDimensionPixelSize(R.dimen.dp14))
+                .selectedStepNumberColor(ContextCompat.getColor(getContext(), R.color.white))
+                .doneStepMarkColor(ContextCompat.getColor(getContext(), R.color.white))
+                .steps(new ArrayList<String>() {{
+                    add("Pending");
+                    add("Confirmed");
+                    add("Packaged");
+                    add("Delivered");
+                }})
+                .stepsNumber(4)
+                .animationDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .stepLineWidth(getResources().getDimensionPixelSize(R.dimen.dp1))
+                .textSize(getResources().getDimensionPixelSize(R.dimen.sp14))
+                .stepNumberTextSize(getResources().getDimensionPixelSize(R.dimen.sp16))
+                .typeface(ResourcesCompat.getFont(getContext(), R.font.crimson_pro))
+                // other state methods are equal to the corresponding xml attributes
+                .commit();
+
+        if(Objects.equals(order.getStatus(), "Pending")) {
+            btnMarkAs.setText("CONFIRM");
+        } else if (Objects.equals(order.getStatus(), "Confirmed")) {
+            stepView.go(1, true);
+            btnMarkAs.setText("Mark as packaged");
+        } else if (Objects.equals(order.getStatus(), "Packaged")) {
+            stepView.go(2, true);
+            btnMarkAs.setVisibility(View.GONE);
         }
 
         //region assign
@@ -105,6 +151,26 @@ public class AdminOrderDetailsFragment extends Fragment {
         //region btn click event handlers
         btnBack.setOnClickListener(v -> {
             navController.popBackStack();
+        });
+
+        btnMarkAs.setOnClickListener(v -> {
+//            stepView.done(true);
+            stepView.go(1, true);
+            String status = "";
+            switch(order.getStatus()) {
+                case "Pending":
+                    status = "Confirmed";
+                    break;
+                case "Confirmed":
+                    status = "Packaged";
+                    break;
+                case "Packaged":
+                    status = "Delivered";
+                    break;
+            }
+            viewModel.updateOrder(order.getId(), status);
+            CustomToast toast = new CustomToast();
+            toast.ShowToastMessage(getContext(), 1, "Updated order status!!");
         });
         //endregion
 

@@ -25,24 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminOrderedListFragment extends Fragment {
-    private RecyclerView rclOrder;
     private AdminOrderManagementAdapter adapter;
     private List<Order> orders;
     private NavController navController;
     private AdminOrderManagementViewModel viewModel;
+    private RecyclerView rclOrders;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_fragmnet_orderlist, container, false);
+        rclOrders = view.findViewById(R.id.rclOrders);
 
-        rclOrder = view.findViewById(R.id.RclOrders);
-        rclOrder.setLayoutManager(new LinearLayoutManager(getContext()));
-        rclOrder.addItemDecoration(new VerticalItemDecoration(40));
-        orders = new ArrayList<>();
-        adapter = new AdminOrderManagementAdapter(orders, this);
-        rclOrder.setAdapter(adapter);
         viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
-
+        rclOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+        rclOrders.addItemDecoration(new VerticalItemDecoration(30));
         return view;
     }
 
@@ -55,15 +52,16 @@ public class AdminOrderedListFragment extends Fragment {
                 case LOADING:
                     break;
                 case ERROR:
-                    CustomToast toastShowSuccess = new CustomToast();
-                    toastShowSuccess.ShowToastMessage(requireActivity(), 2, resource.message);
+                    CustomToast toast = new CustomToast();
+                    toast.ShowToastMessage(getContext(), 2, "error getting orders");
                     break;
                 case SUCCESS:
-                    orders.addAll(resource.data);
-                    adapter = new AdminOrderManagementAdapter(orders, this);
-                    rclOrder.setAdapter(adapter);
-                    break;
-                default:
+                    orders = new ArrayList<>();
+                    if(resource.data != null) {
+                        orders.addAll(resource.data);
+                        adapter = new AdminOrderManagementAdapter(orders, this);
+                        rclOrders.setAdapter(adapter);
+                    }
                     break;
             }
         });

@@ -11,7 +11,7 @@
     <color name="black">#FF000000</color>
     <color name="colorPrimary">#00bcd4</color>
     <color name="colorPrimaryDark">#0097a7</color>
-    <color name="colorAccent">#f2fe71</color>
+    <color name="colorAccent">#A86464</color>
     <color name="bg_login">#26ae90</color>
     <color name="bg_register">#2e3237</color>
     <color name="bg_main">#428bca</color>
@@ -28,7 +28,8 @@
     <color name="background_fragment">#EBEAEF</color>
     <color name="g_black">#33405f</color>
     <color name="pending">#FF7A00</color>
-    <color name="delivering">#18B344</color>
+    <color name="confirmed">#18B344</color>
+    <color name="packaged">#18B3A1</color>
     <color name="delivered">#0041A2</color>
     <color name="canceled">#FF0000</color>
     <color name="bg_primary">#EBEAEF</color>
