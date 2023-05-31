@@ -7,7 +7,9 @@ public class Voucher implements Parcelable {
     private String applyFor, id, voucherName;
     private double discountedValue, condition;
     private long startDate, endDate;
+    public Voucher(){
 
+    }
 
     protected Voucher(Parcel in) {
         applyFor = in.readString();

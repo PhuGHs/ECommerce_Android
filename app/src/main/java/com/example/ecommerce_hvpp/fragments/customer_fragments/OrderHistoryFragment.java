@@ -95,9 +95,12 @@ public class OrderHistoryFragment extends Fragment {
 
     }
     public void getOrderHistoryAndSetOrderHistoryRecycleView(List<OrderHistoryItem> listOrderHistory){
-        adapter = new OrderHistoryAdapter(getContext(), (ArrayList<OrderHistoryItem>) listOrderHistory);
+        adapter = new OrderHistoryAdapter(this, (ArrayList<OrderHistoryItem>) listOrderHistory);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 
 }

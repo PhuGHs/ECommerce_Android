@@ -14,6 +14,9 @@ public class Order implements Parcelable {
     private double totalPrice;
     private List<Voucher> voucherList;
     private List<OrderDetail> items;
+    public Order(){
+
+    }
 
     protected Order(Parcel in) {
         id = in.readString();
@@ -68,6 +71,14 @@ public class Order implements Parcelable {
         this.id = id;
         this.title = title;
         this.remaining_day = day_remaining;
+    }
+    public Order(String id, String deliveryMethod, long receiveDate, String recipientName, String phone_number, String address){
+        this.id = id;
+        this.deliveryMethod = deliveryMethod;
+        this.receiveDate = receiveDate;
+        this.recipientName = recipientName;
+        this.phone_number = phone_number;
+        this.address = address;
     }
 
     @Override

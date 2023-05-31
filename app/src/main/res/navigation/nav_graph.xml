@@ -59,7 +59,11 @@
         android:id="@+id/OrderHistoryFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment"
         android:label="fragment_order_history"
-        tools:layout="@layout/activity_user_orderhistory"/>
+        tools:layout="@layout/activity_user_orderhistory">
+        <action
+            android:id="@+id/navigate_to_orderhistorydetail"
+            app:destination="@id/OrderHistoryDetailFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/VoucherFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.VoucherFragment"

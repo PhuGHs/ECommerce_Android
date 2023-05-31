@@ -3,20 +3,29 @@ package com.example.ecommerce_hvpp.adapter;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryDetailFragment;
 import com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
@@ -37,14 +46,15 @@ import java.util.List;
 import java.util.Locale;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.DataViewHolder>{
-    private Context context;
     private ArrayList<OrderHistoryItem> itemList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
+    private NavController navController;
+    private OrderHistoryFragment parent;
 
-    public OrderHistoryAdapter(Context context, ArrayList<OrderHistoryItem> listOrderHistory) {
-        this.context = context;
+    public OrderHistoryAdapter(OrderHistoryFragment parent, ArrayList<OrderHistoryItem> listOrderHistory) {
+        this.parent = parent;
         this.itemList = listOrderHistory;
     }
     public int getItemCount() {
@@ -72,10 +82,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         holder.day_of_order_tv.setText("Day order: " + getDate(item.getDayCreate_subItem()));
         holder.sum_of_order_tv.setText(Double.toString(item.getSum_of_order()));
+        Log.d(TAG, "id cua order: " + item.getID_of_Order());
 
         getFirst_Item(holder.itemView.getContext(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);
 
-
+        holder.more_detail_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("order_id", item.getID_of_Order());
+                parent.getNavController().navigate(R.id.navigate_to_orderhistorydetail, bundle);
+            }
+        });
     }
     /**
      * Data ViewHolder class.
@@ -84,11 +102,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         private TextView quantity_tv, day_of_order_tv, sum_of_order_tv;
         private ImageView image_item;
         private TextView name_item_tv, quantity_item_tv, price_item_tv;
-        private TextView total_order_tv, total_money;
+        private Button more_detail_btn;
         public DataViewHolder(View itemView){
             super(itemView);
 
-            
+            more_detail_btn = (Button) itemView.findViewById(R.id.more_detail_btn);
 
             quantity_tv = (TextView) itemView.findViewById(R.id.quantity_of_ordereditem_tiengviet);
             day_of_order_tv = (TextView) itemView.findViewById(R.id.day_of_order);
