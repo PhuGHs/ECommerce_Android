@@ -12,7 +12,7 @@
         android:id="@+id/image_of_orderprogress"
         android:src="@drawable/orderprogress_image"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="35px"
@@ -54,6 +54,7 @@
         <Button
             android:layout_width="284px"
             android:layout_height="120px"
+            android:id="@+id/detail_orderprogresss_btn"
             android:textAllCaps="false"
             style="@style/w400_40"
             android:textSize="50px"

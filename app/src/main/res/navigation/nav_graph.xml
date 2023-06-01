@@ -82,7 +82,16 @@
         android:id="@+id/OrderProgressFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderProgressFragment"
         android:label="fragment_orderprogress"
-        tools:layout="@layout/activity_orderprogress"/>
+        tools:layout="@layout/activity_orderprogress">
+        <action
+            android:id="@+id/navigate_to_detail_orderprogress"
+            app:destination="@+id/DetailOrderProgressFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/DetailOrderProgressFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.DetailOrderProgressFragment"
+        android:label="fragment_orderprogress_detail"
+        tools:layout="@layout/activity_details_orderprogress"/>
     <fragment
         android:id="@+id/FeedbackFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.FeedbackFragment"

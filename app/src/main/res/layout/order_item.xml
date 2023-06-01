@@ -12,7 +12,7 @@
         android:src="@drawable/mc"/>
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30px"
         android:orientation="vertical">

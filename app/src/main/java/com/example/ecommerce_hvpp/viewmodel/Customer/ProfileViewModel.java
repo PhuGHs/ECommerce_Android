@@ -32,6 +32,14 @@ public class ProfileViewModel extends ViewModel {
         repo.updateUser(fbUser.getUid(), user.getUsername(), user.getDatebirth(), user.getAddress(), user.getEmail());
         Log.e("Phuc", "Da cap nhat " + user.getUsername() + fbUser.getUid());
     }
+    public LiveData<String> getUserName(){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getUserName(fbUser.getUid());
+    }
+    public LiveData<String> getUserImage(){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getUserImage(fbUser.getUid());
+    }
 //    public void updateAva(ContentResolver contentResolver, User pd, Uri uriThumb, List<ItemModel> list) {
 //
 //        repo.uploadImage(uriThumb, getFileExtension(contentResolver, uriThumb), new AdminProductManagementRepository.OnImageUploadListener() {

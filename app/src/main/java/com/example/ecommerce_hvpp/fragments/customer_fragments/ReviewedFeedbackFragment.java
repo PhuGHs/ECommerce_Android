@@ -9,14 +9,20 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
-import com.example.ecommerce_hvpp.viewmodel.Customer.RecepInfoViewModel;
+import com.example.ecommerce_hvpp.adapter.AdminCustomItemPromotionAdapter;
+import com.example.ecommerce_hvpp.adapter.ReviewFeedBackAdapter;
+import com.example.ecommerce_hvpp.model.Feedback;
+import com.example.ecommerce_hvpp.viewmodel.Customer.FeedBackViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewedFeedbackFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -51,10 +57,10 @@ public class ReviewedFeedbackFragment extends Fragment {
     }
     private NavController navController;
     private ImageButton back_Account_btn;
-    private RecepInfoViewModel viewModel;
     private RecyclerView recyclerview;
-    private RecepInfoAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private ReviewFeedBackAdapter adapter;
+    private FeedBackViewModel viewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +73,12 @@ public class ReviewedFeedbackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_feedback_reviewed, container, false);
+
+        viewModel = new ViewModelProvider(this).get(FeedBackViewModel.class);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_reviewed);
+
+        viewModel.showReviewedFeedback().observe(getViewLifecycleOwner(), feedbacks -> getFeedbackAndSetFeedBackRecycleView(feedbacks));
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -83,6 +93,10 @@ public class ReviewedFeedbackFragment extends Fragment {
                 navController.navigate(R.id.accountFragment);
             }
         });
-
+    }
+    public void getFeedbackAndSetFeedBackRecycleView(List<Feedback> listFeedback){
+        adapter = new ReviewFeedBackAdapter(this, (ArrayList<Feedback>) listFeedback);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
     }
 }

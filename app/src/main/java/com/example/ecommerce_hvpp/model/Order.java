@@ -80,6 +80,12 @@ public class Order implements Parcelable {
         this.phone_number = phone_number;
         this.address = address;
     }
+    public Order(String address, long createdDate, String deliveryMethod, int remaining_day){
+        this.address = address;
+        this.createdDate = createdDate;
+        this.deliveryMethod = deliveryMethod;
+        this.remaining_day = remaining_day;
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

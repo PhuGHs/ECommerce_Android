@@ -19,8 +19,9 @@ import com.google.firebase.storage.UploadTask;
 
 public class ProfileRepository {
     private FirebaseHelper firebaseHelper;
-    private MutableLiveData<Resource<User>> _mldUserInfo;
-    String username;
+    private MutableLiveData<Resource<User>> _mldUserInfo = new MutableLiveData<>();
+    private MutableLiveData<String> username = new MutableLiveData<>();
+    private MutableLiveData<String> userimage = new MutableLiveData<>();
     private DatabaseReference ref;
     private StorageReference imageRef;
     private final String TAG = "ProfileRepository";
@@ -58,6 +59,36 @@ public class ProfileRepository {
                 "address", address,
                 "email", email
         );
+    }
+    public LiveData<String> getUserImage(String UID){
+        _mldUserInfo.setValue(Resource.loading(null));
+        firebaseHelper.getCollection("users").document(UID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        String image = documentSnapshot.getString("imagePath");
+                        userimage.setValue(image);
+                        Log.e("Phuc", "get name successfully " + image);
+                    }
+                    else {
+                        Log.d(TAG, "user not found");
+                    }
+                });
+        return userimage;
+    }
+    public LiveData<String> getUserName(String UID){
+        _mldUserInfo.setValue(Resource.loading(null));
+        firebaseHelper.getCollection("users").document(UID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("username");
+                        username.setValue(name);
+                        Log.e("Phuc", "get name successfully " + name);
+                    }
+                    else {
+                        Log.d(TAG, "user not found");
+                    }
+                });
+        return username;
     }
     public void uploadImage(Uri uri, String fileType, final AdminProductManagementRepository.OnImageUploadListener listener) {
         String path = System.currentTimeMillis() + "." + fileType;

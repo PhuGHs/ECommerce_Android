@@ -50,13 +50,15 @@
             style="@style/regularfont"
             android:text="Unreviewed"
             android:textSize="80px"
-            android:textColor="#776363"/>
+            android:textColor="#776363"
+            android:clickable="true"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_reviewed"
         android:layout_marginTop="50px"
-        android:layout_marginLeft="50px"/>
+        android:layout_marginStart="50px"
+        android:layout_marginEnd="50px"/>
 
 </LinearLayout>

@@ -95,8 +95,11 @@ public class OrderProgressFragment extends Fragment {
         });
     }
     public void getOrderAndSetOrderRecycleView(List<Order> listOrder){
-        adapter = new OrderProgressAdapter(getContext(), (ArrayList<Order>) listOrder);
+        adapter = new OrderProgressAdapter(this, (ArrayList<Order>) listOrder);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 }
