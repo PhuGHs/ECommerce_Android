@@ -4,6 +4,7 @@ import static com.example.ecommerce_hvpp.util.constant.STATISTIC_ORDERS;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_PRODUCT_SOLD;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_REVENUE;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_VISITORS;
+import static com.example.ecommerce_hvpp.util.constant.templateDate;
 
 import android.util.Log;
 import android.view.View;
@@ -14,12 +15,19 @@ import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.DataStatistic;
+import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import io.reactivex.rxjava3.core.Observable;
 
 public class AdminStatisticsRepository {
     NavController navController;
@@ -55,37 +63,37 @@ public class AdminStatisticsRepository {
         };
     }
 
-    public void getQuantityOrders() {
-        CollectionReference ordersRef = firebaseHelper.getCollection("Voucher");
-        ordersRef.orderBy("date_begin", Query.Direction.ASCENDING)
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+    public Observable<Resource<DataStatistic[]>> getObservableStatistics() {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper
+                    .getCollection("Voucher")
+                    .orderBy("date_begin", Query.Direction.ASCENDING)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<DataStatistic> mListData = new ArrayList<>();
                         Map<String, Integer> dateCounts = new HashMap<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                            String date = document.getString("date_begin");
-//                            if (dateCounts.containsKey(date)) {
-//                                dateCounts.put(date, dateCounts.get(date) + 1);
-//                            } else {
-//                                dateCounts.put(date, 1);
-//                            }
+
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            String date = templateDate
+                                    .format(Objects.requireNonNull(snapshot.getTimestamp("date_begin")).toDate());
+                            if (dateCounts.containsKey(date)) {
+                                dateCounts.put(date, dateCounts.get(date) + 1);
+                            } else {
+                                dateCounts.put(date, 1);
+                            }
                         }
-//                    dateCounts.forEach((key, value) -> Log.e("VuCount", key + " : " + value));
 
-                    } else {
-                        Log.e("VuError", "Error");
-                    }
-                });
-    }
+                        dateCounts.forEach((key, value) -> mListData.add(new DataStatistic(key, value)));
+                        DataStatistic[] DataStatistic = mListData.toArray(new DataStatistic[0]);
 
-    public void getQuantityOrder() {
-        CollectionReference ordersRef = firebaseHelper.getCollection("Voucher");
-        ordersRef.orderBy("date_begin", Query.Direction.ASCENDING)
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // handle code here
-                    } else {
-                        Log.e("VuError", "Error");
-                    }
-                });
+                        emitter.onNext(Resource.success(DataStatistic));
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
     }
 }
