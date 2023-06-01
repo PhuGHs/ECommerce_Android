@@ -25,6 +25,7 @@ import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_management.AdminOr
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminOrderedListFragment extends Fragment {
     private AdminOrderManagementAdapter adapter;
@@ -83,7 +84,7 @@ public class AdminOrderedListFragment extends Fragment {
         // Set a listener to receive the selected filter options from the dialog
         orderFilterDialog.setOnFilterSelectedListener(new OrderFilterDialog.OnFilterSelectedListener() {
             @Override
-            public void onFilterSelected(List<String> options) {
+            public void onFilterSelected(Map<String, Boolean> options) {
                 // Handle the selected filter options here
                 // You can perform any necessary operations based on the selected options
             }
