@@ -25,7 +25,10 @@
         <TextView
             android:id="@+id/header_title"
             style="@style/font_medium"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="ORDER #1"

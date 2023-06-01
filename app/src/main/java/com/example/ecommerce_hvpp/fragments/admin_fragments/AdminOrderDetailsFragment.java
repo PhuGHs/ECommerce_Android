@@ -27,9 +27,9 @@ import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.DividerItemDeco
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.util.CurrencyFormat;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_management.AdminOrderManagementViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.shuhart.stepview.StepView;
 
 import java.util.ArrayList;
@@ -119,12 +119,14 @@ public class AdminOrderDetailsFragment extends Fragment {
                 .commit();
 
         if(Objects.equals(order.getStatus(), "Pending")) {
-            btnMarkAs.setText("CONFIRM");
+//            btnMarkAs.setText("CONFIRM");
         } else if (Objects.equals(order.getStatus(), "Confirmed")) {
             stepView.go(1, true);
-            btnMarkAs.setText("Mark as packaged");
+//            btnMarkAs.setText("Mark as packaged");
         } else if (Objects.equals(order.getStatus(), "Packaged")) {
             stepView.go(2, true);
+        } else if (Objects.equals(order.getStatus(), "Delivered")) {
+            stepView.go(3, true);
             btnMarkAs.setVisibility(View.GONE);
         }
 
@@ -169,8 +171,9 @@ public class AdminOrderDetailsFragment extends Fragment {
                     break;
             }
             viewModel.updateOrder(order.getId(), status);
-            CustomToast toast = new CustomToast();
-            toast.ShowToastMessage(getContext(), 1, "Updated order status!!");
+//            CustomToast toast = new CustomToast();
+//            toast.ShowToastMessage(getContext(), 1, "Updated order status!!");
+            Snackbar.make(requireView(), "Updated order status", Snackbar.LENGTH_SHORT).show();
         });
         //endregion
 

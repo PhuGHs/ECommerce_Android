@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminOrderManagementAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
+import com.example.ecommerce_hvpp.dialog.OrderFilterDialog;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_management.AdminOrderManagementViewModel;
@@ -30,6 +32,7 @@ public class AdminOrderedListFragment extends Fragment {
     private NavController navController;
     private AdminOrderManagementViewModel viewModel;
     private RecyclerView rclOrders;
+    private ImageView btnFilter;
 
     @Nullable
     @Override
@@ -37,6 +40,7 @@ public class AdminOrderedListFragment extends Fragment {
         View view = inflater.inflate(R.layout.admin_fragmnet_orderlist, container, false);
         rclOrders = view.findViewById(R.id.rclOrders);
 
+        btnFilter = view.findViewById(R.id.btnFilter);
         viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
         rclOrders.setLayoutManager(new LinearLayoutManager(getContext()));
         rclOrders.addItemDecoration(new VerticalItemDecoration(30));
@@ -47,6 +51,11 @@ public class AdminOrderedListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(requireView());
+
+        btnFilter.setOnClickListener(v -> {
+            showBottomSheetDialog();
+        });
+
         viewModel.getOrders().observe(getViewLifecycleOwner(), resource -> {
             switch(resource.status) {
                 case LOADING:
@@ -65,6 +74,23 @@ public class AdminOrderedListFragment extends Fragment {
                     break;
             }
         });
+    }
+
+    private void showBottomSheetDialog() {
+        // Create an instance of the BottomSheetDialogFragment
+        OrderFilterDialog orderFilterDialog = new OrderFilterDialog();
+
+        // Set a listener to receive the selected filter options from the dialog
+        orderFilterDialog.setOnFilterSelectedListener(new OrderFilterDialog.OnFilterSelectedListener() {
+            @Override
+            public void onFilterSelected(List<String> options) {
+                // Handle the selected filter options here
+                // You can perform any necessary operations based on the selected options
+            }
+        });
+
+        // Show the bottom sheet dialog
+        orderFilterDialog.show(getChildFragmentManager(), orderFilterDialog.getTag());
     }
 
     public NavController getNavController() {
