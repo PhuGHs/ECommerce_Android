@@ -24,16 +24,24 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
+import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,17 +83,16 @@ public class AccountFragment extends Fragment {
     private NavController navController;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private DatabaseReference fbDb = null;
+    private FirebaseHelper firebaseHelper;
     private ProfileViewModel viewModel;
+    private VoucherViewModel voucherViewModel;
     private String name;
-    private String num_of_voucher;
     private String imagePath;
     private TextView name_tv;
     private TextView number_of_voucher_tv;
     private TextView number_of_orderprogress_tv;
     private ImageView ava_image;
     private String size_text = "";
-    private String id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +117,8 @@ public class AccountFragment extends Fragment {
         ava_image = v.findViewById(R.id.image_of_user);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
+
         if (viewModel.showUserName() != null){
            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
                switch (userInfoResource.status){
@@ -120,7 +129,6 @@ public class AccountFragment extends Fragment {
                        imagePath = userInfoResource.data.getImagePath();
                        Glide.with(this).load(imagePath).fitCenter().into(ava_image);
                        name_tv.setText(name);
-                       setQuantityofVoucher(number_of_voucher_tv, "Voucher");
                        setQuantityofOrder(number_of_orderprogress_tv, "Order");
                        break;
                    case ERROR:
@@ -130,6 +138,7 @@ public class AccountFragment extends Fragment {
                }
            });
         }
+        voucherViewModel.showNumofVoucher().observe(requireActivity(), NumofVoucher -> number_of_voucher_tv.setText(Integer.toString(NumofVoucher)));
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -213,26 +222,6 @@ public class AccountFragment extends Fragment {
                         .setNegativeButton("No", dialogClickListener).show();
             }
         });
-    }
-    public void setQuantityofVoucher(TextView textView, String path){
-        db.collection(path)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            int count = 0;
-                            for (DocumentSnapshot document : task.getResult()) {
-                                count++;
-                            }
-                            size_text = Integer.toString(count);
-                            textView.setText(size_text);
-                            Log.d(TAG, path + ": " + size_text);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
     }
     public void setQuantityofOrder(TextView textView, String path){
         FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();

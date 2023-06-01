@@ -62,7 +62,7 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
         holder.applied_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listRecepInfo.clear();
+                listRecepInfo.clear();   //modify to update the list immediately after click
                 viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
             }
         });
