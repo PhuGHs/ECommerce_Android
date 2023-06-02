@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -59,7 +61,7 @@ public class AdminOrderManagementRepository {
                                     for (Map<String, Object> voucherMap : voucherList) {
                                         // Create a new Voucher object using the voucherMap
                                         // and add it to the vouchers list
-                                        Voucher voucher = new Voucher(voucherMap.get("applyFor").toString(), Double.parseDouble(voucherMap.get("condition").toString()), voucherMap.get("Id").toString(), voucherMap.get("voucherName").toString(),  Double.parseDouble(voucherMap.get("discountedValue").toString()));
+                                        Voucher voucher = new Voucher(voucherMap.get("applyFor").toString(), Double.parseDouble(voucherMap.get("condition").toString()), voucherMap.get("id").toString(), voucherMap.get("voucherName").toString(),  Double.parseDouble(voucherMap.get("discountedValue").toString()));
                                         vouchers.add(voucher);
                                     }
                                 }
@@ -88,8 +90,9 @@ public class AdminOrderManagementRepository {
                                             }
                                         });
                                 order.setItems(orderDetails);
+                                orders.add(order);
                             }
-                            orders.add(order);
+                            Log.i("size", String.valueOf(orders.size()));
                             _mldGetOrders.setValue(Resource.success(orders));
                         }
                     } else {
@@ -171,6 +174,23 @@ public class AdminOrderManagementRepository {
         updates.put("updateDate", new Timestamp(new Date(System.currentTimeMillis())));
 
         fbHelper.getCollection("Order").document(Id).update(updates);
+    }
+
+    public void createDummyOrder() {
+        List<Voucher> vouchers = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+        vouchers.add(new Voucher("England, France, Germany, Spain", 6, "voucher1", "FES", 4.2, System.currentTimeMillis(), System.currentTimeMillis()));
+        vouchers.add(new Voucher("England, France, Germany, Spain", 6, "voucher1", "FES", 4.2, System.currentTimeMillis(), System.currentTimeMillis()));
+
+        List<OrderDetail> items = new ArrayList<>();
+        String image = "https://firebasestorage.googleapis.com/v0/b/ecommerce-hvpp.appspot.com/o/uploads%2F1684920025553.jpg?alt=media&token=4c680f30-2475-4322-87c2-4190cae39b58";
+        items.add(new OrderDetail("item1", image, "Bayern Munich Away", (float) 35.2, 2, "L"));
+        items.add(new OrderDetail("item2", image, "Bayern Munich Home", (float) 32.2, 2, "XL"));
+        orders.add(new Order("1", "43 Tan Lap, Di An, Binh Duong", "CUS001", "HVPPXpress", "Cash", "Lê Văn Phú", "please", "0814321006", "PENDING", System.currentTimeMillis(), System.currentTimeMillis(), (float) 485.2, vouchers, items));
+        orders.add(new Order("2", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", "DELIVERING", System.currentTimeMillis(), System.currentTimeMillis(), (float) 325.2, vouchers, items));
+        orders.add(new Order("3", "47 Tan Lap, Dong Hoa, Di An, Binh Duong", "CUS002", "GHTK", "VISA DEBIT", "Lê Văn Phi", "please", "0814321006", "CANCELED", System.currentTimeMillis(), System.currentTimeMillis(), (float) 325.2, vouchers, items));
+
+        fbHelper.getCollection("Order").add(orders.get(0));
     }
 
 }

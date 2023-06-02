@@ -76,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/priceChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Price"
@@ -83,8 +84,10 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         />
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/CreatedDateChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:text="Created Date"
                         style="@style/Widget.MaterialComponents.Chip.Choice"/>
                 </com.google.android.material.chip.ChipGroup>
@@ -102,14 +105,16 @@
                     android:text="Status"
                     android:textSize="20dp"/>
                 <com.google.android.material.chip.ChipGroup
+                    app:singleSelection="true"
                     android:id="@+id/chip_group_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/AllStatusChip"
+                        android:id="@+id/AllChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:checked="true"
                         android:text="All"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/pendingChip"
@@ -161,6 +166,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:text="Order Code"/>
                     <com.google.android.material.chip.Chip
+                        android:checked="true"
                         android:id="@+id/PhoneNumberChip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

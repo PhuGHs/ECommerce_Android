@@ -28,4 +28,7 @@ public class AdminOrderManagementViewModel extends ViewModel {
     public void updateOrder(String Id, String status) {
         repo.updateOrder(Id, status);
     }
+    public void addDummyOrder() {
+        repo.createDummyOrder();
+    }
 }

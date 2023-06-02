@@ -64,7 +64,6 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             list = (ArrayList<Product>) filterResults.values;
-
             notifyDataSetChanged();
         }
     };
