@@ -2,7 +2,6 @@ package com.example.ecommerce_hvpp.adapter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,9 +129,6 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
 
     @SuppressLint("NotifyDataSetChanged")
     public void setTypeAdapter(String type, String order) {
-        Log.i("Type", type);
-        Log.i("Order", order);
-
         list.clear();
         list.addAll(backUpList);
 
@@ -164,7 +160,6 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
 
     private boolean matchesFilter(Order order, String filterPattern) {
         String selectedFilterOption = parent.getFilterOptions().get(2);
-        Log.i("type", selectedFilterOption);
         switch (selectedFilterOption) {
             case "Phone Number":
                 return order.getPhone_number().contains(filterPattern);

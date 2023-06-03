@@ -26,6 +26,11 @@ public class ProductFilterDialog extends BottomSheetDialogFragment {
     private List<Chip> chips;
     private List<String> initialList;
     private List<String> list;
+
+    public ProductFilterDialog(List<String> initialList) {
+        this.initialList = initialList;
+    }
+
     public interface OnFilterSelectedListener {
         void onFilterSelected(List<String> filterOptions);
     }

@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SearchView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,68 +27,35 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminProductAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.GridItemDecoration;
+import com.example.ecommerce_hvpp.dialog.OrderFilterDialog;
+import com.example.ecommerce_hvpp.dialog.ProductFilterDialog;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_product_management.AdminProductManagementViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminProductListFragment extends Fragment {
     private final String TAG = "AdminProductListFragment";
-    private SearchView svSearch;
     private RecyclerView rclProductList;
     private AdminProductAdapter adapter;
     private Button btnAdd;
     private AdminProductManagementViewModel viewModel;
     private NavController navController;
     private List<Product> products;
+    private List<String> filterOptions;
     private int mCurrentItemPosition;
     private EditText etSearchText;
+    private ImageView btnFilter;
+    private TextView tvFoundText;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_fragment_product_management, container, false);
-
-
-        products = new ArrayList<>();
-        //Initialize view
-//        svSearch = view.findViewById(R.id.svSearch);
-        rclProductList = view.findViewById(R.id.RclProductList);
-        btnAdd = view.findViewById(R.id.btnAdd);
-        etSearchText = view.findViewById(R.id.etSearchText);
-
-        //Initialize ViewModel
-        viewModel = new ViewModelProvider(getActivity()).get(AdminProductManagementViewModel.class);
-
-        //Initialize adapter
-        viewModel.getAllProductWithNoCriteria().observe(getViewLifecycleOwner(), resource -> {
-            switch(resource.status) {
-                case SUCCESS:
-                    products = resource.data;
-                    adapter = new AdminProductAdapter(getContext(), resource.data);
-                    rclProductList.setAdapter(adapter);
-                    adapter.setOnLongItemClickListener(new AdminProductAdapter.OnLongItemClickListener() {
-                        @Override
-                        public void itemLongClicked(View v, int position) {
-                            mCurrentItemPosition = position;
-                            v.showContextMenu();
-                        }
-                    });
-                    break;
-                case ERROR:
-                    Log.e(TAG, resource.message);
-                    break;
-                case LOADING:
-                    break;
-                default: break;
-            }
-        });
-        rclProductList.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-
-        rclProductList.addItemDecoration(new GridItemDecoration(2, 88, false));
-        registerForContextMenu(rclProductList);
-
+        initDefaultFilters();
+        initView(view);
+        initDataAdapterAndViewModel();
         return view;
     }
 
@@ -95,30 +63,7 @@ public class AdminProductListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //initialize navController
         navController = Navigation.findNavController(view);
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.navigate_to_productDetails);
-            }
-        });
-
-        etSearchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //no action needed
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                adapter.getFilter().filter(charSequence);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //no action needed
-            }
-        });
+        handleEvents();
     }
 
     @Override
@@ -144,5 +89,119 @@ public class AdminProductListFragment extends Fragment {
                 return super.onContextItemSelected(item);
         }
         return true;
+    }
+
+    private void showBottomSheetDialog() {
+        ProductFilterDialog orderFilterDialog = new ProductFilterDialog(filterOptions);
+
+        orderFilterDialog.setOnFilterSelectedListener(new OrderFilterDialog.OnFilterSelectedListener() {
+            @Override
+            public void onFilterSelected(List<String> options) {
+                filterOptions.clear();
+                filterOptions.addAll(options);
+                Snackbar.make(requireView(), "Filters are applied!", Snackbar.LENGTH_SHORT).show();
+                adapter.setTypeAdapter(filterOptions.get(1), filterOptions.get(0));
+                if(adapter.getListSize() > 1) {
+                    tvFoundText.setText("Found " + adapter.getListSize() + " results");
+                } else {
+                    tvFoundText.setText("Found " + adapter.getListSize() + " result");
+                }
+            }
+        });
+        orderFilterDialog.show(getChildFragmentManager(), orderFilterDialog.getTag());
+    }
+
+    public void initDefaultFilters() {
+        filterOptions = new ArrayList<>();
+        filterOptions.add("Created Date");
+        filterOptions.add("All");
+        filterOptions.add("Product Name Option");
+    }
+
+    public List<String> getFilterOptions() {
+        return filterOptions;
+    }
+
+    private void initDataAdapterAndViewModel() {
+        //Init array
+        products = new ArrayList<>();
+
+        //Initialize ViewModel
+        viewModel = new ViewModelProvider(getActivity()).get(AdminProductManagementViewModel.class);
+
+        //Initialize adapter
+        viewModel.getAllProductWithNoCriteria().observe(getViewLifecycleOwner(), resource -> {
+            switch(resource.status) {
+                case SUCCESS:
+                    products = resource.data;
+                    adapter = new AdminProductAdapter(this, resource.data);
+                    rclProductList.setAdapter(adapter);
+                    if(adapter.getListSize() > 1) {
+                        tvFoundText.setText("Found " + adapter.getListSize() + " results");
+                    } else {
+                        tvFoundText.setText("Found " + adapter.getListSize() + " result");
+                    }
+                    adapter.setOnLongItemClickListener(new AdminProductAdapter.OnLongItemClickListener() {
+                        @Override
+                        public void itemLongClicked(View v, int position) {
+                            mCurrentItemPosition = position;
+                            v.showContextMenu();
+                        }
+                    });
+                    break;
+                case ERROR:
+                    Log.e(TAG, resource.message);
+                    break;
+                case LOADING:
+                    break;
+                default: break;
+            }
+        });
+        rclProductList.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rclProductList.addItemDecoration(new GridItemDecoration(2, 88, false));
+        registerForContextMenu(rclProductList);
+    }
+    private void initView(View view) {
+        btnFilter = view.findViewById(R.id.btnFilter);
+        rclProductList = view.findViewById(R.id.RclProductList);
+        btnAdd = view.findViewById(R.id.btnAdd);
+        etSearchText = view.findViewById(R.id.etSearchText);
+        tvFoundText = view.findViewById(R.id.tvFoundText);
+    }
+
+    private void handleEvents() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.navigate_to_productDetails);
+            }
+        });
+
+        etSearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //no action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.getFilter().filter(charSequence);
+                if(adapter.getListSize() > 1) {
+                    tvFoundText.setText("Found " + adapter.getListSize() + " results");
+                } else {
+                    tvFoundText.setText("Found " + adapter.getListSize() + " result");
+                }
+                Log.i("list", String.valueOf(adapter.getItemCount()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //no action needed
+            }
+        });
+
+        btnFilter.setOnClickListener(v -> {
+            showBottomSheetDialog();
+        });
     }
 }

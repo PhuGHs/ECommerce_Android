@@ -46,79 +46,18 @@ public class AdminOrderedListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_fragmnet_orderlist, container, false);
-        rclOrders = view.findViewById(R.id.rclOrders);
-
         initDefaultFilters();
-        tvFoundText = view.findViewById(R.id.tvFoundText);
-        etSeacrchText = view.findViewById(R.id.etSearchText);
-        btnFilter = view.findViewById(R.id.btnFilter);
-        viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
-        rclOrders.setLayoutManager(new LinearLayoutManager(getContext()));
-        rclOrders.addItemDecoration(new VerticalItemDecoration(30));
-        orders = new ArrayList<>();
-        adapter = new AdminOrderManagementAdapter(orders, this);
-        rclOrders.setAdapter(adapter);
+        initView(view);
+        initViewModelDataAndAdapter();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        viewModel.addDummyOrder();
         navController = Navigation.findNavController(requireView());
-
-        btnFilter.setOnClickListener(v -> {
-            showBottomSheetDialog();
-        });
-
-        viewModel.getOrders().observe(getViewLifecycleOwner(), resource -> {
-            switch(resource.status) {
-                case LOADING:
-                    break;
-                case ERROR:
-                    CustomToast toast = new CustomToast();
-                    toast.ShowToastMessage(getContext(), 2, "error getting orders");
-                    break;
-                case SUCCESS:
-                    if(resource.data != null) {
-                        orders.addAll(resource.data);
-                        adapter.setBackUpList(resource.data);
-                        adapter.notifyDataSetChanged();
-                        if(adapter.getItemCount() > 1) {
-                            tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
-                        } else if (adapter.getListSize() == 0) {
-                            tvFoundText.setText("");
-                        } else {
-                            tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
-                        }
-                    }
-                    break;
-            }
-        });
-
-        etSeacrchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                adapter.getFilter().filter(charSequence);
-                if(adapter.getItemCount() > 1) {
-                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
-                } else if (adapter.getListSize() == 0) {
-                    tvFoundText.setText("");
-                } else {
-                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        getData();
+        handleEvents();
     }
 
     private void showBottomSheetDialog() {
@@ -156,5 +95,75 @@ public class AdminOrderedListFragment extends Fragment {
 
     public List<String> getFilterOptions() {
         return filterOptions;
+    }
+    private void initViewModelDataAndAdapter() {
+        viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
+        rclOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+        rclOrders.addItemDecoration(new VerticalItemDecoration(30));
+        orders = new ArrayList<>();
+        adapter = new AdminOrderManagementAdapter(orders, this);
+        rclOrders.setAdapter(adapter);
+    }
+    private void initView(View view) {
+        rclOrders = view.findViewById(R.id.rclOrders);
+        tvFoundText = view.findViewById(R.id.tvFoundText);
+        etSeacrchText = view.findViewById(R.id.etSearchText);
+        btnFilter = view.findViewById(R.id.btnFilter);
+
+    }
+    private void handleEvents() {
+        btnFilter.setOnClickListener(v -> {
+            showBottomSheetDialog();
+        });
+
+        etSeacrchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.getFilter().filter(charSequence);
+                if(adapter.getItemCount() > 1) {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
+                } else if (adapter.getListSize() == 0) {
+                    tvFoundText.setText("");
+                } else {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+    private void getData() {
+        viewModel.getOrders().observe(getViewLifecycleOwner(), resource -> {
+            switch(resource.status) {
+                case LOADING:
+                    break;
+                case ERROR:
+                    CustomToast toast = new CustomToast();
+                    toast.ShowToastMessage(getContext(), 2, "error getting orders");
+                    break;
+                case SUCCESS:
+                    if(resource.data != null) {
+                        orders.addAll(resource.data);
+                        adapter.setBackUpList(resource.data);
+                        adapter.notifyDataSetChanged();
+                        if(adapter.getItemCount() > 1) {
+                            tvFoundText.setText("Found " + adapter.getItemCount() + " results");
+                        } else if (adapter.getListSize() == 0) {
+                            tvFoundText.setText("");
+                        } else {
+                            tvFoundText.setText("Found " + adapter.getItemCount() + " result");
+                        }
+                    }
+                    break;
+            }
+        });
     }
 }

@@ -1,7 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +51,42 @@ public class AdminOrderDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.admin_fragment_order_detail, container, false);
 
-        //region Initialization
-        //Initialize view
+        initView(view);
+
+        viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
+
+        if(getArguments() != null) {
+            order = getArguments().getParcelable("orderInfo");
+        }
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        navController = Navigation.findNavController(requireView());
+        customStepView();
+        assignData();
+        handleEvents();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    private void initView(View view) {
         btnBack = view.findViewById(R.id.btnBackOrderDetail);
         btnMarkAs = view.findViewById(R.id.btnMarkAs);
         tvHeader = view.findViewById(R.id.header_title);
@@ -70,32 +103,9 @@ public class AdminOrderDetailsFragment extends Fragment {
         tvTotal = view.findViewById(R.id.tvTotal);
         rclProductItem = view.findViewById(R.id.RclOrderItemList);
         stepView = view.findViewById(R.id.step_view);
-
-        //initialize viewModel
-        viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
-        //endregion
-
-        if(getArguments() != null) {
-            order = getArguments().getParcelable("orderInfo");
-        }
-
-        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        navController = Navigation.findNavController(requireView());
-
-
-        if(order == null) {
-            Log.e("AdminOrderDetailsFragment", "Order null");
-        } else {
-            Log.i("list", String.valueOf(order.getItems().size()));
-        }
-
-        //custom stepView
+    private void customStepView() {
         stepView.getState()
                 .selectedTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent))
                 .animationType(StepView.ANIMATION_CIRCLE)
@@ -119,18 +129,16 @@ public class AdminOrderDetailsFragment extends Fragment {
                 .commit();
 
         if(Objects.equals(order.getStatus(), "Pending")) {
-//            btnMarkAs.setText("CONFIRM");
         } else if (Objects.equals(order.getStatus(), "Confirmed")) {
             stepView.go(1, true);
-//            btnMarkAs.setText("Mark as packaged");
         } else if (Objects.equals(order.getStatus(), "Packaged")) {
             stepView.go(2, true);
         } else if (Objects.equals(order.getStatus(), "Delivered")) {
             stepView.go(3, true);
             btnMarkAs.setVisibility(View.GONE);
         }
-
-        //region assign
+    }
+    private void assignData() {
         rclProductItem.setLayoutManager(new LinearLayoutManager(getContext()));
         rclProductItem.addItemDecoration(new VerticalItemDecoration(20));
         rclProductItem.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
@@ -148,15 +156,13 @@ public class AdminOrderDetailsFragment extends Fragment {
         tvAddress.setText(order.getAddress());
         tvSubtotal.setText(CurrencyFormat.getVNDCurrency(order.getSubtotal()));
         tvTotal.setText(CurrencyFormat.getVNDCurrency(order.getSubtotal() - order.getTotalDiscount()));
-        //endregion
-
-        //region btn click event handlers
+    }
+    private void handleEvents() {
         btnBack.setOnClickListener(v -> {
             navController.popBackStack();
         });
 
         btnMarkAs.setOnClickListener(v -> {
-//            stepView.done(true);
             stepView.go(1, true);
             String status = "";
             switch(order.getStatus()) {
@@ -171,13 +177,8 @@ public class AdminOrderDetailsFragment extends Fragment {
                     break;
             }
             viewModel.updateOrder(order.getId(), status);
-//            CustomToast toast = new CustomToast();
-//            toast.ShowToastMessage(getContext(), 1, "Updated order status!!");
             Snackbar.make(requireView(), "Updated order status", Snackbar.LENGTH_SHORT).show();
         });
-        //endregion
-
-
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -185,19 +186,5 @@ public class AdminOrderDetailsFragment extends Fragment {
                 navController.popBackStack();
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
-        bottomNavigationView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
-        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }
