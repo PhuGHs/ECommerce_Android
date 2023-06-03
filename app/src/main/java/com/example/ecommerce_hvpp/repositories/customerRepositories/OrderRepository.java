@@ -35,7 +35,7 @@ public class OrderRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Order> orders = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(UID)){
+                        if (snapshot.getString("customerId").equals(UID)){
                             String title = snapshot.getString("name");
                             String id = snapshot.getString("id");
                             Date date_end = snapshot.getDate("receiveDate");
@@ -99,4 +99,5 @@ public class OrderRepository {
         daysBetween = (int) (difference / (1000 * 60 * 60 * 24));
         return daysBetween;
     }
+
 }

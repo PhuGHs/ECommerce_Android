@@ -50,17 +50,16 @@ public class OrderHistoryRepository {
         firebaseHelper = FirebaseHelper.getInstance();
     }
     public LiveData<List<OrderHistoryItem>> getAll_OrderHistories(String UID) {
-        firebaseHelper.getCollection("Order").get()
+        firebaseHelper.getCollection("users").document(UID).collection("orderhistory")
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<OrderHistoryItem> orderhistories = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(UID)){
-                            Timestamp time_order = snapshot.getTimestamp("createdDate");
-                            long all_quantity = snapshot.getLong("totalQuantity");
-                            double sum_of_order = snapshot.getDouble("totalPrice");
-                            Log.d(TAG,  "Tong san pham: " + all_quantity);
-                            orderhistories.add(new OrderHistoryItem(snapshot.getId(), all_quantity, sum_of_order, time_order.getSeconds()*1000));
-                        }
+                        Timestamp time_order = snapshot.getTimestamp("createdDate");
+                        long all_quantity = snapshot.getLong("totalQuantity");
+                        double sum_of_order = snapshot.getDouble("totalPrice");
+                        Log.d(TAG,  "Tong san pham: " + all_quantity);
+                        orderhistories.add(new OrderHistoryItem(snapshot.getId(), all_quantity, sum_of_order, time_order.getSeconds()*1000));
                     }
                     _mldListOrderHistory.setValue(orderhistories);
                 })
@@ -69,17 +68,21 @@ public class OrderHistoryRepository {
                 });
         return _mldListOrderHistory;
     }
-    public LiveData<List<OrderHistorySubItem>> getAll_ItemsOfOrder(String UID){
-        firebaseHelper.getCollection("Order").document(UID).collection("items")
+    public LiveData<List<OrderHistorySubItem>> getAll_ItemsOfOrder(String UID, String orderId){
+        firebaseHelper.getCollection("users").document(UID).collection("bought_items")
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     List<OrderHistorySubItem> items = new ArrayList<>();
                     for (QueryDocumentSnapshot snapshot : documentSnapshot){
-                        String image = snapshot.getString("image");
-                        String name = snapshot.getString("name");
-                        double price = snapshot.getDouble("price");
-                        long quantity = snapshot.getLong("quantity");
-                        items.add(new OrderHistorySubItem(image, name, Long.toString(quantity), price));
+                        if (snapshot.getString("orderId").equals(orderId)){
+                            String productid = snapshot.getString("productId");
+                            String image = snapshot.getString("image");
+                            String name = snapshot.getString("name");
+                            double price = snapshot.getDouble("price");
+                            long quantity = snapshot.getLong("quantity");
+                            boolean isreviewed = snapshot.getBoolean("isReviewed");
+                            items.add(new OrderHistorySubItem(productid, image, name, Long.toString(quantity), price, isreviewed));
+                        }
                     }
                     _mldListSubOrderHistory.setValue(items);
                 })
@@ -88,8 +91,9 @@ public class OrderHistoryRepository {
                 });
         return _mldListSubOrderHistory;
     }
-    public LiveData<Order> getOrderInfo(String UID){
-        firebaseHelper.getCollection("Order").document(UID).get()
+    public LiveData<Order> getOrderInfo(String UID, String orderId){
+        firebaseHelper.getCollection("users").document(UID).collection("orderhistory").document(orderId)
+                .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if(documentSnapshot.exists()) {
                         Timestamp createdDate = documentSnapshot.getTimestamp("createdDate");
@@ -107,13 +111,12 @@ public class OrderHistoryRepository {
         return orderInfo;
     }
     public LiveData<Integer> getNum_of_completeOrder(String UID){
-        firebaseHelper.getCollection("Order").get()
+        firebaseHelper.getCollection("users").document(UID).collection("orderhistory")
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int count = 0;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(UID)){
-                            count++;
-                        }
+                        count++;
                     }
                     num_of_completeorder.setValue(count);
                     Log.d(TAG, "num order " + count);
@@ -125,14 +128,13 @@ public class OrderHistoryRepository {
         return num_of_completeorder;
     }
     public LiveData<Double> getTotal_of_MoneyPaid(String UID){
-        firebaseHelper.getCollection("Order").get()
+        firebaseHelper.getCollection("users").document(UID).collection("orderhistory")
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     double total_sum = 0;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(UID)){
-                            double price = snapshot.getDouble("totalPrice");
-                            total_sum = total_sum + price;
-                        }
+                        double price = snapshot.getDouble("totalPrice");
+                        total_sum = total_sum + price;
                     }
                     total_moneypaid.setValue(total_sum);
                     Log.d(TAG, "total sum " + total_sum);

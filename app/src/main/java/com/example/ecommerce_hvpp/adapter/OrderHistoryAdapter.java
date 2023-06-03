@@ -83,7 +83,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.sum_of_order_tv.setText(Double.toString(item.getSum_of_order()));
         Log.d(TAG, "id cua order: " + item.getID_of_Order());
 
-        getFirst_Item(holder.itemView.getContext(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);
+        getFirst_Item(holder.itemView.getContext(), item.getID_of_Order(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);
 
         holder.more_detail_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,42 +134,27 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         return formattedTime;
     }
-    public void getFirst_Item(Context view, ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
+    public void getFirst_Item(Context view, String orderId ,ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
         FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        firebaseHelper.getCollection("Order").get()
+        firebaseHelper.getCollection("users").document(fbUser.getUid()).collection("bought_items")
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customer_id").equals(fbUser.getUid())){
-                            db.collection("Order").document(snapshot.getId()).collection("items")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (DocumentSnapshot document : task.getResult()) {
-                                                    String image_path = document.getString("image");
-                                                    String name = document.getString("name");
-                                                    long price = document.getLong("price");
-                                                    long quantity = document.getLong("quantity");
+                        if (snapshot.getString("orderId").equals(orderId)){
+                            String image_path = snapshot.getString("image");
+                            String name = snapshot.getString("name");
+                            long price = snapshot.getLong("price");
+                            long quantity = snapshot.getLong("quantity");
 
-                                                    Glide.with(view).load(image_path).fitCenter().into(image_item);
-                                                    name_item_tv.setText(name);
-                                                    quantity_item_tv.setText("Quantity: " + Long.toString(quantity));
-                                                    price_item_tv.setText("$" + Double.toString(price));
-                                                    Log.d(TAG,  "Lay 1 san pham thanh cong ");
-
-                                                    break;
-                                                }
-
-                                            } else {
-                                                Log.d(TAG, "Error getting documents: ", task.getException());
-                                            }
-                                        }
-                                    });
-                            break;
+                            Glide.with(view).load(image_path).fitCenter().into(image_item);
+                            name_item_tv.setText(name);
+                            quantity_item_tv.setText("Quantity: " + Long.toString(quantity));
+                            price_item_tv.setText("$" + Double.toString(price));
+                            Log.d(TAG,  "Lay 1 san pham thanh cong ");
                         }
+                        break;
                     }
                 })
                 .addOnFailureListener(e -> {

@@ -38,6 +38,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/reviewed_navigate"
+            android:clickable="true"
             android:layout_marginRight="230px"
             style="@style/regularfont"
             android:text="Reviewed"
@@ -57,6 +59,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/list_unreviewed"
         android:layout_marginTop="50px"
-        android:layout_marginLeft="50px"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"/>
 
 </LinearLayout>

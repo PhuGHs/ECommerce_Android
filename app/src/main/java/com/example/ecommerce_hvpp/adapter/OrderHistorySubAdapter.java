@@ -50,13 +50,17 @@ public class OrderHistorySubAdapter extends RecyclerView.Adapter<OrderHistorySub
         holder.quantity_tv.setText("Quantity: " + subItem.getQuantity_subItem());
         holder.sum_of_sub_tv.setText("$" + Double.toString(subItem.getSum_subItem()));
         Glide.with(holder.itemView).load(subItem.getImagePath_subItem()).fitCenter().into(holder.image);
+        if (subItem.isReviewed() == true){
+            holder.review_btn.setVisibility(View.INVISIBLE);
+        }
 
         holder.review_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Bundle bundle = new Bundle(); Get data soon
+                Bundle bundle = new Bundle();
+                bundle.putString("productId", subItem.getProductID());
 
-                parent.getNavController().navigate(R.id.navigate_to_feedback);
+                parent.getNavController().navigate(R.id.navigate_to_feedback, bundle);
             }
         });
     }

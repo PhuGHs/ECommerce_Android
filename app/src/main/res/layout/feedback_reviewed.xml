@@ -61,7 +61,7 @@
             style="@style/regularfont"/>
 
         <LinearLayout
-            android:layout_width="800px"
+            android:layout_width="750px"
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"
             android:layout_marginBottom="20px"

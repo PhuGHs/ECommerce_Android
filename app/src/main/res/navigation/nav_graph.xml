@@ -106,7 +106,11 @@
         android:id="@+id/FeedbackFragment_Unreviewed"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.UnreviewedFeedbackFragment"
         android:label="fragment_unreviewed_feedback"
-        tools:layout="@layout/activity_feedback_unreviewed"/>
+        tools:layout="@layout/activity_feedback_unreviewed">
+        <action
+            android:id="@+id/navigate_to_feedback_unreview"
+            app:destination="@id/FeedbackFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/OrderHistoryDetailFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryDetailFragment"

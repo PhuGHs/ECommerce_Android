@@ -233,7 +233,7 @@ public class AccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             int count = 0;
                             for (DocumentSnapshot document : task.getResult()) {
-                                if (document.getString("customer_id").equals(fbUser.getUid())){
+                                if (document.getString("customerId").equals(fbUser.getUid())){
                                     count++;
                                 }
                             }

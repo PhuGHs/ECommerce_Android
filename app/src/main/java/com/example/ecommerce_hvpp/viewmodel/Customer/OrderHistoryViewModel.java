@@ -23,10 +23,12 @@ public class OrderHistoryViewModel extends ViewModel {
         return repo.getAll_OrderHistories(fbUser.getUid());
     }
     public LiveData<Order> showOrderInfo(String order_id){
-        return repo.getOrderInfo(order_id);
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getOrderInfo(fbUser.getUid(), order_id);
     }
     public LiveData<List<OrderHistorySubItem>> showItemsofOrder(String order_id){
-        return repo.getAll_ItemsOfOrder(order_id);
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getAll_ItemsOfOrder(fbUser.getUid(), order_id);
     }
     public LiveData<Integer> showNumofOrder(){
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();

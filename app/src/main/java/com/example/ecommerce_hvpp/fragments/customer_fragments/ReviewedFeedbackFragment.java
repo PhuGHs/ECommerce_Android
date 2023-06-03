@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +58,7 @@ public class ReviewedFeedbackFragment extends Fragment {
     }
     private NavController navController;
     private ImageButton back_Account_btn;
+    private TextView unreviewed_navigate;
     private RecyclerView recyclerview;
     private LinearLayoutManager linearLayoutManager;
     private ReviewFeedBackAdapter adapter;
@@ -86,11 +88,18 @@ public class ReviewedFeedbackFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
         back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
+        unreviewed_navigate = (TextView) view.findViewById(R.id.unreviewed_navigate);
 
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.accountFragment);
+            }
+        });
+        unreviewed_navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.FeedbackFragment_Unreviewed);
             }
         });
     }
