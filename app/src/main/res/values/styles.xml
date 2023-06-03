@@ -74,4 +74,8 @@
         <item name="fontFamily">@font/crimson_pro</item>
         <item name="android:textSize">36sp</item>
     </style>
+    <style name="w500_60">
+        <item name="fontFamily">@font/crimson_pro_medium</item>
+        <item name="android:textSize">23sp</item>
+    </style>
 </resources>

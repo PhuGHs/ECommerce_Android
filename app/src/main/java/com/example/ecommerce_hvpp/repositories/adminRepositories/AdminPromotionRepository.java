@@ -139,7 +139,10 @@ public class AdminPromotionRepository {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        edtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        int currMonth = monthOfYear + 1;
+                        @SuppressLint("DefaultLocale") String formattedDay = String.format(Locale.getDefault(), "%02d", dayOfMonth);
+                        @SuppressLint("DefaultLocale") String formattedMonth = String.format(Locale.getDefault(), "%02d", currMonth);
+                        edtDate.setText(formattedDay + "/" + formattedMonth + "/" + year);
 
                     }
                 }, mYear, mMonth, mDay);

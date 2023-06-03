@@ -1,8 +1,13 @@
 package com.example.ecommerce_hvpp.util;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+
 
 public class constant {
     public static final int CUSTOMER_MANAGEMENT = 100;
@@ -21,4 +26,6 @@ public class constant {
 
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat templateDate = new SimpleDateFormat("dd/MM/yyyy");
+
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 }

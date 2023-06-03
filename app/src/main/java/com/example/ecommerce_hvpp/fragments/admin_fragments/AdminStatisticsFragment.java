@@ -1,6 +1,9 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.mListDataStatistics;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +15,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticsBinding;
-import com.example.ecommerce_hvpp.viewmodel.admin.AdminStatisticsViewModel;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
+import com.example.ecommerce_hvpp.util.Resource;
+import com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Map;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AdminStatisticsFragment extends Fragment {
     AdminFragmentStatisticsBinding mAdminFragmentStatisticsBinding;
     AdminStatisticsViewModel vmAdminStatistics;
+    AdminStatisticsRepository repo;
+    Observer<Resource<Map<String, Integer>>> observer;
+    Observable<Resource<Map<String, Integer>>> observable;
+    Disposable disposable;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,11 +46,16 @@ public class AdminStatisticsFragment extends Fragment {
         vmAdminStatistics = new ViewModelProvider(requireActivity()).get(AdminStatisticsViewModel.class);
         mAdminFragmentStatisticsBinding.setAdminStatisticsViewModel(vmAdminStatistics);
 
-        // get data
-        getData();
+        // init repo
+        repo = new AdminStatisticsRepository();
 
-        // display data
-        displayData();
+        // init observable
+        observable = repo.getObservableStatisticsOrders();
+        observer = getObserverData();
+
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
 
         // on click back page
         mAdminFragmentStatisticsBinding.adminStatisticsHeaderBack.setOnClickListener(onClickBackPage());
@@ -39,13 +63,13 @@ public class AdminStatisticsFragment extends Fragment {
         return mAdminFragmentStatisticsBinding.getRoot();
     }
 
-    private void getData() {
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.test_bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
     }
 
-    private void displayData() {
-
-    }
 
     private View.OnClickListener onClickBackPage() {
         return new View.OnClickListener() {
@@ -53,6 +77,46 @@ public class AdminStatisticsFragment extends Fragment {
             public void onClick(View view) {
                 NavController navController = Navigation.findNavController(view);
                 navController.popBackStack();
+            }
+        };
+    }
+
+    private Observer<Resource<Map<String, Integer>>> getObserverData() {
+        return new Observer<Resource<Map<String, Integer>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Integer>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        mListDataStatistics = resource.data;
+                        assert mListDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
             }
         };
     }
