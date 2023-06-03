@@ -73,6 +73,9 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
     public int getItemCount() {
         return list.isEmpty() ? 1 : list.size();
     }
+    public int getListSize() {
+        return list.size();
+    }
 
     private Filter orderFilter = new Filter() {
         @Override
@@ -130,59 +133,18 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
         Log.i("Type", type);
         Log.i("Order", order);
 
-        if(type.equals("All")) {
-            if(list.size() == 0 || list == null) {
-                list.addAll(backUpList);
-            }
-            notifyDataSetChanged();
-        } else if(type.equals("Pending")) {
+        list.clear();
+        list.addAll(backUpList);
+
+        if (!type.equals("All")) {
             typeList = new ArrayList<>();
-            list.clear();
-            list.addAll(backUpList);
-            for(Order or : list) {
+            for (Order or : list) {
                 if (or.getStatus().equals(type)) {
                     typeList.add(or);
                 }
             }
             list.clear();
             list.addAll(typeList);
-            notifyDataSetChanged();
-        } else if (type.equals("Confirmed")) {
-            typeList = new ArrayList<>();
-            list.clear();
-            list.addAll(backUpList);
-            for(Order or : list) {
-                if (or.getStatus().equals(type)) {
-                    typeList.add(or);
-                }
-            }
-            list.clear();
-            list.addAll(typeList);
-            notifyDataSetChanged();
-        } else if (type.equals("Packaged")) {
-            typeList = new ArrayList<>();
-            list.clear();
-            list.addAll(backUpList);
-            for(Order or : list) {
-                if (or.getStatus().equals(type)) {
-                    typeList.add(or);
-                }
-            }
-            list.clear();
-            list.addAll(typeList);
-            notifyDataSetChanged();
-        } else {
-            typeList = new ArrayList<>();
-            list.clear();
-            list.addAll(backUpList);
-            for(Order or : list) {
-                if (or.getStatus().equals(type)) {
-                    typeList.add(or);
-                }
-            }
-            list.clear();
-            list.addAll(typeList);
-            notifyDataSetChanged();
         }
 
         Collections.sort(list, new Comparator<Order>() {
@@ -192,11 +154,11 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
                 if (selectedSortOption.equals("Price")) {
                     return Double.compare(t1.getTotalPrice(), order.getTotalPrice());
                 } else {
-                    return Long.compare(order.getCreatedDate(), t1.getCreatedDate());
+                    return Long.compare(t1.getCreatedDate(), order.getCreatedDate());
                 }
             }
         });
-        Collections.reverse(list);
+
         notifyDataSetChanged();
     }
 

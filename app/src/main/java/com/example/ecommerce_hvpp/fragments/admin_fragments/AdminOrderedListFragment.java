@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,7 @@ public class AdminOrderedListFragment extends Fragment {
     private ImageView btnFilter;
     private List<String> filterOptions;
     private EditText etSeacrchText;
+    private TextView tvFoundText;
 
     @Nullable
     @Override
@@ -47,6 +49,7 @@ public class AdminOrderedListFragment extends Fragment {
         rclOrders = view.findViewById(R.id.rclOrders);
 
         initDefaultFilters();
+        tvFoundText = view.findViewById(R.id.tvFoundText);
         etSeacrchText = view.findViewById(R.id.etSearchText);
         btnFilter = view.findViewById(R.id.btnFilter);
         viewModel = new ViewModelProvider(this).get(AdminOrderManagementViewModel.class);
@@ -81,6 +84,13 @@ public class AdminOrderedListFragment extends Fragment {
                         orders.addAll(resource.data);
                         adapter.setBackUpList(resource.data);
                         adapter.notifyDataSetChanged();
+                        if(adapter.getItemCount() > 1) {
+                            tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
+                        } else if (adapter.getListSize() == 0) {
+                            tvFoundText.setText("");
+                        } else {
+                            tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
+                        }
                     }
                     break;
             }
@@ -95,6 +105,13 @@ public class AdminOrderedListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 adapter.getFilter().filter(charSequence);
+                if(adapter.getItemCount() > 1) {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
+                } else if (adapter.getListSize() == 0) {
+                    tvFoundText.setText("");
+                } else {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
+                }
             }
 
             @Override
@@ -114,6 +131,13 @@ public class AdminOrderedListFragment extends Fragment {
                 filterOptions.addAll(options);
                 Snackbar.make(requireView(), "Filters are applied!", Snackbar.LENGTH_SHORT).show();
                 adapter.setTypeAdapter(filterOptions.get(1), filterOptions.get(0));
+                if(adapter.getItemCount() > 1) {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
+                } else if (adapter.getListSize() == 0) {
+                    tvFoundText.setText("");
+                } else {
+                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
+                }
             }
         });
         orderFilterDialog.show(getChildFragmentManager(), orderFilterDialog.getTag());
