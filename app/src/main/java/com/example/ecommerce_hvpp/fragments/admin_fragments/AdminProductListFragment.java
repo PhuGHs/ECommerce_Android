@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -74,11 +75,15 @@ public class AdminProductListFragment extends Fragment {
         menu.setHeaderTitle("Options");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch(id) {
             case R.id.delete_btn:
+                viewModel.deleteProductWithId(products.get(mCurrentItemPosition).getId(), "disabled");
+                products.remove(products.get(mCurrentItemPosition));
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.edit_btn:
                 Bundle bundle = new Bundle();

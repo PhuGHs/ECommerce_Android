@@ -68,6 +68,11 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
 
     @Override
     public int getItemCount() {
+        if(list.size() > 1) {
+            parent.getTvFoundText().setText("Found " + list.size() + " results");
+        } else {
+            parent.getTvFoundText().setText("Found " + list.size() + " result");
+        }
         return list.isEmpty() ? 0 : list.size();
     }
 

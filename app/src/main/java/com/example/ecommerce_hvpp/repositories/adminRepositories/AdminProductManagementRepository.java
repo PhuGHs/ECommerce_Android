@@ -48,7 +48,7 @@ public class AdminProductManagementRepository {
 
     public LiveData<Resource<List<Product>>> getAllProductWithNoCriteria() {
         _mldProductList.setValue(Resource.loading(null));
-        fbHelper.getCollection("Product").get()
+        fbHelper.getCollection("Product").whereEqualTo("status", "available").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -166,6 +166,12 @@ public class AdminProductManagementRepository {
                 })
                 .addOnFailureListener(e -> {
                 });
+    }
+
+    public void updateProductStatus(String Id, String status) {
+        fbHelper.getCollection("Product").document(Id).update("status", status)
+                .addOnSuccessListener(aVoid -> {})
+                .addOnFailureListener(e -> {});
     }
 
     public LiveData<Resource<String>> updateProduct(Product pd) {
