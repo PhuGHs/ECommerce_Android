@@ -119,6 +119,14 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
                 list.addAll(filteredList);
             }
 
+            if(list.size() > 1) {
+                parent.getTvFoundText().setText("Found " + list.size() + " results");
+            } else if (list.size() == 0) {
+                parent.getTvFoundText().setText("");
+            } else {
+                parent.getTvFoundText().setText("Found " + list.size() + " result");
+            }
+
             notifyDataSetChanged();
         }
     };

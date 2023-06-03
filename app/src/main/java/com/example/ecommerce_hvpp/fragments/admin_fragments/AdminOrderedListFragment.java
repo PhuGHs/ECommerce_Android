@@ -125,13 +125,6 @@ public class AdminOrderedListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 adapter.getFilter().filter(charSequence);
-                if(adapter.getItemCount() > 1) {
-                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
-                } else if (adapter.getListSize() == 0) {
-                    tvFoundText.setText("");
-                } else {
-                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
-                }
             }
 
             @Override
@@ -165,5 +158,9 @@ public class AdminOrderedListFragment extends Fragment {
                     break;
             }
         });
+    }
+
+    public TextView getTvFoundText() {
+        return tvFoundText;
     }
 }

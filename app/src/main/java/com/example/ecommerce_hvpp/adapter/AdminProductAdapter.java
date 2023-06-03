@@ -116,6 +116,12 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
             if (filteredList != null) {
                 list.clear();
                 list.addAll(filteredList);
+
+                if(list.size() > 1) {
+                    parent.getTvFoundText().setText("Found " + list.size() + " results");
+                } else {
+                    parent.getTvFoundText().setText("Found " + list.size() + " result");
+                }
                 notifyDataSetChanged();
             }
         }

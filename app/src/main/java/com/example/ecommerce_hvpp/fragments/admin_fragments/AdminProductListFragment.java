@@ -186,12 +186,6 @@ public class AdminProductListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 adapter.getFilter().filter(charSequence);
-                if(adapter.getListSize() > 1) {
-                    tvFoundText.setText("Found " + adapter.getListSize() + " results");
-                } else {
-                    tvFoundText.setText("Found " + adapter.getListSize() + " result");
-                }
-                Log.i("list", String.valueOf(adapter.getItemCount()));
             }
 
             @Override
@@ -203,5 +197,9 @@ public class AdminProductListFragment extends Fragment {
         btnFilter.setOnClickListener(v -> {
             showBottomSheetDialog();
         });
+    }
+
+    public TextView getTvFoundText() {
+        return tvFoundText;
     }
 }
