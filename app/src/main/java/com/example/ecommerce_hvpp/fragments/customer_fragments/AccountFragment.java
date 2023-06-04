@@ -40,6 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +93,7 @@ public class AccountFragment extends Fragment {
     private TextView name_tv;
     private TextView number_of_voucher_tv;
     private TextView number_of_orderprogress_tv;
+    private TextView number_of_feedback_tv;
     private ImageView ava_image;
     private String size_text = "";
     @Override
@@ -114,6 +117,7 @@ public class AccountFragment extends Fragment {
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
+        number_of_feedback_tv = v.findViewById(R.id.number_feedback);
         ava_image = v.findViewById(R.id.image_of_user);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -129,7 +133,8 @@ public class AccountFragment extends Fragment {
                        imagePath = userInfoResource.data.getImagePath();
                        Glide.with(this).load(imagePath).fitCenter().into(ava_image);
                        name_tv.setText(name);
-                       setQuantityofOrder(number_of_orderprogress_tv, "Order");
+                       setQuantity(number_of_orderprogress_tv, "Order");
+                       setQuantityFeedback(number_of_feedback_tv, "Feedback");
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -223,7 +228,7 @@ public class AccountFragment extends Fragment {
             }
         });
     }
-    public void setQuantityofOrder(TextView textView, String path){
+    public void setQuantity(TextView textView, String path){
         FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
         db.collection(path)
                 .get()
@@ -246,4 +251,28 @@ public class AccountFragment extends Fragment {
                     }
                 });
     }
+    public void setQuantityFeedback(TextView textView, String path){
+        FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
+        db.collection(path)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int count = 0;
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.getString("customer_id").equals(fbUser.getUid())){
+                                    count++;
+                                }
+                            }
+                            size_text = Integer.toString(count);
+                            textView.setText(size_text);
+                            Log.d(TAG, path + ": " + size_text);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 }

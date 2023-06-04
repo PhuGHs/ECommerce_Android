@@ -60,7 +60,7 @@ public class UnreviewFeedBackAdapter extends RecyclerView.Adapter<UnreviewFeedBa
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("orderId_unreviewed", item.getProductID());
+                bundle.putString("productId", item.getProductID());
                 parent.getNavController().navigate(R.id.navigate_to_feedback_unreview, bundle);
             }
         });

@@ -2,6 +2,7 @@ package com.example.ecommerce_hvpp.repositories.customerRepositories;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,16 +14,22 @@ import com.example.ecommerce_hvpp.model.OrderDetail;
 import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FeedBackRepository {
     private FirebaseHelper firebaseHelper;
@@ -80,5 +87,33 @@ public class FeedBackRepository {
                     _mldListUnreviewedItem.setValue(null);
                 });
         return _mldListUnreviewedItem;
+    }
+    public void addFeedback(String UID, String content, float point, String product_id, Timestamp date){
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        Map<String, Object> feedback = new HashMap<>();
+        feedback.put("comment", content);
+        feedback.put("point", point);
+        feedback.put("customer_id", UID);
+        feedback.put("product_id", product_id);
+        feedback.put("date", date);
+
+        fs.collection("Feedback").document().set(feedback);
+    }
+    public void updateProduct(String UID, String product_id){
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        firebaseHelper.getCollection("users").document(UID).collection("bought_items")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("productId").equals(product_id)){
+                            DocumentReference ref = fs.collection("users").document(UID).collection("bought_items").document(snapshot.getId());
+                            ref.update("isReviewed", true);
+                            Log.d(TAG, "cap nhat thanh cong");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "khong the cap nhat");
+                });
     }
 }
