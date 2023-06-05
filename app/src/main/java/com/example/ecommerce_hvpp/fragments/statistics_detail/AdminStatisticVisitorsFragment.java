@@ -31,7 +31,6 @@ public class AdminStatisticVisitorsFragment extends Fragment {
     AdminProfileRepository repoData;
     Observer<Resource<List<User>>> observer;
     Observable<Resource<List<User>>> observable;
-    private Disposable disposable;
 
     @Nullable
     @Override
@@ -40,13 +39,8 @@ public class AdminStatisticVisitorsFragment extends Fragment {
 
         // init repo
         repo = new AdminStatisticsRepository();
-        repoData = new AdminProfileRepository();
-
-        // init observable and observer
-        observable = repoData.getObservableCustomers();
 
         // init bar chart
-        initBarChart();
 
         // on click back page
         mAdminFragmentStatisticVisitorsBinding.adminStatisticsVisitorsHeaderBack.setOnClickListener(repo.onClickBackPage());
@@ -54,52 +48,8 @@ public class AdminStatisticVisitorsFragment extends Fragment {
         return mAdminFragmentStatisticVisitorsBinding.getRoot();
     }
 
-    private void initBarChart() {
-        mBarEntries = new ArrayList<>();
-
-
-    }
-
-    private Observer<Resource<List<User>>> getObserverUsers() {
-        return new Observer<Resource<List<User>>>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-                // Perform any setup here if needed
-                disposable = d;
-            }
-
-            @Override
-            public void onNext(@NonNull Resource<List<User>> resource) {
-                switch (resource.status) {
-                    case LOADING:
-                        // Handle loading state if needed
-                        break;
-                    case SUCCESS:
-                        // handle data here from resource
-                        List<User> listUsers = resource.data;
-                        break;
-                    case ERROR:
-                        Log.i("VuError", resource.message);
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                // Handle error state if needed
-            }
-
-            @Override
-            public void onComplete() {
-                // Handle completion if needed
-                Log.e("Vucoder", "onComplete");
-            }
-        };
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        disposable.dispose();
     }
 }

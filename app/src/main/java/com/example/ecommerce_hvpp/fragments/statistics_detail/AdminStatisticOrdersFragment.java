@@ -67,17 +67,7 @@ public class AdminStatisticOrdersFragment extends Fragment {
         // format line
         repo.formatLineChart(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart);
 
-        // init observable
-//        observable = repo.getObservableOrders(mListDataStatistics);
-//        observer = getObserverData();
-//
-//        observable.subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(observer);
-
-
-
-        // init chart graph (test)
+        // init chart graph
         handleFilterDate();
         handleMapToEntry(mListDataUpdate);
 
@@ -119,19 +109,6 @@ public class AdminStatisticOrdersFragment extends Fragment {
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvStartDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvEndDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
     }
-
-    private void formatLineChart() {
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.setPinchZoom(false);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.setScaleEnabled(false);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.getAxisLeft().setDrawAxisLine(true);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.setDrawGridBackground(false);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.getDescription().setEnabled(false);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.getLegend().setEnabled(true);
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.animateX(2000);
-
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart.invalidate();
-    }
-
 
     private void handleFilterDate() {
         mListDataUpdate = new LinkedHashMap<>();

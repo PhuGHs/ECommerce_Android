@@ -68,8 +68,6 @@ public class AdminStatisticsFragment extends Fragment {
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(observer);
 
-
-
         // on click back page
         mAdminFragmentStatisticsBinding.adminStatisticsHeaderBack.setOnClickListener(repo.onClickBackPage());
 
