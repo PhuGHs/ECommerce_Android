@@ -1,14 +1,12 @@
 package com.example.ecommerce_hvpp.fragments.statistics_detail;
 
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.dateFormatter;
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticOrdersBinding;
-import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
-import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminPromotionRepository;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomMarkerView;
-import com.example.ecommerce_hvpp.util.Resource;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -35,21 +30,13 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
-
 public class AdminStatisticOrdersFragment extends Fragment {
     AdminFragmentStatisticOrdersBinding mAdminFragmentStatisticOrdersBinding;
     AdminStatisticsRepository repo;
-    Observer<Resource<Map<String, Integer>>> observer;
-    Observable<Resource<Map<String, Integer>>> observable;
-    Map<String, Integer> mListData;
     Map<String, Integer> mListDataUpdate;
 
     @Nullable
@@ -277,8 +264,4 @@ public class AdminStatisticOrdersFragment extends Fragment {
         return entries;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 }

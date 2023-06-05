@@ -1,7 +1,7 @@
 package com.example.ecommerce_hvpp.adapter;
 
 import static com.example.ecommerce_hvpp.util.constant.KEY_INTENT_PROMOTION;
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -1,7 +1,7 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
 import static com.example.ecommerce_hvpp.util.constant.KEY_INTENT_PROMOTION;
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

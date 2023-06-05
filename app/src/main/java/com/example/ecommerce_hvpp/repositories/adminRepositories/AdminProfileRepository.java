@@ -1,39 +1,29 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
-import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
 import static com.example.ecommerce_hvpp.util.constant.CUSTOMER_MANAGEMENT;
 import static com.example.ecommerce_hvpp.util.constant.DATA_STATISTICS;
 import static com.example.ecommerce_hvpp.util.constant.LOG_OUT;
 import static com.example.ecommerce_hvpp.util.constant.ORDER_HISTORY;
 import static com.example.ecommerce_hvpp.util.constant.PROMOTION_MANAGEMENT;
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.Resource;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class AdminProfileRepository {
@@ -129,7 +119,6 @@ public class AdminProfileRepository {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                             OrderHistory orderHistory = snapshot.toObject(OrderHistory.class);
                             mListOrderHistory.add(orderHistory);
-                            Log.e("Vucoder", String.valueOf(orderHistory.getId()));
                         }
                         emitter.onNext(Resource.success(mListOrderHistory));
                         emitter.onComplete();

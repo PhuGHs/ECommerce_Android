@@ -1,6 +1,10 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayProductSoldDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayRevenueDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayVisitorsDataStatistics;
+import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import com.example.ecommerce_hvpp.viewmodel.admin.AdminProfileViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -35,6 +40,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AdminProfileFragment extends Fragment {
     AdminFragmentProfileBinding mAdminFragmentProfileBinding;
     AdminProfileViewModel vmAdminProfile;
+    AdminStatisticsRepository repo;
     Disposable disposable;
 
     @Nullable
@@ -42,59 +48,86 @@ public class AdminProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mAdminFragmentProfileBinding = AdminFragmentProfileBinding.inflate(inflater, container, false);
 
+        // init view model
         vmAdminProfile = new ViewModelProvider(AdminProfileFragment.this).get(AdminProfileViewModel.class);
         mAdminFragmentProfileBinding.setAdminProfileViewModel(vmAdminProfile);
         mAdminFragmentProfileBinding.setLifecycleOwner(getViewLifecycleOwner());
 
-//        testData();
-        testDataPass();
+        // init repo
+        repo = new AdminStatisticsRepository();
+
+        // get data statistics
+        getDataStatistics();
 
         return mAdminFragmentProfileBinding.getRoot();
     }
 
-    private void testDataPass() {
-        AdminStatisticsRepository repo = new AdminStatisticsRepository();
-        Observer<Resource<Map<String, Integer>>> observer = getObserverDataStatistic();
-        Observable<Resource<Map<String, Integer>>> observable = repo.getObservableStatisticsOrders();
+    private void getDataStatistics() {
+        getVisitorsDataStatistics();
+        getOrdersDataStatistics();
+        getProductSoldDataStatistics();
+        getRevenueDataStatistics();
+    }
 
-        observable.subscribeOn(Schedulers.io())
+    private void getVisitorsDataStatistics() {
+        Observer<Resource<Map<String, Integer>>> observer = getObserverVisitorsDataStatistic();
+        Observable<Resource<Map<String, Integer>>> observable = repo.getObservableVisitorsDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
-    private void testData() {
-        AdminProfileRepository repo = new AdminProfileRepository();
-        Observable<Resource<List<OrderHistory>>> observable = repo.getObservableOrderHistory();
-        Observer<Resource<List<OrderHistory>>> observer = getObserverCustomers();
-        observable.subscribeOn(Schedulers.io())
+    private void getOrdersDataStatistics() {
+        Observer<Resource<Map<String, Integer>>> observer = getObserverOrdersDataStatistic();
+        Observable<Resource<Map<String, Integer>>> observable = repo.getObservableOrdersDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-
     }
-    private Observer<Resource<List<OrderHistory>>> getObserverCustomers() {
-        return new Observer<Resource<List<OrderHistory>>>() {
+
+    private void getProductSoldDataStatistics() {
+        Observer<Resource<Map<String, Integer>>> observer = getObserverProductSoldDataStatistic();
+        Observable<Resource<Map<String, Integer>>> observable = repo.getObservableProductSoldDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    private void getRevenueDataStatistics() {
+        Observer<Resource<Map<String, Double>>> observer = getObserverRevenueDataStatistic();
+        Observable<Resource<Map<String, Double>>> observable = repo.getObservableRevenueDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    private Observer<Resource<Map<String, Integer>>> getObserverVisitorsDataStatistic() {
+        return new Observer<Resource<Map<String, Integer>>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 // Perform any setup here if needed
-                Log.e("Vucoder", "onSubscribe");
+                disposable = d;
             }
 
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
             @Override
-            public void onNext(@NonNull Resource<List<OrderHistory>> resource) {
-                Log.e("Vucoder", "onNext");
+            public void onNext(@NonNull Resource<Map<String, Integer>> resource) {
                 switch (resource.status) {
                     case LOADING:
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
+                        // handle data here from resource
+                        dayVisitorsDataStatistics = resource.data;
+                        assert dayVisitorsDataStatistics != null;
 
-                        List<OrderHistory> orderHistory = resource.data;
-                        for (OrderHistory order : orderHistory) {
-                            Log.e("Vu", String.valueOf(order.getId()));
-                        }
                         break;
                     case ERROR:
-                        Log.i("VuError", resource.message);
+                        Log.e("VuError", resource.message);
                         break;
                 }
             }
@@ -112,7 +145,7 @@ public class AdminProfileFragment extends Fragment {
         };
     }
 
-    private Observer<Resource<Map<String, Integer>>> getObserverDataStatistic() {
+    private Observer<Resource<Map<String, Integer>>> getObserverOrdersDataStatistic() {
         return new Observer<Resource<Map<String, Integer>>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -131,6 +164,86 @@ public class AdminProfileFragment extends Fragment {
                         // handle data here from resource
                         dayOrdersDataStatistics = resource.data;
                         assert dayOrdersDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    private Observer<Resource<Map<String, Integer>>> getObserverProductSoldDataStatistic() {
+        return new Observer<Resource<Map<String, Integer>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Integer>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        dayProductSoldDataStatistics = resource.data;
+                        assert dayProductSoldDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    private Observer<Resource<Map<String, Double>>> getObserverRevenueDataStatistic() {
+        return new Observer<Resource<Map<String, Double>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Double>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        dayRevenueDataStatistics = resource.data;
+                        assert dayRevenueDataStatistics != null;
 
                         break;
                     case ERROR:

@@ -1,16 +1,16 @@
 package com.example.ecommerce_hvpp.model;
 
-public class DataStatisticFloat {
-    private float dayQuantity;
+public class DataStatisticDouble {
+    private double dayQuantity;
     private String dayPercent;
-    private float dayColor;
-    private float monthQuantity;
+    private int dayColor;
+    private double monthQuantity;
     private String monthPercent;
-    private float monthColor;
+    private int monthColor;
 
-    public DataStatisticFloat() {}
+    public DataStatisticDouble() {}
 
-    public DataStatisticFloat(float dayQuantity, String dayPercent, float dayColor, float monthQuantity, String monthPercent, float monthColor) {
+    public DataStatisticDouble(double dayQuantity, String dayPercent, int dayColor, double monthQuantity, String monthPercent, int monthColor) {
         this.dayQuantity = dayQuantity;
         this.dayPercent = dayPercent;
         this.dayColor = dayColor;
@@ -19,11 +19,11 @@ public class DataStatisticFloat {
         this.monthColor = monthColor;
     }
 
-    public float getDayQuantity() {
+    public double getDayQuantity() {
         return dayQuantity;
     }
 
-    public void setDayQuantity(float dayQuantity) {
+    public void setDayQuantity(double dayQuantity) {
         this.dayQuantity = dayQuantity;
     }
 
@@ -35,19 +35,19 @@ public class DataStatisticFloat {
         this.dayPercent = dayPercent;
     }
 
-    public float getDayColor() {
+    public int getDayColor() {
         return dayColor;
     }
 
-    public void setDayColor(float dayColor) {
+    public void setDayColor(int dayColor) {
         this.dayColor = dayColor;
     }
 
-    public float getMonthQuantity() {
+    public double getMonthQuantity() {
         return monthQuantity;
     }
 
-    public void setMonthQuantity(float monthQuantity) {
+    public void setMonthQuantity(double monthQuantity) {
         this.monthQuantity = monthQuantity;
     }
 
@@ -59,11 +59,11 @@ public class DataStatisticFloat {
         this.monthPercent = monthPercent;
     }
 
-    public float getMonthColor() {
+    public int getMonthColor() {
         return monthColor;
     }
 
-    public void setMonthColor(float monthColor) {
+    public void setMonthColor(int monthColor) {
         this.monthColor = monthColor;
     }
 }

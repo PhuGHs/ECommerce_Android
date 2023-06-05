@@ -1,6 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
-import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

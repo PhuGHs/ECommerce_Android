@@ -1,8 +1,12 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayProductSoldDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayRevenueDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayVisitorsDataStatistics;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticProductSold;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticRevenue;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticVisitors;
 
 import android.annotation.SuppressLint;
@@ -24,6 +28,7 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticsBinding;
 import com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticOrdersFragment;
+import com.example.ecommerce_hvpp.model.DataStatisticDouble;
 import com.example.ecommerce_hvpp.model.DataStatisticInt;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
@@ -78,12 +83,13 @@ public class AdminStatisticsFragment extends Fragment {
         handleVisitorsComponent();
         handleOrdersComponent();
         handleProductSoldComponent();
+        handleRevenueComponent();
     }
 
     // Visitors - int
     @SuppressLint("SetTextI18n")
     private void handleVisitorsComponent() {
-        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayVisitorsDataStatistics,
                 mAdminFragmentStatisticsBinding.adminStatisticsComponentVisitorsQuantity);
 
         Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
@@ -115,7 +121,7 @@ public class AdminStatisticsFragment extends Fragment {
     // Product Sold - int
     @SuppressLint("SetTextI18n")
     private void handleProductSoldComponent() {
-        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayProductSoldDataStatistics,
                 mAdminFragmentStatisticsBinding.adminStatisticsComponentProductSoldQuantity);
 
         Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
@@ -131,7 +137,7 @@ public class AdminStatisticsFragment extends Fragment {
     // Revenue - float
     @SuppressLint("SetTextI18n")
     private void handleRevenueComponent() {
-        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+        Pair<Pair<Integer, Integer>, Pair<Double, Double>> result = repo.handleComponentStatisticsDouble(dayRevenueDataStatistics,
                 mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenueQuantity);
 
         Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
@@ -140,7 +146,7 @@ public class AdminStatisticsFragment extends Fragment {
         mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenuePercent.setText(dayResultAndColor.first);
         mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenuePercent.setTextColor(dayResultAndColor.second);
 
-        dataStatisticOrders = new DataStatisticInt(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
+        dataStatisticRevenue = new DataStatisticDouble(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
                 result.second.second, monthResultAndColor.first, monthResultAndColor.second);
     }
 
