@@ -25,6 +25,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminProductAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.GridItemDecoration;
@@ -50,6 +52,7 @@ public class AdminProductListFragment extends Fragment {
     private EditText etSearchText;
     private ImageView btnFilter;
     private TextView tvFoundText;
+    private SkeletonScreen skeletonScreen;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -130,7 +133,12 @@ public class AdminProductListFragment extends Fragment {
     private void initDataAdapterAndViewModel() {
         //Init array
         products = new ArrayList<>();
-
+        adapter = new AdminProductAdapter(this, products);
+        rclProductList.setAdapter(adapter);
+        skeletonScreen = Skeleton.bind(rclProductList)
+                .adapter(adapter)
+                .load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton)
+                .show();
         //Initialize ViewModel
         viewModel = new ViewModelProvider(getActivity()).get(AdminProductManagementViewModel.class);
 
@@ -138,9 +146,9 @@ public class AdminProductListFragment extends Fragment {
         viewModel.getAllProductWithNoCriteria().observe(getViewLifecycleOwner(), resource -> {
             switch(resource.status) {
                 case SUCCESS:
-                    products = resource.data;
-                    adapter = new AdminProductAdapter(this, resource.data);
-                    rclProductList.setAdapter(adapter);
+                    products.addAll(resource.data);
+                    adapter.setOriginalList(products);
+                    adapter.notifyDataSetChanged();
                     if(adapter.getListSize() > 1) {
                         tvFoundText.setText("Found " + adapter.getListSize() + " results");
                     } else {
@@ -153,6 +161,7 @@ public class AdminProductListFragment extends Fragment {
                             v.showContextMenu();
                         }
                     });
+                    skeletonScreen.hide();
                     break;
                 case ERROR:
                     Log.e(TAG, resource.message);

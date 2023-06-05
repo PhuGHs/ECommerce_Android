@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminOrderItemAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.DividerItemDecoration;
@@ -45,6 +46,7 @@ public class AdminOrderDetailsFragment extends Fragment {
     private Order order;
     private StepView stepView;
     private Button btnMarkAs;
+    private SkeletonScreen skeletonScreen;
     //endregion
     @Nullable
     @Override

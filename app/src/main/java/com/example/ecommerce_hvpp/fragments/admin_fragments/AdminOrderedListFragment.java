@@ -19,6 +19,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminOrderManagementAdapter;
 import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
@@ -41,6 +43,7 @@ public class AdminOrderedListFragment extends Fragment {
     private List<String> filterOptions;
     private EditText etSeacrchText;
     private TextView tvFoundText;
+    private SkeletonScreen skeletonScreen;
 
     @Nullable
     @Override
@@ -103,6 +106,10 @@ public class AdminOrderedListFragment extends Fragment {
         orders = new ArrayList<>();
         adapter = new AdminOrderManagementAdapter(orders, this);
         rclOrders.setAdapter(adapter);
+        skeletonScreen = Skeleton.bind(rclOrders)
+                .adapter(adapter)
+                .load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton)
+                .show();
     }
     private void initView(View view) {
         rclOrders = view.findViewById(R.id.rclOrders);
@@ -154,6 +161,7 @@ public class AdminOrderedListFragment extends Fragment {
                         } else {
                             tvFoundText.setText("Found " + adapter.getItemCount() + " result");
                         }
+                        skeletonScreen.hide();
                     }
                     break;
             }
