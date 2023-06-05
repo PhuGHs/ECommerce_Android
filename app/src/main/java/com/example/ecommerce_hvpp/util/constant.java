@@ -24,8 +24,4 @@ public class constant {
 
     public static final String KEY_INTENT_PROMOTION = "KEY_INTENT_PROMOTION";
 
-    @SuppressLint("SimpleDateFormat")
-    public static final SimpleDateFormat templateDate = new SimpleDateFormat("dd/MM/yyyy");
-
-    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 }

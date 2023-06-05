@@ -1,18 +1,21 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
 import static com.example.ecommerce_hvpp.util.constant.CUSTOMER_MANAGEMENT;
 import static com.example.ecommerce_hvpp.util.constant.DATA_STATISTICS;
 import static com.example.ecommerce_hvpp.util.constant.LOG_OUT;
 import static com.example.ecommerce_hvpp.util.constant.ORDER_HISTORY;
 import static com.example.ecommerce_hvpp.util.constant.PROMOTION_MANAGEMENT;
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,7 +35,6 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AdminProfileRepository {
     NavController navController;
@@ -160,5 +162,4 @@ public class AdminProfileRepository {
                     });
         });
     }
-
 }

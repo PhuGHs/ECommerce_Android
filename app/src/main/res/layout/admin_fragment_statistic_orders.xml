@@ -72,15 +72,15 @@
             android:layout_marginBottom="8dp">
 
             <RelativeLayout
-                android:id="@+id/admin_statistics_component_visitors_container"
-                android:layout_width="165dp"
+                android:id="@+id/admin_statistics_orders_day_component_container"
+                android:layout_width="167dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_item_statistic"
                 android:paddingVertical="14dp"
                 android:paddingHorizontal="12dp">
 
                 <TextView
-                    android:id="@+id/admin_statistics_component_visitors_title"
+                    android:id="@+id/admin_statistics_orders_day_component_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/w500_50"
@@ -88,34 +88,35 @@
                     android:textColor="@color/primary" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_component_visitors_quantity"
+                    android:id="@+id/admin_statistics_orders_day_component_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_below="@+id/admin_statistics_component_visitors_title"
+                    android:layout_below="@+id/admin_statistics_orders_day_component_title"
                     style="@style/w400_90"
                     android:text="10"
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_component_visitors_percent"
-                    android:layout_width="45dp"
+                    android:id="@+id/admin_statistics_orders_day_component_percent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/admin_statistics_component_visitors_quantity"
+                    android:layout_below="@id/admin_statistics_orders_day_component_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
-                    android:text="-11%"
+                    android:text="+45%"
                     android:textColor="@color/decrease_percent"
                     android:gravity="center" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_component_visitors_details"
+                    android:id="@+id/admin_statistics_orders_day_component_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/admin_statistics_component_visitors_percent"
-                    android:layout_toEndOf="@id/admin_statistics_component_visitors_percent"
-                    android:layout_marginStart="8dp"
+                    android:layout_alignTop="@id/admin_statistics_orders_day_component_percent"
+                    android:layout_toEndOf="@id/admin_statistics_orders_day_component_percent"
+                    android:layout_marginStart="2dp"
                     style="@style/w400_40"
                     android:text="vs yesterday"
                     android:textColor="@color/black" />
@@ -123,16 +124,17 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/admin_statistics_orders_container"
-                android:layout_width="165dp"
+                android:id="@+id/admin_statistics_orders_month_component_month_container"
+                android:layout_width="167dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/round_item_statistic"
                 android:paddingVertical="14dp"
-                android:paddingHorizontal="12dp">
+                android:paddingStart="12dp"
+                android:paddingEnd="10dp">
 
                 <TextView
-                    android:id="@+id/admin_statistics_orders_component_title"
+                    android:id="@+id/admin_statistics_orders_month_component_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/w500_50"
@@ -140,34 +142,35 @@
                     android:textColor="@color/primary" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_orders_component_quantity"
+                    android:id="@+id/admin_statistics_orders_month_component_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_below="@+id/admin_statistics_orders_component_title"
+                    android:layout_below="@+id/admin_statistics_orders_month_component_title"
                     style="@style/w400_90"
                     android:text="198"
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_orders_component_percent"
-                    android:layout_width="45dp"
+                    android:id="@+id/admin_statistics_orders_month_component_percent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/admin_statistics_orders_component_quantity"
+                    android:layout_below="@id/admin_statistics_orders_month_component_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
-                    android:text="+45%"
+                    android:text="+400%"
                     android:textColor="@color/increase_percent"
                     android:gravity="center" />
 
                 <TextView
-                    android:id="@+id/admin_statistics_orders_component_details"
+                    android:id="@+id/admin_statistics_orders_month_component_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/admin_statistics_orders_component_percent"
-                    android:layout_toEndOf="@id/admin_statistics_orders_component_percent"
-                    android:layout_marginStart="8dp"
+                    android:layout_alignTop="@id/admin_statistics_orders_month_component_percent"
+                    android:layout_toEndOf="@id/admin_statistics_orders_month_component_percent"
+                    android:layout_marginStart="2dp"
                     style="@style/w400_40"
                     android:text="vs last month"
                     android:textColor="@color/black" />

@@ -1,56 +1,50 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.dateFormatter;
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.monthFormatter;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_ORDERS;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_PRODUCT_SOLD;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_REVENUE;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_VISITORS;
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.os.Build;
-import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.DataStatistic;
+import com.example.ecommerce_hvpp.model.DataStatisticInt;
 import com.example.ecommerce_hvpp.util.Resource;
-import com.google.firebase.firestore.CollectionReference;
+import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.Disposable;
 
 
 public class AdminStatisticsRepository {
     NavController navController;
     private final FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
-    public static Map<String, Integer> mListDataStatistics;
+    public static Map<String, Integer> dayOrdersDataStatistics;
 
     public AdminStatisticsRepository() {}
 
@@ -87,6 +81,75 @@ public class AdminStatisticsRepository {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         return templateDate.format(calendar.getTime());
+    }
+    public String getCurrentDay() {
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.format(dateFormatter);
+    }
+
+    public String getPreviousDay() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate previousDate = currentDate.minusDays(1);
+        return previousDate.format(dateFormatter);
+    }
+
+    public String getCurrentMonth() {
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.format(monthFormatter);
+    }
+
+    public String getPreviousMonth() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate previousMonth = currentDate.minusMonths(1);
+        return previousMonth.format(monthFormatter);
+    }
+
+    public int handlePercent(int currentQuantity, int previousQuantity) {
+        int result = 0;
+        if (previousQuantity == 0 && currentQuantity != 0) {
+            result = 100;
+        } else if (previousQuantity != 0) {
+            if (currentQuantity == 0) {
+                result = -100;
+            } else {
+                float percent = (float) (currentQuantity - previousQuantity) / previousQuantity * 100;
+                result = (int) Math.round(percent);
+            }
+        }
+
+        return result;
+    }
+
+    public Pair<String, Integer> handleResult(Context context, int result) {
+        if (result <= 0) {
+            return new Pair<>("" + result + "%", ContextCompat.getColor(context, R.color.decrease_percent));
+        } else {
+            return new Pair<>("+" + result + "%", ContextCompat.getColor(context, R.color.increase_percent));
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> handleComponentStatistics(Map<String, Integer> dayDataStatistics, TextView tvContent) {
+        Map<String, Integer> monthDataStatistics = new HashMap<>();
+        dayDataStatistics.forEach((key, value) -> {
+            String strMonth = key.substring(3, 10);
+            if (monthDataStatistics.containsKey(strMonth)) {
+                monthDataStatistics.put(strMonth, monthDataStatistics.get(strMonth) + value);
+            } else {
+                monthDataStatistics.put(strMonth, value);
+            }
+        });
+
+        int currDayQuantity = dayDataStatistics.getOrDefault(getCurrentDay(), 0);
+        int prevDayQuantity = dayDataStatistics.getOrDefault(getPreviousDay(), 0);
+        int resultDay = handlePercent(currDayQuantity, prevDayQuantity);
+
+        int currMonthQuantity = monthDataStatistics.getOrDefault(getCurrentMonth(), 0);
+        int prevMonthQuantity = monthDataStatistics.getOrDefault(getPreviousMonth(), 0);
+        int resultMonth = handlePercent(currMonthQuantity, prevMonthQuantity);
+
+        tvContent.setText(currDayQuantity + "");
+        return new Pair<>(new Pair<>(resultDay, resultMonth), new Pair<>(currDayQuantity, currMonthQuantity));
     }
 
     public View.OnClickListener createDatePickerDialog(Context mContext) {
@@ -131,6 +194,18 @@ public class AdminStatisticsRepository {
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
+    }
+    
+    public void formatLineChart(LineChart lineChart) {
+        lineChart.setPinchZoom(false);
+        lineChart.setScaleEnabled(false);
+        lineChart.getAxisLeft().setDrawAxisLine(true);
+        lineChart.setDrawGridBackground(false);
+        lineChart.getDescription().setEnabled(false);
+        lineChart.getLegend().setEnabled(true);
+        lineChart.animateX(2000);
+
+        lineChart.invalidate();
     }
 
     public Observable<Resource<Map<String, Integer>>> getObservableStatisticsOrders() {

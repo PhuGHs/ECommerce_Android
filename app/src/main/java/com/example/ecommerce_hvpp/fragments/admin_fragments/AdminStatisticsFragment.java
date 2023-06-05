@@ -1,15 +1,21 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
-import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.mListDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticProductSold;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticVisitors;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -17,11 +23,14 @@ import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticsBinding;
+import com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticOrdersFragment;
+import com.example.ecommerce_hvpp.model.DataStatisticInt;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -36,7 +45,7 @@ public class AdminStatisticsFragment extends Fragment {
     AdminStatisticsRepository repo;
     Observer<Resource<Map<String, Integer>>> observer;
     Observable<Resource<Map<String, Integer>>> observable;
-    Disposable disposable;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,19 +58,94 @@ public class AdminStatisticsFragment extends Fragment {
         // init repo
         repo = new AdminStatisticsRepository();
 
-        // init observable
-        observable = repo.getObservableStatisticsOrders();
-        observer = getObserverData();
+        showDataStatistics();
 
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        // init observable
+//        observable = repo.getObservableStatisticsOrders();
+//        observer = getObserverData();
+//
+//        observable.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(observer);
+
+
 
         // on click back page
-        mAdminFragmentStatisticsBinding.adminStatisticsHeaderBack.setOnClickListener(onClickBackPage());
+        mAdminFragmentStatisticsBinding.adminStatisticsHeaderBack.setOnClickListener(repo.onClickBackPage());
 
         return mAdminFragmentStatisticsBinding.getRoot();
     }
+
+    private void showDataStatistics() {
+        handleVisitorsComponent();
+        handleOrdersComponent();
+        handleProductSoldComponent();
+    }
+
+    // Visitors - int
+    @SuppressLint("SetTextI18n")
+    private void handleVisitorsComponent() {
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+                mAdminFragmentStatisticsBinding.adminStatisticsComponentVisitorsQuantity);
+
+        Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
+        Pair<String, Integer> monthResultAndColor = repo.handleResult(requireContext(), result.first.second);
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentVisitorsPercent.setText(dayResultAndColor.first);
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentVisitorsPercent.setTextColor(dayResultAndColor.second);
+
+        dataStatisticVisitors = new DataStatisticInt(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
+                result.second.second, monthResultAndColor.first, monthResultAndColor.second);
+    }
+
+    // Orders - int
+    @SuppressLint("SetTextI18n")
+    private void handleOrdersComponent() {
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+                mAdminFragmentStatisticsBinding.adminStatisticsComponentOrdersQuantity);
+
+        Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
+        Pair<String, Integer> monthResultAndColor = repo.handleResult(requireContext(), result.first.second);
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentOrdersPercent.setText(dayResultAndColor.first);
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentOrdersPercent.setTextColor(dayResultAndColor.second);
+
+        dataStatisticOrders = new DataStatisticInt(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
+                result.second.second, monthResultAndColor.first, monthResultAndColor.second);
+    }
+
+    // Product Sold - int
+    @SuppressLint("SetTextI18n")
+    private void handleProductSoldComponent() {
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+                mAdminFragmentStatisticsBinding.adminStatisticsComponentProductSoldQuantity);
+
+        Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
+        Pair<String, Integer> monthResultAndColor = repo.handleResult(requireContext(), result.first.second);
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentProductSoldPercent.setText(dayResultAndColor.first);
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentProductSoldPercent.setTextColor(dayResultAndColor.second);
+
+        dataStatisticProductSold = new DataStatisticInt(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
+                result.second.second, monthResultAndColor.first, monthResultAndColor.second);
+    }
+
+    // Revenue - float
+    @SuppressLint("SetTextI18n")
+    private void handleRevenueComponent() {
+        Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> result = repo.handleComponentStatistics(dayOrdersDataStatistics,
+                mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenueQuantity);
+
+        Pair<String, Integer> dayResultAndColor = repo.handleResult(requireContext(), result.first.first);
+        Pair<String, Integer> monthResultAndColor = repo.handleResult(requireContext(), result.first.second);
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenuePercent.setText(dayResultAndColor.first);
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentRevenuePercent.setTextColor(dayResultAndColor.second);
+
+        dataStatisticOrders = new DataStatisticInt(result.second.first, dayResultAndColor.first, dayResultAndColor.second,
+                result.second.second, monthResultAndColor.first, monthResultAndColor.second);
+    }
+
 
     @Override
     public void onResume() {
@@ -70,54 +154,8 @@ public class AdminStatisticsFragment extends Fragment {
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-
-    private View.OnClickListener onClickBackPage() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.popBackStack();
-            }
-        };
-    }
-
-    private Observer<Resource<Map<String, Integer>>> getObserverData() {
-        return new Observer<Resource<Map<String, Integer>>>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-                // Perform any setup here if needed
-                disposable = d;
-            }
-
-            @Override
-            public void onNext(@NonNull Resource<Map<String, Integer>> resource) {
-                switch (resource.status) {
-                    case LOADING:
-                        // Handle loading state if needed
-                        break;
-                    case SUCCESS:
-                        // handle data here from resource
-                        mListDataStatistics = resource.data;
-                        assert mListDataStatistics != null;
-
-                        break;
-                    case ERROR:
-                        Log.e("VuError", resource.message);
-                        break;
-                }
-            }
-
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                // Handle error state if needed
-            }
-
-            @Override
-            public void onComplete() {
-                // Handle completion if needed
-                Log.e("Vucoder", "onComplete");
-            }
-        };
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

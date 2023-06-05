@@ -1,5 +1,8 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,13 +14,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentProfileBinding;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.AdminProfileViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -28,6 +35,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AdminProfileFragment extends Fragment {
     AdminFragmentProfileBinding mAdminFragmentProfileBinding;
     AdminProfileViewModel vmAdminProfile;
+    Disposable disposable;
 
     @Nullable
     @Override
@@ -39,8 +47,19 @@ public class AdminProfileFragment extends Fragment {
         mAdminFragmentProfileBinding.setLifecycleOwner(getViewLifecycleOwner());
 
 //        testData();
+        testDataPass();
 
         return mAdminFragmentProfileBinding.getRoot();
+    }
+
+    private void testDataPass() {
+        AdminStatisticsRepository repo = new AdminStatisticsRepository();
+        Observer<Resource<Map<String, Integer>>> observer = getObserverDataStatistic();
+        Observable<Resource<Map<String, Integer>>> observable = repo.getObservableStatisticsOrders();
+
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     private void testData() {
@@ -91,5 +110,58 @@ public class AdminProfileFragment extends Fragment {
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+    private Observer<Resource<Map<String, Integer>>> getObserverDataStatistic() {
+        return new Observer<Resource<Map<String, Integer>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Integer>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        dayOrdersDataStatistics = resource.data;
+                        assert dayOrdersDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.test_bottom_nav);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        disposable.dispose();
     }
 }

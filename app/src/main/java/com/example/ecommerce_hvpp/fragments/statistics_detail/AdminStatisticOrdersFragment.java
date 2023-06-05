@@ -1,8 +1,9 @@
 package com.example.ecommerce_hvpp.fragments.statistics_detail;
 
-import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.mListDataStatistics;
-import static com.example.ecommerce_hvpp.util.constant.dateFormatter;
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.dateFormatter;
+import static com.example.ecommerce_hvpp.util.CustomDateFormat.templateDate;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
 
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -48,7 +49,6 @@ public class AdminStatisticOrdersFragment extends Fragment {
     AdminStatisticsRepository repo;
     Observer<Resource<Map<String, Integer>>> observer;
     Observable<Resource<Map<String, Integer>>> observable;
-//    private Disposable disposable;
     Map<String, Integer> mListData;
     Map<String, Integer> mListDataUpdate;
 
@@ -62,9 +62,10 @@ public class AdminStatisticOrdersFragment extends Fragment {
 
         // init default date
         initDefaultDate();
+        initDayMonthData();
 
         // format line
-        formatLineChart();
+        repo.formatLineChart(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart);
 
         // init observable
 //        observable = repo.getObservableOrders(mListDataStatistics);
@@ -73,6 +74,7 @@ public class AdminStatisticOrdersFragment extends Fragment {
 //        observable.subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(observer);
+
 
 
         // init chart graph (test)
@@ -86,7 +88,7 @@ public class AdminStatisticOrdersFragment extends Fragment {
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                formatLineChart();
+                repo.formatLineChart(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart);
                 handleFilterDate();
                 handleMapToEntry(mListDataUpdate);
             }
@@ -101,6 +103,16 @@ public class AdminStatisticOrdersFragment extends Fragment {
     private void initDefaultDate() {
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvStartDate.setText(repo.beginningOfMonth());
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvEndDate.setText(templateDate.format(new Date()));
+    }
+
+    private void initDayMonthData() {
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersDayComponentQuantity.setText(String.valueOf(dataStatisticOrders.getDayQuantity()));
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersDayComponentPercent.setText(dataStatisticOrders.getDayPercent());
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersDayComponentPercent.setTextColor(dataStatisticOrders.getDayColor());
+
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersMonthComponentQuantity.setText(String.valueOf(dataStatisticOrders.getMonthQuantity()));
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersMonthComponentPercent.setText(dataStatisticOrders.getMonthPercent());
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersMonthComponentPercent.setTextColor(dataStatisticOrders.getMonthColor());
     }
 
     private void onClickToShowDatePicker() {
@@ -128,7 +140,7 @@ public class AdminStatisticOrdersFragment extends Fragment {
 
         for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
             String dateString = date.format(dateFormatter);
-            int value = mListDataStatistics.getOrDefault(dateString, 0);
+            int value = dayOrdersDataStatistics.getOrDefault(dateString, 0);
             mListDataUpdate.put(dateString, value);
         }
     }
@@ -140,7 +152,7 @@ public class AdminStatisticOrdersFragment extends Fragment {
         listData.forEach((key, value) -> {
             entries.add(new Entry(index[0], value));
             index[0]++;
-            xAxisDates.add(key.substring(0, 5));
+            xAxisDates.add(key.substring(0, 5)); // 11/09/2003
         });
         xAxisDates.add(0, "Select");
 

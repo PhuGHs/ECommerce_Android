@@ -93,10 +93,11 @@
                 
                 <TextView
                     android:id="@+id/admin_statistics_component_visitors_percent"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/admin_statistics_component_visitors_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
                     android:text="-11%"
@@ -155,10 +156,11 @@
 
                 <TextView
                     android:id="@+id/admin_statistics_component_orders_percent"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/admin_statistics_component_orders_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
                     android:text="+11%"
@@ -235,10 +237,11 @@
 
                 <TextView
                     android:id="@+id/admin_statistics_component_revenue_percent"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/admin_statistics_component_revenue_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
                     android:text="+35%"
@@ -297,10 +300,11 @@
 
                 <TextView
                     android:id="@+id/admin_statistics_component_product_sold_percent"
-                    android:layout_width="45dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/admin_statistics_component_product_sold_quantity"
                     android:layout_marginTop="16dp"
+                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
                     style="@style/w400_40"
                     android:text="-27%"
