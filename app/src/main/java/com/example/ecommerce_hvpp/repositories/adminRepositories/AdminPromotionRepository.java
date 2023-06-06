@@ -148,4 +148,8 @@ public class AdminPromotionRepository {
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+
+    public boolean isEmpty(EditText mEditText) {
+        return mEditText.getText().toString().trim().isEmpty();
+    }
 }

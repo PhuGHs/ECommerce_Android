@@ -14,12 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemPromotionAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentPromotionBinding;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminPromotionViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 import java.util.Objects;
@@ -171,12 +173,16 @@ public class AdminPromotionFragment extends Fragment {
         };
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.test_bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         disposable.dispose();
     }
-
-
 }

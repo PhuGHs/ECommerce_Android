@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemCustomerBinding;
 import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.User;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,6 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
                     .load(user.getImagePath())
                     .into(holder.mAdminCustomItemCustomerBinding.adminCustomerManagementComponentAvatarCustomer);
         }
-
     }
 
     @Override

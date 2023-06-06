@@ -58,4 +58,6 @@
         <item>2002/2003</item>
         <item>2006</item>
     </string-array>
+    <string name="helper_text">*Required</string>
+    <string name="required_field">This field is required</string>
 </resources>
