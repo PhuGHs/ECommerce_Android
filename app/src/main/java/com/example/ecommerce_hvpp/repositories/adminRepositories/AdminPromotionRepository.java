@@ -1,5 +1,8 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -27,6 +30,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +56,11 @@ public class AdminPromotionRepository {
                 navController.popBackStack();
             }
         };
+    }
+
+    public void returnBackPage(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.popBackStack();
     }
 
     public Map<String, Object> convertObjectToMap(Promotion promotion) {
@@ -151,5 +160,11 @@ public class AdminPromotionRepository {
 
     public boolean isEmpty(EditText mEditText) {
         return mEditText.getText().toString().trim().isEmpty();
+    }
+
+    public boolean isValidatedDate(String startDate, String endDate) {
+        LocalDate start = LocalDate.parse(startDate, dateFormatter);
+        LocalDate end = LocalDate.parse(endDate, dateFormatter);
+        return start.isBefore(end);
     }
 }

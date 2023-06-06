@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-
-    android:paddingTop="29dp"
+    android:paddingTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_primary">
@@ -123,6 +122,7 @@
                 android:layout_marginTop="11dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_add_promotion_discount_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="custom"
@@ -151,6 +151,7 @@
                 android:layout_marginTop="11dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_add_promotion_minimum_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="custom"
@@ -179,6 +180,7 @@
                 android:layout_marginTop="11dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_add_promotion_start_date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Start date"
@@ -208,6 +210,7 @@
                 android:layout_marginTop="11dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_add_promotion_end_date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="custom"

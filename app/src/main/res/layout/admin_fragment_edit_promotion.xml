@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingHorizontal="25dp"
-    android:paddingTop="29dp"
+    android:paddingTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_primary">
 
     <!--    Header  -->
     <RelativeLayout
+        android:layout_marginHorizontal="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -49,218 +49,250 @@
 
     </RelativeLayout>
 
-    <!--    Name   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_name_container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:layout_marginHorizontal="25dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_name"
+            <!--    Name   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_name_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/w400_50"
-                android:inputType="text" />
+                android:layout_marginTop="15dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/w400_50"
+                        android:inputType="text" />
 
-    <!--    Code   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_code_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Code"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_code"
+            <!--    Code   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_code_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:enabled="false"
-                style="@style/w400_50"
-                android:inputType="text" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_code_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Code"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/w400_50"
+                        android:inputType="text" />
 
-    <!--    Discount   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_discount_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/baseline_discount"
-            android:hint="Discount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_discount"
+            <!--    Discount   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_discount_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/w400_50"
-                android:inputType="number" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_discount_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_discount"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    android:hint="Discount"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_discount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/w400_50"
+                        android:inputType="number" />
 
-    <!--    Condition   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_minimum_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            android:hint="Minimum"
-            app:endIconDrawable="@drawable/baseline_unit"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_minimum"
+            <!--    Condition   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_minimum_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/w400_50"
-                android:inputType="number" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_minimum_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    android:hint="Minimum"
+                    app:endIconDrawable="@drawable/baseline_unit"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_minimum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/w400_50"
+                        android:inputType="number" />
 
-    <!--    Start Date   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_start_date_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Start date"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/baseline_calendar"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_start_date"
+            <!--    Start Date   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_start_date_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                style="@style/w400_50"
-                android:inputType="date" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_start_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Start date"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_calendar"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_start_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        style="@style/w400_50"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-    </RelativeLayout>
-    <!--    End Date   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_end_date_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/baseline_calendar"
-            android:hint="End date"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_end_date"
+            </RelativeLayout>
+            <!--    End Date   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_end_date_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                style="@style/w400_50"
-                android:inputType="date" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/admin_edit_promotion_end_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_calendar"
+                    android:hint="End date"
+                    app:errorEnabled="true"
+                    app:helperText="@string/helper_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_end_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        style="@style/w400_50"
+                        android:inputType="date" />
 
-    <!--    Apply to   -->
-    <RelativeLayout
-        android:id="@+id/admin_edit_promotion_apply_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apply to"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/baseline_arrow_down"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/admin_edit_promotion_apply"
+            <!--    Apply to   -->
+            <RelativeLayout
+                android:id="@+id/admin_edit_promotion_apply_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/w400_50"
-                android:inputType="none" />
+                android:layout_marginTop="11dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Apply to"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_arrow_down"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/admin_edit_promotion_apply"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="All products"
+                        style="@style/w400_50"
+                        android:inputType="none" />
 
-    <!--    Button  -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="24dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/admin_edit_promotion_button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/primary"
-            style="@style/w400_60"
-            android:letterSpacing="0"
-            android:textAllCaps="false"
-            android:text="Save" />
+            </RelativeLayout>
 
-        <Button
-            android:id="@+id/admin_edit_promotion_button_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/admin_edit_promotion_button_save"
-            android:layout_marginStart="46dp"
-            style="@style/w400_60"
-            android:letterSpacing="0"
-            android:textAllCaps="false"
-            android:text="Cancel"
-            android:textColor="@color/black"
-            android:backgroundTint="#BDCDD6" />
+            <!--    Button  -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="24dp">
 
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/admin_edit_promotion_button_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary"
+                    style="@style/w400_60"
+                    android:letterSpacing="0"
+                    android:textAllCaps="false"
+                    android:text="Save" />
+
+                <Button
+                    android:id="@+id/admin_edit_promotion_button_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/admin_edit_promotion_button_save"
+                    android:layout_marginStart="46dp"
+                    style="@style/w400_60"
+                    android:letterSpacing="0"
+                    android:textAllCaps="false"
+                    android:text="Cancel"
+                    android:textColor="@color/black"
+                    android:backgroundTint="#BDCDD6" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
