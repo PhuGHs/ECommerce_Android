@@ -19,6 +19,7 @@ import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -134,7 +135,10 @@ public class AdminProfileRepository {
     public Observable<Resource<List<Promotion>>> getObservablePromotion() {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
-            firebaseHelper.getCollection("Voucher").get()
+            firebaseHelper
+                    .getCollection("Voucher")
+                    .orderBy("date_end", Query.Direction.DESCENDING)
+                    .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         List<Promotion> mListPromotion = new ArrayList<>();
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {

@@ -60,4 +60,6 @@
     </string-array>
     <string name="helper_text">*Required</string>
     <string name="required_field">This field is required</string>
+    <string name="activated">Code:</string>
+    <string name="unactivated">Hello:</string>
 </resources>

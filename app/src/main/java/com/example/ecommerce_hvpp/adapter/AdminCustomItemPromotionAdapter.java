@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.constant.KEY_INTENT_PROMOTION;
 import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
@@ -18,7 +19,9 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemPromotionBinding;
 import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminPromotionFragment;
 import com.example.ecommerce_hvpp.model.Promotion;
+import com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminCustomItemPromotionViewModel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
     List<Promotion> mListPromotion;
     List<Promotion> mListPromotionOriginal;
     AdminPromotionFragment parent;
+    LocalDate currentDate = LocalDate.now();
 
     public AdminCustomItemPromotionAdapter(Context context, List<Promotion> listPromotion, AdminPromotionFragment parent) {
         this.mContext = context;
@@ -49,6 +53,8 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         if (promotion == null) {
             return;
         }
+        boolean isExpired = isExpired(templateDate.format(promotion.getDate_end()));
+        holder.mAdminCustomItemPromotionBinding.setVMItemPromotion(new AdminCustomItemPromotionViewModel(isExpired));
 
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentName.setText(promotion.getName());
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentCode.setText(promotion.getId());
@@ -73,6 +79,12 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
     @Override
     public int getItemCount() {
         return mListPromotion.size();
+    }
+
+    private boolean isExpired(String strEndDate) {
+        LocalDate endDate = LocalDate.parse(strEndDate, dateFormatter);
+        LocalDate endDateUpdate = endDate.plusDays(1);
+        return !endDateUpdate.isAfter(currentDate);
     }
 
     @SuppressLint("NotifyDataSetChanged")

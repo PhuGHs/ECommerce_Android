@@ -2,7 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <import type="com.example.ecommerce_hvpp.R" />
+        <import type="androidx.core.content.ContextCompat" />
+        <variable
+            name="VMItemPromotion"
+            type="com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminCustomItemPromotionViewModel" />
     </data>
 
     <LinearLayout
@@ -16,14 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
-            android:background="@drawable/round_item_promotion">
+            android:background="@drawable/round_item_promotion"
+            android:backgroundTint="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.container_expired) : ContextCompat.getColor(context, R.color.white)}">
 
             <TextView
                 android:id="@+id/admin_promotion_component_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name promotion"
-                android:textColor="@color/primary"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.primary_text_expired) : ContextCompat.getColor(context, R.color.primary)}"
                 style="@style/w600_50"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp" />
@@ -35,15 +40,15 @@
                 android:layout_marginTop="5dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="12dp"
-                android:src="@drawable/baseline_edit" />
+                android:src="@{VMItemPromotion.isDisabled ? @drawable/baseline_edit_disabled : @drawable/baseline_edit}" />
 
             <TextView
                 android:id="@+id/admin_promotion_component_code_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_name"
-                android:text="Code:"
-                android:textColor="@color/black"
+                android:text="@{VMItemPromotion.isDisabled ? @string/activated : @string/unactivated}"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginTop="2dp"
                 android:layout_marginStart="36dp" />
@@ -55,7 +60,7 @@
                 android:layout_below="@id/admin_promotion_component_name"
                 android:layout_toEndOf="@+id/admin_promotion_component_code_label"
                 android:text="BC23525"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w600_50"
                 android:layout_marginTop="2dp"
                 android:layout_marginStart="48dp" />
@@ -66,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_code_label"
                 android:text="Discount:"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="36dp" />
 
@@ -77,7 +82,7 @@
                 android:layout_below="@id/admin_promotion_component_code_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_discount_label"
                 android:text="70"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w600_50"
                 android:layout_marginStart="16dp" />
 
@@ -88,7 +93,7 @@
                 android:layout_below="@id/admin_promotion_component_code_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_discount"
                 android:text="%"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w600_50"
                  />
 
@@ -98,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_discount_label"
                 android:text="Minimum:"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="36dp" />
 
@@ -109,7 +114,7 @@
                 android:layout_below="@id/admin_promotion_component_discount_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_start_date_label"
                 android:text="10000"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="10dp" />
 
@@ -120,7 +125,7 @@
                 android:layout_below="@id/admin_promotion_component_discount_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_condition"
                 android:text="$"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="5dp"/>
 
@@ -130,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_condition_label"
                 android:text="Start date:"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="36dp" />
 
@@ -141,7 +146,7 @@
                 android:layout_below="@id/admin_promotion_component_condition_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_start_date_label"
                 android:text="22/12/2021"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="10dp" />
 
@@ -151,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_start_date_label"
                 android:text="End date:"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="36dp" />
 
@@ -162,7 +167,7 @@
                 android:layout_below="@id/admin_promotion_component_start_date_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_end_date_label"
                 android:text="11/09/2023"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="17dp" />
 
@@ -172,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_end_date_label"
                 android:text="Apply to:"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="36dp" />
 
@@ -183,11 +188,12 @@
                 android:layout_below="@id/admin_promotion_component_end_date_label"
                 android:layout_toEndOf="@+id/admin_promotion_component_apply_label"
                 android:text="Manchester City"
-                android:textColor="@color/black"
+                android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginStart="21dp" />
 
         </RelativeLayout>
 
     </LinearLayout>
+
 </layout>
