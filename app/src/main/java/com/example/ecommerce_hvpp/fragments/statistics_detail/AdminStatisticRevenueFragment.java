@@ -4,6 +4,7 @@ import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminSta
 import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticRevenue;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateRevenue;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -93,8 +94,8 @@ public class AdminStatisticRevenueFragment extends Fragment {
     }
 
     private void onClickToShowDatePicker() {
-        mAdminFragmentStatisticRevenueBinding.adminStatisticsRevenueTvStartDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
-        mAdminFragmentStatisticRevenueBinding.adminStatisticsRevenueTvEndDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
+        mAdminFragmentStatisticRevenueBinding.adminStatisticsRevenueTvStartDate.setOnClickListener(repo.createDatePickerDialog(requireContext(), strMinDateRevenue));
+        mAdminFragmentStatisticRevenueBinding.adminStatisticsRevenueTvEndDate.setOnClickListener(repo.createDatePickerDialog(requireContext(), strMinDateRevenue));
     }
 
     private void handleFilterDate() {

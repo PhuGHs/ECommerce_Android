@@ -4,6 +4,7 @@ import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminSta
 import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateOrders;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticOrdersBinding;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomMarkerView;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -65,9 +67,14 @@ public class AdminStatisticOrdersFragment extends Fragment {
         mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repo.formatLineChart(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart);
-                handleFilterDate();
-                handleMapToEntry(mListDataUpdate);
+                if (repo.isValidatedDate(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvStartDate.getText().toString(),
+                        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvEndDate.getText().toString())) {
+                    repo.formatLineChart(mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersLineChart);
+                    handleFilterDate();
+                    handleMapToEntry(mListDataUpdate);
+                } else {
+                    CustomToast.ShowToastMessage(requireContext(), 2, "Start date must be less than the End date");
+                }
             }
         });
 
@@ -93,8 +100,8 @@ public class AdminStatisticOrdersFragment extends Fragment {
     }
 
     private void onClickToShowDatePicker() {
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvStartDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
-        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvEndDate.setOnClickListener(repo.createDatePickerDialog(requireContext()));
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvStartDate.setOnClickListener(repo.createDatePickerDialog(requireContext(), strMinDateOrders));
+        mAdminFragmentStatisticOrdersBinding.adminStatisticsOrdersTvEndDate.setOnClickListener(repo.createDatePickerDialog(requireContext(), strMinDateOrders));
     }
 
     private void handleFilterDate() {

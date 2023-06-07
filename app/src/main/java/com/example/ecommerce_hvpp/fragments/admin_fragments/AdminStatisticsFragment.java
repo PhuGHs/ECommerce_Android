@@ -8,6 +8,10 @@ import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminS
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticProductSold;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticRevenue;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticVisitors;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateOrders;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateProductSold;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateRevenue;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateVisitors;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -79,11 +83,19 @@ public class AdminStatisticsFragment extends Fragment {
         return mAdminFragmentStatisticsBinding.getRoot();
     }
 
+    private void findMinDateFromData() {
+        strMinDateVisitors = repo.getMinDate(dayVisitorsDataStatistics);
+        strMinDateOrders = repo.getMinDate(dayOrdersDataStatistics);
+        strMinDateProductSold = repo.getMinDate(dayProductSoldDataStatistics);
+        strMinDateRevenue = repo.getMinDateDouble(dayRevenueDataStatistics);
+    }
+
     private void showDataStatistics() {
         handleVisitorsComponent();
         handleOrdersComponent();
         handleProductSoldComponent();
         handleRevenueComponent();
+        findMinDateFromData();
     }
 
     // Visitors - int

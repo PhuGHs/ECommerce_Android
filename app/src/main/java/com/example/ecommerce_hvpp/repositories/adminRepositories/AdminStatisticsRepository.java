@@ -33,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -200,17 +201,37 @@ public class AdminStatisticsRepository {
         return new Pair<>(new Pair<>(resultDay, resultMonth), new Pair<>(currDayQuantity, currMonthQuantity));
     }
 
-    public View.OnClickListener createDatePickerDialog(Context mContext) {
+    public String getMinDate(Map<String, Integer> data) {
+        return dateFormatter.format(data.keySet().stream()
+                .map(integer -> LocalDate.parse(integer, dateFormatter))
+                .min(Comparator.naturalOrder())
+                .get());
+    }
+
+    public String getMinDateDouble(Map<String, Double> data) {
+        return dateFormatter.format(data.keySet().stream()
+                .map(integer -> LocalDate.parse(integer, dateFormatter))
+                .min(Comparator.naturalOrder())
+                .get());
+    }
+
+    public boolean isValidatedDate(String startDate, String endDate) {
+        LocalDate start = LocalDate.parse(startDate, dateFormatter);
+        LocalDate end = LocalDate.parse(endDate, dateFormatter);
+        return start.isBefore(end);
+    }
+
+    public View.OnClickListener createDatePickerDialog(Context mContext, String minDate) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleEventDatePickerDialog(mContext, (TextView) view);
+                handleEventDatePickerDialog(mContext, (TextView) view, minDate);
             }
         };
     }
 
     // handle date picker click
-    public void handleEventDatePickerDialog(Context mContext, TextView tvDate) {
+    public void handleEventDatePickerDialog(Context mContext, TextView tvDate, String strMinDate) {
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
@@ -241,6 +262,18 @@ public class AdminStatisticsRepository {
 
                     }
                 }, mYear, mMonth, mDay);
+
+        // set min max date
+        try {
+            Date minDate = sdf.parse(strMinDate);
+            assert minDate != null;
+            datePickerDialog.getDatePicker().setMinDate(minDate.getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+
         datePickerDialog.show();
     }
     

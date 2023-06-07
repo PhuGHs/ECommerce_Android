@@ -11,5 +11,10 @@ public class AdminStatisticsComponentViewModel extends ViewModel {
     public static DataStatisticInt dataStatisticVisitors;
     public static DataStatisticDouble dataStatisticRevenue;
 
+    public static String strMinDateOrders;
+    public static String strMinDateProductSold;
+    public static String strMinDateVisitors;
+    public static String strMinDateRevenue;
+
     public AdminStatisticsComponentViewModel() {}
 }
