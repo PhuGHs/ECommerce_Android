@@ -29,13 +29,15 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Voucher> vouchers = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        String name = snapshot.getString("name");
-                        String code = snapshot.getString("id");
-                        long value = snapshot.getLong("value");
-                        boolean isUsed = snapshot.getBoolean("isUsed");
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 < 0){
+                            String name = snapshot.getString("name");
+                            String code = snapshot.getString("id");
+                            long value = snapshot.getLong("value");
+                            boolean isUsed = snapshot.getBoolean("isUsed");
 
-                        Timestamp date_end = snapshot.getTimestamp("date_end");
-                        vouchers.add(new Voucher(name, code, value, date_end.getSeconds()*1000, isUsed));
+                            Timestamp date_end = snapshot.getTimestamp("date_end");
+                            vouchers.add(new Voucher(name, code, value, date_end.getSeconds()*1000, isUsed));
+                        }
                     }
                     _mldListVoucher.setValue(vouchers);
                 })
@@ -50,7 +52,9 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int count = 0;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        count++;
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 < 0){
+                            count++;
+                        }
                     }
                     number_of_voucher.setValue(count);
                 })

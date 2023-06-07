@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Voucher;
+import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
         holder.name_tv.setText(voucher.getVoucherName());
         holder.code_tv.setText("Code:   " + voucher.getId());
         holder.discount_value_tv.setText("-" + String.valueOf(voucher.getDiscountedValue()));
-
         holder.date_end_tv.setText(getDate(voucher.getEndDate()));
 
     }
