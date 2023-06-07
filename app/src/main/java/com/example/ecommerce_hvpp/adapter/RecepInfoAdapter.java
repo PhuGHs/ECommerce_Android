@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +125,8 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
             applied_btn = (Button) itemView.findViewById(R.id.apply_btn);
             edit_btn = (Button) itemView.findViewById(R.id.edit_btn);
             delete_btn = (AppCompatImageButton) itemView.findViewById(R.id.delete_btn);
+
+
         }
 
     }

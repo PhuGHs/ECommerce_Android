@@ -45,18 +45,16 @@ public class FeedBackRepository {
         firebaseHelper.getCollection("Feedback").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Feedback> feedbacks = new ArrayList<>();
-                    Feedback fb1 = null;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customer_id").equals(UID)){
                             String comment = snapshot.getString("comment");
                             Timestamp time_feedback = snapshot.getTimestamp("date");
                             long point = snapshot.getLong("point");
                             String product_id = snapshot.getString("product_id");
-                            fb1 = new Feedback(comment, point, time_feedback.getSeconds()*1000, product_id);
+
+                            feedbacks.add(new Feedback(comment, point, time_feedback.getSeconds()*1000, product_id));
                         }
                     }
-                    feedbacks.add(fb1);
-                    Log.d(TAG, "name product: " + fb1.getProductID());
                     _mldListReviewedFeedback.setValue(feedbacks);
 
                 })

@@ -49,7 +49,7 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
 
         holder.id_tv.setText("ID: #" + order.getId());
         holder.title_tv.setText(order.getTitle());
-        holder.time_remain_tv.setText("Remaining day:    " + Integer.toString(order.getRemaining_day()) + " day");
+        holder.time_remain_tv.setText("Remaining day: " + Integer.toString(order.getRemaining_day()) + " day");
 
         holder.detail_btn.setOnClickListener(new View.OnClickListener() {
             @Override

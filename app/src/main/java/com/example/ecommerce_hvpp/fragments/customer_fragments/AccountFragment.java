@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -159,7 +160,7 @@ public class AccountFragment extends Fragment {
         RelativeLayout profile_btn = (RelativeLayout) view.findViewById(R.id.btn_profile);
         RelativeLayout recep_info_btn = (RelativeLayout) view.findViewById(R.id.btn_recep_info);
         RelativeLayout order_history_btn = (RelativeLayout) view.findViewById(R.id.btn_orderhistory);
-        //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
+        RelativeLayout chat_with_admin_btn = (RelativeLayout) view.findViewById(R.id.btn_chat_with_admin);
         RelativeLayout logout_btn = (RelativeLayout) view.findViewById(R.id.btn_logout);
 
 
@@ -200,6 +201,12 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 navController.navigate(R.id.OrderHistoryFragment);
+            }
+        });
+        chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.chatRoomFragment);
             }
         });
         logout_btn.setOnClickListener(new View.OnClickListener() {
