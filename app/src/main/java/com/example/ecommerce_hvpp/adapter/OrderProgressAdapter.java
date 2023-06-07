@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.fragments.customer_fragments.OrderProgressFragment;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.RecepInfoRepository;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdapter.DataViewHolder>{
     private OrderProgressFragment parent;

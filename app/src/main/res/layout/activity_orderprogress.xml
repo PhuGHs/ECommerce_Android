@@ -31,23 +31,24 @@
             style="@style/header"/>
     </LinearLayout>
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
+        android:id="@+id/search_bar_orderprogress"
+        android:background="@drawable/bg_white_rounded"
+        android:layout_marginTop="90px"
         android:layout_width="948px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90px"
-        android:background="@drawable/bg_white_rounded"
-        app:iconifiedByDefault="false"
-        app:queryBackground="@color/white"
-        app:queryHint="Tìm kiếm ..."
-        app:searchIcon="@drawable/baseline_search_24"
-        app:submitBackground="@drawable/bg_white_rounded" />
+        android:queryHint="Search your order..."
+        android:iconifiedByDefault="false"
+        style="@style/font_crimson_regular"
+        android:queryBackground="@color/white"
+        android:submitBackground="@drawable/bg_white_rounded"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_orderprogress"
         android:layout_marginTop="80px"
-        android:paddingLeft="40px"
-        android:paddingRight="40px"/>
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"/>
 
 </LinearLayout>
