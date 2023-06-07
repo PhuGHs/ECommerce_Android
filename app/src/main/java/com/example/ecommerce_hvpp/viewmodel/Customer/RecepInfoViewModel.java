@@ -29,5 +29,13 @@ public class RecepInfoViewModel extends ViewModel {
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         repo.updateStatusOfRecepInfo(fbUser.getUid(), recep_id);
     }
+    public void addNewRecepInfo(String address, String name, String phonenumber, boolean isApplied){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.addNewRecepInfo(fbUser.getUid(), address, name, phonenumber, isApplied);
+    }
+    public void deleteRecepInfo(String address){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.deleteRecepInfo(fbUser.getUid(), address);
+    }
 
 }

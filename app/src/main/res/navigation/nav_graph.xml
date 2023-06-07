@@ -60,6 +60,11 @@
             app:destination="@id/RecepientInfoDetailFragment"/>
     </fragment>
     <fragment
+        android:id="@+id/NewRecepientInfoFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.NewRecepInfoFragment"
+        android:label="fragment_recepient_info_new"
+        tools:layout="@layout/actitvity_new_recepinfo"/>
+    <fragment
         android:id="@+id/RecepientInfoDetailFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.EditRecepInfoFragment"
         android:label="fragment_recepient_info_detail"

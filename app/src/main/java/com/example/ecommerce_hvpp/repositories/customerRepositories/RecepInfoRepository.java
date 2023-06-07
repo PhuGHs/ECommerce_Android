@@ -23,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecepInfoRepository {
     private FirebaseHelper firebaseHelper;
@@ -106,6 +108,33 @@ public class RecepInfoRepository {
                 })
                 .addOnFailureListener(e -> {
                     Log.d(TAG, "khong the cap nhat trang thai recepinfo");
+                });
+    }
+    public void addNewRecepInfo(String UID, String address, String username, String phonenumber, boolean isApplied){
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        Map<String, Object> recepinfo = new HashMap<>();
+        recepinfo.put("address", address);
+        recepinfo.put("name", username);
+        recepinfo.put("phonenumber", phonenumber);
+        recepinfo.put("isApplied", false);
+
+        fs.collection("users").document(UID).collection("recep_info").document().set(recepinfo);
+    }
+    public void deleteRecepInfo(String UID, String address){
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        firebaseHelper.getCollection("users").document(UID).collection("recep_info")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("address").equals(address)){
+                            DocumentReference ref = fs.collection("users").document(UID).collection("recep_info").document(snapshot.getId());
+                            ref.delete();
+                            Log.d(TAG, "xoa thanh cong");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "khong the xoa recepinfo");
                 });
     }
 

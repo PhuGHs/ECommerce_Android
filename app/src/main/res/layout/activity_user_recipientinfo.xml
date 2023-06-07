@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_width="125px"
+            android:layout_width="110px"
             android:layout_height="100px"
             android:layout_marginTop="110px"
             android:layout_marginLeft="46px"
@@ -42,15 +42,6 @@
             android:backgroundTint="@color/primary"
             android:src="@drawable/add_ic"/>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_width="125px"
-            android:layout_height="100px"
-            android:layout_marginTop="110px"
-            android:layout_marginLeft="46px"
-            android:id="@+id/delete_btn"
-            android:background="@drawable/bg_white_rounded"
-            android:backgroundTint="@color/primary"
-            android:src="@drawable/delete_ic"/>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
