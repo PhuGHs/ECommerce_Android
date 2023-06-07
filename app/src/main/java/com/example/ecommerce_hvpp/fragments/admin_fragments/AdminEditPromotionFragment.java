@@ -173,6 +173,8 @@ public class AdminEditPromotionFragment extends Fragment {
     }
 
     private void handleSaveButton() throws ParseException {
-        repo.updatePromotionDatabase(convertPromotionObject());
+        Promotion promotion = convertPromotionObject();
+        repo.updatePromotionDatabase(promotion);
+        repo.updateVoucherForUsers(promotion);
     }
 }

@@ -91,7 +91,6 @@ public class AdminPromotionFragment extends Fragment {
         return mAdminFragmentPromotionBinding.getRoot();
     }
 
-
     private Observer<Resource<List<Promotion>>> getObserverPromotion() {
         return new Observer<Resource<List<Promotion>>>() {
             @Override

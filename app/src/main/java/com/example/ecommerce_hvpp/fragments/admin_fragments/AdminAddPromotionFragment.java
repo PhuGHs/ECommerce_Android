@@ -156,7 +156,9 @@ public class AdminAddPromotionFragment extends Fragment {
     }
 
     private void handleAddButton() throws ParseException {
-        repo.insertPromotionDatabase(convertPromotionObject());
+        Promotion promotion = convertPromotionObject();
+        repo.insertPromotionDatabase(promotion);
+        repo.insertVoucherForUsers(promotion);
     }
 
     @Override

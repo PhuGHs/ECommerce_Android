@@ -22,6 +22,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentProfileBinding;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminPromotionRepository;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.AdminProfileViewModel;
@@ -55,11 +56,16 @@ public class AdminProfileFragment extends Fragment {
 
         // init repo
         repo = new AdminStatisticsRepository();
-
+        testData(); // test data here
         // get data statistics
         getDataStatistics();
 
         return mAdminFragmentProfileBinding.getRoot();
+    }
+
+    private void testData() {
+        AdminPromotionRepository repoTest = new AdminPromotionRepository();
+        repoTest.getVouchersOfUsers();
     }
 
     private void getDataStatistics() {
