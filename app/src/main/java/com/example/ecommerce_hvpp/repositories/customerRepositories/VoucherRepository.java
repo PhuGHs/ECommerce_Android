@@ -29,7 +29,7 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Voucher> vouchers = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 < 0){
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0){
                             String name = snapshot.getString("name");
                             String code = snapshot.getString("id");
                             long value = snapshot.getLong("value");
@@ -52,7 +52,7 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int count = 0;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 < 0){
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0){
                             count++;
                         }
                     }

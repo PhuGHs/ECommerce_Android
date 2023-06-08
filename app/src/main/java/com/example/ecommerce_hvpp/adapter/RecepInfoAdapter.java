@@ -1,9 +1,12 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,7 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
     private RecepInfoViewModel viewModel;
     private ArrayList<RecepInfo> listRecepInfo;
     private RecepientInfoFragment parent;
+    private int tickPos = -1;
     public RecepInfoAdapter(RecepientInfoFragment parent, ArrayList<RecepInfo> listRecepInfo) {
         this.parent = parent;
         this.listRecepInfo = listRecepInfo;
@@ -60,10 +64,10 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
         holder.address_tv.setText(recepInfo.getAddress());
 
         if (recepInfo.getisApplied() == true){
+            tickPos = holder.getAdapterPosition();
             holder.isApplied_image.setImageResource(R.drawable.checked);
             holder.applied_btn.setVisibility(View.INVISIBLE);
         }
-
         holder.delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,10 +95,24 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
         holder.applied_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (tickPos != -1){
+                    RecepInfo recep = listRecepInfo.get(tickPos);
+                    assert recep != null;
+                    recep.setApplied(false);
+                    listRecepInfo.set(tickPos, recep);
+                    Log.d(TAG, "Current tick: " + tickPos);
+                    notifyItemChanged(tickPos);
+                }
+
+
+                tickPos = holder.getAdapterPosition();
+                RecepInfo recep1 = listRecepInfo.get(tickPos);
+                recep1.setApplied(true);
+                listRecepInfo.set(tickPos, recep1);
+                Log.d(TAG, "New current tick: " + tickPos);
+                notifyItemChanged(tickPos);
+
                 viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
-                holder.isApplied_image.setImageResource(R.drawable.checked);
-                holder.applied_btn.setVisibility(View.INVISIBLE);
-                //notifyItemChanged(position); //modify to update the list immediately after click
             }
         });
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +124,22 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
             }
         });
 
+    }
+//    public int getCurrentTick(){
+//        for (RecepInfo recepInfo : listRecepInfo){
+//            if (recepInfo.getisApplied()){
+//                return listRecepInfo.indexOf(recepInfo);
+//            }
+//        }
+//        return -1;
+//    }
+    public RecepInfo getCurrentTick(){
+        for (RecepInfo recepInfo : listRecepInfo){
+            if (recepInfo.getisApplied() == true){
+                return recepInfo;
+            }
+        }
+        return null;
     }
     /**
      * Data ViewHolder class.
@@ -125,7 +159,6 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
             applied_btn = (Button) itemView.findViewById(R.id.apply_btn);
             edit_btn = (Button) itemView.findViewById(R.id.edit_btn);
             delete_btn = (AppCompatImageButton) itemView.findViewById(R.id.delete_btn);
-
 
         }
 
