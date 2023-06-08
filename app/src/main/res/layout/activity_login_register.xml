@@ -6,21 +6,71 @@
     android:id="@+id/layout_register_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
+        android:id="@+id/noInternetLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:title="@string/app_name"
-        app:titleTextColor="@color/white"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/noInternetImage"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:src="@drawable/no_internet"
+            android:layout_marginTop="100dp"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/noInternetHeading"
+            android:layout_below="@id/noInternetImage"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            style="@style/font_crimson_bold"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:text="NO INTERNET CONNECTION"/>
+        <TextView
+            android:id="@+id/noInternetContent"
+            android:layout_below="@id/noInternetHeading"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:gravity="center"
+            style="@style/font_crimson_regular"
+            android:text="Check your internet connection and try again!"/>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/noInternetContent"
+            android:id="@+id/btnTryAgain"
+            android:text="Try again"
+            android:textSize="20dp"
+            style="@style/font_medium"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/hasInternetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white"
+            tools:ignore="MissingConstraints" />
 
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/login_register_graph" />
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/login_register_graph" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
