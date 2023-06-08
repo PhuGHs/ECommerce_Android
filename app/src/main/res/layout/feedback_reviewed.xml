@@ -2,13 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="20dp"
     android:orientation="horizontal"
-    android:background="@drawable/bg_white_rounded">
+    android:background="@drawable/bg_white_rounded"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
 
-    <ImageView
+    <androidx.cardview.widget.CardView
         android:layout_width="50px"
         android:layout_height="50px"
-        android:src="@drawable/ic_launcher_background"/>
+        app:cardCornerRadius="100dp">
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:id="@+id/image_of_user_feedback"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar_customer"/>
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,21 +30,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/name_feedback"
+            android:id="@+id/name_user_feedback"
             android:text="vanphudh2003"
             android:textColor="@color/black"
             style="@style/header"/>
 
-        <ImageView
-            android:layout_width="200px"
-            android:layout_height="100px"
-            android:backgroundTint="@color/transparent"
-            android:src="@drawable/rate_star"/>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="110px"
+            android:layout_marginLeft="-160px"
+            android:id="@+id/ratingBar_of_feedback"
+            android:scaleX="0.5"
+            android:scaleY="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/date_feedback"
+            android:id="@+id/datetime_feedback"
             android:text="18-04-2023  22:01"
             android:textColor="#776363"
             style="@style/header"/>
@@ -47,15 +61,17 @@
             style="@style/regularfont"/>
 
         <LinearLayout
-            android:layout_width="900px"
+            android:layout_width="750px"
             android:layout_height="wrap_content"
             android:layout_marginTop="30px"
+            android:layout_marginBottom="20px"
             android:background="@drawable/bg_white_rounded"
             android:backgroundTint="@color/background">
             <ImageView
                 android:layout_width="70px"
                 android:layout_height="70px"
-                android:src="@drawable/ic_launcher_background"/>
+                android:src="@drawable/mc"
+                android:id="@+id/image_of_feedbackitem"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -64,6 +80,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/name_of_feedbackitem"
                     android:text="Áo Retro Manchester City"
                     android:textSize="40px"
                     style="@style/header"/>

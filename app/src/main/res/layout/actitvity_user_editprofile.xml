@@ -178,9 +178,9 @@
                 android:text="Change avatar"
                 android:textAllCaps="false"
                 style="@style/header"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="50px"
-                android:backgroundTint="#B3E5BE"/>
+                android:backgroundTint="#1B9C85"/>
 
             <Button
                 android:layout_width="500px"
@@ -190,9 +190,9 @@
                 android:text="Edit profile"
                 android:textAllCaps="false"
                 style="@style/header"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="50px"
-                android:backgroundTint="#B3E5BE"/>
+                android:backgroundTint="#1B9C85"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

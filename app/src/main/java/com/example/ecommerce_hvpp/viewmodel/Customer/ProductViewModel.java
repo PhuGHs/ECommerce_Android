@@ -80,7 +80,7 @@ public class ProductViewModel extends ViewModel {
                         String nation = documentSnapshot.getString("nation");
                         String season = documentSnapshot.getString("season");
                         double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("point");
+                        double Point = documentSnapshot.getDouble("pointAvg");
                         String urlmain = documentSnapshot.getString("url_main");
                         String urlsub1 = documentSnapshot.getString("url_sub1");
                         String urlsub2 = documentSnapshot.getString("url_sub2");
