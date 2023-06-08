@@ -19,13 +19,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.adapter.AdminCustomItemOrderHistoryAdapter;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentOrderHistoryBinding;
+import com.example.ecommerce_hvpp.dialog.OrderFilterDialog;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_order_history.AdminOrderHistoryViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +48,9 @@ public class AdminOrderHistoryFragment extends Fragment {
     Observable<Resource<List<OrderHistory>>> observable;
     Observer<Resource<List<OrderHistory>>> observer;
     private Disposable disposable;
+    private List<String> filterOptions;
     static int PERMISSION_CODE = 100;
+    AdminOrderHistoryFragment mFragment;
 
     @Nullable
     @Override
@@ -51,6 +58,7 @@ public class AdminOrderHistoryFragment extends Fragment {
         mAdminFragmentOrderHistoryBinding = AdminFragmentOrderHistoryBinding.inflate(inflater, container, false);
 
         // init view model
+        mFragment = this;
         vmAdminOrderHistory = new ViewModelProvider(requireActivity()).get(AdminOrderHistoryViewModel.class);
 
         // display data into app
@@ -71,27 +79,7 @@ public class AdminOrderHistoryFragment extends Fragment {
         }
 
         // search bar
-        mAdminFragmentOrderHistoryBinding.adminOrderHistorySearchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String strSearch = charSequence.toString();
-                observer = getObserverAfterSearch(strSearch);
-
-                observable.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        handleEvents();
 
 
         return mAdminFragmentOrderHistoryBinding.getRoot();
@@ -114,7 +102,7 @@ public class AdminOrderHistoryFragment extends Fragment {
                         // Handle loading state if needed
                         break;
                     case SUCCESS:
-                        adapterAdminCustomItemOrderHistory = new AdminCustomItemOrderHistoryAdapter(getContext(), Objects.requireNonNull(resource.data));
+                        adapterAdminCustomItemOrderHistory = new AdminCustomItemOrderHistoryAdapter(getContext(), Objects.requireNonNull(resource.data), mFragment);
 
                         //set up recyclerview
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -177,6 +165,67 @@ public class AdminOrderHistoryFragment extends Fragment {
                 Log.e("Vucoder", "onComplete");
             }
         };
+    }
+
+    private void handleEvents() {
+        initDefaultFilters();
+        mAdminFragmentOrderHistoryBinding.adminOrderHistoryFilter.setOnClickListener(v -> {
+            showBottomSheetDialog();
+        });
+        mAdminFragmentOrderHistoryBinding.adminOrderHistorySearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String strSearch = charSequence.toString();
+                observer = getObserverAfterSearch(strSearch);
+
+                observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void showBottomSheetDialog() {
+        OrderFilterDialog orderFilterDialog = new OrderFilterDialog(filterOptions);
+
+        orderFilterDialog.setOnFilterSelectedListener(new OrderFilterDialog.OnFilterSelectedListener() {
+            @Override
+            public void onFilterSelected(List<String> options) {
+                filterOptions.clear();
+                filterOptions.addAll(options);
+                Snackbar.make(requireView(), "Filters are applied!", Snackbar.LENGTH_SHORT).show();
+                adapterAdminCustomItemOrderHistory.setTypeAdapter(filterOptions.get(1), filterOptions.get(0));
+//                if(adapter.getItemCount() > 1) {
+//                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " results");
+//                } else if (adapter.getListSize() == 0) {
+//                    tvFoundText.setText("");
+//                } else {
+//                    tvFoundText.setText("Found " + String.valueOf(adapter.getItemCount()) + " result");
+//                }
+            }
+        });
+        orderFilterDialog.show(getChildFragmentManager(), orderFilterDialog.getTag());
+    }
+
+    public void initDefaultFilters() {
+        filterOptions = new ArrayList<>();
+        filterOptions.add("Created Date");
+        filterOptions.add("All");
+        filterOptions.add("Phone Number");
+    }
+
+    public List<String> getFilterOptions() {
+        return filterOptions;
     }
 
     @Override

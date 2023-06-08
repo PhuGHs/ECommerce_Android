@@ -93,74 +93,54 @@
 
         </RelativeLayout>
 
-        <!--    Calendar    -->
+        <!--    filter    -->
         <RelativeLayout
+            android:id="@+id/admin_order_history_search_container"
             android:layout_width="match_parent"
-            android:layout_height="27dp"
-            android:layout_marginTop="20dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/calendar_container"
-                android:layout_width="297dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/round_calendar">
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:background="@drawable/searchview_bg"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="50dp"
+                android:layout_alignParentEnd="true">
 
                 <ImageView
-                    android:id="@+id/admin_order_history_ic_start_date"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/baseline_calendar"
+                    android:id="@+id/admin_order_history_search_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/baseline_search_24"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="16dp" />
+                    android:layout_marginStart="10dp"
+                    app:tint="@color/background"/>
 
-                <TextView
-                    android:id="@+id/admin_order_history_tv_start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <EditText
+                    android:id="@+id/admin_order_history_search_edit_text"
+                    android:layout_toEndOf="@id/admin_order_history_search_icon"
                     android:layout_marginStart="5dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/admin_order_history_ic_start_date"
-                    android:text="11/09/2021"
-                    android:textColor="@color/black"
-                    style="@style/w400_40" />
-
-                <ImageView
-                    android:id="@+id/ic_arrow_order_history"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/baseline_right_arrow" />
-
-                <ImageView
-                    android:id="@+id/admin_order_history_ic_end_date"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_toEndOf="@id/ic_arrow_order_history"
-                    android:src="@drawable/baseline_calendar"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="36dp" />
-
-                <TextView
-                    android:id="@+id/admin_order_history_tv_end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/admin_order_history_ic_end_date"
-                    android:text="11/09/2021"
-                    android:textColor="@color/black"
-                    style="@style/w400_40" />
+                    android:layout_height="match_parent"
+                    android:hint="Click here to find orders ..."
+                    android:textColor="#454545"
+                    android:foregroundTint="@color/background"
+                    android:background="@color/white"
+                    android:backgroundTint="@color/white"
+                    style="@style/font_medium"
+                    android:textSize="20dp"
+                    android:layout_centerVertical="true"/>
 
             </RelativeLayout>
 
-            <!--        Filter        -->
             <ImageView
-                android:layout_width="39dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/baseline_filter"
-                android:background="@drawable/round_filter"
-                android:padding="6dp" />
+                android:id="@+id/admin_order_history_filter"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/filter"
+                app:tint="@color/primary"
+                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 

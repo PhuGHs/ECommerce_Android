@@ -18,12 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemOrderHistoryBinding;
+import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminOrderHistoryFragment;
+import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,12 +42,14 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     List<OrderHistory> mListOrderHistory;
     List<OrderHistory> mListOrderHistoryOriginal;
     AdminProfileRepository repo;
+    AdminOrderHistoryFragment parent;
 
 
-    public AdminCustomItemOrderHistoryAdapter(Context context, List<OrderHistory> listOrderHistory) {
+    public AdminCustomItemOrderHistoryAdapter(Context context, List<OrderHistory> listOrderHistory, AdminOrderHistoryFragment parent) {
         this.mContext = context;
         this.mListOrderHistory = listOrderHistory;
         this.mListOrderHistoryOriginal = listOrderHistory;
+        this.parent = parent;
     }
     @NonNull
     @Override
@@ -91,6 +97,33 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
     @Override
     public int getItemCount() {
         return mListOrderHistory.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setTypeAdapter(String type, String order) {
+        mListOrderHistory.clear();
+        mListOrderHistory.addAll(mListOrderHistoryOriginal);
+
+//        if (!type.equals("All")) {
+//            typeList = new ArrayList<>();
+//            for (Order or : list) {
+//                if (or.getStatus().equals(type)) {
+//                    typeList.add(or);
+//                }
+//            }
+//            list.clear();
+//            list.addAll(typeList);
+//        }
+
+        Collections.sort(mListOrderHistory, new Comparator<OrderHistory>() {
+            @Override
+            public int compare(OrderHistory order, OrderHistory t1) {
+                String selectedSortOption = parent.getFilterOptions().get(0);
+                return Long.compare(t1.getCreatedDate().getTime(), order.getCreatedDate().getTime());
+            }
+        });
+
+        notifyDataSetChanged();
     }
 
     private Observer<Resource<User>> getObserverUser(@NonNull AdminCustomItemOrderHistoryViewHolder holder, OrderHistory orderHistory) {
