@@ -67,6 +67,9 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
             tickPos = holder.getAdapterPosition();
             holder.isApplied_image.setImageResource(R.drawable.checked);
             holder.applied_btn.setVisibility(View.INVISIBLE);
+        } else {
+            holder.isApplied_image.setImageResource(0);
+            holder.applied_btn.setVisibility(View.VISIBLE);
         }
         holder.delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +103,6 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
                     assert recep != null;
                     recep.setApplied(false);
                     listRecepInfo.set(tickPos, recep);
-                    Log.d(TAG, "Current tick: " + tickPos);
                     notifyItemChanged(tickPos);
                 }
 
@@ -109,10 +111,13 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
                 RecepInfo recep1 = listRecepInfo.get(tickPos);
                 recep1.setApplied(true);
                 listRecepInfo.set(tickPos, recep1);
-                Log.d(TAG, "New current tick: " + tickPos);
                 notifyItemChanged(tickPos);
 
-                viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
+                for (RecepInfo item : listRecepInfo) {
+                    Log.e("PhucRecep", item.getName() + " : " + item.getisApplied());
+                }
+
+//                viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
             }
         });
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
