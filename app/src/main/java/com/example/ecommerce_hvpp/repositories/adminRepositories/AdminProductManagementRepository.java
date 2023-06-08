@@ -12,6 +12,7 @@ import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -47,14 +48,30 @@ public class AdminProductManagementRepository {
 
     public LiveData<Resource<List<Product>>> getAllProductWithNoCriteria() {
         _mldProductList.setValue(Resource.loading(null));
-        fbHelper.getCollection("Product").get()
+        fbHelper.getCollection("Product").whereEqualTo("status", "available").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<Product> products = new ArrayList<>();
-                        for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            Product pd = snapshot.toObject(Product.class);
-                            products.add(pd);
+                        for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String id = documentSnapshot.getString("id");
+                            String name = documentSnapshot.getString("name");
+                            String club = documentSnapshot.getString("club");
+                            String nation = documentSnapshot.getString("nation");
+                            String season = documentSnapshot.getString("season");
+                            double Price = documentSnapshot.getDouble("price");
+                            double Point = documentSnapshot.getDouble("pointAvg");
+                            String urlmain = documentSnapshot.getString("url_main");
+                            String urlsub1 = documentSnapshot.getString("url_sub1");
+                            String urlsub2 = documentSnapshot.getString("url_sub2");
+                            String urlthumb = documentSnapshot.getString("url_thumb");
+                            long sizeM = documentSnapshot.getLong("size_m");
+                            long sizeL = documentSnapshot.getLong("size_l");
+                            long sizeXL = documentSnapshot.getLong("size_xl");
+                            String status = documentSnapshot.getString("status");
+                            Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                            String desc = documentSnapshot.getString("description");
+                            products.add(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds()*1000));
                         }
                         _mldProductList.setValue(Resource.success(products));
                     }
@@ -75,7 +92,24 @@ public class AdminProductManagementRepository {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        _mldProduct.setValue(Resource.success(documentSnapshot.toObject(Product.class)));
+                        String id = documentSnapshot.getString("id");
+                        String name = documentSnapshot.getString("name");
+                        String club = documentSnapshot.getString("club");
+                        String nation = documentSnapshot.getString("nation");
+                        String season = documentSnapshot.getString("season");
+                        double Price = documentSnapshot.getDouble("price");
+                        double Point = documentSnapshot.getDouble("pointAvg");
+                        String urlmain = documentSnapshot.getString("url_main");
+                        String urlsub1 = documentSnapshot.getString("url_sub1");
+                        String urlsub2 = documentSnapshot.getString("url_sub2");
+                        String urlthumb = documentSnapshot.getString("url_thumb");
+                        long sizeM = documentSnapshot.getLong("size_m");
+                        long sizeL = documentSnapshot.getLong("size_l");
+                        long sizeXL = documentSnapshot.getLong("size_xl");
+                        String status = documentSnapshot.getString("status");
+                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
+                        String desc = documentSnapshot.getString("description");
+                        _mldProduct.setValue(Resource.success(new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds()*1000)));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -89,7 +123,25 @@ public class AdminProductManagementRepository {
 
     public LiveData<Resource<String>> addProduct(Product pd) {
         _mldUAddProduct.setValue(Resource.loading(null));
-        fbHelper.getCollection("Product").add(pd)
+        Map<String, Object> add = new HashMap<>();
+        add.put("club", pd.getClub());
+        add.put("description", pd.getDescription());
+        add.put("name", pd.getName());
+        add.put("nation", pd.getNation());
+        add.put("pointAvg", pd.getPointAvg());
+        add.put("price", pd.getPrice());
+        add.put("season", pd.getSeason());
+        add.put("size_l", pd.getSize_l());
+        add.put("size_m", pd.getSize_m());
+        add.put("size_xl", pd.getSize_xl());
+        add.put("url_thumb", pd.getUrlthumb());
+        add.put("url_main", pd.getUrlmain());
+        add.put("url_sub1", pd.getUrlsub1());
+        add.put("url_sub2", pd.getUrlsub2());
+        add.put("status", pd.getStatus());
+        add.put("time_added", new Timestamp(pd.getTimeAdded() / 1000, 0));
+
+        fbHelper.getCollection("Product").add(add)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -98,8 +150,7 @@ public class AdminProductManagementRepository {
                         updateProductWithId(documentReference, pd);
                         _mldUAddProduct.setValue(Resource.success("added product"));
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         _mldUAddProduct.setValue(Resource.error("Error adding product", null));
@@ -117,6 +168,12 @@ public class AdminProductManagementRepository {
                 });
     }
 
+    public void updateProductStatus(String Id, String status) {
+        fbHelper.getCollection("Product").document(Id).update("status", status)
+                .addOnSuccessListener(aVoid -> {})
+                .addOnFailureListener(e -> {});
+    }
+
     public LiveData<Resource<String>> updateProduct(Product pd) {
         _mldEdit.setValue(Resource.loading(null));
         Map<String, Object> updates = new HashMap<>();
@@ -127,9 +184,9 @@ public class AdminProductManagementRepository {
         updates.put("point", pd.getPointAvg());
         updates.put("price", pd.getPrice());
         updates.put("season", pd.getSeason());
-        updates.put("size_l", pd.getSizeL());
-        updates.put("size_m", pd.getSizeM());
-        updates.put("size_xl", pd.getSizeXL());
+        updates.put("size_l", pd.getSize_l());
+        updates.put("size_m", pd.getSize_m());
+        updates.put("size_xl", pd.getSize_xl());
         updates.put("url_thumb", pd.getUrlthumb());
         updates.put("url_main", pd.getUrlmain());
         updates.put("url_sub1", pd.getUrlsub1());

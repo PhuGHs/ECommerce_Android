@@ -1,14 +1,16 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -31,7 +33,7 @@ public class ChatRoomFragment extends Fragment {
     private ChatRoomAdapter adapter;
     private List<ChatRoom> list;
     private RecyclerView rcvInboxList;
-    private SearchView svSearch;
+    private EditText etSearch;
     private NavController navController;
     private String roomName;
     public NavController getNavController() {
@@ -46,7 +48,7 @@ public class ChatRoomFragment extends Fragment {
 
         //Initialize views
         rcvInboxList = view.findViewById(R.id.rcvInboxList);
-        svSearch = view.findViewById(R.id.search_bar);
+        etSearch = view.findViewById(R.id.etSearchText);
 
 
         //Initialize viewModel
@@ -94,16 +96,32 @@ public class ChatRoomFragment extends Fragment {
                     break;
                 case SUCCESS:
                     roomName = resource.data.getUsername();
+                    adapter.updateRoomAvatar(resource.data.getImagePath());
+                    adapter.updateRoomName(roomName);
                     break;
+            }
+        });
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
 
+
     public String getCurrentUserUID() {
         return currentUserUID;
-    }
-
-    public String getRoomName() {
-        return roomName;
     }
 }

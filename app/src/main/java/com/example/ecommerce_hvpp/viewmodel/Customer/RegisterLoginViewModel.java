@@ -23,14 +23,14 @@ public class RegisterLoginViewModel extends ViewModel {
     }
     public String UID;
 
-    public LiveData<Resource<User>> registerUser(String email, String password) {
+    public LiveData<Resource<User>> registerUser(String email, String password, String username) {
         _register.setValue(Resource.loading(null));
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         FirebaseUser user = task.getResult().getUser();
                         UID = user.getUid();
-                        createUser(UID, new User(email, password));
+                        createUser(UID, new User(UID, email, password, username));
                     } else {
                         String errMessage = task.getException().getMessage();
                         _register.setValue(Resource.error(errMessage, null));

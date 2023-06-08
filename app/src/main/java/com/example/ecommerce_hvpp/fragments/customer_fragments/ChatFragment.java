@@ -20,11 +20,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.ChatAdapter;
 import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 import com.example.ecommerce_hvpp.viewmodel.ChatViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.Objects;
 
@@ -35,6 +37,7 @@ public class ChatFragment extends Fragment {
     private ImageView btnBack;
     private TextView tvName;
     private CardView btnSend;
+    private ShapeableImageView siProfileImage;
     private ChatViewModel viewModel;
     private ChatRoomViewModel chatRoomViewModel;
     private NavController navController;
@@ -42,6 +45,7 @@ public class ChatFragment extends Fragment {
     private String senderId;
     private String recipientId;
     private String roomName;
+    private String imagePath;
     public static final String TAG = "ChatFragment";
     public ChatFragment() {
 
@@ -58,6 +62,7 @@ public class ChatFragment extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
         etTextMessage = view.findViewById(R.id.etMessage);
         tvName = view.findViewById(R.id.tvName);
+        siProfileImage = view.findViewById(R.id.profileImage);
 
         //Initialize RoomId
         assert getArguments() != null;
@@ -65,6 +70,7 @@ public class ChatFragment extends Fragment {
         senderId = getArguments().getString("senderId");
         recipientId = getArguments().getString("recipientId");
         roomName= getArguments().getString("roomName");
+        imagePath = getArguments().getString("imagePath");
 
         //Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
@@ -72,6 +78,10 @@ public class ChatFragment extends Fragment {
 
         //assign value
         tvName.setText(roomName);
+        Glide.with(getContext())
+                .load(imagePath)
+                .fitCenter()
+                .into(siProfileImage);
 
         //Initialize ChatAdapter
         if(viewModel.getChatMessagesLiveData(roomId).getValue() != null) {
@@ -132,5 +142,12 @@ public class ChatFragment extends Fragment {
         super.onResume();
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 }

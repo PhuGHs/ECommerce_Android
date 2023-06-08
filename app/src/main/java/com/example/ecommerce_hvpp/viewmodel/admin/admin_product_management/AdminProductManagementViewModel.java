@@ -19,4 +19,8 @@ public class AdminProductManagementViewModel extends ViewModel {
     public LiveData<Resource<List<Product>>> getAllProductWithNoCriteria() {
         return repo.getAllProductWithNoCriteria();
     }
+
+    public void deleteProductWithId(String Id, String status) {
+        repo.updateProductStatus(Id, status);
+    }
 }

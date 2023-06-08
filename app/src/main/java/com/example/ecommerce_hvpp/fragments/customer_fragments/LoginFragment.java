@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,9 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.dialog.ResetPasswordDialog;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.util.Validator;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginFragment extends Fragment {
@@ -36,6 +37,12 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        viewModel = new ViewModelProvider(requireActivity()).get(RegisterLoginViewModel.class);
+        email = view.findViewById(R.id.log_email);
+        signup = view.findViewById(R.id.reg_signup_button);
+        password = view.findViewById(R.id.log_password);
+        loginButton = view.findViewById(R.id.login_btn);
+        btnResetPassword = view.findViewById(R.id.btnResetPassword);
 
         return view;
     }
@@ -43,13 +50,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        viewModel = new ViewModelProvider(requireActivity()).get(RegisterLoginViewModel.class);
-        email = view.findViewById(R.id.log_email);
-        signup = view.findViewById(R.id.reg_signup_button);
-        password = view.findViewById(R.id.log_password);
-        loginButton = view.findViewById(R.id.login_btn);
-        btnResetPassword = view.findViewById(R.id.btnResetPassword);
 
         email.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,8 +99,8 @@ public class LoginFragment extends Fragment {
                             startActivity(intent);
                             break;
                         case ERROR:
-                            CustomToast loginErrorToast = new CustomToast();
-                            loginErrorToast.ShowToastMessage(requireActivity(), 2, resource.message);
+                            ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
+                            Snackbar.make(ctw, requireView(), resource.message, Snackbar.LENGTH_LONG).show();
                             break;
                     }
                 });
