@@ -24,4 +24,11 @@ public class Validator {
         }
         return password.equals(confirmPassword);
     }
+
+    public static boolean isValidPasswordHasEnoughCharacter(String password) {
+        if (password.length() < 8) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -80,4 +80,16 @@
         <item name="fontFamily">@font/myfont_medium</item>
         <item name="textAllCaps">false</item>
     </style>
+    <style name="SnackBarSuccess">
+        <item name="snackbarStyle">@style/SuccessStyle</item>
+    </style>
+    <style name="SnackBarError">
+        <item name="snackbarStyle">@style/ErrorStyle</item>
+    </style>
+    <style name="SuccessStyle" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">#00C851</item>
+    </style>
+    <style name="ErrorStyle" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">#ff4444</item>
+    </style>
 </resources>
