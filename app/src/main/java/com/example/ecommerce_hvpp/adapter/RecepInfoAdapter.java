@@ -106,7 +106,6 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
                     notifyItemChanged(tickPos);
                 }
 
-
                 tickPos = holder.getAdapterPosition();
                 RecepInfo recep1 = listRecepInfo.get(tickPos);
                 recep1.setApplied(true);
@@ -117,7 +116,7 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
                     Log.e("PhucRecep", item.getName() + " : " + item.getisApplied());
                 }
 
-//                viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
+                viewModel.updateStatusRecepDetail(recepInfo.getRecep_ID());
             }
         });
         holder.edit_btn.setOnClickListener(new View.OnClickListener() {
@@ -130,14 +129,6 @@ public class RecepInfoAdapter extends RecyclerView.Adapter<RecepInfoAdapter.Data
         });
 
     }
-//    public int getCurrentTick(){
-//        for (RecepInfo recepInfo : listRecepInfo){
-//            if (recepInfo.getisApplied()){
-//                return listRecepInfo.indexOf(recepInfo);
-//            }
-//        }
-//        return -1;
-//    }
     public RecepInfo getCurrentTick(){
         for (RecepInfo recepInfo : listRecepInfo){
             if (recepInfo.getisApplied() == true){
