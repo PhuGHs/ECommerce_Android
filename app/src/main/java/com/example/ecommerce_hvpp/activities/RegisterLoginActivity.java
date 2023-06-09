@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.activities;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
+import com.example.ecommerce_hvpp.util.SessionManager;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -27,12 +29,20 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
     private View image;
     private ViewModelProvider vmProvider;
+    private SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
+        sessionManager = new SessionManager(this);
+
+        if(sessionManager.isLoggedIn()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
@@ -44,7 +54,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
-
         MainActivity.PDviewModel = new ProductViewModel();
     }
 

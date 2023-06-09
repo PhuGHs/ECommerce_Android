@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.dialog.ResetPasswordDialog;
+import com.example.ecommerce_hvpp.util.SessionManager;
 import com.example.ecommerce_hvpp.util.Validator;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,11 +34,13 @@ public class LoginFragment extends Fragment {
     private TextInputLayout email, password;
     private TextView signup;
     private RegisterLoginViewModel viewModel;
+    private SessionManager sessionManager;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(RegisterLoginViewModel.class);
+        sessionManager = new SessionManager(getContext());
         email = view.findViewById(R.id.log_email);
         signup = view.findViewById(R.id.reg_signup_button);
         password = view.findViewById(R.id.log_password);
@@ -96,7 +99,9 @@ public class LoginFragment extends Fragment {
                         case SUCCESS:
                             Intent intent = new Intent(requireActivity(), MainActivity.class);
                             intent.putExtra("UID", viewModel.UID);
+                            sessionManager.saveSession(str_email, str_password);
                             startActivity(intent);
+                            getActivity().finish();
                             break;
                         case ERROR:
                             ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);

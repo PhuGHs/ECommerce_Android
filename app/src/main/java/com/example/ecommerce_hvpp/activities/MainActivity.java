@@ -15,6 +15,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
+import com.example.ecommerce_hvpp.util.SessionManager;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,12 +28,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
 
     private NetworkChangeBroadcastReceiver networkChangeBroadcastReceiver;
     private RelativeLayout noInternetLayout, hasInternetLayout;
+    private SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fbHelper = FirebaseHelper.getInstance();
         setContentView(R.layout.activity_main);
-
+        PDviewModel.initData();
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
 
@@ -56,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
                 });
 
         NavigationUI.setupWithNavController(bottomNav, navController);
-
-        PDviewModel.initData();
     }
 
     public void showMainLayout() {
