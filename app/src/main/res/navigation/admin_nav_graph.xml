@@ -136,6 +136,9 @@
         <action
             android:id="@+id/action_adminStatisticsFragment_to_adminStatisticVisitorsFragment"
             app:destination="@id/adminStatisticVisitorsFragment" />
+        <action
+            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticClubFragment"
+            app:destination="@id/adminStatisticClubFragment" />
     </fragment>
     <fragment
         android:id="@+id/adminAddPromotionFragment"
@@ -172,4 +175,11 @@
         android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticProductSoldFragment"
         android:label="admin_fragment_statistic_product_sold"
         tools:layout="@layout/admin_fragment_statistic_product_sold" />
+
+    <fragment
+        android:id="@+id/adminStatisticClubFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticClubFragment"
+        android:label="admin_fragment_statistic_club"
+        tools:layout="@layout/admin_fragment_statistic_club" />
+
 </navigation>

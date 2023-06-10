@@ -15,14 +15,14 @@
         android:layout_height="match_parent"
         android:paddingHorizontal="25dp"
         android:background="@color/bg_primary"
-        android:paddingTop="29dp"
+        android:paddingTop="10dp"
         >
 
         <!--    Header  -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="29dp">
+            android:layout_marginBottom="12dp">
 
             <ImageView
                 android:id="@+id/admin_statistics_header_back"
@@ -59,58 +59,67 @@
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/admin_statistics_orders_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            style="@style/w500_60"
+            android:text="Today"
+            android:textColor="@color/black" />
         
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            
+
             <RelativeLayout
                 android:id="@+id/admin_statistics_component_visitors_container"
                 android:layout_width="165dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_item_statistic"
-                android:paddingVertical="14dp"
+                android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_VISITORS)}"
                 android:paddingHorizontal="16dp"
-                android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_VISITORS)}">
+                android:paddingVertical="14dp">
 
                 <TextView
                     android:id="@+id/admin_statistics_component_visitors_title"
+                    style="@style/w500_50"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/w500_50"
-                    android:text="Today's Visitors"
-                    android:textColor="@color/primary"/>
+                    android:text="VISITORS"
+                    android:textColor="@color/primary" />
 
                 <TextView
                     android:id="@+id/admin_statistics_component_visitors_quantity"
+                    style="@style/w400_90"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_below="@+id/admin_statistics_component_visitors_title"
-                    style="@style/w400_90"
+                    android:layout_marginTop="8dp"
                     android:text="1098"
-                    android:textColor="@color/black"/>
-                
+                    android:textColor="@color/black" />
+
                 <TextView
                     android:id="@+id/admin_statistics_component_visitors_percent"
+                    style="@style/w400_40"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/admin_statistics_component_visitors_quantity"
                     android:layout_marginTop="16dp"
-                    android:paddingHorizontal="5dp"
                     android:background="@drawable/round_percent"
-                    style="@style/w400_40"
+                    android:gravity="center"
+                    android:paddingHorizontal="5dp"
                     android:text="-11%"
-                    android:textColor="@color/decrease_percent"
-                    android:gravity="center" />
+                    android:textColor="@color/decrease_percent" />
 
                 <TextView
                     android:id="@+id/admin_statistics_component_visitors_details"
+                    style="@style/w400_40"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/admin_statistics_component_visitors_percent"
                     android:layout_toStartOf="@id/admin_statistics_component_visitors_next"
-                    style="@style/w400_40"
                     android:text="Details"
                     android:textColor="@color/black" />
 
@@ -118,11 +127,11 @@
                     android:id="@+id/admin_statistics_component_visitors_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_next_details"
                     android:layout_alignTop="@id/admin_statistics_component_visitors_details"
-                    android:layout_marginTop="9dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginStart="4dp"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_marginTop="9dp"
+                    android:src="@drawable/baseline_next_details" />
 
             </RelativeLayout>
 
@@ -141,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/w500_50"
-                    android:text="Today's Orders"
+                    android:text="ORDERS"
                     android:textColor="@color/primary"/>
 
                 <TextView
@@ -194,7 +203,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
             <RelativeLayout
                 android:id="@+id/admin_statistics_component_revenue_container"
@@ -210,7 +220,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/w500_50"
-                    android:text="Revenue"
+                    android:text="REVENUE"
                     android:textColor="@color/primary"/>
 
                 <TextView
@@ -277,7 +287,8 @@
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/round_item_statistic"
                 android:paddingVertical="14dp"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="14dp"
                 android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_PRODUCT_SOLD)}">
 
                 <TextView
@@ -285,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/w500_50"
-                    android:text="Product Sold"
+                    android:text="PRODUCT SOLD"
                     android:textColor="@color/primary"/>
 
                 <TextView
@@ -329,11 +340,181 @@
                     android:layout_alignTop="@id/admin_statistics_component_product_sold_details"
                     android:layout_marginTop="9dp"
                     android:layout_marginStart="4dp"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="2dp"/>
 
             </RelativeLayout>
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/admin_statistics_orders_statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            style="@style/w500_60"
+            android:text="This month"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/admin_statistics_component_club_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_item_statistic"
+                android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_CLUB)}"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp">
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_club_title"
+                    style="@style/w500_50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CLUB TOP-SELLING"
+                    android:textColor="@color/primary" />
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_club_quantity"
+                    style="@style/w500_50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/admin_statistics_component_club_title"
+                    android:layout_marginTop="15dp"
+                    android:text="Manchester City"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_club_details"
+                    style="@style/w400_40"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/admin_statistics_component_club_quantity"
+                    android:layout_toStartOf="@id/admin_statistics_component_club_next"
+                    android:layout_marginTop="3dp"
+                    android:text="Details"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/admin_statistics_component_club_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/admin_statistics_component_club_details"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="9dp"
+                    android:src="@drawable/baseline_next_details" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/admin_statistics_component_nation_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/round_item_statistic"
+                android:paddingVertical="14dp"
+                android:paddingHorizontal="16dp"
+                android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_ORDERS)}">
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_nation_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/w500_50"
+                    android:text="NATION TOP-SELLING"
+                    android:textColor="@color/primary"/>
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_nation_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/admin_statistics_component_nation_title"
+                    style="@style/w500_50"
+                    android:text="Argentina, Germany"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_nation_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/admin_statistics_component_nation_quantity"
+                    android:layout_toStartOf="@id/admin_statistics_component_nation_next"
+                    android:layout_marginTop="3dp"
+                    style="@style/w400_40"
+                    android:text="Details"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/admin_statistics_component_nation_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_next_details"
+                    android:layout_alignTop="@id/admin_statistics_component_nation_details"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/admin_statistics_component_season_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/round_item_statistic"
+                android:paddingVertical="14dp"
+                android:paddingHorizontal="16dp"
+                android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_ORDERS)}">
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_season_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/w500_50"
+                    android:text="SEASON TOP-SELLING"
+                    android:textColor="@color/primary"/>
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_season_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/admin_statistics_component_season_title"
+                    style="@style/w500_50"
+                    android:text="2012-2013"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/admin_statistics_component_season_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/admin_statistics_component_season_quantity"
+                    android:layout_toStartOf="@id/admin_statistics_component_season_next"
+                    android:layout_marginTop="3dp"
+                    style="@style/w400_40"
+                    android:text="Details"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/admin_statistics_component_season_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_next_details"
+                    android:layout_alignTop="@id/admin_statistics_component_season_details"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </layout>

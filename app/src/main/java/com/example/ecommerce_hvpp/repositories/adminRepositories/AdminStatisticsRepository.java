@@ -3,6 +3,7 @@ package com.example.ecommerce_hvpp.repositories.adminRepositories;
 import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.monthFormatter;
+import static com.example.ecommerce_hvpp.util.constant.STATISTIC_CLUB;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_ORDERS;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_PRODUCT_SOLD;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_REVENUE;
@@ -67,6 +68,9 @@ public class AdminStatisticsRepository {
                 break;
             case STATISTIC_PRODUCT_SOLD:
                 navController.navigate(R.id.adminStatisticProductSoldFragment);
+                break;
+            case STATISTIC_CLUB:
+                navController.navigate(R.id.adminStatisticClubFragment);
                 break;
         }
     }

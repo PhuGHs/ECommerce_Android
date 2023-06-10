@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="25dp"
+        android:background="@color/bg_primary"
+        android:paddingTop="10dp">
+
+        <!--    Header  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/admin_statistics_club_header_back"
+                android:layout_width="14dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_back_34" />
+
+            <TextView
+                android:id="@+id/admin_statistics_club_title"
+                style="@style/header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Club Top-selling"
+                android:textColor="@color/primary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                app:cardCornerRadius="100dp">
+
+                <ImageView
+                    android:id="@+id/admin_statistics_club_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/avatar_customer"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/admin_statistics_club_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            style="@style/w500_60"
+            android:text="This month"
+            android:textColor="@color/black" />
+
+
+        <RelativeLayout
+            android:id="@+id/admin_statistics_component_club_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_item_statistic"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/admin_statistics_component_club_title"
+                style="@style/w500_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CLUB TOP-SELLING"
+                android:textColor="@color/primary" />
+
+            <TextView
+                android:id="@+id/admin_statistics_component_club_quantity"
+                style="@style/w500_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/admin_statistics_component_club_title"
+                android:layout_marginTop="15dp"
+                android:text="Manchester City"
+                android:textColor="@color/black" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/admin_statistics_club_statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            style="@style/w500_60"
+            android:text="Statistics"
+            android:textColor="@color/black" />
+
+        <!-- chart-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:background="@drawable/round_item_statistic"
+            android:paddingBottom="15dp"
+            android:layout_marginBottom="15dp">
+
+            <!--  calendar  -->
+            <RelativeLayout
+                android:id="@+id/admin_statistics_club_calendar"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/round_month">
+
+                <TextView
+                    android:id="@+id/admin_statistics_club_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    style="@style/w400_50"
+                    android:text="07/2023"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@id/admin_statistics_club_month"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/baseline_arrow_down_white"
+                    android:scaleType="centerCrop" />
+
+            </RelativeLayout>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/admin_statistics_club_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/admin_statistics_club_calendar"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</layout>
