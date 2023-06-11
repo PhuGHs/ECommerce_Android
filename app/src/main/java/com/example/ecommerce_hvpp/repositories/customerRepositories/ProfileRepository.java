@@ -50,14 +50,15 @@ public class ProfileRepository {
                 });
         return _mldUserInfo;
     }
-    public void updateUser(String UID, String name, String datebirth, String address, String email) {
+    public void updateUser(String UID, String name, String datebirth, String address, String email, String imagepath) {
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
         DocumentReference ref = fs.collection("users").document(UID);
         ref.update(
                 "username", name,
                 "datebirth", datebirth,
                 "address", address,
-                "email", email
+                "email", email,
+                "imagePath", imagepath
         );
     }
     public LiveData<String> getUserImage(String UID){
