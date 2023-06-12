@@ -80,7 +80,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         }
 
         holder.day_of_order_tv.setText("Day order: " + getDate(item.getDayCreate_subItem()));
-        holder.sum_of_order_tv.setText(Double.toString(item.getSum_of_order()));
+        holder.sum_of_order_tv.setText("$" + Double.toString(item.getSum_of_order()));
         Log.d(TAG, "id cua order: " + item.getID_of_Order());
 
         getFirst_Item(holder.itemView.getContext(), item.getID_of_Order(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);

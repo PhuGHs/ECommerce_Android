@@ -132,7 +132,13 @@ public class AccountFragment extends Fragment {
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
                        imagePath = userInfoResource.data.getImagePath();
-                       Glide.with(this).load(imagePath).fitCenter().into(ava_image);
+                       if (getContext() == null){
+                            return;
+                       }
+                       else{
+                           Glide.with(getContext()).load(imagePath).fitCenter().into(ava_image);
+                       }
+
                        name_tv.setText(name);
                        setQuantity(number_of_orderprogress_tv, "Order");
                        setQuantityFeedback(number_of_feedback_tv, "Feedback");

@@ -10,6 +10,7 @@ import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -53,19 +54,30 @@ public class OrderRepository {
         return _mldListOrder;
     }
     public LiveData<List<OrderHistorySubItem>> getItemsofOrder(String order_id){
-        firebaseHelper.getCollection("Order").document(order_id).collection("items")
+        firebaseHelper.getCollection("Order")
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    List<OrderHistorySubItem> items = new ArrayList<>();
-                    for (QueryDocumentSnapshot snapshot : documentSnapshot){
-                        String image = snapshot.getString("image");
-                        String name = snapshot.getString("name");
-                        long quantity = snapshot.getLong("quantity");
-                        double price = snapshot.getDouble("price");
-                        items.add(new OrderHistorySubItem(image, name, Long.toString(quantity), price));
-                        Log.d(TAG, "get items order successfully");
+                    for (DocumentSnapshot snapshot : documentSnapshot){
+                        if (snapshot.getString("id").equals(order_id)){
+                            firebaseHelper.getCollection("Order").document(snapshot.getId()).collection("items")
+                                    .get()
+                                    .addOnSuccessListener(documentSnapshot1 -> {
+                                        List<OrderHistorySubItem> items = new ArrayList<>();
+                                        for (QueryDocumentSnapshot snapshot1 : documentSnapshot1){
+                                            String image = snapshot1.getString("image");
+                                            String name = snapshot1.getString("name");
+                                            long quantity = snapshot1.getLong("quantity");
+                                            double price = snapshot1.getDouble("price");
+                                            items.add(new OrderHistorySubItem(image, name, Long.toString(quantity), price));
+                                            Log.d(TAG, "get items order successfully");
+                                        }
+                                        _mldListItemsOrder.setValue(items);
+                                    })
+                                    .addOnFailureListener(e1 -> {
+                                        _mldListItemsOrder.setValue(null);
+                                    });
+                        }
                     }
-                    _mldListItemsOrder.setValue(items);
                 })
                 .addOnFailureListener(e -> {
                     _mldListItemsOrder.setValue(null);
@@ -73,20 +85,19 @@ public class OrderRepository {
         return _mldListItemsOrder;
     }
     public LiveData<Order> getOrderprogressInfo(String order_id){
-        firebaseHelper.getCollection("Order").document(order_id)
+        firebaseHelper.getCollection("Order")
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    Order orderdetail = null;
-                    if (documentSnapshot.exists()){
-                        String address = documentSnapshot.getString("address");
-                        String deliveryMethod = documentSnapshot.getString("deliveryMethod");
-                        Timestamp startDate = documentSnapshot.getTimestamp("createdDate");
-                        Date date_end = documentSnapshot.getDate("receiveDate");
-                        int day_remaining = getDayRemaining(date_end);
-                        orderdetail = new Order(address, startDate.getSeconds()*1000, deliveryMethod, day_remaining);
+                    for (DocumentSnapshot snapshot : documentSnapshot){
+                        if (snapshot.getString("id").equals(order_id)){
+                            String address = snapshot.getString("address");
+                            String deliveryMethod = snapshot.getString("deliveryMethod");
+                            Timestamp startDate = snapshot.getTimestamp("createdDate");
+                            Date date_end = snapshot.getDate("receiveDate");
+                            int day_remaining = getDayRemaining(date_end);
+                            orderprogressInfo.setValue(new Order(address, startDate.getSeconds()*1000, deliveryMethod, day_remaining));
+                        }
                     }
-                    orderprogressInfo.setValue(orderdetail);
-                    Log.d(TAG, "get order info " + orderdetail.getDeliveryMethod());
                 })
                 .addOnFailureListener(e -> {
                     orderprogressInfo.setValue(null);
