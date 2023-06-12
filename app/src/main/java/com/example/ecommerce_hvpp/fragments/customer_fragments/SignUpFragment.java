@@ -7,7 +7,6 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,10 +22,12 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
 public class SignUpFragment extends Fragment {
     private TextInputLayout username, email, password, confirmPassword;
     private TextView loginButton;
-    private Button registerButton;
+    private CircularProgressButton registerButton;
     private RegisterLoginViewModel viewModel;
     private NavController navController;
 
@@ -56,7 +57,7 @@ public class SignUpFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.signUpFragment);
+                navController.popBackStack();
             }
         });
 
@@ -156,9 +157,16 @@ public class SignUpFragment extends Fragment {
             String str_password = password.getEditText().getText().toString();
             String str_username = username.getEditText().getText().toString();
 
+            if(str_email.isEmpty() || str_password.isEmpty() || str_username.isEmpty()) {
+                ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
+                Snackbar.make(ctw2, requireView(), "Please fill in all the blanks!", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
             viewModel.registerUser(str_email, str_password, str_username).observe(requireActivity(), resource -> {
                 switch(resource.status) {
                     case LOADING:
+                        registerButton.startAnimation();
                         break;
                     case SUCCESS:
                         ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarSuccess);
@@ -166,6 +174,7 @@ public class SignUpFragment extends Fragment {
                         navController.navigate(R.id.loginFragment);
                         break;
                     case ERROR:
+                        registerButton.revertAnimation();
                         ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
                         Snackbar.make(ctw2, requireView(), resource.message, Snackbar.LENGTH_LONG).show();
                         break;

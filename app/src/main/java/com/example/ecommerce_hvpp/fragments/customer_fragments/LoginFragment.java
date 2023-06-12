@@ -8,7 +8,6 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,8 +26,10 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
 public class LoginFragment extends Fragment {
-    private Button loginButton;
+    private CircularProgressButton loginButton;
     private TextView btnResetPassword;
     private NavController navController;
     private TextInputLayout email, password;
@@ -92,9 +93,17 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 String str_email = email.getEditText().getText().toString().trim();
                 String str_password = password.getEditText().getText().toString();
+
+                if(str_email.isEmpty() || str_password.isEmpty()) {
+                    ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
+                    Snackbar.make(ctw2, requireView(), "Please fill in all the blanks!", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
                 viewModel.loginUser(str_email, str_password).observe(requireActivity(), resource -> {
                     switch(resource.status) {
                         case LOADING:
+                            loginButton.startAnimation();
                             break;
                         case SUCCESS:
                             Intent intent = new Intent(requireActivity(), MainActivity.class);
@@ -104,6 +113,7 @@ public class LoginFragment extends Fragment {
                             getActivity().finish();
                             break;
                         case ERROR:
+                            loginButton.revertAnimation();
                             ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
                             Snackbar.make(ctw, requireView(), resource.message, Snackbar.LENGTH_LONG).show();
                             break;
