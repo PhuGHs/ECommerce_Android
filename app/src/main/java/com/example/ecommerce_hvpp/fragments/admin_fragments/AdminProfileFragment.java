@@ -7,17 +7,29 @@ import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminSta
 import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import android.Manifest;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentProfileBinding;
 import com.example.ecommerce_hvpp.model.OrderHistory;
@@ -42,6 +54,12 @@ public class AdminProfileFragment extends Fragment {
     AdminFragmentProfileBinding mAdminFragmentProfileBinding;
     AdminProfileViewModel vmAdminProfile;
     AdminStatisticsRepository repo;
+    private ActivityResultLauncher<Intent> thumbnailLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private Uri thumbnailImage;
+    private ContentResolver contentResolver;
+    private String path;
     Disposable disposable;
 
     @Nullable
@@ -57,8 +75,22 @@ public class AdminProfileFragment extends Fragment {
         // init repo
         repo = new AdminStatisticsRepository();
         testData(); // test data here
+
+        // update avatar
+        initLauncher();
+        onClickImage();
+
         // get data statistics
         getDataStatistics();
+
+        // logout
+        mAdminFragmentProfileBinding.adminProfileLogoutContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AdminProfileRepository repoData = new AdminProfileRepository();
+                repoData.logOutApp(requireContext());
+            }
+        });
 
         return mAdminFragmentProfileBinding.getRoot();
     }
@@ -66,6 +98,81 @@ public class AdminProfileFragment extends Fragment {
     private void testData() {
         AdminPromotionRepository repoTest = new AdminPromotionRepository();
         repoTest.getVouchersOfUsers();
+    }
+
+    private void initLauncher() {
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if(isGranted) {
+                openGallery();
+            } else {
+                // do nothing
+                //show message (disabled)
+            }
+        });
+
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    if (data.getClipData() != null) {
+                        // Image was selected
+//                        processSelectedImage(data.getData());
+                    }
+                }
+            }
+        });
+
+        thumbnailLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null && data.getData() != null) {
+                    thumbnailImage = data.getData();
+                    Glide.with(requireContext()).load(thumbnailImage).fitCenter().into(mAdminFragmentProfileBinding.adminProfileAvatarAdmin);
+                    path = thumbnailImage.toString();
+                    //viewModel.uploadAvatar(contentResolver, user, thumbnailImage);
+                }
+            }
+        });
+    }
+
+    private void onClickImage() {
+        mAdminFragmentProfileBinding.adminProfileAvatarAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check if the permission is already granted
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Request permission if it has not been granted
+                    requestGalleryPermission();
+                } else {
+                    // Permission already granted, proceed with gallery access
+                    OpenThumbnailGallery();
+                }
+            }
+        });
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private void requestGalleryPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+    @SuppressLint("IntentReset")
+    private void OpenThumbnailGallery() {
+        @SuppressLint("IntentReset") Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        thumbnailLauncher.launch(intent);
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setType("image/*");
+        galleryLauncher.launch(intent);
     }
 
     private void getDataStatistics() {

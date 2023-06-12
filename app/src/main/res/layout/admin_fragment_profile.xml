@@ -212,8 +212,7 @@
                 android:layout_height="43dp"
                 android:layout_below="@+id/admin_profile_promotion_container"
                 android:background="@drawable/round_option_profile"
-                android:layout_marginBottom="23dp"
-                android:onClick="@{(view) -> AdminProfileViewModel.onClickOption(view, constant.LOG_OUT)}">
+                android:layout_marginBottom="23dp">
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -6,6 +6,9 @@ import static com.example.ecommerce_hvpp.util.constant.LOG_OUT;
 import static com.example.ecommerce_hvpp.util.constant.ORDER_HISTORY;
 import static com.example.ecommerce_hvpp.util.constant.PROMOTION_MANAGEMENT;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.model.User;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,10 +53,28 @@ public class AdminProfileRepository {
             case PROMOTION_MANAGEMENT:
                 navController.navigate(R.id.adminPromotionFragment);
                 break;
-            case LOG_OUT:
-                Toast.makeText(view.getContext(), "Logout", Toast.LENGTH_SHORT).show();
-                break;
         }
+    }
+
+    public void logOutApp(Context context) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+//                        mAuth.signOut();
+                        navController.navigate(R.id.loginFragment);
+                        CustomToast.ShowToastMessage(context, 1, "Đăng xuất thành công");
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
     public View.OnClickListener onClickBackPage() {
