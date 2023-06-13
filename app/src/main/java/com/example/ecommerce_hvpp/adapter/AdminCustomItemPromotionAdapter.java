@@ -95,8 +95,7 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         } else {
             List<Promotion> listOrderHistory = new ArrayList<>();
             for (Promotion promotion : mListPromotionOriginal) {
-                if (String.valueOf(promotion.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
-                        promotion.getName().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (promotion.getName().toLowerCase().contains(strSearch.toLowerCase())) {
                     listOrderHistory.add(promotion);
                 }
             }

@@ -150,10 +150,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         } else {
             List<OrderHistory> listOrderHistory = new ArrayList<>();
             for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
-                if (String.valueOf(orderHistory.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getRecipientName().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getPhoneNumber().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getAddress().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (orderHistory.getRecipientName().toLowerCase().contains(strSearch.toLowerCase())) {
                     listOrderHistory.add(orderHistory);
                 }
             }

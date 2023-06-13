@@ -75,8 +75,7 @@ public class AdminCustomItemCustomerAdapter extends RecyclerView.Adapter<AdminCu
         } else {
             List<User> listUsers = new ArrayList<>();
             for (User user : mListUsersOriginal) {
-                if (user.getUsername().toLowerCase().contains(strSearch.toLowerCase()) ||
-                    user.getEmail().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (user.getUsername().toLowerCase().contains(strSearch.toLowerCase())) {
                     listUsers.add(user);
                 }
             }
