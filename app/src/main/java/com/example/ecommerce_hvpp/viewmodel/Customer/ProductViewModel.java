@@ -14,12 +14,14 @@ import androidx.lifecycle.ViewModel;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Cart;
+import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.api.LogDescriptor;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
     private List<Product> listNewArrivals, listBestSeller, listFavorite;
-    private HashMap<String, Product> listAllProduct;
+    public HashMap<String, Product> listAllProduct;
     private MutableLiveData<List<Product>> mldListNewArrivals, mldListBestSeller, mldListFavorite, mldDetailCategory;
     private MutableLiveData<List<Feedback>> mldListFeedback;
     private MutableLiveData<List<Cart>> mldListCart;
@@ -156,17 +158,45 @@ public class ProductViewModel extends ViewModel {
         data.put("quantity", quantity);
         data.put("size", size);
 
-        helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
-                .set(data)
-                .addOnSuccessListener(unused -> {
-                    Log.d("Cart", "add Success");
-                    CustomToast.ShowToastMessage(context, 1, "Add to cart successfully");
-                })
-                .addOnFailureListener(e -> {
-                    Log.d("Cart", "add Failure");
-                    CustomToast.ShowToastMessage(context, 2, "Add to cart failed");
-                });
-        listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
+        boolean added = false;
+        long quantityBefore = 0;
+        for (Cart cart : listCart) {
+            if (cart.getProduct().getId().equals(product_id)){
+                if (cart.getSize().equals(size)){
+                    added = true;
+                    quantityBefore = cart.getQuantity();
+                    if (quantity + quantityBefore <= listAllProduct.get(product_id).getSize(size)) cart.setQuantity(quantity + quantityBefore);
+                }
+            }
+        }
+        if (added) {
+            if (quantity + quantityBefore > listAllProduct.get(product_id).getSize(size)){
+                CustomToast.ShowToastMessage(context, 2, "You have added this product before. The total quantity is not enough");
+                return;
+            }
+            helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
+                    .update("quantity", quantity + quantityBefore)
+                    .addOnSuccessListener(unused -> {
+                        Log.d("Cart", "add more quantity Success");
+                        CustomToast.ShowToastMessage(context, 1, "Add to cart successfully");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("Cart", "add Failure");
+                        CustomToast.ShowToastMessage(context, 2, "Add to cart failed");
+                    });
+        } else {
+            helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
+                    .set(data)
+                    .addOnSuccessListener(unused -> {
+                        Log.d("Cart", "add Success");
+                        CustomToast.ShowToastMessage(context, 1, "Add to cart successfully");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("Cart", "add Failure");
+                        CustomToast.ShowToastMessage(context, 2, "Add to cart failed");
+                    });
+            listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
+        }
         mldListCart.setValue(listCart);
         calcTotalItemAndPriceCart();
     }
@@ -187,6 +217,14 @@ public class ProductViewModel extends ViewModel {
         listCart.remove(cart);
         mldListCart.setValue(listCart);
         calcTotalItemAndPriceCart();
+    }
+    public void updateCartToDB(){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+        for (Cart cart : listCart) {
+            helper.getDb().collection("Cart").document(customer_id + "_" + cart.getProduct().getId() + "_" + cart.getSize())
+                    .update("quantity", cart.getQuantity())
+                    .addOnSuccessListener(unused -> Log.d("Cart", "update quantity to DB"));
+        }
     }
     private void initUserCart(){
         mldListCart = new MutableLiveData<>();

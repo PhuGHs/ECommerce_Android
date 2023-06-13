@@ -77,7 +77,7 @@ public class CheckoutFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_checkout, container, false);
     }
-    private ImageButton btnBackToCart;
+    private ImageButton btnBackToCart, navToAddress, navToVoucher;
     private ListView listVoucherAppliedLv;
     private ArrayList<Pair<String, Double>> listVoucherApplied;
     private TextView addressApplied, cartItems, cartPrice, totalOrder;
@@ -94,6 +94,8 @@ public class CheckoutFragment extends Fragment {
         listVoucherAppliedLv = (ListView) view.findViewById(R.id.listVoucherApplied);
         listVoucherApplied = new ArrayList<>();
         btnBackToCart = (ImageButton) view.findViewById(R.id.btnBackToCart);
+        navToAddress = (ImageButton) view.findViewById(R.id.navToAddress);
+        navToVoucher = (ImageButton) view.findViewById(R.id.navToVoucher);
         addressApplied = (TextView) view.findViewById(R.id.addressApplied);
         cartItems = (TextView) view.findViewById(R.id.cartItems);
         cartPrice = (TextView) view.findViewById(R.id.cartPrice);
@@ -116,6 +118,8 @@ public class CheckoutFragment extends Fragment {
 
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
+        navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
+        navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
     }
     private void getListVoucherApplied(){
         //listVoucherApplied.add(new Pair<>("RF001", 3.00));
