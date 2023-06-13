@@ -73,7 +73,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
             Log.d("Remove from cart",product.getName());
             holder.adapter.listCart.remove(p);
             holder.adapter.notifyItemRemoved(p);
-            MainActivity.PDviewModel.removeFromCart(product.getId(), cart.getQuantity(), cart.getSize());
+            MainActivity.PDviewModel.removeFromCart(context, product.getId(), cart.getQuantity(), cart.getSize());
         });
 
         //change quantity

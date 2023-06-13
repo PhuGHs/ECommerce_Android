@@ -162,11 +162,11 @@ public class DetailProductCustomerFragment extends Fragment {
                 else btnFav.setImageResource(R.drawable.outline_heart);
                 btnFav.setOnClickListener(view -> {
                     if (favorite){
-                        MainActivity.PDviewModel.removeFromWishList(productID);
+                        MainActivity.PDviewModel.removeFromWishList(getContext(), productID);
                         btnFav.setImageResource(R.drawable.outline_heart);
                     }
                     else {
-                        MainActivity.PDviewModel.addToWishList(productID);
+                        MainActivity.PDviewModel.addToWishList(getContext(), productID);
                         btnFav.setImageResource(R.drawable.full_heart);
                     }
                 });
@@ -206,7 +206,7 @@ public class DetailProductCustomerFragment extends Fragment {
             }
         });
         sizeChosen.observe(getViewLifecycleOwner(), size -> {
-            btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, size, Long.parseLong(detailQuantity.getText().toString())));
+            btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(getContext(), productID, size, Long.parseLong(detailQuantity.getText().toString())));
         });
     }
     public void loadDetailImage(Product product){
