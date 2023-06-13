@@ -7,18 +7,18 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_primary"
+        android:orientation="vertical"
         android:paddingTop="10dp">
 
         <!--    Header  -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginHorizontal="25dp">
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="12dp">
 
             <ImageView
                 android:id="@+id/admin_statistics_club_header_back"
@@ -41,129 +41,170 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="31dp"
                 android:layout_height="31dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 app:cardCornerRadius="100dp">
 
                 <ImageView
                     android:id="@+id/admin_statistics_club_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/avatar_customer"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar_customer" />
 
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/admin_statistics_club_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginHorizontal="25dp"
-            style="@style/w500_60"
-            android:text="This month"
-            android:textColor="@color/black" />
-
-
-        <RelativeLayout
-            android:id="@+id/admin_statistics_component_club_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_item_statistic"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="14dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginHorizontal="25dp">
-
-            <TextView
-                android:id="@+id/admin_statistics_component_club_title"
-                style="@style/w500_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CLUB TOP-SELLING"
-                android:textColor="@color/primary" />
-
-            <TextView
-                android:id="@+id/admin_statistics_component_club_quantity"
-                style="@style/w500_50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/admin_statistics_component_club_title"
-                android:layout_marginTop="15dp"
-                android:text="Manchester City"
-                android:textColor="@color/black" />
-
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/admin_statistics_club_statistics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginHorizontal="25dp"
-            style="@style/w500_60"
-            android:text="Statistics"
-            android:textColor="@color/black" />
-
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
 
-            <!-- chart-->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_item_statistic"
-                android:paddingBottom="15dp"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginBottom="15dp">
+                android:orientation="vertical">
 
-                <!--  calendar  -->
-                <RelativeLayout
-                    android:id="@+id/admin_statistics_club_calendar"
-                    android:layout_width="110dp"
+                <TextView
+                    android:id="@+id/admin_statistics_club_overview"
+                    style="@style/w500_60"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/round_month">
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="This month"
+                    android:textColor="@color/black" />
+
+
+                <RelativeLayout
+                    android:id="@+id/admin_statistics_component_club_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_item_statistic"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
 
                     <TextView
-                        android:id="@+id/admin_statistics_club_month"
+                        android:id="@+id/admin_statistics_component_club_title"
+                        style="@style/w500_50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="5dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="10dp"
-                        style="@style/w400_50"
-                        android:text="07/2023"
-                        android:textColor="@color/white" />
+                        android:text="CLUB TOP-SELLING"
+                        android:textColor="@color/primary" />
 
-                    <ImageView
-                        android:layout_width="10dp"
+                    <TextView
+                        android:id="@+id/admin_statistics_component_club_quantity"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignTop="@id/admin_statistics_club_month"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/baseline_arrow_down_white"
-                        android:scaleType="centerCrop" />
+                        android:layout_below="@+id/admin_statistics_component_club_title"
+                        android:layout_marginTop="15dp"
+                        android:text="Manchester City"
+                        android:textColor="@color/black" />
 
                 </RelativeLayout>
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/admin_statistics_club_pie_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/admin_statistics_club_calendar"/>
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/admin_statistics_club_statistics"
+                    style="@style/w500_60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Statistics"
+                    android:textColor="@color/black" />
+
+
+                <!-- chart-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/round_item_statistic"
+                    android:paddingBottom="10dp">
+
+                    <!--  calendar  -->
+                    <RelativeLayout
+                        android:id="@+id/admin_statistics_club_calendar"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/round_month">
+
+                        <TextView
+                            android:id="@+id/admin_statistics_club_month"
+                            style="@style/w400_50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:paddingVertical="5dp"
+                            android:text="07/2023"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/admin_statistics_club_month"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="10dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/baseline_arrow_down_white" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/admin_statistics_club_title_bar_chart"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/admin_statistics_club_calendar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text=""
+                        android:textColor="@color/primary" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/admin_statistics_club_bar_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_below="@id/admin_statistics_club_title_bar_chart"
+                        android:layout_marginBottom="20dp"
+                        android:paddingBottom="20dp" />
+
+                    <TextView
+                        android:id="@+id/admin_statistics_club_title_pie_chart"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/admin_statistics_club_bar_chart"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text=""
+                        android:textColor="@color/primary" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/admin_statistics_club_pie_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_below="@id/admin_statistics_club_title_pie_chart"
+                        android:layout_marginTop="10dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </ScrollView>
-
 
     </LinearLayout>
 

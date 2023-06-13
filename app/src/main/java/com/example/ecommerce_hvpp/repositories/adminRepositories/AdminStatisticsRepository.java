@@ -26,17 +26,33 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.util.Resource;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -202,6 +218,7 @@ public class AdminStatisticsRepository {
         int resultMonth = handlePercentDouble(currMonthQuantity, prevMonthQuantity);
 
         tvContent.setText(currDayQuantity + "");
+        currMonthQuantity = Double.parseDouble(decimalFormatter.format(currMonthQuantity));
         return new Pair<>(new Pair<>(resultDay, resultMonth), new Pair<>(currDayQuantity, currMonthQuantity));
     }
 
@@ -279,6 +296,81 @@ public class AdminStatisticsRepository {
         datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
 
         datePickerDialog.show();
+    }
+
+    public void formatPieChart(PieChart pieChart, List<PieEntry> entries, Context context) {
+        PieDataSet pieDataSet = new PieDataSet(entries, "");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextColor(ContextCompat.getColor(context, R.color.white));
+        pieDataSet.setValueTextSize(12f);
+        pieDataSet.setSliceSpace(3f);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+
+        Legend legend = pieChart.getLegend();
+        legend.setFormSize(14);
+        legend.setFormToTextSpace(5);
+        legend.setWordWrapEnabled(true);
+        legend.setTextSize(12);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        legend.setXEntrySpace(20);
+        legend.setYEntrySpace(5);
+
+        pieChart.setUsePercentValues(true);
+        pieChart.setRotationEnabled(false);
+        pieChart.setData(pieData);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setCenterText("Pie Chart");
+        pieChart.animateX(2000);
+
+        pieChart.invalidate();
+    }
+
+    public void formatBarChart(BarChart barChart, List<BarEntry> entries, List<String> xAxisLabels, Context context) {
+        BarDataSet barDataSet = new BarDataSet(entries, "");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        barDataSet.setValueTextColor(ContextCompat.getColor(context, R.color.black));
+        barDataSet.setValueTextSize(12f);
+
+        ArrayList<IBarDataSet> dataSetFinal = new ArrayList<>();
+        dataSetFinal.add(barDataSet);
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setGranularity(1f);
+        xAxis.setEnabled(true);
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(12f);
+
+        BarData barData = new BarData(dataSetFinal);
+        barData.setBarWidth(0.5f);
+
+        barChart.setData(barData);
+        barChart.getLegend().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+
+        barChart.getXAxis()
+                .setValueFormatter(new com.github.mikephil.charting.formatter.IndexAxisValueFormatter(xAxisLabels));
+
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawAxisLine(true);
+
+        barChart.getAxisLeft().setDrawGridLines(true);
+        barChart.getAxisLeft().setDrawAxisLine(true);
+
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getXAxis().setDrawAxisLine(false);
+
+        barChart.setExtraBottomOffset(10);
+        barChart.animateY(2000, Easing.EaseInBounce);
+
+        barChart.invalidate();
+        barChart.setVisibleXRangeMaximum(3);
     }
     
     public void formatLineChart(LineChart lineChart) {
