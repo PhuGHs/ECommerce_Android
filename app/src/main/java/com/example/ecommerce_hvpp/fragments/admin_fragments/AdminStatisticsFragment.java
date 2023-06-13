@@ -8,10 +8,13 @@ import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminS
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticProductSold;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticRevenue;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticVisitors;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strClub;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateOrders;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateProductSold;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateRevenue;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strMinDateVisitors;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strNation;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strSeason;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -39,7 +42,9 @@ import com.example.ecommerce_hvpp.util.Resource;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -96,6 +101,10 @@ public class AdminStatisticsFragment extends Fragment {
         handleProductSoldComponent();
         handleRevenueComponent();
         findMinDateFromData();
+
+        handleClubTopSellingComponent();
+        handleNationTopSellingComponent();
+        handleSeasonTopSellingComponent();
     }
 
     // Visitors - int
@@ -162,6 +171,52 @@ public class AdminStatisticsFragment extends Fragment {
                 result.second.second, monthResultAndColor.first, monthResultAndColor.second);
     }
 
+    private void handleClubTopSellingComponent() {
+        // handle to find top selling
+        List<String> listResult = new ArrayList<>();
+        listResult.add("Manchester City");
+        listResult.add("Inter Milan");
+
+        StringBuilder template = new StringBuilder();
+        listResult.forEach(item ->{
+            template.append(item).append(", ");
+        });
+        template.setLength(template.length() - 2);
+        strClub = template.toString();
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentClubQuantity.setText(strClub);
+    }
+
+    private void handleNationTopSellingComponent() {
+        // handle to find top selling
+        List<String> listResult = new ArrayList<>();
+        listResult.add("Argentina");
+        listResult.add("France");
+
+        StringBuilder template = new StringBuilder();
+        listResult.forEach(item ->{
+            template.append(item).append(", ");
+        });
+        template.setLength(template.length() - 2);
+        strNation = template.toString();
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentNationQuantity.setText(strNation);
+    }
+
+    private void handleSeasonTopSellingComponent() {
+        // handle to find top selling
+        List<String> listResult = new ArrayList<>();
+        listResult.add("2012-2013");
+
+        StringBuilder template = new StringBuilder();
+        listResult.forEach(item ->{
+            template.append(item).append(", ");
+        });
+        template.setLength(template.length() - 2);
+        strSeason = template.toString();
+
+        mAdminFragmentStatisticsBinding.adminStatisticsComponentSeasonQuantity.setText(strSeason);
+    }
 
     @Override
     public void onResume() {

@@ -1,56 +1,36 @@
 package com.example.ecommerce_hvpp.fragments.statistics_detail;
 
-import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strClub;
+import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strSeason;
 
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticClubBinding;
+import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticSeasonBinding;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomMarkerView;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LegendEntry;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.renderer.LegendRenderer;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdminStatisticClubFragment extends Fragment {
-    AdminFragmentStatisticClubBinding mAdminFragmentStatisticClubBinding;
+public class AdminStatisticSeasonFragment extends Fragment {
+    AdminFragmentStatisticSeasonBinding mAdminFragmentStatisticSeasonBinding;
     AdminStatisticsRepository repo;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mAdminFragmentStatisticClubBinding = AdminFragmentStatisticClubBinding.inflate(inflater, container, false);
+        mAdminFragmentStatisticSeasonBinding = AdminFragmentStatisticSeasonBinding.inflate(inflater, container, false);
 
         // init repo
         repo = new AdminStatisticsRepository();
@@ -62,14 +42,14 @@ public class AdminStatisticClubFragment extends Fragment {
         createChart();
 
         // on click back page
-        mAdminFragmentStatisticClubBinding.adminStatisticsClubHeaderBack.setOnClickListener(repo.onClickBackPage());
+        mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonHeaderBack.setOnClickListener(repo.onClickBackPage());
 
-        return mAdminFragmentStatisticClubBinding.getRoot();
+        return mAdminFragmentStatisticSeasonBinding.getRoot();
     }
 
     private void initView() {
-        mAdminFragmentStatisticClubBinding.adminStatisticsComponentClubQuantity.setText(strClub);
-        mAdminFragmentStatisticClubBinding.adminStatisticsClubMonth.setText(repo.getCurrentMonth());
+        mAdminFragmentStatisticSeasonBinding.adminStatisticsComponentSeasonQuantity.setText(strSeason);
+        mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonMonth.setText(repo.getCurrentMonth());
     }
 
     private Map<String, Integer> getData() {
@@ -98,10 +78,10 @@ public class AdminStatisticClubFragment extends Fragment {
             entries.add(new PieEntry(value, key));
         });
 
-        String title = "Top 5 Club Top-selling";
-        mAdminFragmentStatisticClubBinding.adminStatisticsClubTitlePieChart.setText(title);
+        String title = "Top 5 Season Top-selling";
+        mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonTitlePieChart.setText(title);
 
-        PieChart pieChart = mAdminFragmentStatisticClubBinding.adminStatisticsClubPieChart;
+        PieChart pieChart = mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonPieChart;
         repo.formatPieChart(pieChart, entries, requireContext());
     }
 
@@ -117,10 +97,10 @@ public class AdminStatisticClubFragment extends Fragment {
         });
         xAxisLabels.add(0, "Select");
 
-        String title = "Quantity of Retro Football Clothes Purchased by Club";
-        mAdminFragmentStatisticClubBinding.adminStatisticsClubTitleBarChart.setText(title);
+        String title = "Quantity of Retro Football Clothes Purchased by Season";
+        mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonTitleBarChart.setText(title);
 
-        BarChart barChart = mAdminFragmentStatisticClubBinding.adminStatisticsClubBarChart;
+        BarChart barChart = mAdminFragmentStatisticSeasonBinding.adminStatisticsSeasonBarChart;
         repo.formatBarChart(barChart, entries, xAxisLabels, requireContext());
     }
 }

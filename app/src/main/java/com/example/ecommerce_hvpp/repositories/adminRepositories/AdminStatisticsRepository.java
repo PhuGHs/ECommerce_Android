@@ -4,9 +4,11 @@ import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.monthFormatter;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_CLUB;
+import static com.example.ecommerce_hvpp.util.constant.STATISTIC_NATION;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_ORDERS;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_PRODUCT_SOLD;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_REVENUE;
+import static com.example.ecommerce_hvpp.util.constant.STATISTIC_SEASON;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_VISITORS;
 import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
@@ -87,6 +89,12 @@ public class AdminStatisticsRepository {
                 break;
             case STATISTIC_CLUB:
                 navController.navigate(R.id.adminStatisticClubFragment);
+                break;
+            case STATISTIC_NATION:
+                navController.navigate(R.id.adminStatisticNationFragment);
+                break;
+            case STATISTIC_SEASON:
+                navController.navigate(R.id.adminStatisticSeasonFragment);
                 break;
         }
     }
