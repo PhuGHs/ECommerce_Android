@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,17 +51,18 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
         holder.code_tv.setText("Code:   " + voucher.getId());
         holder.discount_value_tv.setText("-" + String.valueOf(voucher.getDiscountedValue()));
         holder.date_end_tv.setText(getDate(voucher.getEndDate()));
-
     }
     /**
      * Data ViewHolder class.
      */
     public static class DataViewHolder extends RecyclerView.ViewHolder{
         private TextView name_tv, code_tv, discount_value_tv, date_end_tv;
+        private Button useBtn;
         private ImageView image;
         public DataViewHolder(View itemView){
             super(itemView);
 
+            useBtn = (Button) itemView.findViewById(R.id.btn_use);
             name_tv = (TextView) itemView.findViewById(R.id.title_of_voucher);
             code_tv = (TextView) itemView.findViewById(R.id.code_of_voucher);
             discount_value_tv = (TextView) itemView.findViewById(R.id.discount_of_voucher);
