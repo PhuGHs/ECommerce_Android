@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 
@@ -16,6 +17,7 @@ import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -110,7 +112,7 @@ public class ProductViewModel extends ViewModel {
         }
         return listFound;
     }
-    public void addToWishList(String product_id){
+    public void addToWishList(Context context, String product_id){
         Map<String, Object> data = new HashMap<>();
         data.put("product_id", product_id);
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -118,23 +120,35 @@ public class ProductViewModel extends ViewModel {
 
         helper.getDb().collection("WishList").document(customer_id + "_" + product_id)
                 .set(data)
-                .addOnSuccessListener(unused -> Log.d("WishList","add Success"))
-                .addOnFailureListener(e -> Log.d("WishList","add Failure"));
+                .addOnSuccessListener(unused -> {
+                    Log.d("WishList","add Success");
+                    CustomToast.ShowToastMessage(context, 1, "Add to wishlist successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("WishList","add Failure");
+                    CustomToast.ShowToastMessage(context, 2, "Add to wishlist failed");
+                });
         listFavorite.add(listAllProduct.get(product_id));
         mldListFavorite.setValue(listFavorite);
     }
-    public void removeFromWishList(String product_id){
+    public void removeFromWishList(Context context, String product_id){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
 
         helper.getDb().collection("WishList").document(customer_id + "_" + product_id)
                 .delete()
-                .addOnSuccessListener(unused -> Log.d("WishList", "delete Success"))
-                .addOnFailureListener(e -> Log.d("WishList", "delete Failure"));
+                .addOnSuccessListener(unused -> {
+                    Log.d("WishList", "delete Success");
+                    CustomToast.ShowToastMessage(context, 1, "Remove from wishlist successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("WishList", "delete Failure");
+                    CustomToast.ShowToastMessage(context, 2, "Remove from wishlist failed");
+                });
         listFavorite.remove(listAllProduct.get(product_id));
         Log.d("Remove",product_id);
         mldListFavorite.setValue(listFavorite);
     }
-    public void addToCart(String product_id, String size, long quantity){
+    public void addToCart(Context context, String product_id, String size, long quantity){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
         Map<String, Object> data = new HashMap<>();
         data.put("product_id", product_id);
@@ -144,19 +158,31 @@ public class ProductViewModel extends ViewModel {
 
         helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
                 .set(data)
-                .addOnSuccessListener(unused -> Log.d("Cart", "add Success"))
-                .addOnFailureListener(e -> Log.d("Cart", "add Failure"));
+                .addOnSuccessListener(unused -> {
+                    Log.d("Cart", "add Success");
+                    CustomToast.ShowToastMessage(context, 1, "Add to cart successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("Cart", "add Failure");
+                    CustomToast.ShowToastMessage(context, 2, "Add to cart failed");
+                });
         listCart.add(new Cart(listAllProduct.get(product_id), quantity, size));
         mldListCart.setValue(listCart);
         calcTotalItemAndPriceCart();
     }
-    public void removeFromCart(String product_id, long quantity, String size){
+    public void removeFromCart(Context context, String product_id, long quantity, String size){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
 
         helper.getDb().collection("Cart").document(customer_id + "_" + product_id + "_" + size)
                 .delete()
-                .addOnSuccessListener(unused -> Log.d("Cart", "delete Success"))
-                .addOnFailureListener(e -> Log.d("Cart", "delete Failure"));
+                .addOnSuccessListener(unused -> {
+                    Log.d("Cart", "delete Success");
+                    CustomToast.ShowToastMessage(context, 1, "Remove from cart successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("Cart", "delete Failure");
+                    CustomToast.ShowToastMessage(context, 2, "Remove from cart failed");
+                });
         Cart cart = new Cart(listAllProduct.get(product_id), quantity, size);
         listCart.remove(cart);
         mldListCart.setValue(listCart);
