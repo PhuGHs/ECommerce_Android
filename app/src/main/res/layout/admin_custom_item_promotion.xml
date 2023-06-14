@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/admin_promotion_component_name"
-                android:text="@{VMItemPromotion.isDisabled ? @string/activated : @string/unactivated}"
+                android:text="Code:"
                 android:textColor="@{VMItemPromotion.isDisabled ? ContextCompat.getColor(context, R.color.sub_text_expired) : ContextCompat.getColor(context, R.color.black)}"
                 style="@style/w400_50"
                 android:layout_marginTop="2dp"

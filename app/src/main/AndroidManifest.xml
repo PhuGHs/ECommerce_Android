@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Ecommerce_hvpp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.TestActivityAdmin"
+            android:name=".activities.RegisterLoginActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"
             android:exported="true">
             <intent-filter>
