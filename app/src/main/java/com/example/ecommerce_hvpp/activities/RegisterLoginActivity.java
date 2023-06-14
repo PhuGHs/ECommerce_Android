@@ -35,7 +35,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         setContentView(R.layout.activity_login_register);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
-//        MainActivity.PDviewModel = new ProductViewModel();
+        MainActivity.PDviewModel = new ProductViewModel();
         sessionManager = new SessionManager(this);
 
 //        if(sessionManager.isLoggedIn()) {

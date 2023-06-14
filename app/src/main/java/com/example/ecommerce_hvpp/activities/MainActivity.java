@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
 
         bottomNav = findViewById(R.id.bottom_nav);
         navController = Navigation.findNavController(this, R.id.host_fragment);
-        MainActivity.PDviewModel = new ProductViewModel();
+        PDviewModel.initData();
 
         String Id = fbHelper.getAuth().getCurrentUser().getUid();
         fbHelper.getCollection("users").document(Id).get()
@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
                         bottomNav.inflateMenu(R.menu.admin_bottom_menu);
                         navController.setGraph(R.navigation.admin_nav_graph);
                     } else {
-                        PDviewModel.initData();
                         bottomNav.inflateMenu(R.menu.bottom_menu);
                         navController.setGraph(R.navigation.nav_graph);
                     }
