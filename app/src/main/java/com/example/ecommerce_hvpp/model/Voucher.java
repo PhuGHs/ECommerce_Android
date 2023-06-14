@@ -7,7 +7,10 @@ public class Voucher implements Parcelable {
     private String applyFor, id, voucherName;
     private double discountedValue, condition;
     private long startDate, endDate;
+    private boolean isUsed;
+    public Voucher(){
 
+    }
 
     protected Voucher(Parcel in) {
         applyFor = in.readString();
@@ -29,7 +32,22 @@ public class Voucher implements Parcelable {
         this.endDate = endDate;
     }
 
-    public Voucher(String name, String code, long value, long l) {
+    public Voucher(String name, String code, long value, long endDate, boolean isUsed) {
+        this.voucherName = name;
+        this.id = code;
+        this.discountedValue = value;
+        this.endDate = endDate;
+        this.isUsed = isUsed;
+    }
+    public Voucher(String applyFor, double condition, String name, String code, long value, long startDate, long endDate, boolean isUsed) {
+        this.applyFor = applyFor;
+        this.condition = condition;
+        this.voucherName = name;
+        this.id = code;
+        this.discountedValue = value;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isUsed = isUsed;
     }
 
     @Override
@@ -114,5 +132,9 @@ public class Voucher implements Parcelable {
 
     public void setEndDate(long endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
     }
 }

@@ -9,6 +9,8 @@ public class Feedback {
     private long Point;
     private long Date;
     private String Comment;
+    private String Image_product_path;
+    private String NameProduct;
 
     public Feedback(String customerID, String productID, long point, long date, String comment) {
         CustomerID = customerID;
@@ -19,6 +21,12 @@ public class Feedback {
     }
     public Feedback(){
 
+    }
+    public Feedback(String comment, long point, long date, String productID){
+        this.Comment = comment;
+        this.Point = point;
+        this.Date = date;
+        this.ProductID = productID;
     }
 
     public String getCustomerID() {
@@ -59,5 +67,21 @@ public class Feedback {
 
     public void setComment(String comment) {
         Comment = comment;
+    }
+
+    public String getImage_product_path() {
+        return Image_product_path;
+    }
+
+    public String getNameProduct() {
+        return NameProduct;
+    }
+
+    public void setImage_product_path(String image_product_path) {
+        Image_product_path = image_product_path;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        NameProduct = nameProduct;
     }
 }

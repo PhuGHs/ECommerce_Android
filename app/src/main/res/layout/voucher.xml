@@ -7,13 +7,11 @@
     android:paddingRight="66px"
     android:layout_marginBottom="88px"
     android:background="@drawable/bg_white_rounded">
-
         <ImageView
             android:layout_width="155px"
             android:layout_height="138px"
             android:id="@+id/image_of_voucher"
             android:src="@drawable/voucher_detail"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +25,6 @@
                 android:textColor="@color/black"
                 android:textSize="50px"
                 style="@style/font_medium"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +78,7 @@
                 android:layout_marginTop="38px"
                 android:gravity="right">
                 <Button
+                    android:id="@+id/btn_use"
                     android:layout_width="250px"
                     android:layout_height="130px"
                     android:textAllCaps="false"

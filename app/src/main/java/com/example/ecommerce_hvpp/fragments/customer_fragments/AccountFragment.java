@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,16 +25,26 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
+import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,17 +86,17 @@ public class AccountFragment extends Fragment {
     private NavController navController;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private DatabaseReference fbDb = null;
+    private FirebaseHelper firebaseHelper;
     private ProfileViewModel viewModel;
+    private VoucherViewModel voucherViewModel;
     private String name;
-    private String num_of_voucher;
     private String imagePath;
     private TextView name_tv;
     private TextView number_of_voucher_tv;
     private TextView number_of_orderprogress_tv;
+    private TextView number_of_feedback_tv;
     private ImageView ava_image;
     private String size_text = "";
-    private String id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,9 +118,12 @@ public class AccountFragment extends Fragment {
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
+        number_of_feedback_tv = v.findViewById(R.id.number_feedback);
         ava_image = v.findViewById(R.id.image_of_user);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
+
         if (viewModel.showUserName() != null){
            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
                switch (userInfoResource.status){
@@ -118,10 +132,16 @@ public class AccountFragment extends Fragment {
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
                        imagePath = userInfoResource.data.getImagePath();
-                       Glide.with(this).load(imagePath).fitCenter().into(ava_image);
+                       if (getContext() == null){
+                            return;
+                       }
+                       else{
+                           Glide.with(getContext()).load(imagePath).fitCenter().into(ava_image);
+                       }
+
                        name_tv.setText(name);
-                       setQuantityofVoucher(number_of_voucher_tv, "Voucher");
-                       setQuantityofOrder(number_of_orderprogress_tv, "Order");
+                       setQuantity(number_of_orderprogress_tv, "Order");
+                       setQuantityFeedback(number_of_feedback_tv, "Feedback");
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -130,6 +150,7 @@ public class AccountFragment extends Fragment {
                }
            });
         }
+        voucherViewModel.showNumofVoucher().observe(requireActivity(), NumofVoucher -> number_of_voucher_tv.setText(Integer.toString(NumofVoucher)));
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -145,7 +166,7 @@ public class AccountFragment extends Fragment {
         RelativeLayout profile_btn = (RelativeLayout) view.findViewById(R.id.btn_profile);
         RelativeLayout recep_info_btn = (RelativeLayout) view.findViewById(R.id.btn_recep_info);
         RelativeLayout order_history_btn = (RelativeLayout) view.findViewById(R.id.btn_orderhistory);
-        //Button chat_with_admin_btn = (Button) view.findViewById(R.id.btn_chat_with_admin);
+        RelativeLayout chat_with_admin_btn = (RelativeLayout) view.findViewById(R.id.btn_chat_with_admin);
         RelativeLayout logout_btn = (RelativeLayout) view.findViewById(R.id.btn_logout);
 
 
@@ -188,6 +209,12 @@ public class AccountFragment extends Fragment {
                 navController.navigate(R.id.OrderHistoryFragment);
             }
         });
+        chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.chatRoomFragment);
+            }
+        });
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,7 +241,8 @@ public class AccountFragment extends Fragment {
             }
         });
     }
-    public void setQuantityofVoucher(TextView textView, String path){
+    public void setQuantity(TextView textView, String path){
+        FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
         db.collection(path)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -223,7 +251,9 @@ public class AccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             int count = 0;
                             for (DocumentSnapshot document : task.getResult()) {
-                                count++;
+                                if (document.getString("customerId").equals(fbUser.getUid())){
+                                    count++;
+                                }
                             }
                             size_text = Integer.toString(count);
                             textView.setText(size_text);
@@ -234,7 +264,7 @@ public class AccountFragment extends Fragment {
                     }
                 });
     }
-    public void setQuantityofOrder(TextView textView, String path){
+    public void setQuantityFeedback(TextView textView, String path){
         FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
         db.collection(path)
                 .get()
@@ -257,4 +287,5 @@ public class AccountFragment extends Fragment {
                     }
                 });
     }
+
 }

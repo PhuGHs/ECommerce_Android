@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.repositories.customerRepositories;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -7,23 +8,32 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.User;
+import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProductManagementRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class ProfileRepository {
     private FirebaseHelper firebaseHelper;
-    private MutableLiveData<Resource<User>> _mldUserInfo;
-    String username;
+    private MutableLiveData<Resource<User>> _mldUserInfo = new MutableLiveData<>();
+    private MutableLiveData<String> username = new MutableLiveData<>();
+    private MutableLiveData<String> userimage = new MutableLiveData<>();
     private DatabaseReference ref;
+    private StorageReference imageRef;
     private final String TAG = "ProfileRepository";
     public ProfileRepository(){
         _mldUserInfo = new MutableLiveData<>();
         firebaseHelper = FirebaseHelper.getInstance();
         ref = firebaseHelper.getDatabaseReference("users");
 
+    }
+    public interface OnImageUploadListener {
+        void onImageUploadSuccess(String imageUrl);
+        void onImageUploadFailure(String exception);
     }
 
     public LiveData<Resource<User>> getUserInfo(String UID){
@@ -40,15 +50,60 @@ public class ProfileRepository {
                 });
         return _mldUserInfo;
     }
-    public void updateUser(String UID, String name, String datebirth, String address, String email) {
+    public void updateUser(String UID, String name, String datebirth, String address, String email, String imagepath) {
         FirebaseFirestore fs = FirebaseFirestore.getInstance();
         DocumentReference ref = fs.collection("users").document(UID);
         ref.update(
                 "username", name,
                 "datebirth", datebirth,
                 "address", address,
-                "email", email
+                "email", email,
+                "imagePath", imagepath
         );
+    }
+    public LiveData<String> getUserImage(String UID){
+        _mldUserInfo.setValue(Resource.loading(null));
+        firebaseHelper.getCollection("users").document(UID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        String image = documentSnapshot.getString("imagePath");
+                        userimage.setValue(image);
+                        Log.e("Phuc", "get name successfully " + image);
+                    }
+                    else {
+                        Log.d(TAG, "user not found");
+                    }
+                });
+        return userimage;
+    }
+    public LiveData<String> getUserName(String UID){
+        _mldUserInfo.setValue(Resource.loading(null));
+        firebaseHelper.getCollection("users").document(UID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("username");
+                        username.setValue(name);
+                        Log.e("Phuc", "get name successfully " + name);
+                    }
+                    else {
+                        Log.d(TAG, "user not found");
+                    }
+                });
+        return username;
+    }
+    public void uploadImage(Uri uri, String fileType, final AdminProductManagementRepository.OnImageUploadListener listener) {
+        String path = System.currentTimeMillis() + "." + fileType;
+        imageRef = firebaseHelper.getImageStorage();
+        UploadTask uploadTask = imageRef.child(path).putFile(uri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            imageRef.child(path).getDownloadUrl().addOnSuccessListener(downloadUrl -> {
+                listener.onImageUploadSuccess(downloadUrl.toString());
+            }).addOnFailureListener(e -> {
+                listener.onImageUploadFailure(e.getMessage());
+            });
+        }).addOnFailureListener(e -> {
+            listener.onImageUploadFailure(e.getMessage());
+        });
     }
 
 }

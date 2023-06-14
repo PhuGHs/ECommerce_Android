@@ -1,14 +1,17 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
+import android.database.Observable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,8 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.OrderProgressAdapter;
+import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.OrderRepository;
 import com.example.ecommerce_hvpp.viewmodel.Customer.OrderViewModel;
 
 import java.util.ArrayList;
@@ -60,6 +67,8 @@ public class OrderProgressFragment extends Fragment {
     private RecyclerView recyclerview;
     private OrderProgressAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private SearchView searchView;
+    private OrderProgressFragment fragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +86,30 @@ public class OrderProgressFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_orderprogress);
         viewModel = new ViewModelProvider(this).get(OrderViewModel.class);
+        searchView = (SearchView) v.findViewById(R.id.search_bar_orderprogress);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter = new OrderProgressAdapter(fragment, (ArrayList<Order>) viewModel.getOrderFound(s));
+                recyclerview.setAdapter(adapter);
+                recyclerview.setLayoutManager(linearLayoutManager);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s.isEmpty()){
+
+                }
+                else {
+                    adapter = new OrderProgressAdapter(fragment, (ArrayList<Order>) viewModel.getOrderFound(s));
+                    recyclerview.setAdapter(adapter);
+                    recyclerview.setLayoutManager(linearLayoutManager);
+                }
+                return false;
+            }
+        });
 
         viewModel.showOrderList().observe(getViewLifecycleOwner(), orders -> getOrderAndSetOrderRecycleView(orders));
         return v;
@@ -95,8 +128,11 @@ public class OrderProgressFragment extends Fragment {
         });
     }
     public void getOrderAndSetOrderRecycleView(List<Order> listOrder){
-        adapter = new OrderProgressAdapter(getContext(), (ArrayList<Order>) listOrder);
+        adapter = new OrderProgressAdapter(this, (ArrayList<Order>) listOrder);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 }

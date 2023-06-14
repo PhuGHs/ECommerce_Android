@@ -5,30 +5,27 @@
     android:orientation="vertical"
     android:gravity="center|top"
     android:background="@color/background">
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_height="wrap_content">
         <ImageButton
             android:id="@+id/back_info"
-            android:layout_width="132px"
-            android:layout_height="143px"
-            android:layout_marginTop="10px"
-            android:layout_marginLeft="10px"
-            android:backgroundTint="@color/background"
-            android:src="@drawable/back_back_ic"/>
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_marginTop="35px"
+            android:layout_width="46dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30px"
-            android:layout_marginLeft="235px"
+            android:background="@color/transparent"
+            android:src="@drawable/left_arrow"
+            android:clickable="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Feedback"
-            android:textColor="@color/primary"
-            android:textSize="80px"
-            style="@style/header"/>
-    </LinearLayout>
+            android:layout_marginTop="20px"
+            style="@style/font_crimson_bold"
+            android:textColor="#A86464"
+            android:textSize="70px"
+            android:gravity="center"/>
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,6 +35,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/reviewed_navigate"
+            android:clickable="true"
             android:layout_marginRight="230px"
             style="@style/regularfont"
             android:text="Reviewed"
@@ -57,6 +56,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/list_unreviewed"
         android:layout_marginTop="50px"
-        android:layout_marginLeft="50px"/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"/>
 
 </LinearLayout>

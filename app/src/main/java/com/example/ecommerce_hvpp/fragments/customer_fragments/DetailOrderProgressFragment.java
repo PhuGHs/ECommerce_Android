@@ -1,7 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.activities.MainActivity;
-import com.example.ecommerce_hvpp.adapter.OrderHistoryAdapter;
+import com.example.ecommerce_hvpp.adapter.DetailOrderProgressAdapter;
 import com.example.ecommerce_hvpp.adapter.OrderHistorySubAdapter;
-import com.example.ecommerce_hvpp.adapter.ProductAdapter;
 import com.example.ecommerce_hvpp.model.Order;
-import com.example.ecommerce_hvpp.model.OrderHistoryItem;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
-import com.example.ecommerce_hvpp.model.Product;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.OrderHistoryViewModel;
+import com.example.ecommerce_hvpp.viewmodel.Customer.OrderViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class OrderHistoryDetailFragment extends Fragment {
+public class DetailOrderProgressFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ORDER_ID = "order_id";
@@ -46,12 +40,12 @@ public class OrderHistoryDetailFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public OrderHistoryDetailFragment() {
+    public DetailOrderProgressFragment() {
         // Required empty public constructor
     }
     // TODO: Rename and change types and number of parameters
-    public static OrderHistoryDetailFragment newInstance(String order_id) {
-        OrderHistoryDetailFragment fragment = new OrderHistoryDetailFragment();
+    public static DetailOrderProgressFragment newInstance(String order_id) {
+        DetailOrderProgressFragment fragment = new DetailOrderProgressFragment();
         Bundle args = new Bundle();
         args.putString(ORDER_ID, order_id);
         fragment.setArguments(args);
@@ -59,43 +53,48 @@ public class OrderHistoryDetailFragment extends Fragment {
     }
     private NavController navController;
     private ImageButton back_Account_btn;
-    private OrderHistoryViewModel viewModel;
-    private OrderHistorySubAdapter adapter;
     private RecyclerView recyclerview;
     private LinearLayoutManager linearLayoutManager;
-    private TextView type_of_delivery;
-    private TextView day_of_delivery;
-    private TextView name_of_recep_delivery;
-    private TextView phonenumber_of_recep_delivery;
-    private TextView address_of_recep_delivery;
-
+    private DetailOrderProgressAdapter adapter;
+    private OrderViewModel viewModel;
+    private TextView id_tv;
+    private TextView address_tv;
+    private TextView type_of_delivery_tv;
+    private TextView start_date_tv;
+    private TextView remaining_day_tv;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.activity_orderhistory_detail, container, false);
+        View v = inflater.inflate(R.layout.activity_details_orderprogress, container, false);
 
-        type_of_delivery = v.findViewById(R.id.type_of_delivery);
-        day_of_delivery = v.findViewById(R.id.day_of_delivery);
-        name_of_recep_delivery = v.findViewById(R.id.name_of_recep_delivery);
-        phonenumber_of_recep_delivery = v.findViewById(R.id.numberphone_of_recep_delivery);
-        address_of_recep_delivery = v.findViewById(R.id.address_of_recep_delivery);
+        id_tv = v.findViewById(R.id.id_order);
+        address_tv = v.findViewById(R.id.address_of_order);
+        type_of_delivery_tv = v.findViewById(R.id.type_of_delivery);
+        start_date_tv = v.findViewById(R.id.start_date);
+        remaining_day_tv = v.findViewById(R.id.remaining_day);
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerview = v.findViewById(R.id.orderhistory_detail_list);
-        viewModel = new ViewModelProvider(this).get(OrderHistoryViewModel.class);
+        recyclerview = v.findViewById(R.id.list_order_progress);
+        viewModel = new ViewModelProvider(this).get(OrderViewModel.class);
 
         //Get data
-        String id = getArguments().getString("order_id");
+        String id = getArguments().getString("orderprogress_id");
 
-        viewModel.showOrderInfo(id).observe(requireActivity(), OrderInfo -> {
-            type_of_delivery.setText(OrderInfo.getDeliveryMethod());
-            day_of_delivery.setText("Received Day: " + getDate(OrderInfo.getReceiveDate()));
-            name_of_recep_delivery.setText(OrderInfo.getRecipientName());
-            phonenumber_of_recep_delivery.setText(OrderInfo.getPhone_number());
-            address_of_recep_delivery.setText(OrderInfo.getAddress());
+        id_tv.setText("#" + id);
+        viewModel.showOrderProgressInfo(id).observe(requireActivity(), OrderInfo -> {
+            address_tv.setText(OrderInfo.getAddress());
+            type_of_delivery_tv.setText(OrderInfo.getDeliveryMethod());
+            start_date_tv.setText(getDate(OrderInfo.getCreatedDate()));
+
+            if (OrderInfo.getRemaining_day() < 2){
+                remaining_day_tv.setText(Integer.toString(OrderInfo.getRemaining_day()) + " day");
+            }
+            else {
+                remaining_day_tv.setText(Integer.toString(OrderInfo.getRemaining_day()) + " days");
+            }
         });
-        
-        viewModel.showItemsofOrder(id).observe(getViewLifecycleOwner(), items -> getItemAndSetItemRecycleView(items));
+
+        viewModel.showOrderDetail(id).observe(getViewLifecycleOwner(), items -> getItemProgressAndSetItemProgressRecycleView(items));
 
         return v;
     }
@@ -108,10 +107,9 @@ public class OrderHistoryDetailFragment extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.OrderHistoryFragment);
+                navController.navigate(R.id.OrderProgressFragment);
             }
         });
-
     }
     public String getDate(long timeStamp){
 
@@ -120,13 +118,10 @@ public class OrderHistoryDetailFragment extends Fragment {
 
         return formattedTime;
     }
-    public void getItemAndSetItemRecycleView(List<OrderHistorySubItem> listItems){
-        adapter = new OrderHistorySubAdapter(this, (ArrayList<OrderHistorySubItem>) listItems);
+    public void getItemProgressAndSetItemProgressRecycleView(List<OrderHistorySubItem> listItems){
+        adapter = new DetailOrderProgressAdapter(getContext(), (ArrayList<OrderHistorySubItem>) listItems);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
-    }
-    public NavController getNavController() {
-        return navController;
     }
 
 }
