@@ -39,12 +39,13 @@ public class Voucher implements Parcelable {
         this.endDate = endDate;
         this.isUsed = isUsed;
     }
-    public Voucher(String applyFor, double condition, String name, String code, long value, long endDate, boolean isUsed) {
+    public Voucher(String applyFor, double condition, String name, String code, long value, long startDate, long endDate, boolean isUsed) {
         this.applyFor = applyFor;
         this.condition = condition;
         this.voucherName = name;
         this.id = code;
         this.discountedValue = value;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.isUsed = isUsed;
     }

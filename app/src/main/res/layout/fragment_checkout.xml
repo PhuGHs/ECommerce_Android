@@ -71,16 +71,6 @@
                         android:src="@drawable/right_arrow"/>
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/nameAndPhoneApplied"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="El Nino - 0374825441"
-                    android:textSize="60px"
-                    style="@style/font_crimson_regular"
-                    android:textColor="#A86464"
-                    android:layout_marginLeft="85px"
-                    android:layout_marginRight="85px"/>
-                <TextView
                     android:id="@+id/addressApplied"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

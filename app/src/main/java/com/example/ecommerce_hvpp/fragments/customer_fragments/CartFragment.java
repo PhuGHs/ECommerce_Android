@@ -109,7 +109,7 @@ public class CartFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("Total price", totalPrice.getText().toString());
             bundle.putString("Total item", totalItems.getText().toString());
-
+            MainActivity.PDviewModel.updateCartToDB();
             navController.navigate(R.id.checkoutFragment, bundle);
         });
     }

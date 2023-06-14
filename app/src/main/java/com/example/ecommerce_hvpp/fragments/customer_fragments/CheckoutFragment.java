@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +87,7 @@ public class CheckoutFragment extends Fragment {
     private ListView listVoucherAppliedLv;
     private ArrayList<Pair<String, Double>> listVoucherApplied;
     private TextView addressApplied, cartItems, cartPrice, totalOrder;
-    Double shipping = 1.99;
+    Double shipping = 1.99, total;
     Spinner spinnerTypeCheckout;
     ArrayList<String> listTypeCheckout;
     private NavController navController;
@@ -118,9 +119,6 @@ public class CheckoutFragment extends Fragment {
         checkoutAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
         spinnerTypeCheckout.setAdapter(checkoutAdapter);
 
-        VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
-        listVoucherAppliedLv.setAdapter(voucherAdapter);
-
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
         navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
@@ -129,9 +127,16 @@ public class CheckoutFragment extends Fragment {
     private void getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
         voucherViewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> {
-            for (Voucher voucher : vouchers) {
-                if (MainActivity.PDviewModel.checkVoucherApply(voucher))
+            if (listVoucherApplied.size() < 1){
+                for (Voucher voucher : vouchers) {
+                    if (MainActivity.PDviewModel.checkVoucherApply(voucher))
+                        Log.d("Voucher", "add " + voucher.getId());
+                    total -= voucher.getDiscountedValue();
                     listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
+                }
+                VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
+                listVoucherAppliedLv.setAdapter(voucherAdapter);
+                totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
             }
         });
     }
@@ -151,11 +156,8 @@ public class CheckoutFragment extends Fragment {
         cartPrice.setText("$" + Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0);
     }
     public void calcTotalOrder(){
-        double total = shipping;
+        total = shipping;
         total += Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0;
-        for (int i = 0; i < listVoucherApplied.size(); i++){
-            total -= listVoucherApplied.get(i).second;
-        }
         totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
     }
 }

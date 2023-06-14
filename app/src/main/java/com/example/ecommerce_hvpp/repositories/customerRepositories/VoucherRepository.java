@@ -32,13 +32,14 @@ public class VoucherRepository {
                         if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0){
                             String name = snapshot.getString("name");
                             String code = snapshot.getString("id");
-                            String apply_for = snapshot.getString("applied_for");
+                            String apply_for = snapshot.getString("apply_for");
                             long condition = snapshot.getLong("condition");
                             long value = snapshot.getLong("value");
                             boolean isUsed = snapshot.getBoolean("isUsed");
 
                             Timestamp date_end = snapshot.getTimestamp("date_end");
-                            vouchers.add(new Voucher(apply_for, condition, name, code, value, date_end.getSeconds()*1000, isUsed));
+                            Timestamp date_start = snapshot.getTimestamp("date_begin");
+                            vouchers.add(new Voucher(apply_for, condition, name, code, value, date_start.getSeconds()*1000, date_end.getSeconds()*1000, isUsed));
                         }
                     }
                     _mldListVoucher.setValue(vouchers);
