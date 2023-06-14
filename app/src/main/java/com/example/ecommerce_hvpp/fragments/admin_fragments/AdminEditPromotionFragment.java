@@ -1,7 +1,7 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
 import static com.example.ecommerce_hvpp.util.constant.KEY_INTENT_PROMOTION;
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentEditPromotionBinding;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminPromotionRepository;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -43,7 +45,21 @@ public class AdminEditPromotionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    handleSaveButton();
+                    if (isValidated()) {
+                        setNotError();
+                        if (repo.isValidatedDate(mAdminFragmentEditPromotionBinding.adminEditPromotionStartDate.getText().toString(),
+                                mAdminFragmentEditPromotionBinding.adminEditPromotionEndDate.getText().toString())) {
+                            CustomToast.ShowToastMessage(requireContext(), 1, "Updated Successfully");
+                            handleSaveButton();
+                            repo.returnBackPage(view);
+                        } else {
+                            CustomToast.ShowToastMessage(requireContext(), 2, "Start date must be less than the End date");
+                            errorDateLogic();
+                        }
+                    } else {
+                        CustomToast.ShowToastMessage(requireContext(), 2, "Some field is empty");
+                        findTextInputEmpty();
+                    }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
@@ -78,6 +94,67 @@ public class AdminEditPromotionFragment extends Fragment {
         mAdminFragmentEditPromotionBinding.adminEditPromotionApply.setText(currPromotion.getApply_for());
     }
 
+    private boolean isValidated() {
+        return !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionName)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionCode)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionDiscount)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionMinimum)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionStartDate)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionEndDate)
+                && !repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionApply);
+    }
+
+    private void setNotError() {
+        String noError = "";
+        mAdminFragmentEditPromotionBinding.adminEditPromotionDiscountLayout.setError(noError);
+        mAdminFragmentEditPromotionBinding.adminEditPromotionMinimumLayout.setError(noError);
+        mAdminFragmentEditPromotionBinding.adminEditPromotionStartDateLayout.setError(noError);
+        mAdminFragmentEditPromotionBinding.adminEditPromotionEndDateLayout.setError(noError);
+    }
+
+    private void findTextInputEmpty() {
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionName)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionName.setError(getResources().getString(R.string.required_field));
+        }
+
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionCode)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionCode.setError(getResources().getString(R.string.required_field));
+        }
+
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionDiscount)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionDiscountLayout.setErrorIconDrawable(null);
+            mAdminFragmentEditPromotionBinding.adminEditPromotionDiscountLayout.setError(getResources().getString(R.string.required_field));
+        } else {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionDiscountLayout.setError(null);
+        }
+
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionMinimum)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionMinimumLayout.setErrorIconDrawable(null);
+            mAdminFragmentEditPromotionBinding.adminEditPromotionMinimumLayout.setError(getResources().getString(R.string.required_field));
+        } else {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionMinimumLayout.setError(null);
+        }
+
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionStartDate)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionStartDateLayout.setErrorIconDrawable(null);
+            mAdminFragmentEditPromotionBinding.adminEditPromotionStartDateLayout.setError(getResources().getString(R.string.required_field));
+        } else {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionStartDateLayout.setError(null);
+        }
+
+        if (repo.isEmpty(mAdminFragmentEditPromotionBinding.adminEditPromotionEndDate)) {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionEndDateLayout.setErrorIconDrawable(null);
+            mAdminFragmentEditPromotionBinding.adminEditPromotionEndDateLayout.setError(getResources().getString(R.string.required_field));
+        } else {
+            mAdminFragmentEditPromotionBinding.adminEditPromotionEndDateLayout.setError(null);
+        }
+    }
+
+    private void errorDateLogic() {
+        mAdminFragmentEditPromotionBinding.adminEditPromotionStartDateLayout.setError("Start date must be less than the End date");
+        mAdminFragmentEditPromotionBinding.adminEditPromotionEndDateLayout.setError("Start date must be later than the End date");
+    }
+
     Promotion convertPromotionObject() throws ParseException {
         String name = String.valueOf(mAdminFragmentEditPromotionBinding.adminEditPromotionName.getText());
         String code = String.valueOf(mAdminFragmentEditPromotionBinding.adminEditPromotionCode.getText());
@@ -96,6 +173,8 @@ public class AdminEditPromotionFragment extends Fragment {
     }
 
     private void handleSaveButton() throws ParseException {
-        repo.updatePromotionDatabase(convertPromotionObject());
+        Promotion promotion = convertPromotionObject();
+        repo.updatePromotionDatabase(promotion);
+        repo.updateVoucherForUsers(promotion);
     }
 }

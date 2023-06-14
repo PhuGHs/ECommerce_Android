@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_primary"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <!--    Header  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/admin_statistics_nation_header_back"
+                android:layout_width="14dp"
+                android:layout_height="23dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_back_34" />
+
+            <TextView
+                android:id="@+id/admin_statistics_nation_title"
+                style="@style/header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Nation Top-selling"
+                android:textColor="@color/primary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:cardCornerRadius="100dp">
+
+                <ImageView
+                    android:id="@+id/admin_statistics_nation_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar_customer" />
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/admin_statistics_nation_overview"
+                    style="@style/w500_60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="This month"
+                    android:textColor="@color/black" />
+
+
+                <RelativeLayout
+                    android:id="@+id/admin_statistics_component_nation_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_item_statistic"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <TextView
+                        android:id="@+id/admin_statistics_component_nation_title"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NATION TOP-SELLING"
+                        android:textColor="@color/primary" />
+
+                    <TextView
+                        android:id="@+id/admin_statistics_component_nation_quantity"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/admin_statistics_component_nation_title"
+                        android:layout_marginTop="15dp"
+                        android:text="Argentina"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/admin_statistics_nation_statistics"
+                    style="@style/w500_60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Statistics"
+                    android:textColor="@color/black" />
+
+
+                <!-- chart-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/round_item_statistic"
+                    android:paddingBottom="10dp">
+
+                    <!--  calendar  -->
+                    <RelativeLayout
+                        android:id="@+id/admin_statistics_nation_calendar"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/round_month">
+
+                        <TextView
+                            android:id="@+id/admin_statistics_nation_month"
+                            style="@style/w400_50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:paddingVertical="5dp"
+                            android:text="07/2023"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@id/admin_statistics_nation_month"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="10dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/baseline_arrow_down_white" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/admin_statistics_nation_title_bar_chart"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/admin_statistics_nation_calendar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text=""
+                        android:textColor="@color/primary" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/admin_statistics_nation_bar_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_below="@id/admin_statistics_nation_title_bar_chart"
+                        android:layout_marginBottom="20dp"
+                        android:paddingBottom="20dp" />
+
+                    <TextView
+                        android:id="@+id/admin_statistics_nation_title_pie_chart"
+                        style="@style/w500_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/admin_statistics_nation_bar_chart"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text=""
+                        android:textColor="@color/primary" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/admin_statistics_nation_pie_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_below="@id/admin_statistics_nation_title_pie_chart"
+                        android:layout_marginTop="10dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

@@ -22,6 +22,7 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
         Log.d("In cart", product.getName());
         holder.size.setText(cart.getSize());
         holder.quantity.setText(String.valueOf(cart.getQuantity()));
+        long quantity = cart.getQuantity();
 
         Glide.with(context)
                 .asBitmap()
@@ -73,10 +75,27 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
             Log.d("Remove from cart",product.getName());
             holder.adapter.listCart.remove(p);
             holder.adapter.notifyItemRemoved(p);
-            MainActivity.PDviewModel.removeFromCart(product.getId(), cart.getQuantity(), cart.getSize());
+            MainActivity.PDviewModel.removeFromCart(context, product.getId(), cart.getQuantity(), cart.getSize());
         });
 
         //change quantity
+        holder.minusQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (quantity > 1) holder.adapter.listCart.get(p).setQuantity(quantity - 1);
+                holder.adapter.notifyDataSetChanged();
+            }
+        });
+        holder.plusQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (quantity < product.getSize(cart.getSize())) {
+                    holder.adapter.listCart.get(p).setQuantity(quantity + 1);
+                }
+                else CustomToast.ShowToastMessage(context, 2, "Not enough quantity");
+                holder.adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**

@@ -57,14 +57,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="26px"
-        android:gravity="right">
+        android:gravity="right"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="110px"
+            android:layout_height="100px"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="100dp"
+            android:id="@+id/delete_btn"
+            android:background="@drawable/bg_white_rounded"
+            android:backgroundTint="@color/primary"
+            android:src="@drawable/delete_ic"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/apply_btn"
             android:layout_marginRight="41px"
             android:textAllCaps="false"
-            style="@style/font_crimson_regular"
+            style="@style/header"
             android:textSize="45px"
             android:text="Apply"/>
         <Button
@@ -72,7 +82,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_btn"
             android:textAllCaps="false"
-            style="@style/font_crimson_regular"
+            style="@style/header"
             android:textSize="45px"
             android:text="Edit"/>
     </LinearLayout>

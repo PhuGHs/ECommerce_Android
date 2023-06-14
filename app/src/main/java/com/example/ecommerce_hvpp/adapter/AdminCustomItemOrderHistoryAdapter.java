@@ -1,7 +1,7 @@
 package com.example.ecommerce_hvpp.adapter;
 
 
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -62,21 +62,21 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
             return;
         }
 
-        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentIdOrder.setText(String.valueOf(orderHistory.getId()));
-        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getTime_create()));
-        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentNameCustomer.setText(orderHistory.getName());
-        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentPhoneCustomer.setText(orderHistory.getPhone());
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentIdOrder.setText(orderHistory.getId());
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentDate.setText(templateDate.format(orderHistory.getCreatedDate()));
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentNameCustomer.setText(orderHistory.getRecipientName());
+        holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentPhoneCustomer.setText(orderHistory.getPhoneNumber());
         holder.mAdminCustomItemOrderHistoryBinding.adminOrderHistoryComponentAddressCustomer.setText(orderHistory.getAddress());
 
 //         get user by Id and set data into UI
         repo = new AdminProfileRepository();
-        Observable<Resource<User>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomer_id()));
+        Observable<Resource<User>> observable = repo.getObservableCustomerById(String.valueOf(orderHistory.getCustomerId()));
         Observer<Resource<User>> observer = getObserverUser(holder, orderHistory);
-//
+
 //        // add customer into order history
         mListOrderHistory.set(position, orderHistory);
 
-        observable.subscribeOn(Schedulers.newThread())
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
 
@@ -150,10 +150,7 @@ public class AdminCustomItemOrderHistoryAdapter extends RecyclerView.Adapter<Adm
         } else {
             List<OrderHistory> listOrderHistory = new ArrayList<>();
             for (OrderHistory orderHistory : mListOrderHistoryOriginal) {
-                if (String.valueOf(orderHistory.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getName().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getPhone().toLowerCase().contains(strSearch.toLowerCase()) ||
-                        orderHistory.getAddress().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (orderHistory.getRecipientName().toLowerCase().contains(strSearch.toLowerCase())) {
                     listOrderHistory.add(orderHistory);
                 }
             }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +61,8 @@ public class OrderHistoryFragment extends Fragment {
     private OrderHistoryAdapter adapter;
     private RecyclerView recyclerview;
     private LinearLayoutManager linearLayoutManager;
+    private TextView num_of_completedorders;
+    private TextView total_moneypaid;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +76,22 @@ public class OrderHistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_user_orderhistory, container, false);
 
+        num_of_completedorders = v.findViewById(R.id.number_of_completedorder);
+        total_moneypaid = v.findViewById(R.id.total_moneypaid);
+
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_order_history);
         viewModel = new ViewModelProvider(this).get(OrderHistoryViewModel.class);
+
+        viewModel.showNumofOrder().observe(requireActivity(), NumofOrder -> {
+            if (NumofOrder < 2){
+                num_of_completedorders.setText("Found " + NumofOrder + " completed order");
+            }
+            else{
+                num_of_completedorders.setText("Found " + NumofOrder + " completed orders");
+            }
+        });
+        viewModel.showTotalSum().observe(requireActivity(), TotalSum -> total_moneypaid.setText("$" + Double.toString(TotalSum)));
         viewModel.showOrderHistoryList().observe(getViewLifecycleOwner(), orderhistories -> getOrderHistoryAndSetOrderHistoryRecycleView(orderhistories));
 
         return v;
@@ -95,9 +111,12 @@ public class OrderHistoryFragment extends Fragment {
 
     }
     public void getOrderHistoryAndSetOrderHistoryRecycleView(List<OrderHistoryItem> listOrderHistory){
-        adapter = new OrderHistoryAdapter(getContext(), (ArrayList<OrderHistoryItem>) listOrderHistory);
+        adapter = new OrderHistoryAdapter(this, (ArrayList<OrderHistoryItem>) listOrderHistory);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 
 }

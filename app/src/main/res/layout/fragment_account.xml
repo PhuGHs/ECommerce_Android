@@ -28,17 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/image_of_user"
-            android:scaleType="centerCrop"
-            android:src="@drawable/avatar_customer"/>
+            android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name_tv"
         android:layout_marginBottom="22dp"
-        android:text="Hoang Phuc"
+        android:text="Name"
         android:textColor="@color/black"
         android:textSize="64px"
         style="@style/header"/>
@@ -159,7 +156,7 @@
             android:layout_marginHorizontal="35dp"
             android:layout_height="43dp"
             android:background="@drawable/bg_white_rounded"
-            android:layout_marginBottom="23dp">
+            android:layout_marginBottom="18dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -196,7 +193,7 @@
             android:layout_marginHorizontal="35dp"
             android:layout_below="@+id/btn_profile"
             android:background="@drawable/bg_white_rounded"
-            android:layout_marginBottom="23dp">
+            android:layout_marginBottom="18dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -233,7 +230,7 @@
             android:layout_height="43dp"
             android:layout_below="@+id/btn_recep_info"
             android:background="@drawable/bg_white_rounded"
-            android:layout_marginBottom="23dp">
+            android:layout_marginBottom="18dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -270,7 +267,7 @@
             android:layout_marginHorizontal="35dp"
             android:layout_below="@+id/btn_orderhistory"
             android:background="@drawable/bg_white_rounded"
-            android:layout_marginBottom="23dp">
+            android:layout_marginBottom="18dp">
 
             <ImageView
                 android:layout_width="wrap_content"

@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
 
@@ -53,6 +54,9 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
+
+        MainActivity.PDviewModel = new ProductViewModel();
+        MainActivity.PDviewModel.initListBestSellerLiveData();
     }
 
     @Override

@@ -109,4 +109,7 @@ public class User {
     public void setSumRevenue(long sumRevenue) {
         this.sumRevenue = sumRevenue;
     }
+
+    public void setUrlthumb(String imageUrl) {
+    }
 }

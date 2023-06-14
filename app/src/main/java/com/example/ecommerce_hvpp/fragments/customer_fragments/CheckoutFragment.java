@@ -5,13 +5,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -21,8 +26,12 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.CheckoutAdapter;
 import com.example.ecommerce_hvpp.adapter.VoucherAdapter;
+import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,14 +86,19 @@ public class CheckoutFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_checkout, container, false);
     }
-    private ImageButton btnBackToCart;
+    private ImageButton btnBackToCart, navToAddress, navToVoucher;
     private ListView listVoucherAppliedLv;
     private ArrayList<Pair<String, Double>> listVoucherApplied;
-    private TextView addressApplied, cartItems, cartPrice, totalOrder;
-    Double shipping = 1.99;
-    Spinner spinnerTypeCheckout;
-    ArrayList<String> listTypeCheckout;
+    private TextView addressApplied, cartItems, cartPrice, totalOrder, shippingPrice;
+    Double shipping = 1.99, total;
+    Spinner spinnerTypeCheckout, spinnerShipping;
+    ArrayList<String> listTypeCheckout, listTypeShipping;
+    HashMap<String, Double> listShippingPrice;
     private NavController navController;
+    private Button btnAccept;
+    private EditText txtNote;
+    Long nextDay = (long) 432000;
+    String deliverMethod, paymentMethod;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -94,41 +108,104 @@ public class CheckoutFragment extends Fragment {
         listVoucherAppliedLv = (ListView) view.findViewById(R.id.listVoucherApplied);
         listVoucherApplied = new ArrayList<>();
         btnBackToCart = (ImageButton) view.findViewById(R.id.btnBackToCart);
+        navToAddress = (ImageButton) view.findViewById(R.id.navToAddress);
+        navToVoucher = (ImageButton) view.findViewById(R.id.navToVoucher);
+        btnAccept = (Button) view.findViewById(R.id.btnCheckoutDone);
         addressApplied = (TextView) view.findViewById(R.id.addressApplied);
         cartItems = (TextView) view.findViewById(R.id.cartItems);
         cartPrice = (TextView) view.findViewById(R.id.cartPrice);
         totalOrder = (TextView) view.findViewById(R.id.totalOrder);
+        shippingPrice = (TextView) view.findViewById(R.id.shippingPrice);
         spinnerTypeCheckout = (Spinner) view.findViewById(R.id.typeCheckout);
+        spinnerShipping = (Spinner) view.findViewById(R.id.typeShipping);
+        txtNote = (EditText) view.findViewById(R.id.txtNoteOrder);
         listTypeCheckout = new ArrayList<>();
-
+        listTypeShipping = new ArrayList<>();
+        listShippingPrice = new HashMap<>();
         getListVoucherApplied();
+        getAddressApplied();
         getTypeCheckout();
-        addressApplied.setText(getAddressApplied());
+        getTypeShipping();
         getCartItemsAndPrice();
         calcTotalOrder();
 
         CheckoutAdapter checkoutAdapter = new CheckoutAdapter(getContext(), R.layout.simple_spinner_string_item, listTypeCheckout);
         checkoutAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
         spinnerTypeCheckout.setAdapter(checkoutAdapter);
+        spinnerTypeCheckout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                paymentMethod = listTypeCheckout.get(i);
+            }
 
-        VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
-        listVoucherAppliedLv.setAdapter(voucherAdapter);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        CheckoutAdapter shippingAdapter = new CheckoutAdapter(getContext(), R.layout.simple_spinner_string_item, listTypeShipping);
+        shippingAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
+        spinnerShipping.setAdapter(shippingAdapter);
+        spinnerShipping.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String key = listTypeShipping.get(i);
+                deliverMethod = key;
+                shipping = listShippingPrice.get(key);
+                shippingPrice.setText("$" + shipping);
+                totalOrder.setText("$" + (total + shipping));
+
+                if (key.equals("Normal")) nextDay = (long) 432000;
+                if (key.equals("Express")) nextDay = (long) 259200;
+                if (key.equals("Same day")) nextDay = (long) 86400;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
+        navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
+        navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
+
+        //create order
+        btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, total + shipping));
     }
     private void getListVoucherApplied(){
-        //listVoucherApplied.add(new Pair<>("RF001", 3.00));
-        //listVoucherApplied.add(new Pair<>("RF002", 4.00));
-        listVoucherApplied.add(new Pair<>("RF003", 1.99));
+        VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
+        voucherViewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> {
+            if (listVoucherApplied.size() < 1){
+                for (Voucher voucher : vouchers) {
+                    if (MainActivity.PDviewModel.checkVoucherApply(voucher))
+                        Log.d("Voucher", "add " + voucher.getId());
+                    total -= voucher.getDiscountedValue();
+                    listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
+                }
+                VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
+                listVoucherAppliedLv.setAdapter(voucherAdapter);
+                totalOrder.setText("$" + Math.round((total + shipping) * 100.0) / 100.0);
+            }
+        });
+    }
+    public void getTypeShipping(){
+        listTypeShipping.add("Normal");
+        listTypeShipping.add("Express");
+        listTypeShipping.add("Same day");
+        listShippingPrice.put("Normal", 1.99);
+        listShippingPrice.put("Express", 3.99);
+        listShippingPrice.put("Same day", 6.99);
     }
     private void getTypeCheckout(){
         listTypeCheckout.add("Visa");
         listTypeCheckout.add("Card Debit");
         listTypeCheckout.add("Momo");
     }
-    private String getAddressApplied(){
-        return "Santigo Bernabeu Stadium, Madrid, Spain - Hala Madrid, Fede Valverde";
+    private void getAddressApplied(){
+        MainActivity.PDviewModel.getAddressApplied().observe(getViewLifecycleOwner(), info -> addressApplied.setText(info));
     }
     private void getCartItemsAndPrice(){
         int items = MainActivity.PDviewModel.getTotalCartItems().getValue();
@@ -138,11 +215,9 @@ public class CheckoutFragment extends Fragment {
         cartPrice.setText("$" + Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0);
     }
     public void calcTotalOrder(){
-        double total = shipping;
+        total = shipping;
         total += Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0;
-        for (int i = 0; i < listVoucherApplied.size(); i++){
-            total -= listVoucherApplied.get(i).second;
-        }
         totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
+        total -= shipping;
     }
 }

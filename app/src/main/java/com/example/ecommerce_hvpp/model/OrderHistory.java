@@ -3,55 +3,58 @@ package com.example.ecommerce_hvpp.model;
 import java.util.Date;
 
 public class OrderHistory {
-    private String customer_id;
-    private int id;
-    private Date time_create;
-    private String phone;
+    private String customerId;
+    private String id;
+    private Date createdDate;
+    private String phoneNumber;
     private String address;
-    private String name;
+    private String recipientName;
+    private double totalPrice;
+    private Date updateDate;
+    private boolean status;
     private User user;
 
     public OrderHistory() {}
 
-    public OrderHistory(String customer_id, int id, Date time_create, String phone, String address, String name) {
-        this.customer_id = customer_id;
+    public OrderHistory(String customerId, String id, Date createDate, String phoneNumber, String address, String recipientName) {
+        this.customerId = customerId;
         this.id = id;
-        this.time_create = time_create;
-        this.phone = phone;
+        this.createdDate = createDate;
+        this.phoneNumber = phoneNumber;
         this.address = address;
-        this.name = name;
+        this.recipientName = recipientName;
     }
 
-    public String getCustomer_id() {
-        return customer_id;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(String customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Date getTime_create() {
-        return time_create;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setTime_create(Date time_create) {
-        this.time_create = time_create;
+    public void setCreatedDate(Date createDate) {
+        this.createdDate = createDate;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {
@@ -62,12 +65,12 @@ public class OrderHistory {
         this.address = address;
     }
 
-    public String getName() {
-        return name;
+    public String getRecipientName() {
+        return recipientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
     }
 
     public User getUser() {

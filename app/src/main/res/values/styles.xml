@@ -92,4 +92,8 @@
     <style name="ErrorStyle" parent="Widget.MaterialComponents.Snackbar">
         <item name="android:background">#ff4444</item>
     </style>
+    <style name="w500_60">
+        <item name="fontFamily">@font/crimson_pro_medium</item>
+        <item name="android:textSize">23sp</item>
+    </style>
 </resources>

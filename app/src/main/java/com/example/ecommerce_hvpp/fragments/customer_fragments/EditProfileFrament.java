@@ -1,16 +1,31 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
+import static android.content.ContentValues.TAG;
+
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +37,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.adapter.AdminProductImageSlider;
+import com.example.ecommerce_hvpp.model.ItemModel;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +54,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * create an instance of this fragment.
  */
 public class EditProfileFrament extends Fragment {
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,14 +104,49 @@ public class EditProfileFrament extends Fragment {
     private Button change_ava_btn;
     private Button cancel_btn;
     private Button save_btn;
+    private ActivityResultLauncher<Intent> galleryLauncher;
+    private ActivityResultLauncher<Intent> thumbnailLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+    private Uri thumbnailImage;
+    private ContentResolver contentResolver;
+    private String path;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if(isGranted) {
+                openGallery();
+            } else {
+                // do nothing
+                //show message (disabled)
+            }
+        });
+
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    if (data.getClipData() != null) {
+                        // Image was selected
+                        processSelectedImage(data.getData());
+                    }
+                }
+            }
+        });
+
+        thumbnailLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null && data.getData() != null) {
+                    thumbnailImage = data.getData();
+                    Log.d(TAG, "link" + thumbnailImage);
+                    Glide.with(getContext()).load(thumbnailImage).fitCenter().into(ava_image);
+                    path = thumbnailImage.toString();
+                    //viewModel.uploadAvatar(contentResolver, user, thumbnailImage);
+                }
+            }
+        });
     }
 
     @Override
@@ -103,6 +157,9 @@ public class EditProfileFrament extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        contentResolver = getContext().getContentResolver();
+
         name_tv = v.findViewById(R.id.name_textview);
         name_edt = v.findViewById(R.id.name_edittext);
         datebirth_edt = v.findViewById(R.id.datebirth_edittext);
@@ -162,21 +219,21 @@ public class EditProfileFrament extends Fragment {
                 navController.navigate(R.id.accountFragment);
             }
         });
-//        change_ava_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-////            public void onClick(View view) {
-////                if(ActivityCompat.checkSelfPermission(getActivity(),
-////                        android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-////                {
-////                    CustomToast Toast = new CustomToast();
-////                    Toast.ShowToastMessage(requireActivity(), 3, "Không thể mở thư viện ảnh");
-////                }
-////                else {
-////                    //startGallery(); bổ sung sau
-////                }
-////            }
-//
-//        });
+        change_ava_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check if the permission is already granted
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Request permission if it has not been granted
+                    requestGalleryPermission();
+                } else {
+                    // Permission already granted, proceed with gallery access
+                    OpenThumbnailGallery();
+                }
+            }
+
+        });
         edit_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -245,7 +302,32 @@ public class EditProfileFrament extends Fragment {
         user.setDatebirth(datebirth);
         user.setAddress(address);
         user.setEmail(email);
+        user.setImagePath(path);
+        Log.d(TAG, "link" + path);
         viewModel.updateUser(user);
+    }
+    private void processSelectedImage(Uri imageUri) {
+        //SlideAdapter.addItem(new ItemModel(imageUri, null));
+    }
+    private void requestGalleryPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setType("image/*");
+        galleryLauncher.launch(intent);
+    }
+
+    private void OpenThumbnailGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        thumbnailLauncher.launch(intent);
     }
 
 }

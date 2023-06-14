@@ -205,6 +205,11 @@ public class Product implements Parcelable {
     public long getSizeXL() {
         return size_xl;
     }
+    public long getSize(String size){
+        if (size.equals("M")) return size_m;
+        if (size.equals("L")) return size_l;
+        return size_xl;
+    }
 
     public void setSizeXL(long sizeXL) {
         this.size_xl = sizeXL;

@@ -34,6 +34,7 @@ import com.example.ecommerce_hvpp.adapter.FeedbackCustomerAdapter;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.google.android.material.snackbar.Snackbar;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +107,7 @@ public class DetailProductCustomerFragment extends Fragment {
     ImageButton minusQuantity, plusQuantity;
     RadioGroup sizeGroup;
     List<Long> listSize;
-    Integer MinQuantity = 1;
+    Integer MinQuantity = 1, quantityAvailable = 0;
     RecyclerView feedbackRv;
     MutableLiveData<String> sizeChosen = new MutableLiveData<>("M");
     FeedbackCustomerAdapter feedbackAdapter;
@@ -139,7 +140,7 @@ public class DetailProductCustomerFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         //set data
-        detailQuantity.setText("1");
+        detailQuantity.setText("0");
         getDataFromPreviousFragment();
 
         btnBackToPrevious.setOnClickListener(view1 -> {
@@ -177,6 +178,7 @@ public class DetailProductCustomerFragment extends Fragment {
                 ratingBar.setRating((float)product.getPointAvg());
                 listSize = new ArrayList<>();
                 sizeAvailable.setText(String.valueOf(product.getSizeM()));
+                quantityAvailable = (int) product.getSizeM();
                 listSize.add(product.getSizeM());
                 listSize.add(product.getSizeL());
                 listSize.add(product.getSizeXL());
@@ -192,11 +194,11 @@ public class DetailProductCustomerFragment extends Fragment {
                 else btnFav.setImageResource(R.drawable.outline_heart);
                 btnFav.setOnClickListener(view -> {
                     if (favorite){
-                        MainActivity.PDviewModel.removeFromWishList(productID);
+                        MainActivity.PDviewModel.removeFromWishList(getContext(), productID);
                         btnFav.setImageResource(R.drawable.outline_heart);
                     }
                     else {
-                        MainActivity.PDviewModel.addToWishList(productID);
+                        MainActivity.PDviewModel.addToWishList(getContext(), productID);
                         btnFav.setImageResource(R.drawable.full_heart);
                     }
                 });
@@ -214,7 +216,10 @@ public class DetailProductCustomerFragment extends Fragment {
         });
         plusQuantity.setOnClickListener(view13 -> {
             int quantity = Integer.parseInt(detailQuantity.getText().toString());
-            quantity++;
+            if (quantity >= quantityAvailable){
+                CustomToast.ShowToastMessage(getContext(), 2, "Not enough quantity!!");
+            }
+            else quantity++;
             detailQuantity.setText(String.valueOf(quantity));
         });
     }
@@ -223,20 +228,34 @@ public class DetailProductCustomerFragment extends Fragment {
             if (listSize != null){
                 if (checkID == R.id.rbtnSizeM){
                     sizeAvailable.setText(String.valueOf(listSize.get(0)));
+                    quantityAvailable = (int) MainActivity.PDviewModel.listAllProduct.get(productID).getSizeM();
                     sizeChosen.setValue("M");
                 }
                 if (checkID == R.id.rbtnSizeL){
                     sizeAvailable.setText(String.valueOf(listSize.get(1)));
+                    quantityAvailable = (int) MainActivity.PDviewModel.listAllProduct.get(productID).getSizeL();
                     sizeChosen.setValue("L");
                 }
                 if (checkID == R.id.rbtnSizeXL){
                     sizeAvailable.setText(String.valueOf(listSize.get(2)));
+                    quantityAvailable = (int) MainActivity.PDviewModel.listAllProduct.get(productID).getSizeXL();
                     sizeChosen.setValue("XL");
                 }
             }
         });
         sizeChosen.observe(getViewLifecycleOwner(), size -> {
-            btnAddToCart.setOnClickListener(view -> MainActivity.PDviewModel.addToCart(productID, size, Long.parseLong(detailQuantity.getText().toString())));
+            btnAddToCart.setOnClickListener(view -> {
+                int quantity = Integer.parseInt(detailQuantity.getText().toString());
+                if (quantity == 0) {
+                    CustomToast.ShowToastMessage(getContext(), 2, "Quantity > 0, please");
+                }
+                else
+                if (quantity > quantityAvailable){
+                    CustomToast.ShowToastMessage(getContext(), 2, "Not enough quantity");
+                }
+                else
+                MainActivity.PDviewModel.addToCart(getContext(), productID, size, Long.parseLong(detailQuantity.getText().toString()));
+            });
         });
     }
     public void loadDetailImage(Product product){
