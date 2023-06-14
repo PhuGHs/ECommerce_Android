@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -21,8 +23,11 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.CheckoutAdapter;
 import com.example.ecommerce_hvpp.adapter.VoucherAdapter;
+import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,8 +109,8 @@ public class CheckoutFragment extends Fragment {
         listTypeCheckout = new ArrayList<>();
 
         getListVoucherApplied();
+        getAddressApplied();
         getTypeCheckout();
-        addressApplied.setText(getAddressApplied());
         getCartItemsAndPrice();
         calcTotalOrder();
 
@@ -122,17 +127,21 @@ public class CheckoutFragment extends Fragment {
         navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
     }
     private void getListVoucherApplied(){
-        //listVoucherApplied.add(new Pair<>("RF001", 3.00));
-        //listVoucherApplied.add(new Pair<>("RF002", 4.00));
-        listVoucherApplied.add(new Pair<>("RF003", 1.99));
+        VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
+        voucherViewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> {
+            for (Voucher voucher : vouchers) {
+                if (MainActivity.PDviewModel.checkVoucherApply(voucher))
+                    listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
+            }
+        });
     }
     private void getTypeCheckout(){
         listTypeCheckout.add("Visa");
         listTypeCheckout.add("Card Debit");
         listTypeCheckout.add("Momo");
     }
-    private String getAddressApplied(){
-        return "Santigo Bernabeu Stadium, Madrid, Spain - Hala Madrid, Fede Valverde";
+    private void getAddressApplied(){
+        MainActivity.PDviewModel.getAddressApplied().observe(getViewLifecycleOwner(), info -> addressApplied.setText(info));
     }
     private void getCartItemsAndPrice(){
         int items = MainActivity.PDviewModel.getTotalCartItems().getValue();

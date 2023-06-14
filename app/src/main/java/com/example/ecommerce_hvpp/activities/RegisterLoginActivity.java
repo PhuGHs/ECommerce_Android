@@ -34,6 +34,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
 
         MainActivity.PDviewModel = new ProductViewModel();
+        MainActivity.PDviewModel.initListBestSellerLiveData();
     }
 
     @Override
