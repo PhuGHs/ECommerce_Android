@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailProductCustomerFragment"
+            app:destination="@id/detailProductCustomerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.FavoriteFragment"

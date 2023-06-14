@@ -223,7 +223,5 @@ public class AdminProductManagementRepository {
             listener.onImageUploadFailure(e.getMessage());
         });
     }
-
-
 }
 

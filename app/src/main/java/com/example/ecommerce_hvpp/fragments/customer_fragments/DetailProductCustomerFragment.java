@@ -1,6 +1,11 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,9 +33,14 @@ import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.FeedbackCustomerAdapter;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +95,7 @@ public class DetailProductCustomerFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detail_product_customer, container, false);
     }
+    boolean isSharing = false;
     TextView detailName, detailSeason, detailPrice, detailPoint, detailQuantity, sizeAvailable, detailDesc;
     ImageButton btnBackToPrevious, btnFav;
     Button btnAddToCart;
@@ -99,6 +111,8 @@ public class DetailProductCustomerFragment extends Fragment {
     MutableLiveData<String> sizeChosen = new MutableLiveData<>("M");
     FeedbackCustomerAdapter feedbackAdapter;
     LinearLayoutManager linearLayoutManager;
+    ImageButton btnShare;
+    String imageLink, productName, description;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -121,22 +135,37 @@ public class DetailProductCustomerFragment extends Fragment {
         sizeAvailable = (TextView) view.findViewById(R.id.sizeAvailable);
         feedbackRv = (RecyclerView) view.findViewById(R.id.listFeedbackC);
         detailDesc = (TextView) view.findViewById(R.id.detailDesc);
+        btnShare = view.findViewById(R.id.btnShare);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         //set data
         detailQuantity.setText("1");
         getDataFromPreviousFragment();
 
-        btnBackToPrevious.setOnClickListener(view1 -> navController.popBackStack());
+        btnBackToPrevious.setOnClickListener(view1 -> {
+            if(isSharing) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.host_fragment, new HomeFragment())
+                        .commit();
+            } else {
+                navController.popBackStack();
+            }
+        });
 
         modifyQuantityProduct();
 
         setSizeQuantityAndSizeChosen();
+
+        handleShare();
     }
     public void getDataFromPreviousFragment(){
         Bundle bundle = getArguments();
         if (bundle != null){
             productID = bundle.getString("productID");
+            if(bundle.containsKey("sharing")) {
+                isSharing = bundle.getBoolean("sharing");
+            }
 
             MainActivity.PDviewModel.getDetailProduct(productID).observe(getViewLifecycleOwner(), product -> {
                 detailName.setText(product.getName());
@@ -153,6 +182,8 @@ public class DetailProductCustomerFragment extends Fragment {
                 listSize.add(product.getSizeXL());
 
                 loadDetailImage(product);
+                productName = product.getName();
+                description = product.getDescription();
             });
             MainActivity.PDviewModel.isFavorite(productID).observe(getViewLifecycleOwner(), favorite -> {
                 if (favorite){
@@ -224,10 +255,47 @@ public class DetailProductCustomerFragment extends Fragment {
         listImage.add(slideModel3);
 
         detailImgSlider.setImageList(listImage, ScaleTypes.FIT);
+        imageLink = product.getUrlmain();
     }
     public void getDetailFeedbackAndSetFeedbackRecycleView(List<Feedback> listFeedback){
         feedbackAdapter = new FeedbackCustomerAdapter(getContext(), (ArrayList<Feedback>) listFeedback);
         feedbackRv.setAdapter(feedbackAdapter);
         feedbackRv.setLayoutManager(linearLayoutManager);
+    }
+
+    public void handleShare() {
+        btnShare.setOnClickListener(v -> {
+            String path = "product/" + productID;
+            BranchUniversalObject buo = new BranchUniversalObject()
+                    .setCanonicalIdentifier(path)
+                    .setTitle(productName)
+                    .setContentDescription(description)
+                    .setContentImageUrl(imageLink)
+                    .setLocalIndexMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+                    .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC);
+
+            io.branch.referral.util.LinkProperties properties = new io.branch.referral.util.LinkProperties()
+                            .setFeature("sharing")
+                            .addControlParameter("$desktop_url", "https://example.phu.com")
+                            .addControlParameter("custom_data", productID);
+
+            buo.generateShortUrl(getContext(), properties, new Branch.BranchLinkCreateListener() {
+                @Override
+                public void onLinkCreate(String url, BranchError error) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(getContext(), ClipboardManager.class);
+                    ClipData clip = ClipData.newPlainText("label", url);
+                    clipboard.setPrimaryClip(clip);
+
+                    if(error != null) {
+                        Log.i("link fail", error.getMessage());
+                    }
+
+                    Log.d("url", url == null ? "url null" : url);
+                    Log.d("properties", properties == null ? "properties null" : properties.getControlParams().get("custom_data"));
+
+                    Snackbar.make(requireView(), "Copied to clipboard!", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 }

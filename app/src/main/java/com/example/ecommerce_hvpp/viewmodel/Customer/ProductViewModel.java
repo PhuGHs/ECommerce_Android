@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -10,8 +11,9 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Cart;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
-import com.example.ecommerce_hvpp.model.Revenue;
 import com.google.firebase.Timestamp;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class ProductViewModel extends ViewModel {
     public void initData(){
         initCategories();
         initListNewArrivalsLiveData();
-        initListBestSellerLiveData();
+//        initListBestSellerLiveData();
         initListFavoriteLiveData();
         initUserCart();
     }
@@ -282,49 +284,49 @@ public class ProductViewModel extends ViewModel {
                 });
     }
 
-    private void initListBestSellerLiveData() {
-        listBestSeller = new ArrayList<>();
-        List<Revenue> listRevenue = new ArrayList<>();
-
-        helper.getCollection("OrderDetail").orderBy("product_id").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    //get all product revenue
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String product_id = documentSnapshot.getString("product_id");
-                        long quantity = documentSnapshot.getLong("quantity");
-
-                        if (listRevenue.size() < 1){
-                            listRevenue.add(new Revenue(product_id, quantity));
-                        }
-                        else {
-                            if (product_id.equals(listRevenue.get(listRevenue.size() - 1).getProduct_id())){
-                                listRevenue.get(listRevenue.size() - 1).setQuantity(quantity);
-                            }
-                            else {
-                                Log.d(listRevenue.get(listRevenue.size() - 1).getProduct_id(), listRevenue.get(listRevenue.size() - 1).getQuantity() + "/");
-
-                                listRevenue.add(new Revenue(product_id, quantity));
-                            }
-                        }
-                    }
-                    // find top 3 best seller
-                    for (int j = 0; j < 3; j++){
-                        long max = 0;
-                        int maxIndex = 0;
-                        String best = "";
-                        for (int i = 0; i < listRevenue.size(); i++){
-                            if (listRevenue.get(i).getQuantity() > max){
-                                max = listRevenue.get(i).getQuantity();
-                                best = listRevenue.get(i).getProduct_id();
-                                maxIndex = i;
-                            }
-                        }
-                        listRevenue.get(maxIndex).resetQuantity();
-                        listBestSeller.add(listAllProduct.get(best));
-                    }
-                    mldListBestSeller.setValue(listBestSeller);
-                });
-    }
+//    private void initListBestSellerLiveData() {
+//        listBestSeller = new ArrayList<>();
+//        List<Revenue> listRevenue = new ArrayList<>();
+//
+//        helper.getCollection("OrderDetail").orderBy("product_id").get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    //get all product revenue
+//                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+//                        String product_id = documentSnapshot.getString("product_id");
+//                        long quantity = documentSnapshot.getLong("quantity");
+//
+//                        if (listRevenue.size() < 1){
+//                            listRevenue.add(new Revenue(product_id, quantity));
+//                        }
+//                        else {
+//                            if (product_id.equals(listRevenue.get(listRevenue.size() - 1).getProduct_id())){
+//                                listRevenue.get(listRevenue.size() - 1).setQuantity(quantity);
+//                            }
+//                            else {
+//                                Log.d(listRevenue.get(listRevenue.size() - 1).getProduct_id(), listRevenue.get(listRevenue.size() - 1).getQuantity() + "/");
+//
+//                                listRevenue.add(new Revenue(product_id, quantity));
+//                            }
+//                        }
+//                    }
+//                    // find top 3 best seller
+//                    for (int j = 0; j < 3; j++){
+//                        long max = 0;
+//                        int maxIndex = 0;
+//                        String best = "";
+//                        for (int i = 0; i < listRevenue.size(); i++){
+//                            if (listRevenue.get(i).getQuantity() > max){
+//                                max = listRevenue.get(i).getQuantity();
+//                                best = listRevenue.get(i).getProduct_id();
+//                                maxIndex = i;
+//                            }
+//                        }
+//                        listRevenue.get(maxIndex).resetQuantity();
+//                        listBestSeller.add(listAllProduct.get(best));
+//                    }
+//                    mldListBestSeller.setValue(listBestSeller);
+//                });
+//    }
 
     private void initListNewArrivalsLiveData() {
         listNewArrivals = new ArrayList<>();
@@ -378,4 +380,34 @@ public class ProductViewModel extends ViewModel {
                 });
         return mldListFeedback;
     }
+
+    public void generateSharingLink(Uri deepLink, Uri preViewImageLink, final OnShareableLinkGeneratedListener listener) {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(deepLink)
+                .setDomainUriPrefix("https://hvpp.page.link")
+                .setSocialMetaTagParameters(new DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(preViewImageLink)
+                        .build())
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .buildDynamicLink();
+
+        listener.onShareableLinkGenerated(dynamicLink.getUri());
+        Log.i("link", dynamicLink.getUri().toString());
+    }
+
+    public interface OnShareableLinkGeneratedListener {
+        void onShareableLinkGenerated(Uri shareableLink);
+    }
+
+//    public void handleIncomingDeepLinks(NavController navController, Intent intent) {
+//        FirebaseDynamicLinks.getInstance()
+//                .getDynamicLink(intent)
+//                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
+//                    @Override
+//                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+//                        Uri deepLink = pendingDynamicLinkData.getLink();
+//                        String path = deepLink.getPath();
+//                    }
+//                })
+//    }
 }
