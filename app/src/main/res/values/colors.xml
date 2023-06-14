@@ -38,4 +38,8 @@
     <color name="completed_text_color">#D8D8D8</color>
     <color name="increase_percent">#537FE7</color>
     <color name="decrease_percent">#A86464</color>
+    <color name="error">#FA1412</color>
+    <color name="container_expired">#99FFFFFF</color>
+    <color name="sub_text_expired">#80000000</color>
+    <color name="primary_text_expired">#CCA86464</color>
 </resources>

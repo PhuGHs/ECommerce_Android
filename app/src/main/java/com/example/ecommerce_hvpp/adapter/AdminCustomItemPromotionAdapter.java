@@ -1,7 +1,8 @@
 package com.example.ecommerce_hvpp.adapter;
 
+import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.constant.KEY_INTENT_PROMOTION;
-import static com.example.ecommerce_hvpp.util.constant.templateDate;
+import static com.example.ecommerce_hvpp.util.CustomFormat.templateDate;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,8 +26,9 @@ import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminPromotionFragme
 import com.example.ecommerce_hvpp.fragments.customer_fragments.ReviewedFeedbackFragment;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Promotion;
+import com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminCustomItemPromotionViewModel;
+import java.time.LocalDate;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +40,7 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
     List<Promotion> mListPromotion;
     List<Promotion> mListPromotionOriginal;
     AdminPromotionFragment parent;
+    LocalDate currentDate = LocalDate.now();
 
     public AdminCustomItemPromotionAdapter(Context context, List<Promotion> listPromotion, AdminPromotionFragment parent) {
         this.mContext = context;
@@ -60,6 +63,8 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         if (promotion == null) {
             return;
         }
+        boolean isExpired = isExpired(templateDate.format(promotion.getDate_end()));
+        holder.mAdminCustomItemPromotionBinding.setVMItemPromotion(new AdminCustomItemPromotionViewModel(isExpired));
 
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentName.setText(promotion.getName());
         holder.mAdminCustomItemPromotionBinding.adminPromotionComponentCode.setText(promotion.getId());
@@ -86,6 +91,12 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         return mListPromotion.size();
     }
 
+    private boolean isExpired(String strEndDate) {
+        LocalDate endDate = LocalDate.parse(strEndDate, dateFormatter);
+        LocalDate endDateUpdate = endDate.plusDays(1);
+        return !endDateUpdate.isAfter(currentDate);
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     public void filterPromotion(String strSearch) {
         if (strSearch.isEmpty()) {
@@ -94,8 +105,7 @@ public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminC
         } else {
             List<Promotion> listOrderHistory = new ArrayList<>();
             for (Promotion promotion : mListPromotionOriginal) {
-                if (String.valueOf(promotion.getId()).toLowerCase().contains(strSearch.toLowerCase()) ||
-                        promotion.getName().toLowerCase().contains(strSearch.toLowerCase())) {
+                if (promotion.getName().toLowerCase().contains(strSearch.toLowerCase())) {
                     listOrderHistory.add(promotion);
                 }
             }

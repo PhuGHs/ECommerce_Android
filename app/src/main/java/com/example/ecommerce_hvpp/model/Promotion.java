@@ -11,6 +11,7 @@ public class Promotion implements Serializable {
     private Date date_end;
     private String apply_for;
     private int condition; // min money
+    private boolean isUsed = false;
 
     public Promotion() {}
 
@@ -78,5 +79,13 @@ public class Promotion implements Serializable {
 
     public void setCondition(int condition) {
         this.condition = condition;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
     }
 }
