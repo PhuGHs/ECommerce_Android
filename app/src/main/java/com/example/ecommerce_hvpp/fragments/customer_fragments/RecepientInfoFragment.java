@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
 import com.example.ecommerce_hvpp.model.RecepInfo;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RecepInfoViewModel;
 
 import java.util.ArrayList;
@@ -60,6 +64,8 @@ public class RecepientInfoFragment extends Fragment {
     private RecyclerView recyclerview;
     private RecepInfoAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private AppCompatImageButton add_btn;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,18 +90,28 @@ public class RecepientInfoFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
         back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
+        add_btn = (AppCompatImageButton) view.findViewById(R.id.add_btn);
 
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.accountFragment);
+                navController.popBackStack();
+            }
+        });
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.NewRecepientInfoFragment);
             }
         });
 
     }
     public void getRecepInfoAndSetRecepInfoRecycleView(List<RecepInfo> listRecepInfo){
-        adapter = new RecepInfoAdapter(getContext(), (ArrayList<RecepInfo>) listRecepInfo);
+        adapter = new RecepInfoAdapter(this, (ArrayList<RecepInfo>) listRecepInfo);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController() {
+        return navController;
     }
 }

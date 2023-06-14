@@ -3,58 +3,39 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:background="@drawable/bg_white_rounded">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/image_of_unreviewed_feedback"
+            android:src="@drawable/mc"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="151px"
-                android:layout_height="146px"
-                android:src="@drawable/ic_launcher_background"/>
-
-            <LinearLayout
+            android:layout_marginLeft="30px"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="36px"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/title_of_feebackitem"
-                    android:text="Retro Manchester UTD Away 2006/07"
-                    style="@style/header"
-                    android:textColor="@color/black"
-                    android:textSize="40px"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35px"
-                    android:id="@+id/time_and_quantity_of_feedbackitem"
-                    android:text="21/05/2023    |       Quantity: 1"
-                    style="@style/regularfont"
-                    android:textColor="@color/black"
-                    android:textSize="40px"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/total_money_feedbackitem"
-                    android:text="$90.00"
-                    android:textSize="50px"
-                    android:textColor="#FF3030"
-                    style="@style/regularfont"/>
-            </LinearLayout>
+                android:id="@+id/name_of_unreviewed_feeedback"
+                android:text="Retro Manchester UTD Away 2006/07"
+                style="@style/header"
+                android:textColor="@color/black"
+                android:textSize="55px"/>
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="18px"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,42 +45,69 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/quantity_of_feedbackitem_detail"
-            android:text="1 product"
+            android:id="@+id/quantity_of_unreviewed_feedback"
+            android:text="Quantity: 1"
+            style="@style/regularfont"
+            android:textColor="@color/black"
+            android:textSize="40px"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total :   "
+                style="@style/regularfont"
+                android:textColor="@color/black"
+                android:textSize="45px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sum_of_unreviewed_feedback"
+                android:text="$90.00"
+                style="@style/regularfont"
+                android:textColor="#FF3030"
+                android:textSize="50px"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="18px"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5px">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/date_of_unreviewed_feedback"
+            android:text="Purchase day:    20/05/2023"
             style="@style/header"
             android:textColor="#838383"
             android:textSize="40px"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="400px"
-            android:text="Sum: "
-            style="@style/regularfont"
-            android:textColor="@color/black"
-            android:textSize="50px"/>
+            android:layout_marginLeft="20px"
+            android:gravity="right">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/review_btn_unreviewed_feedback"
+                android:textAllCaps="false"
+                style="@style/header_title"
+                android:textSize="45px"
+                android:text="Review" />
+        </LinearLayout>
+    </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="160px"
-            android:id="@+id/sum_of_feedbackitem"
-            android:text="$90.00"
-            style="@style/regularfont"
-            android:textColor="#FF3030"
-            android:textSize="50px"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="right"
-        android:layout_marginTop="15px">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/review_btn"
-            android:layout_marginLeft="250px"
-            android:text="Review"/>
-    </LinearLayout>
+
 </LinearLayout>

@@ -5,95 +5,130 @@
     android:orientation="vertical"
     android:gravity="center|top"
     android:background="@color/background">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/back_info"
-            android:layout_width="132px"
-            android:layout_height="143px"
-            android:layout_marginTop="10px"
-            android:layout_marginLeft="10px"
-            android:backgroundTint="@color/background"
-            android:src="@drawable/back_back_ic"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40px"
-            android:layout_marginLeft="35px"
-            android:text="Edit Recipient's Information"
-            android:textColor="@color/primary"
-            android:textSize="64px"
-            style="@style/header"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="119px"
-        android:background="@drawable/bg_white_rounded"
-        android:orientation="vertical"
-        android:paddingLeft="58px">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:layout_width="970px"
-                style="@style/header"
-                android:text="Name:"
-                android:textSize="50px"
-                android:textColor="@color/primary"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25px">
-
-            <EditText
-                android:layout_width="970px"
-                style="@style/header"
-                android:text="Phone number:"
-                android:textSize="50px"
-                android:textColor="@color/primary"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25px">
-
-            <EditText
-                android:layout_width="970px"
-                style="@style/header"
-                android:text="Address:"
-                android:textSize="50px"
-                android:textColor="@color/primary"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/back_info"
+            android:layout_marginTop="35px"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:src="@drawable/left_arrow"
+            android:clickable="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Recipient Information"
+            android:layout_marginTop="20px"
+            style="@style/font_crimson_bold"
+            android:textColor="#A86464"
+            android:textSize="70px"
+            android:gravity="center"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85px"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_rounded">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="250px"
+                android:layout_height="wrap_content"
+                android:text="Name: "
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textVisiblePassword"
+                android:id="@+id/name_recep_edittext"
+                style="@style/font_crimson_italic"
+                android:textSize="50px"
+                android:text="PhucDu"
+                android:textColor="@color/primary"
+                android:background="@color/transparent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="250px"
+                android:layout_height="wrap_content"
+                android:text="Phone: "
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textVisiblePassword"
+                android:id="@+id/phonenumber_recep_edittext"
+                style="@style/font_crimson_italic"
+                android:textSize="50px"
+                android:textColor="@color/primary"
+                android:background="@color/transparent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:layout_width="250px"
+                android:layout_height="wrap_content"
+                android:text="Address: "
+                style="@style/header"
+                android:textSize="50px"
+                android:textColor="@color/primary"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:inputType="textVisiblePassword|textMultiLine"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:id="@+id/address_recep_edittext"
+                style="@style/font_crimson_italic"
+                android:textSize="50px"
+                android:textColor="@color/primary"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="520px"
             android:textAllCaps="false"
+            style="@style/header"
             android:id="@+id/cancel_btn"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:textSize="45px"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/save_btn"
             android:layout_marginLeft="38px"
             android:textAllCaps="false"
-            android:text="Save"/>
+            style="@style/header"
+            android:text="Save"
+            android:textSize="45px"/>
     </LinearLayout>
 </LinearLayout>

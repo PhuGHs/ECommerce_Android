@@ -101,12 +101,15 @@ public class CartFragment extends Fragment {
         btnNavToCheckout = (Button) view.findViewById(R.id.btnNavToCheckout);
 
         //navigate
-        btnBackToHome.setOnClickListener(view1 -> navController.navigate(R.id.homeFragment));
+        btnBackToHome.setOnClickListener(view1 -> {
+            MainActivity.PDviewModel.updateCartToDB();
+            navController.navigate(R.id.homeFragment);
+        });
         btnNavToCheckout.setOnClickListener(view12 -> {
             Bundle bundle = new Bundle();
             bundle.putString("Total price", totalPrice.getText().toString());
             bundle.putString("Total item", totalItems.getText().toString());
-
+            MainActivity.PDviewModel.updateCartToDB();
             navController.navigate(R.id.checkoutFragment, bundle);
         });
     }

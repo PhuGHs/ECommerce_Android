@@ -130,6 +130,11 @@ public class Product {
     public long getSizeXL() {
         return sizeXL;
     }
+    public long getSize(String size){
+        if (size.equals("M")) return sizeM;
+        if (size.equals("L")) return sizeL;
+        return sizeXL;
+    }
 
     public void setSizeXL(long sizeXL) {
         this.sizeXL = sizeXL;

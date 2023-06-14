@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
+import com.example.ecommerce_hvpp.adapter.ReviewFeedBackAdapter;
+import com.example.ecommerce_hvpp.adapter.UnreviewFeedBackAdapter;
+import com.example.ecommerce_hvpp.model.Feedback;
+import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
+import com.example.ecommerce_hvpp.viewmodel.Customer.FeedBackViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RecepInfoViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UnreviewedFeedbackFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -51,9 +62,10 @@ public class UnreviewedFeedbackFragment extends Fragment {
     }
     private NavController navController;
     private ImageButton back_Account_btn;
-    private RecepInfoViewModel viewModel;
+    private TextView reviewed_navigate;
+    private FeedBackViewModel viewModel;
     private RecyclerView recyclerview;
-    private RecepInfoAdapter adapter;
+    private UnreviewFeedBackAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +79,13 @@ public class UnreviewedFeedbackFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_feedback_unreviewed, container, false);
+
+        viewModel = new ViewModelProvider(this).get(FeedBackViewModel.class);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_unreviewed);
+
+        viewModel.showUnreviewedFeedback().observe(getViewLifecycleOwner(), items -> getUnreviewItemAndSetItemRecycleView(items));
+
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -76,6 +93,7 @@ public class UnreviewedFeedbackFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
         back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
+        reviewed_navigate = (TextView) view.findViewById(R.id.reviewed_navigate);
 
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,5 +102,20 @@ public class UnreviewedFeedbackFragment extends Fragment {
             }
         });
 
+        reviewed_navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.FeedbackFragment_Reviewed);
+            }
+        });
+
+    }
+    public void getUnreviewItemAndSetItemRecycleView(List<OrderHistorySubItem> listUnreview){
+        adapter = new UnreviewFeedBackAdapter(this, (ArrayList<OrderHistorySubItem>) listUnreview);
+        recyclerview.setAdapter(adapter);
+        recyclerview.setLayoutManager(linearLayoutManager);
+    }
+    public NavController getNavController(){
+        return navController;
     }
 }

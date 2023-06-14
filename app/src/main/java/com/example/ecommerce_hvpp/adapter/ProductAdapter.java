@@ -65,11 +65,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.DataView
             else holder.btnFav.setImageResource(R.drawable.outline_heart);
             holder.btnFav.setOnClickListener(view -> {
                 if (Favorite) {
-                    MainActivity.PDviewModel.removeFromWishList(product.getId());
+                    MainActivity.PDviewModel.removeFromWishList(context, product.getId());
                     holder.btnFav.setImageResource(R.drawable.outline_heart);
                 }
                 else {
-                    MainActivity.PDviewModel.addToWishList(product.getId());
+                    MainActivity.PDviewModel.addToWishList(context, product.getId());
                     holder.btnFav.setImageResource(R.drawable.full_heart);
                 }
             });

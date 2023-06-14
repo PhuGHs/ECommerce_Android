@@ -54,12 +54,30 @@
         android:id="@+id/RecepientInfoFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.RecepientInfoFragment"
         android:label="fragment_recepient_info"
-        tools:layout="@layout/activity_user_recipientinfo"/>
+        tools:layout="@layout/activity_user_recipientinfo">
+        <action
+            android:id="@+id/navigate_to_editrecepinfo"
+            app:destination="@id/RecepientInfoDetailFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/NewRecepientInfoFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.NewRecepInfoFragment"
+        android:label="fragment_recepient_info_new"
+        tools:layout="@layout/actitvity_new_recepinfo"/>
+    <fragment
+        android:id="@+id/RecepientInfoDetailFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.EditRecepInfoFragment"
+        android:label="fragment_recepient_info_detail"
+        tools:layout="@layout/activity_edit_recepientinfo"/>
     <fragment
         android:id="@+id/OrderHistoryFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryFragment"
         android:label="fragment_order_history"
-        tools:layout="@layout/activity_user_orderhistory"/>
+        tools:layout="@layout/activity_user_orderhistory">
+        <action
+            android:id="@+id/navigate_to_orderhistorydetail"
+            app:destination="@id/OrderHistoryDetailFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/VoucherFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.VoucherFragment"
@@ -69,7 +87,16 @@
         android:id="@+id/OrderProgressFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderProgressFragment"
         android:label="fragment_orderprogress"
-        tools:layout="@layout/activity_orderprogress"/>
+        tools:layout="@layout/activity_orderprogress">
+        <action
+            android:id="@+id/navigate_to_detail_orderprogress"
+            app:destination="@+id/DetailOrderProgressFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/DetailOrderProgressFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.DetailOrderProgressFragment"
+        android:label="fragment_orderprogress_detail"
+        tools:layout="@layout/activity_details_orderprogress"/>
     <fragment
         android:id="@+id/FeedbackFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.FeedbackFragment"
@@ -84,10 +111,33 @@
         android:id="@+id/FeedbackFragment_Unreviewed"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.UnreviewedFeedbackFragment"
         android:label="fragment_unreviewed_feedback"
-        tools:layout="@layout/activity_feedback_unreviewed"/>
+        tools:layout="@layout/activity_feedback_unreviewed">
+        <action
+            android:id="@+id/navigate_to_feedback_unreview"
+            app:destination="@id/FeedbackFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/OrderHistoryDetailFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.OrderHistoryDetailFragment"
         android:label="fragment_orderhistory_detail"
-        tools:layout="@layout/activity_orderhistory_detail"/>
+        tools:layout="@layout/activity_orderhistory_detail">
+        <action
+            android:id="@+id/navigate_to_feedback"
+            app:destination="@id/FeedbackFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.ChatRoomFragment"
+        android:label="admin_fragment_chat_list"
+        tools:layout="@layout/admin_fragment_chat_list" >
+        <action
+            android:id="@+id/navigate_to_chatDetail"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.ChatFragment"
+        android:label="chat_fragment"
+        tools:layout="@layout/chat_fragment" />
+
 </navigation>

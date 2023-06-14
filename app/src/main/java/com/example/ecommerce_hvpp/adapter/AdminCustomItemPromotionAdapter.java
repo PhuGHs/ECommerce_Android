@@ -10,20 +10,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.databinding.AdminCustomItemPromotionBinding;
 import com.example.ecommerce_hvpp.fragments.admin_fragments.AdminPromotionFragment;
+import com.example.ecommerce_hvpp.fragments.customer_fragments.ReviewedFeedbackFragment;
+import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Promotion;
 import com.example.ecommerce_hvpp.viewmodel.admin.admin_promotion.AdminCustomItemPromotionViewModel;
-
 import java.time.LocalDate;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminCustomItemPromotionAdapter extends RecyclerView.Adapter<AdminCustomItemPromotionAdapter.AdminCustomItemPromotionViewHolder> {
     Context mContext;
