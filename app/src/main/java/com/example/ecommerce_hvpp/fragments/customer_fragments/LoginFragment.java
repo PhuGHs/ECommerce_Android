@@ -110,7 +110,11 @@ public class LoginFragment extends Fragment {
                             intent.putExtra("UID", viewModel.UID);
                             sessionManager.saveSession(str_email, str_password);
                             startActivity(intent);
-                            getActivity().finish();
+                            email.getEditText().setText("");
+                            password.getEditText().setText("");
+                            loginButton.revertAnimation();
+                            email.setError(null);
+                            password.setError(null);
                             break;
                         case ERROR:
                             loginButton.revertAnimation();

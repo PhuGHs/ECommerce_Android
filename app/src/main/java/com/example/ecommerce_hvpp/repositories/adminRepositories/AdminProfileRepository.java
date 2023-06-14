@@ -6,9 +6,11 @@ import static com.example.ecommerce_hvpp.util.constant.LOG_OUT;
 import static com.example.ecommerce_hvpp.util.constant.ORDER_HISTORY;
 import static com.example.ecommerce_hvpp.util.constant.PROMOTION_MANAGEMENT;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.icu.util.ICUUncheckedIOException;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.OrderHistory;
 import com.example.ecommerce_hvpp.model.Promotion;
@@ -63,7 +67,11 @@ public class AdminProfileRepository {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
 //                        mAuth.signOut();
-                        navController.navigate(R.id.loginFragment);
+//                        Activity currActivity = (Activity)context;
+//                        currActivity.finish();
+                        MainActivity mainActivity = (MainActivity) context;
+                        RegisterLoginActivity.sessionManager.clearSession();
+                        mainActivity.finish();
                         CustomToast.ShowToastMessage(context, 1, "Đăng xuất thành công");
                         break;
 

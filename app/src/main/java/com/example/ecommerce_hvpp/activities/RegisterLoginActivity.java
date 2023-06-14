@@ -1,5 +1,6 @@
 package com.example.ecommerce_hvpp.activities;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -28,21 +29,20 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
     private View image;
     private ViewModelProvider vmProvider;
-    private SessionManager sessionManager;
+    public static SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
-//        MainActivity.PDviewModel = new ProductViewModel();
+        MainActivity.PDviewModel = new ProductViewModel();
         sessionManager = new SessionManager(this);
 
-//        if(sessionManager.isLoggedIn()) {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        if(sessionManager.isLoggedIn()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
 
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
