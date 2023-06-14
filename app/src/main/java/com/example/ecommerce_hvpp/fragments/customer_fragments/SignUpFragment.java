@@ -3,10 +3,10 @@ package com.example.ecommerce_hvpp.fragments.customer_fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,15 +17,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.util.Validator;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 public class SignUpFragment extends Fragment {
     private TextInputLayout username, email, password, confirmPassword;
     private TextView loginButton;
-    private Button registerButton;
+    private CircularProgressButton registerButton;
     private RegisterLoginViewModel viewModel;
     private NavController navController;
 
@@ -55,7 +57,7 @@ public class SignUpFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.signUpFragment);
+                navController.popBackStack();
             }
         });
 
@@ -103,6 +105,29 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+        password.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!Validator.isValidPasswordHasEnoughCharacter(password.getEditText().getText().toString())) {
+                    password.setError("Passwords length must be more than 8 characters");
+                    registerButton.setEnabled(false);
+                } else {
+                    password.setError(null);
+                    registerButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         confirmPassword.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -114,8 +139,7 @@ public class SignUpFragment extends Fragment {
                 if (!Validator.isValidPassword(password.getEditText().getText().toString(), confirmPassword.getEditText().getText().toString())) {
                     confirmPassword.setError("Passwords do not match");
                     registerButton.setEnabled(false);
-                }
-                else {
+                } else {
                     confirmPassword.setError(null);
                     registerButton.setEnabled(true);
                 }
@@ -131,19 +155,28 @@ public class SignUpFragment extends Fragment {
         registerButton.setOnClickListener(views -> {
             String str_email = email.getEditText().getText().toString().trim();
             String str_password = password.getEditText().getText().toString();
+            String str_username = username.getEditText().getText().toString();
 
-            viewModel.registerUser(str_email, str_password).observe(requireActivity(), resource -> {
+            if(str_email.isEmpty() || str_password.isEmpty() || str_username.isEmpty()) {
+                ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
+                Snackbar.make(ctw2, requireView(), "Please fill in all the blanks!", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            viewModel.registerUser(str_email, str_password, str_username).observe(requireActivity(), resource -> {
                 switch(resource.status) {
                     case LOADING:
+                        registerButton.startAnimation();
                         break;
                     case SUCCESS:
-                        CustomToast signUpToast = new CustomToast();
-                        signUpToast.ShowToastMessage(getActivity(), 1, "Đăng ký thành công!");
+                        ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarSuccess);
+                        Snackbar.make(ctw, requireView(), "Đăng ký thành công!", Snackbar.LENGTH_LONG).show();
                         navController.navigate(R.id.loginFragment);
                         break;
                     case ERROR:
-                        CustomToast signUpErrorToast = new CustomToast();
-                        signUpErrorToast.ShowToastMessage(getActivity(), 2, resource.message);
+                        registerButton.revertAnimation();
+                        ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
+                        Snackbar.make(ctw2, requireView(), resource.message, Snackbar.LENGTH_LONG).show();
                         break;
                 }
             });

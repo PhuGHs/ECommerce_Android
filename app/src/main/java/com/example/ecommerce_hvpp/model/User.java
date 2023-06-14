@@ -1,9 +1,12 @@
 package com.example.ecommerce_hvpp.model;
 
 public class User {
-    public User(String email, String password) {
+    public User(String id, String email, String password, String username) {
+        this.id = id;
         this.email = email;
         this.password = password;
+        this.username = username;
+        imagePath = "https://img.icons8.com/?size=512&id=AjTPlMclWxjF&format=png";
     }
 
     public User() {
@@ -84,11 +87,27 @@ public class User {
         return imagePath;
     }
 
-    public User(String username, String email, String password, String imagePath) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.imagePath = imagePath;
+//    public User(String username, String email, String password, String imagePath) {
+//        this.username = username;
+//        this.email = email;
+//        this.password = password;
+//        this.imagePath = imagePath;
+//    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public long getSumRevenue() {
+        return sumRevenue;
+    }
+
+    public void setSumRevenue(long sumRevenue) {
+        this.sumRevenue = sumRevenue;
     }
 
     public void setUrlthumb(String imageUrl) {

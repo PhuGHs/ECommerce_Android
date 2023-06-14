@@ -49,6 +49,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
     implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-dynamic-links:21.1.0'
 
     annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
@@ -69,7 +70,7 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
 
     //viewpager2 indicatior
-    implementation 'io.github.vejei.viewpagerindicator:viewpagerindicator:1.0.0-alpha.1'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     //stepView
     implementation 'com.shuhart.stepview:stepview:1.5.1'
@@ -109,4 +110,7 @@ dependencies {
 
     // chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //branch.io
+    implementation 'io.branch.sdk.android:library:5.+'
 }

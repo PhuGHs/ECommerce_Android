@@ -31,7 +31,8 @@
         style="@style/font_medium"
         android:textSize="20dp"
         android:textColor="#FF7A00"
-        android:text="PENDING" />
+        android:textAllCaps="true"
+        android:text="pending" />
     <TextView
         android:layout_below="@id/tvOrderId"
         android:id="@+id/tvRecipientName"

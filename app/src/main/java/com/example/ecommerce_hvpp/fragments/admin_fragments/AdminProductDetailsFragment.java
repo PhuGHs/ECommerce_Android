@@ -90,40 +90,7 @@ public class AdminProductDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if(isGranted) {
-                openGallery();
-            } else {
-                // do nothing
-                //show message (disabled)
-            }
-        });
-
-        galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
-                Intent data = result.getData();
-                if (data != null) {
-                    if (data.getClipData() != null) {
-                        // Multiple images were selected
-                        handleMultipleImages(data);
-                    } else if (data.getData() != null) {
-                        // Only one image was selected
-                        processSelectedImage(data.getData());
-                    }
-                }
-            }
-        });
-
-        thumbnailLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
-                Intent data = result.getData();
-                if (data != null && data.getData() != null) {
-                    thumbnailImage = data.getData();
-                    tvThumbnailImage.setText(getFileNameFromUri(thumbnailImage));
-                }
-            }
-        });
+        initPermission();
     }
     @Nullable
     @Override
@@ -143,61 +110,10 @@ public class AdminProductDetailsFragment extends Fragment {
 
         contentResolver = getContext().getContentResolver();
 
-        //region Initialize View
-        tvHeader = view.findViewById(R.id.header_title);
-        btnBack = view.findViewById(R.id.btnBackProductDetail);
-        etName = view.findViewById(R.id.etName);
-        etPrice = view.findViewById(R.id.etPrice);
-        tvThumbnailImage = view.findViewById(R.id.tvThumbImageFile);
-        etDescription = view.findViewById(R.id.etDescriptionName);
-        spType = view.findViewById(R.id.type_Spinner);
-        spSeason = view.findViewById(R.id.season_spinner);
-        btnAddMoreImages = view.findViewById(R.id.abtnAddMoreImage);
-        etSizeL = view.findViewById(R.id.etSizeL);
-        etNumL = view.findViewById(R.id.etNumL);
-        etNumM = view.findViewById(R.id.etNumM);
-        etNumXL = view.findViewById(R.id.etNumXL);
-        etSizeXL = view.findViewById(R.id.etSizeXL);
-        etSizeM = view.findViewById(R.id.etSizeM);
-        etTypeName = view.findViewById(R.id.etTypeName);
-        tvTypeName = view.findViewById(R.id.tvHeaderForField);
-
-        btnSave = view.findViewById(R.id.btnSave);
-        btnCancel = view.findViewById(R.id.btnCancel);
-        btnAddSizeXL = view.findViewById(R.id.btnAddSizeXL);
-        btnAddSizeL = view.findViewById(R.id.btnAddSizeL);
-        btnAddSizeM = view.findViewById(R.id.btnAddSizeM);
-
-
-        editTextList = new ArrayList<>();
-        editTextList.add(etName);
-        editTextList.add(etPrice);
-        editTextList.add(etDescription);
-        editTextList.add(etSizeL);
-        editTextList.add(etSizeXL);
-        editTextList.add(etSizeM);
-        editTextList.add(etSizeM);
-        editTextList.add(etTypeName);
-        //endregion
-
-        //region initialize spinner adapter
-        TypeAdapter = ArrayAdapter.createFromResource(getContext() , R.array.type_array, R.layout.simple_spinner_string_item);
-        SeasonAdapter = ArrayAdapter.createFromResource(getContext() , R.array.season_array, R.layout.simple_spinner_string_item);
-        TypeAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
-        SeasonAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
-        spType.setAdapter(TypeAdapter);
-        spSeason.setAdapter(SeasonAdapter);
-        //endregion
-
-        //region sliderView
-        sliderView = view.findViewById(R.id.imageSlider);
-        SlideAdapter = new AdminProductImageSlider(getContext());
-        sliderView.setSliderAdapter(SlideAdapter);
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.SLIDE);
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.setScrollTimeInSec(3);
-        sliderView.stopAutoCycle();
-        //endregion
+        initView(view);
+        initEditTextArray();
+        initSpinnerAdapter();
+        customAndInitImageSlider();
 
         return view;
     }
@@ -208,181 +124,14 @@ public class AdminProductDetailsFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
         tvHeader.setText(Id);
-
-        btnAddMoreImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Check if the permission is already granted
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Request permission if it has not been granted
-                    requestGalleryPermission();
-                } else {
-                    // Permission already granted, proceed with gallery access
-                    openGallery();
-                }
-            }
-        });
-
-        etPrice.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etNumL.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etNumXL.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etNumM.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etSizeM.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etSizeL.setFilters(new InputFilter[]{new NumberInputFilter()});
-        etSizeXL.setFilters(new InputFilter[]{new NumberInputFilter()});
-
-
-        tvThumbnailImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OpenThumbnailGallery();
-            }
-        });
-
-        viewModel.getIsEditMode().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isEditMode) {
-                if(isEditMode) {
-                    //getData
-                    implementEditFunctionality();
-                } else {
-                    implementAddFunctionality();
-                }
-            }
-        });
-
-        spType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItem = adapterView.getItemAtPosition(i).toString();
-                tvTypeName.setText(selectedItem);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // do nothin
-            }
-        });
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // pop back stack using nav controller
-                navController.popBackStack();
-            }
-        });
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isFieldsModified) {
-                    showUnsavedChangesDialog();
-                    return;
-                }
-                navController.popBackStack();
-            }
-        });
+        createEditTextFilter();
+        handleEvents();
     }
 
     public void implementEditFunctionality() {
         isFieldsModified = false;
-        // set value
-        viewModel.getProduct(Id).observe(getViewLifecycleOwner(), resource -> {
-            switch(resource.status) {
-                case LOADING:
-                    break;
-                case ERROR:
-                    Log.e(TAG, resource.message);
-                    break;
-                case SUCCESS:
-                    etName.setText(resource.data.getName());
-                    etPrice.setText(String.valueOf(resource.data.getPrice()));
-                    etSizeM.setText(String.valueOf(resource.data.getSizeM()));
-                    etSizeXL.setText(String.valueOf(resource.data.getSizeXL()));
-                    etSizeL.setText(String.valueOf(resource.data.getSizeL()));
-                    etDescription.setText(resource.data.getDescription());
-                    if(resource.data.getClub() == "") {
-                        spType.setSelection(TypeAdapter.getPosition("Nation"));
-                        etTypeName.setText(resource.data.getNation());
-                    }
-                    else {
-                        spType.setSelection(TypeAdapter.getPosition("Club"));
-                        etTypeName.setText(resource.data.getClub());
-                    }
-                    spSeason.setSelection(SeasonAdapter.getPosition(resource.data.getSeason()));
-                    tvThumbnailImage.setText(resource.data.getUrlthumb());
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlmain()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub1()));
-                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub2()));
-
-
-                    setTextWatcherToEditTextFields();
-                    break;
-            }
-            btnAddSizeM.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!etNumM.getText().toString().trim().equals("")) {
-                        etSizeM.setText(String.valueOf(Integer.parseInt(etNumM.getText().toString()) + Integer.parseInt(etSizeM.getText().toString())));
-                        etNumM.setText("");
-                    }
-
-                }
-            });
-
-            btnAddSizeL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!etNumL.getText().toString().trim().equals("")) {
-                        etSizeL.setText(String.valueOf(Integer.parseInt(etNumL.getText().toString()) + Integer.parseInt(etSizeL.getText().toString())));
-                        etNumL.setText("");
-                    }
-                }
-            });
-
-            btnAddSizeXL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!etNumXL.getText().toString().trim().equals("")) {
-                        etSizeXL.setText(String.valueOf(Integer.parseInt(etNumXL.getText().toString()) + Integer.parseInt(etSizeXL.getText().toString())));
-                        etNumXL.setText("");
-                    }
-                }
-            });
-
-
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String Name, Type, Season, Price, Description, XL, L, M;
-                    Name = etName.getText().toString();
-                    Type = spType.getSelectedItem().toString();
-                    Season = spSeason.getSelectedItem().toString();
-                    Price = etPrice.getText().toString();
-                    Description = etDescription.getText().toString();
-                    XL = etSizeXL.getText().toString();
-                    L = etSizeL.getText().toString();
-                    M = etSizeM.getText().toString();
-
-
-                    Product pd = new Product(Id, Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
-
-                    if(Type.equals("Club")) {
-                        pd.setClub(etTypeName.getText().toString());
-                    } else {
-                        pd.setNation(etTypeName.getText().toString());
-                    }
-
-                    pd.setUrlthumb(tvThumbnailImage.getText().toString());
-                    pd.setUrlmain(SlideAdapter.getList().get(0).getLink());
-                    pd.setUrlsub1(SlideAdapter.getList().get(1).getLink());
-                    pd.setUrlsub2(SlideAdapter.getList().get(2).getLink());
-                    editFunc_saveProduct(pd);
-                    isFieldsModified = false;
-                }
-            });
-        });
+        assignEditData();
+        handleEditEvents();
     }
     public void implementAddFunctionality() {
         btnCancel.setVisibility(View.GONE);
@@ -465,7 +214,7 @@ public class AdminProductDetailsFragment extends Fragment {
         M = etSizeM.getText().toString();
 
 
-        Product pd = new Product(Name, Season, Price, Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+        Product pd = new Product(Name, Season, Double.parseDouble(Price), Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
         if(Type.equals("Club")) {
             pd.setClub(etTypeName.getText().toString());
         } else {
@@ -637,5 +386,269 @@ public class AdminProductDetailsFragment extends Fragment {
         bottomNavigationView.setVisibility(View.VISIBLE);
     }
     //endregion
+
+
+    private void initPermission() {
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if(isGranted) {
+                openGallery();
+            } else {
+                // do nothing
+                //show message (disabled)
+            }
+        });
+
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    if (data.getClipData() != null) {
+                        // Multiple images were selected
+                        handleMultipleImages(data);
+                    } else if (data.getData() != null) {
+                        // Only one image was selected
+                        processSelectedImage(data.getData());
+                    }
+                }
+            }
+        });
+
+        thumbnailLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == FragmentActivity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null && data.getData() != null) {
+                    thumbnailImage = data.getData();
+                    tvThumbnailImage.setText(getFileNameFromUri(thumbnailImage));
+                }
+            }
+        });
+    }
+    private void initView(View view) {
+        sliderView = view.findViewById(R.id.imageSlider);
+        tvHeader = view.findViewById(R.id.header_title);
+        btnBack = view.findViewById(R.id.btnBackProductDetail);
+        etName = view.findViewById(R.id.etName);
+        etPrice = view.findViewById(R.id.etPrice);
+        tvThumbnailImage = view.findViewById(R.id.tvThumbImageFile);
+        etDescription = view.findViewById(R.id.etDescriptionName);
+        spType = view.findViewById(R.id.type_Spinner);
+        spSeason = view.findViewById(R.id.season_spinner);
+        btnAddMoreImages = view.findViewById(R.id.abtnAddMoreImage);
+        etSizeL = view.findViewById(R.id.etSizeL);
+        etNumL = view.findViewById(R.id.etNumL);
+        etNumM = view.findViewById(R.id.etNumM);
+        etNumXL = view.findViewById(R.id.etNumXL);
+        etSizeXL = view.findViewById(R.id.etSizeXL);
+        etSizeM = view.findViewById(R.id.etSizeM);
+        etTypeName = view.findViewById(R.id.etTypeName);
+        tvTypeName = view.findViewById(R.id.tvHeaderForField);
+
+        btnSave = view.findViewById(R.id.btnSave);
+        btnCancel = view.findViewById(R.id.btnCancel);
+        btnAddSizeXL = view.findViewById(R.id.btnAddSizeXL);
+        btnAddSizeL = view.findViewById(R.id.btnAddSizeL);
+        btnAddSizeM = view.findViewById(R.id.btnAddSizeM);
+    }
+    private void initEditTextArray() {
+        editTextList = new ArrayList<>();
+        editTextList.add(etName);
+        editTextList.add(etPrice);
+        editTextList.add(etDescription);
+        editTextList.add(etSizeL);
+        editTextList.add(etSizeXL);
+        editTextList.add(etSizeM);
+        editTextList.add(etSizeM);
+        editTextList.add(etTypeName);
+    }
+    private void initSpinnerAdapter() {
+        TypeAdapter = ArrayAdapter.createFromResource(getContext() , R.array.type_array, R.layout.simple_spinner_string_item);
+        SeasonAdapter = ArrayAdapter.createFromResource(getContext() , R.array.season_array, R.layout.simple_spinner_string_item);
+        TypeAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
+        SeasonAdapter.setDropDownViewResource(com.bumptech.glide.R.layout.support_simple_spinner_dropdown_item);
+        spType.setAdapter(TypeAdapter);
+        spSeason.setAdapter(SeasonAdapter);
+    }
+    private void customAndInitImageSlider() {
+        SlideAdapter = new AdminProductImageSlider(getContext());
+        sliderView.setSliderAdapter(SlideAdapter);
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.SLIDE);
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        sliderView.setScrollTimeInSec(3);
+        sliderView.stopAutoCycle();
+    }
+    private void createEditTextFilter() {
+        etPrice.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumXL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etNumM.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeM.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeL.setFilters(new InputFilter[]{new NumberInputFilter()});
+        etSizeXL.setFilters(new InputFilter[]{new NumberInputFilter()});
+    }
+    private void handleEvents() {
+        btnAddMoreImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check if the permission is already granted
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Request permission if it has not been granted
+                    requestGalleryPermission();
+                } else {
+                    // Permission already granted, proceed with gallery access
+                    openGallery();
+                }
+            }
+        });
+        tvThumbnailImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OpenThumbnailGallery();
+            }
+        });
+
+        viewModel.getIsEditMode().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isEditMode) {
+                if(isEditMode) {
+                    //getData
+                    implementEditFunctionality();
+                } else {
+                    implementAddFunctionality();
+                }
+            }
+        });
+
+        spType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = adapterView.getItemAtPosition(i).toString();
+                tvTypeName.setText(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // do nothin
+            }
+        });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // pop back stack using nav controller
+                navController.popBackStack();
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isFieldsModified) {
+                    showUnsavedChangesDialog();
+                    return;
+                }
+                navController.popBackStack();
+            }
+        });
+    }
+    private void assignEditData() {
+        viewModel.getProduct(Id).observe(getViewLifecycleOwner(), resource -> {
+            switch(resource.status) {
+                case LOADING:
+                    break;
+                case ERROR:
+                    Log.e(TAG, resource.message);
+                    break;
+                case SUCCESS:
+                    etName.setText(resource.data.getName());
+                    etPrice.setText(String.valueOf(resource.data.getPrice()));
+                    etSizeM.setText(String.valueOf(resource.data.getSize_m()));
+                    etSizeXL.setText(String.valueOf(resource.data.getSize_xl()));
+                    etSizeL.setText(String.valueOf(resource.data.getSize_l()));
+                    etDescription.setText(resource.data.getDescription());
+                    if(resource.data.getClub() == "") {
+                        spType.setSelection(TypeAdapter.getPosition("Nation"));
+                        etTypeName.setText(resource.data.getNation());
+                    }
+                    else {
+                        spType.setSelection(TypeAdapter.getPosition("Club"));
+                        etTypeName.setText(resource.data.getClub());
+                    }
+                    spSeason.setSelection(SeasonAdapter.getPosition(resource.data.getSeason()));
+                    tvThumbnailImage.setText(resource.data.getUrlthumb());
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlmain()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub1()));
+                    SlideAdapter.addItem(new ItemModel(null, resource.data.getUrlsub2()));
+
+
+                    setTextWatcherToEditTextFields();
+                    break;
+            }
+        });
+    }
+    private void handleEditEvents() {
+        btnAddSizeM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!etNumM.getText().toString().trim().equals("")) {
+                    etSizeM.setText(String.valueOf(Integer.parseInt(etNumM.getText().toString()) + Integer.parseInt(etSizeM.getText().toString())));
+                    etNumM.setText("");
+                }
+
+            }
+        });
+
+        btnAddSizeL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!etNumL.getText().toString().trim().equals("")) {
+                    etSizeL.setText(String.valueOf(Integer.parseInt(etNumL.getText().toString()) + Integer.parseInt(etSizeL.getText().toString())));
+                    etNumL.setText("");
+                }
+            }
+        });
+
+        btnAddSizeXL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!etNumXL.getText().toString().trim().equals("")) {
+                    etSizeXL.setText(String.valueOf(Integer.parseInt(etNumXL.getText().toString()) + Integer.parseInt(etSizeXL.getText().toString())));
+                    etNumXL.setText("");
+                }
+            }
+        });
+
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Name, Type, Season, Price, Description, XL, L, M;
+                Name = etName.getText().toString();
+                Type = spType.getSelectedItem().toString();
+                Season = spSeason.getSelectedItem().toString();
+                Price = etPrice.getText().toString();
+                Description = etDescription.getText().toString();
+                XL = etSizeXL.getText().toString();
+                L = etSizeL.getText().toString();
+                M = etSizeM.getText().toString();
+
+
+                Product pd = new Product(Id, Name, Season, Double.parseDouble(Price), Description, Integer.parseInt(XL), Integer.parseInt(L), Integer.parseInt(M));
+
+                if(Type.equals("Club")) {
+                    pd.setClub(etTypeName.getText().toString());
+                } else {
+                    pd.setNation(etTypeName.getText().toString());
+                }
+
+                pd.setUrlthumb(tvThumbnailImage.getText().toString());
+                pd.setUrlmain(SlideAdapter.getList().get(0).getLink());
+                pd.setUrlsub1(SlideAdapter.getList().get(1).getLink());
+                pd.setUrlsub2(SlideAdapter.getList().get(2).getLink());
+                editFunc_saveProduct(pd);
+                isFieldsModified = false;
+            }
+        });
+    }
 
 }

@@ -1,38 +1,27 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Cart;
-import com.example.ecommerce_hvpp.model.Customer;
 import com.example.ecommerce_hvpp.model.Feedback;
 import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.api.LogDescriptor;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
@@ -74,6 +61,7 @@ public class ProductViewModel extends ViewModel {
     public void initData(){
         initCategories();
         initListNewArrivalsLiveData();
+        initListBestSellerLiveData();
         getListBestSeller(listRevenue);
         initListFavoriteLiveData();
         initUserCart();
@@ -540,4 +528,34 @@ public class ProductViewModel extends ViewModel {
                 });
         return mldListFeedback;
     }
+
+    public void generateSharingLink(Uri deepLink, Uri preViewImageLink, final OnShareableLinkGeneratedListener listener) {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(deepLink)
+                .setDomainUriPrefix("https://hvpp.page.link")
+                .setSocialMetaTagParameters(new DynamicLink.SocialMetaTagParameters.Builder()
+                        .setImageUrl(preViewImageLink)
+                        .build())
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .buildDynamicLink();
+
+        listener.onShareableLinkGenerated(dynamicLink.getUri());
+        Log.i("link", dynamicLink.getUri().toString());
+    }
+
+    public interface OnShareableLinkGeneratedListener {
+        void onShareableLinkGenerated(Uri shareableLink);
+    }
+
+//    public void handleIncomingDeepLinks(NavController navController, Intent intent) {
+//        FirebaseDynamicLinks.getInstance()
+//                .getDynamicLink(intent)
+//                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
+//                    @Override
+//                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+//                        Uri deepLink = pendingDynamicLinkData.getLink();
+//                        String path = deepLink.getPath();
+//                    }
+//                })
+//    }
 }

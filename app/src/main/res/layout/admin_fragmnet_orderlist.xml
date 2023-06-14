@@ -22,38 +22,70 @@
             android:textSize="35dp"
             android:textStyle="bold" />
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/searchview_bg"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="70dp"
+            android:layout_alignParentEnd="true">
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_search_24"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                app:tint="@color/background"/>
+            <EditText
+                android:id="@+id/etSearchText"
+                android:layout_toEndOf="@id/searchIcon"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:hint="Click here to find orders ..."
+                android:textColor="#454545"
+                android:foregroundTint="@color/background"
+                android:background="@color/white"
+                android:backgroundTint="@color/white"
+                style="@style/font_medium"
+                android:textSize="20dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/btnFilter"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/filter"
+            app:tint="@color/primary"
+            android:layout_marginEnd="20dp"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
     <TextView
-        android:id="@+id/tvTotalOrders"
-        android:layout_below="@id/header"
-        android:layout_marginStart="20dp"
-        android:textColor="@color/primary"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        style="@style/font_medium"
+        android:textSize="20dp"
+        android:id="@+id/tvFoundText"
+        android:layout_below="@id/search_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="4 orders in total."
-        style="@style/font_medium"
-        android:textSize="20dp"/>
-    <RelativeLayout
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/tvTotalOrders"
+        android:text="Found 2 results"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rclOrders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tvFoundText"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
-        android:id="@+id/subHeader">
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/baseline_filter_alt_24"
-            android:backgroundTint="@color/primary"
-            android:background="@drawable/searchview_bg"
-            android:padding="5dp"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RclOrders"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/subHeader"
-        android:layout_marginTop="5dp"
-        android:padding="20dp" />
+        android:layout_marginBottom="20dp" />
+
 </RelativeLayout>

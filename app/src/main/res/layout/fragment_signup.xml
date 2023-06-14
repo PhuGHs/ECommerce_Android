@@ -94,15 +94,18 @@
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-        <Button
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/reg_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REGISTER"
             android:layout_marginBottom="10dp"
             android:textSize="18dp"
+            android:layout_gravity="center_horizontal"
             android:background="#000"
             android:textColor="#fff"
+            android:backgroundTint="@color/primary"
+            app:spinning_bar_color="@color/white"
             android:transitionName="button_tran"/>
 
         <TextView

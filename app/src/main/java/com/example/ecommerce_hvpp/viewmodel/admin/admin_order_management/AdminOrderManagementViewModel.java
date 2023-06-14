@@ -20,4 +20,15 @@ public class AdminOrderManagementViewModel extends ViewModel {
         combinedLiveData.setValue(Resource.loading(null));
         return repo.getOrders();
     }
+
+    public LiveData<Resource<List<Order>>> getOrdersByStatus(String status) {
+        return repo.getOrdersByStatus(status);
+    }
+
+    public void updateOrder(String Id, String status) {
+        repo.updateOrder(Id, status);
+    }
+    public void addDummyOrder() {
+        repo.createDummyOrder();
+    }
 }
