@@ -17,8 +17,6 @@ import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.google.firebase.Timestamp;
-import com.google.firebase.dynamiclinks.DynamicLink;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -106,7 +104,7 @@ public class ProductViewModel extends ViewModel {
         data.put("address", recipientInfo.second);
         data.put("recipientName", recipientInfo.first.first);
         data.put("phoneNumber", recipientInfo.first.second);
-        data.put("customerID", customer_id);
+        data.put("customerId", customer_id);
         data.put("createdDated", Timestamp.now());
         data.put("deliverMethod", deliverMethod);
         data.put("paymentMethod", paymentMethod);
@@ -528,34 +526,4 @@ public class ProductViewModel extends ViewModel {
                 });
         return mldListFeedback;
     }
-
-    public void generateSharingLink(Uri deepLink, Uri preViewImageLink, final OnShareableLinkGeneratedListener listener) {
-        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(deepLink)
-                .setDomainUriPrefix("https://hvpp.page.link")
-                .setSocialMetaTagParameters(new DynamicLink.SocialMetaTagParameters.Builder()
-                        .setImageUrl(preViewImageLink)
-                        .build())
-                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
-                .buildDynamicLink();
-
-        listener.onShareableLinkGenerated(dynamicLink.getUri());
-        Log.i("link", dynamicLink.getUri().toString());
-    }
-
-    public interface OnShareableLinkGeneratedListener {
-        void onShareableLinkGenerated(Uri shareableLink);
-    }
-
-//    public void handleIncomingDeepLinks(NavController navController, Intent intent) {
-//        FirebaseDynamicLinks.getInstance()
-//                .getDynamicLink(intent)
-//                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
-//                    @Override
-//                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-//                        Uri deepLink = pendingDynamicLinkData.getLink();
-//                        String path = deepLink.getPath();
-//                    }
-//                })
-//    }
 }
