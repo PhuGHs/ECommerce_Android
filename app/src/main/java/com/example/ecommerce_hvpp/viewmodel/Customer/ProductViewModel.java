@@ -56,6 +56,7 @@ public class ProductViewModel extends ViewModel {
     private MutableLiveData<Integer> totalCartItems = new MutableLiveData<>(0);
     private MutableLiveData<Double> totalPriceCart = new MutableLiveData<>((double)0);
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
+    private Pair<Pair<String, String>, String> recipientInfo;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
         //init
@@ -109,6 +110,50 @@ public class ProductViewModel extends ViewModel {
                     }
                 })
                 .addOnFailureListener(e -> Log.d("Get all", "Failure"));
+    }
+    public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", customer_id + estimateDate);
+        data.put("address", recipientInfo.second);
+        data.put("recipientName", recipientInfo.first.first);
+        data.put("phoneNumber", recipientInfo.first.second);
+        data.put("customerID", customer_id);
+        data.put("createdDated", Timestamp.now());
+        data.put("deliverMethod", deliverMethod);
+        data.put("paymentMethod", paymentMethod);
+        data.put("note", note);
+        Timestamp esDate = new Timestamp(estimateDate/1000, 0);
+        data.put("receiveDate", esDate);
+        data.put("status", "Pending");
+        data.put("totalPrice", totalPrice);
+
+        helper.getDb().collection("Order").document(customer_id + estimateDate)
+                .set(data)
+                .addOnSuccessListener(unused -> {
+                    Log.d("Create Order", "success");
+                    CustomToast.ShowToastMessage(context, 1, "Create order successfully!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("Create Order", "failure");
+                    CustomToast.ShowToastMessage(context, 1, "Create order failed!");
+                })
+                .addOnCompleteListener(task -> {
+                    if (task.isComplete()){
+                        for (Cart cart : listCart){
+                            Map<String, Object> item = new HashMap<>();
+                            item.put("id", cart.getProduct().getId() + cart.getSize() + cart.getQuantity());
+                            item.put("product_id", cart.getProduct().getId());
+                            item.put("quantity", cart.getQuantity());
+                            item.put("size", cart.getSize());
+                            helper.getDb().collection("Order").document(customer_id + estimateDate)
+                                    .collection("items").document(cart.getProduct().getId() + cart.getSize() + cart.getQuantity())
+                                    .set(item)
+                                    .addOnSuccessListener(unused -> Log.d("Order items", "success"))
+                                    .addOnFailureListener(e -> Log.d("Order items", "failure"));
+                        }
+                    }
+                });
     }
     public List<Product> getListFound(String queryName){
         List<Product> listFound = new ArrayList<>();
@@ -249,15 +294,13 @@ public class ProductViewModel extends ViewModel {
         String customer_id = helper.getAuth().getCurrentUser().getUid();
         helper.getDb().collection("users").document(customer_id).collection("recep_info")
                 .whereEqualTo("isApplied", true).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            String name = documentSnapshot.getString("name");
-                            String phone = documentSnapshot.getString("phonenumber");
-                            String address = documentSnapshot.getString("address");
-                            addressApplied.setValue(name + " - " + phone + "\n" + address);
-                        }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        String name = documentSnapshot.getString("name");
+                        String phone = documentSnapshot.getString("phonenumber");
+                        String address = documentSnapshot.getString("address");
+                        addressApplied.setValue(name + " - " + phone + "\n" + address);
+                        recipientInfo = new Pair<>(new Pair<>(name, phone), address);
                     }
                 });
         return addressApplied;

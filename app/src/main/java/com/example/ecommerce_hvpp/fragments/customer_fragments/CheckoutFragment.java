@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,6 +14,9 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -26,9 +28,10 @@ import com.example.ecommerce_hvpp.adapter.CheckoutAdapter;
 import com.example.ecommerce_hvpp.adapter.VoucherAdapter;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,11 +89,16 @@ public class CheckoutFragment extends Fragment {
     private ImageButton btnBackToCart, navToAddress, navToVoucher;
     private ListView listVoucherAppliedLv;
     private ArrayList<Pair<String, Double>> listVoucherApplied;
-    private TextView addressApplied, cartItems, cartPrice, totalOrder;
+    private TextView addressApplied, cartItems, cartPrice, totalOrder, shippingPrice;
     Double shipping = 1.99, total;
-    Spinner spinnerTypeCheckout;
-    ArrayList<String> listTypeCheckout;
+    Spinner spinnerTypeCheckout, spinnerShipping;
+    ArrayList<String> listTypeCheckout, listTypeShipping;
+    HashMap<String, Double> listShippingPrice;
     private NavController navController;
+    private Button btnAccept;
+    private EditText txtNote;
+    Long nextDay = (long) 432000;
+    String deliverMethod, paymentMethod;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -102,27 +110,70 @@ public class CheckoutFragment extends Fragment {
         btnBackToCart = (ImageButton) view.findViewById(R.id.btnBackToCart);
         navToAddress = (ImageButton) view.findViewById(R.id.navToAddress);
         navToVoucher = (ImageButton) view.findViewById(R.id.navToVoucher);
+        btnAccept = (Button) view.findViewById(R.id.btnCheckoutDone);
         addressApplied = (TextView) view.findViewById(R.id.addressApplied);
         cartItems = (TextView) view.findViewById(R.id.cartItems);
         cartPrice = (TextView) view.findViewById(R.id.cartPrice);
         totalOrder = (TextView) view.findViewById(R.id.totalOrder);
+        shippingPrice = (TextView) view.findViewById(R.id.shippingPrice);
         spinnerTypeCheckout = (Spinner) view.findViewById(R.id.typeCheckout);
+        spinnerShipping = (Spinner) view.findViewById(R.id.typeShipping);
+        txtNote = (EditText) view.findViewById(R.id.txtNoteOrder);
         listTypeCheckout = new ArrayList<>();
-
+        listTypeShipping = new ArrayList<>();
+        listShippingPrice = new HashMap<>();
         getListVoucherApplied();
         getAddressApplied();
         getTypeCheckout();
+        getTypeShipping();
         getCartItemsAndPrice();
         calcTotalOrder();
 
         CheckoutAdapter checkoutAdapter = new CheckoutAdapter(getContext(), R.layout.simple_spinner_string_item, listTypeCheckout);
         checkoutAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
         spinnerTypeCheckout.setAdapter(checkoutAdapter);
+        spinnerTypeCheckout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                paymentMethod = listTypeCheckout.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        CheckoutAdapter shippingAdapter = new CheckoutAdapter(getContext(), R.layout.simple_spinner_string_item, listTypeShipping);
+        shippingAdapter.setDropDownViewResource(R.layout.simple_spinner_string_item);
+        spinnerShipping.setAdapter(shippingAdapter);
+        spinnerShipping.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String key = listTypeShipping.get(i);
+                deliverMethod = key;
+                shipping = listShippingPrice.get(key);
+                shippingPrice.setText("$" + shipping);
+                totalOrder.setText("$" + (total + shipping));
+
+                if (key.equals("Normal")) nextDay = (long) 432000;
+                if (key.equals("Express")) nextDay = (long) 259200;
+                if (key.equals("Same day")) nextDay = (long) 86400;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
         navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
         navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
+
+        //create order
+        btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, total + shipping));
     }
     private void getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
@@ -136,9 +187,17 @@ public class CheckoutFragment extends Fragment {
                 }
                 VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
                 listVoucherAppliedLv.setAdapter(voucherAdapter);
-                totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
+                totalOrder.setText("$" + Math.round((total + shipping) * 100.0) / 100.0);
             }
         });
+    }
+    public void getTypeShipping(){
+        listTypeShipping.add("Normal");
+        listTypeShipping.add("Express");
+        listTypeShipping.add("Same day");
+        listShippingPrice.put("Normal", 1.99);
+        listShippingPrice.put("Express", 3.99);
+        listShippingPrice.put("Same day", 6.99);
     }
     private void getTypeCheckout(){
         listTypeCheckout.add("Visa");
@@ -159,5 +218,6 @@ public class CheckoutFragment extends Fragment {
         total = shipping;
         total += Math.round(MainActivity.PDviewModel.getTotalPriceCart().getValue() * 100.0) / 100.0;
         totalOrder.setText("$" + Math.round(total * 100.0) / 100.0);
+        total -= shipping;
     }
 }
