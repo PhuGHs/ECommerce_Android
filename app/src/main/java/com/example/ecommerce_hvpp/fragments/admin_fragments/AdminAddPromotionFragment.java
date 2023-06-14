@@ -164,7 +164,7 @@ public class AdminAddPromotionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.test_bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 }
