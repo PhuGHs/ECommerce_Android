@@ -13,9 +13,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
-import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
 
@@ -30,23 +30,16 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     private View image;
     private ViewModelProvider vmProvider;
     public static SessionManager sessionManager;
+    private FirebaseHelper fbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
-        MainActivity.PDviewModel = new ProductViewModel();
-        sessionManager = new SessionManager(this);
-
-        if(sessionManager.isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
-
+        fbHelper = FirebaseHelper.getInstance();
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
-
         tryAgainButton = findViewById(R.id.btnTryAgain);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -54,9 +47,25 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
+    }
 
-        MainActivity.PDviewModel = new ProductViewModel();
-        MainActivity.PDviewModel.initListBestSellerLiveData();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MainActivity.PDviewModel.initListBestSellerLiveData().observe(this, voidResource -> {
+            switch(voidResource.status) {
+                case SUCCESS:
+                    if(fbHelper.getAuth().getCurrentUser() != null) {
+                        startActivity(new Intent(RegisterLoginActivity.this, MainActivity.class));
+                    }
+                    break;
+                case LOADING:
+                    break;
+                case ERROR:
+                    break;
+            }
+        });
+
     }
 
     @Override

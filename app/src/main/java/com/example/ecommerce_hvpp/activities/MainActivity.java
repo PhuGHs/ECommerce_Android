@@ -130,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
         NavigationUI.setupWithNavController(bottomNav, navController);
     }
 
-
-
     public void showMainLayout() {
         hasInternetLayout.setVisibility(View.VISIBLE);
         noInternetLayout.setVisibility(View.GONE);
