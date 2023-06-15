@@ -1,6 +1,10 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
@@ -43,7 +47,8 @@ public class ProductViewModel extends ViewModel {
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private Pair<Pair<String, String>, String> recipientInfo;
     private String TAG = "Product ViewModel";
-    public ProductViewModel(){
+    Context context;
+    public ProductViewModel(Context context){
         //init
         helper = FirebaseHelper.getInstance();
         mldListNewArrivals = new MutableLiveData<>();
@@ -53,52 +58,47 @@ public class ProductViewModel extends ViewModel {
         mldCategories = new MutableLiveData<>();
         mldListCart = new MutableLiveData<>();
 
-        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-            getAllProduct();
-            initListBestSellerLiveData();
-        }); // wait get all product
-        future.join();
+        this.context = context;
+        getAllProduct();
+        initListBestSellerLiveData();
     }
     public void initData(){
         initCategories();
         initListNewArrivalsLiveData();
-        initListBestSellerLiveData();
-        getListBestSeller(listRevenue);
         initListFavoriteLiveData();
         initUserCart();
     }
     private void getAllProduct(){
         listAllProduct = new HashMap<>();
 
-        helper.getCollection("Product")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Log.d("Get all product", "Success");
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String id = documentSnapshot.getString("id");
-                        String name = documentSnapshot.getString("name");
-                        String club = documentSnapshot.getString("club");
-                        String nation = documentSnapshot.getString("nation");
-                        String season = documentSnapshot.getString("season");
-                        double Price = documentSnapshot.getDouble("price");
-                        double Point = documentSnapshot.getDouble("pointAvg");
-                        String urlmain = documentSnapshot.getString("url_main");
-                        String urlsub1 = documentSnapshot.getString("url_sub1");
-                        String urlsub2 = documentSnapshot.getString("url_sub2");
-                        String urlthumb = documentSnapshot.getString("url_thumb");
-                        long sizeM = documentSnapshot.getLong("size_m");
-                        long sizeL = documentSnapshot.getLong("size_l");
-                        long sizeXL = documentSnapshot.getLong("size_xl");
-                        String status = documentSnapshot.getString("status");
-                        Timestamp timeAdded = documentSnapshot.getTimestamp("time_added");
-                        String desc = documentSnapshot.getString("description");
+        SQLiteDatabase db = context.openOrCreateDatabase("PD.db", 0, null);
 
-                        Log.d("Get all", id + "--" + name);
+        String query = "SELECT * FROM PRODUCT ";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToNext();
+        while (cursor.isAfterLast() == false){
+            String id = cursor.getString(0);
+            String name = cursor.getString(1);
+            String club = cursor.getString(2);
+            String nation = cursor.getString(3);
+            String season = cursor.getString(4);
+            String desc = cursor.getString(5);
+            double point = cursor.getDouble(6);
+            double price = cursor.getDouble(7);
+            String status = cursor.getString(8);
+            long sizeM = cursor.getLong(9);
+            long sizeL = cursor.getLong(10);
+            long sizeXL = cursor.getLong(11);
+            long timeAdded = cursor.getLong(12);
+            String URLmain = cursor.getString(13);
+            String URLsub1 = cursor.getString(14);
+            String URLsub2 = cursor.getString(15);
+            String URLthumb = cursor.getString(16);
 
-                        listAllProduct.put(id, new Product(id, name, club, nation, season, desc, Price, Point, sizeM, sizeL, sizeXL, urlmain, urlsub1, urlsub2, urlthumb, status, timeAdded.getSeconds() * 1000));
-                    }
-                })
-                .addOnFailureListener(e -> Log.d("Get all", "Failure"));
+            listAllProduct.put(id, new Product(id, name, club, nation, season, desc, price, point, sizeM, sizeL, sizeXL, URLmain, URLsub1, URLsub2, URLthumb, status, timeAdded * 1000));
+
+            cursor.moveToNext();
+        }
     }
     public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
@@ -430,34 +430,38 @@ public class ProductViewModel extends ViewModel {
     public void initListBestSellerLiveData() {
         listBestSeller = new ArrayList<>();
 
-        helper.getCollection("Order").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for (QueryDocumentSnapshot document : task.getResult()){
-                            String document_id = document.getId();
-
-                            helper.getCollection("Order").document(document_id).collection("items")
-                                    .get()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()){
-                                            //get all revenue
-                                            for (QueryDocumentSnapshot items1 : task1.getResult()){
-                                                String product_id = items1.getString("product_id");
-                                                long quantity = items1.getLong("quantity");
-
-                                                Log.d("Revenue", product_id + quantity);
-                                                if (listRevenue.containsKey(product_id)){
-                                                    listRevenue.get(product_id).setQuantity(quantity);
-                                                }
-                                                else {
-                                                    listRevenue.put(product_id, new Revenue(product_id, quantity));
-                                                }
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
+        SQLiteDatabase db = context.openOrCreateDatabase("PD.db", 0, null);
+        //get all revenue
+        String query = "SELECT * FROM REVENUE";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToNext();
+        while (cursor.isAfterLast() == false){
+            String product_id = cursor.getString(1);
+            long quantity = cursor.getLong(2);
+            if (listRevenue.containsKey(product_id)){
+                listRevenue.get(product_id).setQuantity(quantity);
+            }
+            else {
+                listRevenue.put(product_id, new Revenue(product_id, quantity));
+            }
+            cursor.moveToNext();
+        }
+        //find top 3
+        Set<String> keys = listRevenue.keySet();
+        for (int j = 0; j < 3; j++){
+            long max = 0;
+            String best = "";
+            for (String key : keys){
+                if (listRevenue.get(key).getQuantity() > max) {
+                    max = listRevenue.get(key).getQuantity();
+                    best = key;
+                }
+            }
+            Log.d("Best", best);
+            listBestSeller.add(listAllProduct.get(best));
+            listRevenue.get(best).resetQuantity();
+        }
+        mldListBestSeller.setValue(listBestSeller);
     }
 
     private void initListNewArrivalsLiveData() {
@@ -477,23 +481,6 @@ public class ProductViewModel extends ViewModel {
         return mldListNewArrivals;
     }
 
-    private void getListBestSeller(HashMap<String, Revenue> listRevenue){
-        Set<String> keys = listRevenue.keySet();
-        for (int j = 0; j < 3; j++){
-            long max = 0;
-            String best = "";
-            for (String key : keys){
-                if (listRevenue.get(key).getQuantity() > max) {
-                    max = listRevenue.get(key).getQuantity();
-                    best = key;
-                }
-            }
-            Log.d("Best", best);
-            listBestSeller.add(listAllProduct.get(best));
-            listRevenue.get(best).resetQuantity();
-        }
-        mldListBestSeller.setValue(listBestSeller);
-    }
     public MutableLiveData<List<Product>> getMldListBestSeller() {
         return mldListBestSeller;
     }

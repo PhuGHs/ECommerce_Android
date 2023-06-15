@@ -2,6 +2,7 @@ package com.example.ecommerce_hvpp.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
 
         bottomNav = findViewById(R.id.bottom_nav);
         navController = Navigation.findNavController(this, R.id.host_fragment);
+        SQLiteDatabase db = openOrCreateDatabase("PD.db", MODE_PRIVATE, null);
+        PDviewModel = new ProductViewModel(this);
         PDviewModel.initData();
 
         String Id = fbHelper.getAuth().getCurrentUser().getUid();
