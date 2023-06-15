@@ -36,13 +36,12 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         setContentView(R.layout.activity_login_register);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
-        MainActivity.PDviewModel = new ProductViewModel();
         sessionManager = new SessionManager(this);
 
-        if(sessionManager.isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+        //if(sessionManager.isLoggedIn()) {
+        //    Intent intent = new Intent(this, MainActivity.class);
+        //    startActivity(intent);
+        //}
 
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
@@ -56,7 +55,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
 
         MainActivity.PDviewModel = new ProductViewModel();
-        MainActivity.PDviewModel.initListBestSellerLiveData();
     }
 
     @Override

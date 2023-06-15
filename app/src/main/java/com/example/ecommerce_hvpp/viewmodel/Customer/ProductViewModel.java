@@ -53,7 +53,10 @@ public class ProductViewModel extends ViewModel {
         mldCategories = new MutableLiveData<>();
         mldListCart = new MutableLiveData<>();
 
-        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> getAllProduct()); // wait get all product
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            getAllProduct();
+            initListBestSellerLiveData();
+        }); // wait get all product
         future.join();
     }
     public void initData(){
