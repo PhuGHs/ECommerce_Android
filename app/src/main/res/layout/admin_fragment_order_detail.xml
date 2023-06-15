@@ -192,60 +192,13 @@
                     android:layout_below="@id/tvFoundtext"
                     android:padding="20dp"/>
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/promotion_layout"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/item_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-                <LinearLayout
-                    android:id="@+id/discount_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_centerVertical="true"
-                        android:id="@+id/discount_icon"
-                        app:tint="@color/primary"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/baseline_discount_24" />
-                    <TextView
-                        android:id="@+id/discount_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Vouchers"
-                        android:layout_toEndOf="@id/imgMoney"
-                        style="@style/font_medium"
-                        android:textColor="@color/primary"
-                        android:textSize="25dp"
-                        android:textStyle="bold"
-                        android:layout_centerVertical="true"/>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/tvNumberOfVouchers"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/font_medium"
-                    android:textSize="20dp"
-                    android:textColor="@color/primary"
-                    android:text="2 applied"
-                    android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"/>
-            </RelativeLayout>
 
             <RelativeLayout
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:layout_below="@id/promotion_layout"
+                android:layout_below="@id/item_layout"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:id="@+id/info_layout"
@@ -385,54 +338,6 @@
                 </LinearLayout>
                 <LinearLayout
                     android:layout_below="@id/order_subHeader_layout"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/subtotal_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Subtotal: "
-                        android:textColor="@color/primary"
-                        style="@style/font_medium"
-                        android:textSize="20dp"/>
-                    <TextView
-                        android:id="@+id/tvSubtotal"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="450.000đ"
-                        style="@style/font_medium"
-                        android:textSize="20dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_below="@id/subtotal_layout"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/delivery_fee_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Delivery fee: "
-                        android:textColor="@color/primary"
-                        style="@style/font_medium"
-                        android:textSize="20dp"/>
-                    <TextView
-                        android:id="@+id/tvDeliveryFee"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="30.000đ"
-                        style="@style/font_medium"
-                        android:textSize="20dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_below="@id/delivery_fee_layout"
                     android:layout_marginTop="10dp"
                     android:id="@+id/total_layout"
                     android:layout_width="match_parent"
