@@ -97,7 +97,6 @@ public class EditProfileFrament extends Fragment {
     private TextView name_tv;
     private EditText name_edt;
     private EditText datebirth_edt;
-    private EditText address_edt;
     private EditText email_edt;
     private ImageView ava_image;
     private Button edit_profile_btn;
@@ -163,7 +162,6 @@ public class EditProfileFrament extends Fragment {
         name_tv = v.findViewById(R.id.name_textview);
         name_edt = v.findViewById(R.id.name_edittext);
         datebirth_edt = v.findViewById(R.id.datebirth_edittext);
-        address_edt = v.findViewById(R.id.address_edittext);
         email_edt = v.findViewById(R.id.email_edittext);
         ava_image = v.findViewById(R.id.image_of_user);
         change_ava_btn = v.findViewById(R.id.change_ava_btn);
@@ -185,12 +183,10 @@ public class EditProfileFrament extends Fragment {
                         name_tv.setText(name);
                         name_edt.setText(name);
                         datebirth_edt.setText(datebirth);
-                        address_edt.setText(address);
                         email_edt.setText(email);
 
                         name_edt.setEnabled(false);
                         datebirth_edt.setEnabled(false);
-                        address_edt.setEnabled(false);
                         email_edt.setEnabled(false);
                         break;
                     case ERROR:
@@ -239,7 +235,6 @@ public class EditProfileFrament extends Fragment {
             public void onClick(View view) {
                 name_edt.setEnabled(true);
                 datebirth_edt.setEnabled(true);
-                address_edt.setEnabled(true);
                 email_edt.setEnabled(true);
                 CustomToast successToast = new CustomToast();
                 successToast.ShowToastMessage(requireActivity(), 1, "Mời bạn thay đổi thông tin ở phần phía trên");
@@ -295,7 +290,6 @@ public class EditProfileFrament extends Fragment {
     public void updateUser(){
         String name = name_edt.getText().toString();
         String datebirth = datebirth_edt.getText().toString();
-        String address = address_edt.getText().toString();
         String email = email_edt.getText().toString();
         User user = new User();
         user.setUsername(name);

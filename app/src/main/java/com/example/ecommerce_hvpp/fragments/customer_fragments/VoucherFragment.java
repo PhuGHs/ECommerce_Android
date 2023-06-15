@@ -90,7 +90,12 @@ public class VoucherFragment extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.popBackStack();
+                Bundle bundle = getArguments();
+                String previous = bundle.getString("Previous");
+                if (previous.equals("Checkout")){
+                    navController.navigate(R.id.checkoutFragment);
+                }
+                else navController.navigate(R.id.accountFragment);
             }
         });
     }
