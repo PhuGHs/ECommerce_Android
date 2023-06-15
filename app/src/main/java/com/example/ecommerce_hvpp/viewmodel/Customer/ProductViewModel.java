@@ -108,7 +108,7 @@ public class ProductViewModel extends ViewModel {
         data.put("recipientName", recipientInfo.first.first);
         data.put("phoneNumber", recipientInfo.first.second);
         data.put("customerId", customer_id);
-        data.put("createdDated", Timestamp.now());
+        data.put("createdDate", Timestamp.now());
         data.put("deliverMethod", deliverMethod);
         data.put("paymentMethod", paymentMethod);
         data.put("note", note);
