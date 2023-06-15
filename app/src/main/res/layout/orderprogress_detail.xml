@@ -4,60 +4,68 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="50px"
     android:background="@drawable/bg_white_rounded"
-    android:paddingLeft="10px">
-    <ImageView
-        android:layout_width="155px"
-        android:layout_height="129px"
-        android:layout_marginTop="25px"
-        android:id="@+id/image_of_orderprogress"
-        android:src="@drawable/orderprogress_image"/>
+    android:id="@+id/orderprogress_layout"
+    android:paddingLeft="10dp"
+    android:orientation="vertical">
     <LinearLayout
-        android:layout_width="130dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="35px"
-        android:layout_marginTop="28px">
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_marginTop="25px">
+        <ImageView
+            android:layout_width="155px"
+            android:layout_height="129px"
+            android:id="@+id/image_of_orderprogress"
+            android:src="@drawable/orderprogress_image"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/id_of_order"
-            android:text="ID: #2050"
-            android:textColor="@color/black"
-            android:textSize="50px"
-            style="@style/header"/>
+            android:orientation="vertical"
+            android:paddingLeft="35px">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_of_order"
+                android:text="ID: #2050"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/header"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title_of_order"
-            android:text="Đặt áo cho team"
-            android:textColor="@color/black"
-            android:textSize="50px"
-            style="@style/regularfont"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title_of_order"
+                android:text="Đặt áo cho team"
+                android:textColor="@color/black"
+                android:textSize="50px"
+                style="@style/regularfont"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingRight="32px"
-        android:layout_marginTop="28px"
-        android:gravity="right">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/timeremain_of_order"
-            android:text="Time remaining:       1 day"
+            android:id="@+id/status_of_order"
+            android:layout_marginTop="5dp"
+            android:text="Pending"
             android:textColor="@color/black"
-            android:textSize="45px"
+            android:textSize="60px"
             style="@style/font_crimson_italic"/>
-
-        <Button
-            android:layout_width="284px"
-            android:layout_height="120px"
-            android:id="@+id/detail_orderprogresss_btn"
-            android:textAllCaps="false"
-            style="@style/w400_40"
-            android:textSize="50px"
-            android:text="Detail"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="20dp">
+            <Button
+                android:layout_width="284px"
+                android:layout_height="120px"
+                android:id="@+id/confirm_btn"
+                android:textAllCaps="false"
+                style="@style/header_title"
+                android:textSize="45px"
+                android:text="Confirm"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

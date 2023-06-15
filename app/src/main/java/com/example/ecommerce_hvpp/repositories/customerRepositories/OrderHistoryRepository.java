@@ -2,13 +2,16 @@ package com.example.ecommerce_hvpp.repositories.customerRepositories;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderDetail;
@@ -39,6 +42,7 @@ public class OrderHistoryRepository {
     private MutableLiveData<List<OrderHistoryItem>> _mldListOrderHistory = new MutableLiveData<>();
     private MutableLiveData<List<OrderHistorySubItem>> _mldListSubOrderHistory = new MutableLiveData<>();
     private MutableLiveData<Order> orderInfo = new MutableLiveData<>();
+    private MutableLiveData<OrderHistorySubItem> orderItem = new MutableLiveData<>();
     private MutableLiveData<Integer> num_of_completeorder = new MutableLiveData<>();
     private MutableLiveData<Double> total_moneypaid = new MutableLiveData<>();
     private final String TAG = "OrderHistoryRepository";
@@ -144,5 +148,53 @@ public class OrderHistoryRepository {
                     Log.d(TAG, "khong lay duoc tong tien order");
                 });
         return total_moneypaid;
+    }
+    public void getFirst_Item(Context view, String UID, String orderId , ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
+
+        firebaseHelper.getCollection("users").document(UID).collection("bought_items")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("orderId").equals(orderId)){
+                            String image_path = snapshot.getString("image");
+                            String name = snapshot.getString("name");
+                            long price = snapshot.getLong("price");
+                            long quantity = snapshot.getLong("quantity");
+
+                            Glide.with(view).load(image_path).fitCenter().into(image_item);
+                            name_item_tv.setText(name);
+                            quantity_item_tv.setText("Quantity: " + Long.toString(quantity));
+                            price_item_tv.setText("$" + Double.toString(price));
+                            Log.d(TAG,  "Lay 1 san pham thanh cong ");
+                        }
+                        break;
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Lay that bai");
+                });
+    }
+    public LiveData<OrderHistorySubItem> getFirstItem(String UID, String order_id){
+        firebaseHelper.getCollection("users").document(UID).collection("bought_items")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    for (DocumentSnapshot snapshot : documentSnapshot){
+                        if (snapshot.getString("orderId").equals(order_id)){
+                            String image = snapshot.getString("image");
+                            String name = snapshot.getString("name");
+                            long price = snapshot.getLong("price");
+                            long quantity = snapshot.getLong("quantity");
+
+                            OrderHistorySubItem item = new OrderHistorySubItem(image, name, Long.toString(quantity), price, order_id);
+                            orderItem.setValue(item);
+                            Log.d(TAG,  "Lay 1 san pham thanh cong " + name);
+                            break;
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "Lay that bai");
+                });
+        return orderItem;
     }
 }

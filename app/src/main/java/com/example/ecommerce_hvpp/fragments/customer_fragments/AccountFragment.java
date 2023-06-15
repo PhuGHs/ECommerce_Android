@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
+import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
@@ -223,8 +225,9 @@ public class AccountFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                mAuth.signOut();
-                                navController.navigate(R.id.loginFragment);
+                                MainActivity mainActivity = (MainActivity) getContext();
+                                RegisterLoginActivity.sessionManager.clearSession();
+                                mainActivity.finish();
                                 CustomToast signOutToast = new CustomToast();
                                 signOutToast.ShowToastMessage(getActivity(), 1, "Đăng xuất thành công");
                                 break;

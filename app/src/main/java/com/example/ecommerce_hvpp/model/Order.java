@@ -67,10 +67,10 @@ public class Order implements Parcelable {
         this.voucherList = voucherList;
     }
 
-    public Order(String id, String title, int day_remaining) {
+    public Order(String id, String title, String status) {
         this.id = id;
         this.title = title;
-        this.remaining_day = day_remaining;
+        this.status = status;
     }
     public Order(String id, String deliveryMethod, long receiveDate, String recipientName, String phone_number, String address){
         this.id = id;

@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_white_rounded"
     android:paddingRight="20dp"
-    android:paddingTop="5dp">
+    android:paddingTop="5dp"
+    android:layout_marginBottom="15dp">
     <ImageView
         android:layout_width="252px"
         android:layout_height="252px"

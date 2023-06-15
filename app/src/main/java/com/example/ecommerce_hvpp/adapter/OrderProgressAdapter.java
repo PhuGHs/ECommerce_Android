@@ -2,15 +2,19 @@ package com.example.ecommerce_hvpp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
@@ -19,6 +23,8 @@ import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.RecepInfoRepository;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
+import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.Customer.OrderViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +32,7 @@ import java.util.List;
 public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdapter.DataViewHolder>{
     private OrderProgressFragment parent;
     private ArrayList<Order> listOrder;
+    private OrderViewModel viewModel;
 
     public OrderProgressAdapter(OrderProgressFragment parent, ArrayList<Order> listOrder) {
         this.parent = parent;
@@ -46,18 +53,34 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
     @Override
     public void onBindViewHolder(@NonNull OrderProgressAdapter.DataViewHolder holder, int position) {
         Order order = listOrder.get(position);
+        viewModel = new ViewModelProvider(parent).get(OrderViewModel.class);
 
         holder.id_tv.setText("ID: #" + order.getId());
         holder.title_tv.setText(order.getTitle());
 
-        if (order.getRemaining_day() < 2){
-            holder.time_remain_tv.setText("Remaining day: " + Integer.toString(order.getRemaining_day()) + " day");
+        if (order.getStatus().equals("Delivered")){
+            holder.status_tv.setText("Delivered");
+            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirmed));
         }
-        else{
-            holder.time_remain_tv.setText("Remaining day: " + Integer.toString(order.getRemaining_day()) + " days");
+        else if (order.getStatus().equals("Pending")){
+            holder.status_tv.setText("Pending");
+            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pending));
         }
-
-        holder.detail_btn.setOnClickListener(new View.OnClickListener() {
+        else {
+            holder.status_tv.setText("Packed");
+            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.packaged));
+        }
+        holder.confirm_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.confirmOrder(order.getId());
+                viewModel.confirmItemsOfOrder(order.getId());
+                holder.confirm_btn.setVisibility(View.INVISIBLE);
+                CustomToast signOutToast = new CustomToast();
+                signOutToast.ShowToastMessage(parent.getActivity(), 1, "Confirm order successfully");
+            }
+        });
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -71,18 +94,20 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
      * Data ViewHolder class.
      */
     public static class DataViewHolder extends RecyclerView.ViewHolder{
-        private TextView id_tv, title_tv, time_remain_tv;
+        private TextView id_tv, title_tv, status_tv;
         private ImageView image;
-        private Button detail_btn;
+        private Button confirm_btn;
+        private LinearLayout linearLayout;
         public DataViewHolder(View itemView){
             super(itemView);
 
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.orderprogress_layout);
             id_tv = (TextView) itemView.findViewById(R.id.id_of_order);
             title_tv = (TextView) itemView.findViewById(R.id.title_of_order);
-            time_remain_tv = (TextView) itemView.findViewById(R.id.timeremain_of_order);
+            status_tv = (TextView) itemView.findViewById(R.id.status_of_order);
             image = (ImageView) itemView.findViewById(R.id.image_of_orderprogress);
 
-            detail_btn = (Button) itemView.findViewById(R.id.detail_orderprogresss_btn);
+            confirm_btn = (Button) itemView.findViewById(R.id.confirm_btn);
         }
     }
 }
