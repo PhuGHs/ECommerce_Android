@@ -15,7 +15,6 @@ import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
-import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,7 +41,6 @@ public class ProductViewModel extends ViewModel {
     private MutableLiveData<Double> totalPriceCart = new MutableLiveData<>((double)0);
     private MutableLiveData<HashMap<String, List<String>>> mldCategories;
     private Pair<Pair<String, String>, String> recipientInfo;
-    private MutableLiveData<Resource<Void>> mldInitial;
     private String TAG = "Product ViewModel";
     public ProductViewModel(){
         //init
@@ -53,18 +51,18 @@ public class ProductViewModel extends ViewModel {
         mldListFeedback = new MutableLiveData<>();
         mldCategories = new MutableLiveData<>();
         mldListCart = new MutableLiveData<>();
-        mldInitial = new MutableLiveData<>();
 
-        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> getAllProduct()); // wait get all product
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            getAllProduct();
+        }); // wait get all product
         future.join();
     }
-    public void initData(){
-        initListBestSellerLiveData();
+    public void initData(){ // get data from firebase and then put into hashmap
         initCategories();
+        getListBestSeller(listRevenue);
         initListNewArrivalsLiveData();
         initListFavoriteLiveData();
         initUserCart();
-        getListBestSeller(listRevenue);
     }
     private void getAllProduct(){
         listAllProduct = new HashMap<>();
@@ -426,9 +424,9 @@ public class ProductViewModel extends ViewModel {
                 });
     }
 
-    public LiveData<Resource<Void>> initListBestSellerLiveData() {
+    public CompletableFuture<Void> initListBestSellerLiveData() {
         listBestSeller = new ArrayList<>();
-        mldInitial.setValue(Resource.loading(null));
+        CompletableFuture<Void> future = new CompletableFuture<>();
         helper.getCollection("Order").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
@@ -452,13 +450,13 @@ public class ProductViewModel extends ViewModel {
                                                     listRevenue.put(product_id, new Revenue(product_id, quantity));
                                                 }
                                             }
-                                            mldInitial.setValue(Resource.success(null));
+                                            future.complete(null);
                                         }
                                     });
                         }
                     }
                 });
-        return mldInitial;
+        return future;
     }
 
     private void initListNewArrivalsLiveData() {

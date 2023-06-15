@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
 
         bottomNav = findViewById(R.id.bottom_nav);
         navController = Navigation.findNavController(this, R.id.host_fragment);
+        Log.i("Main", "onCreate");
         PDviewModel.initData();
 
         String Id = fbHelper.getAuth().getCurrentUser().getUid();

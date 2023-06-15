@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -16,8 +17,14 @@ import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
+import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RegisterLoginActivity extends AppCompatActivity implements NetworkChangeBroadcastReceiver.NetworkConnectivityListener {
     private NavController navController;
@@ -35,6 +42,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
+        Log.i("Register", "onCreate");
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
         fbHelper = FirebaseHelper.getInstance();
@@ -49,23 +57,30 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
     }
 
-    @Override
     protected void onStart() {
         super.onStart();
-        MainActivity.PDviewModel.initListBestSellerLiveData().observe(this, voidResource -> {
-            switch(voidResource.status) {
-                case SUCCESS:
-                    if(fbHelper.getAuth().getCurrentUser() != null) {
-                        startActivity(new Intent(RegisterLoginActivity.this, MainActivity.class));
+        MainActivity.PDviewModel = new ProductViewModel();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(fbHelper.getAuth().getCurrentUser() != null) {
+                            Log.i("Register", "onStart inside success");
+                            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+                            scheduledExecutorService.schedule(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(RegisterLoginActivity.this, MainActivity.class));
+                                }
+                            }, 2, TimeUnit.SECONDS);
+                        }
                     }
-                    break;
-                case LOADING:
-                    break;
-                case ERROR:
-                    break;
+                });
             }
         });
-
     }
 
     @Override
