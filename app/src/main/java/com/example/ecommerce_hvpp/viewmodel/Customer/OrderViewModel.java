@@ -85,4 +85,8 @@ public class OrderViewModel extends ViewModel {
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         repo.confirmItemsOfOrder(fbUser.getUid(), order_id);
     }
+    public void updateStatusOrder(String order_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.updateStatusOrder(fbUser.getUid(), order_id);
+    }
 }

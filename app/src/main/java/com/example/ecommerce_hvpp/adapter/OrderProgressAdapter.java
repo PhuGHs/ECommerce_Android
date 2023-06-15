@@ -60,11 +60,16 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
 
         if (order.getStatus().equals("Delivered")){
             holder.status_tv.setText("Delivered");
-            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirmed));
+            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.delivered));
         }
         else if (order.getStatus().equals("Pending")){
             holder.status_tv.setText("Pending");
             holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pending));
+        }
+        else if (order.getStatus().equals("Confirmed")){
+            holder.status_tv.setText("The order has been confirmed");
+            holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirmed));
+            holder.confirm_btn.setVisibility(View.INVISIBLE);
         }
         else {
             holder.status_tv.setText("Packed");
@@ -75,6 +80,9 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
             public void onClick(View view) {
                 viewModel.confirmOrder(order.getId());
                 viewModel.confirmItemsOfOrder(order.getId());
+                viewModel.updateStatusOrder(order.getId());
+                holder.status_tv.setText("The order has been confirmed");
+                holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirmed));
                 holder.confirm_btn.setVisibility(View.INVISIBLE);
                 CustomToast signOutToast = new CustomToast();
                 signOutToast.ShowToastMessage(parent.getActivity(), 1, "Confirm order successfully");

@@ -12,6 +12,7 @@ import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -120,7 +121,7 @@ public class OrderRepository {
         firebaseHelper.getCollection("Order").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("customerId").equals(UID)){
+                        if (snapshot.getString("customerId").equals(UID) && snapshot.getString("id").equals(order_id)){
                             Map<String, Object> orderhistory = new HashMap<>();
                             orderhistory.put("address", snapshot.getString("address"));
                             orderhistory.put("createdDate", snapshot.getTimestamp("createdDate"));
@@ -180,6 +181,23 @@ public class OrderRepository {
                 })
                 .addOnFailureListener(e -> {
                     return;
+                });
+    }
+    public void updateStatusOrder(String UID, String order_id){
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        firebaseHelper.getCollection("Order")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getString("id").equals(order_id) && snapshot.getString("customerId").equals(UID)){
+                            DocumentReference ref = fs.collection("Order").document(snapshot.getId());
+                            ref.update("status", "Confirmed");
+                            Log.d(TAG, "cap nhat thanh cong");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "khong the cap nhat trang thai order");
                 });
     }
 
