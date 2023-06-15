@@ -40,10 +40,10 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         MainActivity.PDviewModel = new ProductViewModel();
         sessionManager = new SessionManager(this);
 
-        if(sessionManager.isLoggedIn()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+//        if(sessionManager.isLoggedIn()) {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        }
 
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);

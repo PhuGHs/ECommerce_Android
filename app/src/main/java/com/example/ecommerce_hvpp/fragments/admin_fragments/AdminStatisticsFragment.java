@@ -33,6 +33,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticsBinding;
 import com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticOrdersFragment;
 import com.example.ecommerce_hvpp.model.DataStatisticDouble;
@@ -172,6 +173,9 @@ public class AdminStatisticsFragment extends Fragment {
     }
 
     private void handleClubTopSellingComponent() {
+        // get list product
+        MainActivity.PDviewModel.listAllProduct.get("id"); // => get product by id
+
         // handle to find top selling
         List<String> listResult = new ArrayList<>();
         listResult.add("Manchester City");
