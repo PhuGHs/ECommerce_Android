@@ -19,6 +19,10 @@ public class UserRepository {
     private FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
     private MutableLiveData<Resource<User>> _mldUser = new MutableLiveData<>();
     private MutableLiveData<Resource<List<User>>> _mldListUser = new MutableLiveData<>();
+    public interface UserCallback {
+        void onSuccess(User user);
+        void onError(String errorMessage);
+    }
     private final String TAG = "UserRepository";
 
     public void addUser(User user) {
@@ -33,13 +37,46 @@ public class UserRepository {
         firebaseHelper.getDatabaseReference().child("users").child(userUID).removeValue();
     }
 
+    public void getUserWith(String UID, UserCallback callback) {
+        firebaseHelper.getCollection("users").document(UID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        boolean isAdmin = documentSnapshot.getBoolean("admin");
+                        String username = documentSnapshot.getString("username");
+                        String email = documentSnapshot.getString("email");
+                        String password = documentSnapshot.getString("password");
+                        String datebirth = documentSnapshot.getString("datebirth");
+                        String address = documentSnapshot.getString("address");
+                        String imagePath = documentSnapshot.getString("imagePath");
+                        User user = new User();
+                        user.setUsername(username);
+                        user.setEmail(email);
+                        user.setPassword(password);
+                        user.setDatebirth(datebirth);
+                        user.setAddress(address);
+                        user.setImagePath(imagePath);
+                        callback.onSuccess(user);
+                    } else {
+                        Log.d(TAG, "user not found");
+                        callback.onError("User not found");
+                    }
+                });
+    }
+
     public LiveData<Resource<User>> getUser(String UID) {
         _mldUser.setValue(Resource.loading(null));
         firebaseHelper.getCollection("users").document(UID).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if(documentSnapshot.exists()) {
-                        User user = documentSnapshot.toObject(User.class);
-                        _mldUser.setValue(Resource.success(user));
+                        boolean isAdmin = documentSnapshot.getBoolean("admin");
+                        String username = documentSnapshot.getString("username");
+                        String email = documentSnapshot.getString("email");
+                        String password = documentSnapshot.getString("password");
+                        String datebirth = documentSnapshot.getString("datebirth");
+                        String address = documentSnapshot.getString("address");
+                        String imagePath = documentSnapshot.getString("imagePath");
+                        boolean isNew = documentSnapshot.getBoolean("new");
+                        _mldUser.setValue(Resource.success(new User(isAdmin, username, email, password, datebirth, address, imagePath, isNew)));
                     } else {
                         Log.d(TAG, "user not found");
                     }

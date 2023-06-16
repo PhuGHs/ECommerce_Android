@@ -140,6 +140,36 @@ public class AdminPromotionRepository {
                 });
     }
 
+//    public void insertVoucherForNewUser() {
+//        CollectionReference usersRef = firebaseHelper.getCollection("users");
+//
+//        // set the data in firestore
+//        usersRef.get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                        CollectionReference vouchersRef = document.getReference().collection("vouchers");
+//
+//                        vouchersRef.document(promotion.getId()).set(convertObjectToMapIsUsed(promotion), SetOptions.merge())
+//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void unused) {
+//                                        Log.d("VuSubCollection", "name : " + promotion.getName());
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Log.e("VuError", "" + e);
+//                                    }
+//                                });
+//                    }
+//
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e("VuError", "" + e.getMessage());
+//                });
+//    }
+
     public void getVouchersOfUsers() {
         CollectionReference usersRef = firebaseHelper.getCollection("users");
 
