@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatRoomRepository {
     private FirebaseHelper fbHelper;
@@ -76,14 +77,60 @@ public class ChatRoomRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<ChatRoom> result = new ArrayList<>();
-                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                AtomicInteger expectedCallbacks = new AtomicInteger(0);
+                AtomicInteger completedCallbacks = new AtomicInteger(0);
+
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
                     String user1Id = datasnapshot.child("user1Id").getValue(String.class);
                     String user2Id = datasnapshot.child("user2Id").getValue(String.class);
-                    if(user1Id.equals(currentUserId) || user2Id.equals(currentUserId)) {
-                        result.add(datasnapshot.getValue(ChatRoom.class));
+                    if (user1Id.equals(currentUserId) || user2Id.equals(currentUserId)) {
+                        ChatRoom room = datasnapshot.getValue(ChatRoom.class);
+                        result.add(room);
+                        expectedCallbacks.incrementAndGet();
+
+                        if (currentUserId.equals(room.getUser1Id())) {
+                            userRepository.getUserWith(room.getUser2Id(), new UserRepository.UserCallback() {
+                                @Override
+                                public void onSuccess(User user) {
+                                    room.setRoomName(user.getUsername());
+                                    room.setImagePath(user.getImagePath());
+                                    if (completedCallbacks.incrementAndGet() == expectedCallbacks.get()) {
+                                        // All callbacks completed, populate data and update LiveData
+                                        populateDataAndNotify(result);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    if (completedCallbacks.incrementAndGet() == expectedCallbacks.get()) {
+                                        // All callbacks completed, populate data and update LiveData
+                                        populateDataAndNotify(result);
+                                    }
+                                }
+                            });
+                        } else {
+                            userRepository.getUserWith(room.getUser1Id(), new UserRepository.UserCallback() {
+                                @Override
+                                public void onSuccess(User user) {
+                                    room.setRoomName(user.getUsername());
+                                    room.setImagePath(user.getImagePath());
+                                    if (completedCallbacks.incrementAndGet() == expectedCallbacks.get()) {
+                                        // All callbacks completed, populate data and update LiveData
+                                        populateDataAndNotify(result);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    if (completedCallbacks.incrementAndGet() == expectedCallbacks.get()) {
+                                        // All callbacks completed, populate data and update LiveData
+                                        populateDataAndNotify(result);
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
-                _mldChatRoomList.setValue(Resource.success(result));
             }
 
             @Override
@@ -91,18 +138,42 @@ public class ChatRoomRepository {
                 Log.e("Firebase", "Error retrieving chatroom data" + error.getMessage());
             }
         };
-        ref.addValueEventListener(listener);
 
+        ref.addValueEventListener(listener);
         return _mldChatRoomList;
     }
+
+    private void populateDataAndNotify(List<ChatRoom> result) {
+        for (ChatRoom room : result) {
+            Log.e("roomName", room.getRoomName());
+            Log.e("imagePath", room.getImagePath());
+        }
+
+        _mldChatRoomList.setValue(Resource.success(result));
+    }
+
+
     public void updateAllChatRoom() {
 
     }
 
-    public void createNewChatRoom() {
+    public ChatRoom createNewChatRoom() {
         String roomId = ref.push().getKey();
-        ChatRoom room2 = new ChatRoom(roomId, getCurrentUserUID(), "lqPv1mxDkVe3O6dZCkzN28OgNKF2", "Vừa nãy t đến xong về", System.currentTimeMillis());
+        ChatRoom room2 = new ChatRoom(roomId, fbHelper.getAuth().getCurrentUser().getUid(), "03oJJtgjDlMjZkIQl65anPzEvm62", "", System.currentTimeMillis());
+        userRepository.getUserWith(fbHelper.getAuth().getCurrentUser().getUid(), new UserRepository.UserCallback() {
+            @Override
+            public void onSuccess(User user) {
+                room2.setRoomName(user.getUsername());
+                room2.setImagePath(user.getImagePath());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
         ref.child(roomId).setValue(room2);
+        return room2;
     }
 
     public String getCurrentUserUID() {

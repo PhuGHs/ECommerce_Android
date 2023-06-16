@@ -5,6 +5,14 @@ import static android.content.ContentValues.TAG;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,42 +21,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
-import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.model.ChatRoom;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,6 +84,7 @@ public class AccountFragment extends Fragment {
     private FirebaseHelper firebaseHelper;
     private ProfileViewModel viewModel;
     private VoucherViewModel voucherViewModel;
+    private ChatRoomViewModel chatRoomViewModel;
     private String name;
     private String imagePath;
     private TextView name_tv;
@@ -105,6 +97,7 @@ public class AccountFragment extends Fragment {
     private String size_text = "";
     private SkeletonScreen voucher_screen, orderprogress_screeen, feedback_screen, ava_screen;
     private SkeletonScreen profile_screen, recep_screeen, history_screen, chat_screen, logout_screen;
+    private UserRepository userRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +115,8 @@ public class AccountFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        userRepository = new UserRepository();
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
@@ -242,7 +236,30 @@ public class AccountFragment extends Fragment {
         chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.chatFragment);
+                chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
+                    switch (resource.status) {
+                        case LOADING:
+                            break;
+                        case ERROR:
+                            break;
+                        case SUCCESS:
+                            Bundle bundle = new Bundle();
+                            if(resource.data.isEmpty()) {
+                                ChatRoom room2 = chatRoomViewModel.createNewChatRoom();
+                                bundle.putString("roomId", room2.getChatRoomId());
+                                bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
+                                bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
+                            } else {
+                                bundle.putString("roomId", resource.data.get(0).getChatRoomId());
+                                bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
+                                bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
+                                bundle.putString("roomName", resource.data.get(0).getRoomName());
+                                bundle.putString("imagePath", resource.data.get(0).getImagePath());
+                            }
+                            navController.navigate(R.id.action_accountFragment_to_chatFragment, bundle);
+                            break;
+                    }
+                });
             }
         });
         logout_btn.setOnClickListener(new View.OnClickListener() {
@@ -254,10 +271,10 @@ public class AccountFragment extends Fragment {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 MainActivity mainActivity = (MainActivity) getContext();
-                                RegisterLoginActivity.sessionManager.clearSession();
-                                mainActivity.finish();
+                                mAuth.signOut();
                                 CustomToast signOutToast = new CustomToast();
                                 signOutToast.ShowToastMessage(getActivity(), 1, "Đăng xuất thành công");
+                                mainActivity.finish();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
