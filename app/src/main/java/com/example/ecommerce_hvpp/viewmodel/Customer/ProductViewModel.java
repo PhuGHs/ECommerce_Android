@@ -60,11 +60,11 @@ public class ProductViewModel extends ViewModel {
 
         this.context = context;
         getAllProduct();
-        initListBestSellerLiveData();
     }
     public void initData(){
         initCategories();
         initListNewArrivalsLiveData();
+        initListBestSellerLiveData();
         initListFavoriteLiveData();
         initUserCart();
     }
@@ -73,7 +73,7 @@ public class ProductViewModel extends ViewModel {
 
         SQLiteDatabase db = context.openOrCreateDatabase("PD.db", 0, null);
 
-        String query = "SELECT * FROM PRODUCT ";
+        String query = "SELECT * FROM PRODUCT WHERE Status != 'disabled' ";
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToNext();
         while (cursor.isAfterLast() == false){
@@ -97,6 +97,7 @@ public class ProductViewModel extends ViewModel {
 
             listAllProduct.put(id, new Product(id, name, club, nation, season, desc, price, point, sizeM, sizeL, sizeXL, URLmain, URLsub1, URLsub2, URLthumb, status, timeAdded * 1000));
 
+            Log.d("Get list all product", id);
             cursor.moveToNext();
         }
     }
@@ -117,7 +118,9 @@ public class ProductViewModel extends ViewModel {
         data.put("status", "Pending");
         data.put("totalPrice", totalPrice);
 
-        helper.getDb().collection("Order").document(customer_id + estimateDate)
+        String document_id = helper.getDb().collection("Order").document().getId();
+
+        helper.getDb().collection("Order").document(document_id)
                 .set(data)
                 .addOnSuccessListener(unused -> {
                     Log.d("Create Order", "success");
@@ -135,7 +138,7 @@ public class ProductViewModel extends ViewModel {
                             item.put("product_id", cart.getProduct().getId());
                             item.put("quantity", cart.getQuantity());
                             item.put("size", cart.getSize());
-                            helper.getDb().collection("Order").document(customer_id + estimateDate)
+                            helper.getDb().collection("Order").document(document_id)
                                     .collection("items").document(cart.getProduct().getId() + cart.getSize() + cart.getQuantity())
                                     .set(item)
                                     .addOnSuccessListener(unused -> Log.d("Order items", "success"))
@@ -448,8 +451,9 @@ public class ProductViewModel extends ViewModel {
         }
         //find top 3
         Set<String> keys = listRevenue.keySet();
-        for (int j = 0; j < 3; j++){
-            long max = 0;
+        long max = 1;
+        while (max > 0){
+            max = 0;
             String best = "";
             for (String key : keys){
                 if (listRevenue.get(key).getQuantity() > max) {
@@ -457,9 +461,12 @@ public class ProductViewModel extends ViewModel {
                     best = key;
                 }
             }
-            Log.d("Best", best);
-            listBestSeller.add(listAllProduct.get(best));
-            listRevenue.get(best).resetQuantity();
+            Log.d("Best seller", best);
+            if (listAllProduct.get(best) != null){
+                listBestSeller.add(listAllProduct.get(best));
+            }
+            if (listBestSeller.size() == 4) break;
+            if (!best.equals("")) listRevenue.get(best).resetQuantity();
         }
         mldListBestSeller.setValue(listBestSeller);
     }
@@ -467,14 +474,15 @@ public class ProductViewModel extends ViewModel {
     private void initListNewArrivalsLiveData() {
         listNewArrivals = new ArrayList<>();
 
-        helper.getCollection("Product").orderBy("time_added").limit(4).get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                        String id = documentSnapshot.getString("id");
-                        listNewArrivals.add(listAllProduct.get(id));
-                    }
-                    mldListNewArrivals.setValue(listNewArrivals);
-                });
+        SQLiteDatabase db = context.openOrCreateDatabase("PD.db", 0, null);
+        String query = "SELECT ID FROM PRODUCT WHERE Status != 'disabled' ORDER BY TimeAdded DESC Limit 4";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToNext();
+        while (cursor.isAfterLast() == false){
+            listNewArrivals.add(listAllProduct.get(cursor.getString(0)));
+            cursor.moveToNext();
+        }
+        mldListNewArrivals.setValue(listNewArrivals);
     }
 
     public MutableLiveData<List<Product>> getMldListNewArrivals() {
