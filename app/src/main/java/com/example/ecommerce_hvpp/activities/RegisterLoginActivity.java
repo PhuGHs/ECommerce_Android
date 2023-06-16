@@ -19,22 +19,13 @@ import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.Product;
-import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
-import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.google.api.LogDescriptor;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -80,7 +71,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     @Override
     protected void onStart() {
         super.onStart();
-        MainActivity.PDviewModel = new ProductViewModel();
 
         Branch.sessionBuilder(this).withCallback(new Branch.BranchUniversalReferralInitListener() {
             @Override
@@ -98,40 +88,15 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         }).withData(this.getIntent().getData()).init();
 
         Log.i("init", "init");
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                /*MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
-                            Log.i("Register", "onStart inside success");
-                            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-                            scheduledExecutorService.schedule(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
-                                    intent.putExtra("productID", iD);
-                                    Log.i("iD", iD);
-                                    startActivity(intent);
-                                }
-                            }, 2, TimeUnit.SECONDS);
-                        } else if (fbHelper.getAuth().getCurrentUser() != null){
-                            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-                            scheduledExecutorService.schedule(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                }
-                            }, 2, TimeUnit.SECONDS);
-                        }
-                    }
-                });*/
-            }
-        });
+        if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
+            Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
+            intent.putExtra("productID", iD);
+            Log.i("iD", iD);
+            startActivity(intent);
+        } else if(fbHelper.getAuth().getCurrentUser() != null) {
+            Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

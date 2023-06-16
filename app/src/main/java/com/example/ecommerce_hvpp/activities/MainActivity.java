@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
         super.onCreate(savedInstanceState);
         fbHelper = FirebaseHelper.getInstance();
         setContentView(R.layout.activity_main);
-        PDviewModel.initData();
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
 
