@@ -110,9 +110,7 @@ public class EditRecepInfoFragment extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("Previous", "Account");
-                navController.navigate(R.id.RecepientInfoFragment, bundle);
+                navController.popBackStack();
             }
         });
 

@@ -34,6 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/price_of_order"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="$14.99"
                 android:textSize="60px"
                 android:textColor="@color/primary"

@@ -204,7 +204,7 @@ public class EditProfileFrament extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.accountFragment);
+                navController.popBackStack();
             }
         });
         change_ava_btn.setOnClickListener(new View.OnClickListener() {

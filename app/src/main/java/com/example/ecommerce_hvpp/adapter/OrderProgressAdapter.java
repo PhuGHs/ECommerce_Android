@@ -1,8 +1,5 @@
 package com.example.ecommerce_hvpp.adapter;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.fragments.customer_fragments.OrderProgressFragment;
 import com.example.ecommerce_hvpp.model.Order;
-import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.repositories.customerRepositories.RecepInfoRepository;
-import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.OrderViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdapter.DataViewHolder>{
     private OrderProgressFragment parent;
@@ -67,7 +60,7 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
             holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pending));
             holder.confirm_btn.setVisibility(View.INVISIBLE);
         }
-        else if (order.getStatus().equals("Confirmed")){
+        else if (order.getStatus().equals("Received")){
             holder.status_tv.setText("The order has been confirmed");
             holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.confirmed));
             holder.confirm_btn.setVisibility(View.INVISIBLE);

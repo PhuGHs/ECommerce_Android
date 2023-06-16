@@ -22,6 +22,7 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,7 +45,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     private ViewModelProvider vmProvider;
     public static SessionManager sessionManager;
     private FirebaseHelper fbHelper;
-    private String iD;
+    private String iD = "";
 
     @Override
     protected void onStart() {
@@ -75,7 +76,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
                 MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
                     @Override
                     public void run() {
-                        if(fbHelper.getAuth().getCurrentUser() != null) {
+                        if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
                             Log.i("Register", "onStart inside success");
                             ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
                             scheduledExecutorService.schedule(new Runnable() {
@@ -84,6 +85,15 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
                                     Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                                     intent.putExtra("productID", iD);
                                     Log.i("iD", iD);
+                                    startActivity(intent);
+                                }
+                            }, 2, TimeUnit.SECONDS);
+                        } else if (fbHelper.getAuth().getCurrentUser() != null){
+                            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+                            scheduledExecutorService.schedule(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
                             }, 2, TimeUnit.SECONDS);

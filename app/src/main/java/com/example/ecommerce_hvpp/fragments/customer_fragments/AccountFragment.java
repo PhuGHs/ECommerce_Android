@@ -22,12 +22,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
-import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.ChatRoom;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
@@ -95,6 +93,7 @@ public class AccountFragment extends Fragment {
     private LinearLayout voucher_btn, orderprogress_btn, feedback_btn;
     private RelativeLayout profile_btn, recep_info_btn, order_history_btn, chat_with_admin_btn, logout_btn;
     private String size_text = "";
+    private SkeletonScreen skeView;
     private SkeletonScreen voucher_screen, orderprogress_screeen, feedback_screen, ava_screen;
     private SkeletonScreen profile_screen, recep_screeen, history_screen, chat_screen, logout_screen;
     private UserRepository userRepository;
@@ -140,16 +139,7 @@ public class AccountFragment extends Fragment {
            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
                switch (userInfoResource.status){
                    case LOADING:
-                       voucher_screen = Skeleton.bind(voucher_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       orderprogress_screeen = Skeleton.bind(orderprogress_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       feedback_screen = Skeleton.bind(feedback_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       ava_screen = Skeleton.bind(ava_image).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-
-                       profile_screen = Skeleton.bind(profile_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       recep_screeen = Skeleton.bind(recep_info_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       history_screen = Skeleton.bind(order_history_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       chat_screen = Skeleton.bind(chat_with_admin_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
-                       logout_screen = Skeleton.bind(logout_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+//                       skeView = Skeleton.bind(v).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
                        break;
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
@@ -163,15 +153,16 @@ public class AccountFragment extends Fragment {
 
                        name_tv.setText(name);
 
-                       voucher_screen.hide();
-                       orderprogress_screeen.hide();
-                       feedback_screen.hide();
-                       ava_screen.hide();
-                       profile_screen.hide();
-                       recep_screeen.hide();
-                       history_screen.hide();
-                       chat_screen.hide();
-                       logout_screen.hide();
+//                       voucher_screen.hide();
+//                       orderprogress_screeen.hide();
+//                       feedback_screen.hide();
+//                       ava_screen.hide();
+//                       profile_screen.hide();
+//                       recep_screeen.hide();
+//                       history_screen.hide();
+//                       chat_screen.hide();
+//                       logout_screen.hide();
+//                       skeView.hide();
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -236,6 +227,19 @@ public class AccountFragment extends Fragment {
         chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                chatRoomViewModel.checkIfHasRoomBefore().observe(getViewLifecycleOwner(), resource2 -> {
+                    switch (resource2.status) {
+                        case SUCCESS:
+                            if(resource2.data.isEmpty()) {
+                                chatRoomViewModel.createNewChatRoom();
+                                Log.e("come to create", "true");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
                 chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
                     switch (resource.status) {
                         case LOADING:
@@ -244,18 +248,12 @@ public class AccountFragment extends Fragment {
                             break;
                         case SUCCESS:
                             Bundle bundle = new Bundle();
-                            if(resource.data.isEmpty()) {
-                                ChatRoom room2 = chatRoomViewModel.createNewChatRoom();
-                                bundle.putString("roomId", room2.getChatRoomId());
-                                bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
-                                bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
-                            } else {
-                                bundle.putString("roomId", resource.data.get(0).getChatRoomId());
-                                bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
-                                bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
-                                bundle.putString("roomName", resource.data.get(0).getRoomName());
-                                bundle.putString("imagePath", resource.data.get(0).getImagePath());
-                            }
+                            bundle.putString("roomId", resource.data.get(0).getChatRoomId());
+                            bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
+                            bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
+                            bundle.putString("roomName", resource.data.get(0).getRoomName());
+                            bundle.putString("imagePath", resource.data.get(0).getImagePath());
+
                             navController.navigate(R.id.action_accountFragment_to_chatFragment, bundle);
                             break;
                     }
@@ -299,7 +297,7 @@ public class AccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             int count = 0;
                             for (DocumentSnapshot document : task.getResult()) {
-                                if (document.getString("customerId").equals(fbUser.getUid()) && !(document.getString("status").equals("Confirmed"))){
+                                if (document.getString("customerId").equals(fbUser.getUid()) && !(document.getString("status").equals("Received"))){
                                     count++;
                                 }
                             }

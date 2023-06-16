@@ -9,7 +9,6 @@ import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -191,7 +190,7 @@ public class OrderRepository {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("id").equals(order_id) && snapshot.getString("customerId").equals(UID)){
                             DocumentReference ref = fs.collection("Order").document(snapshot.getId());
-                            ref.update("status", "Confirmed");
+                            ref.update("status", "Received");
                             Log.d(TAG, "cap nhat thanh cong");
                         }
                     }

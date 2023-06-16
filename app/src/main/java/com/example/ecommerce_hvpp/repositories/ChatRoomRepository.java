@@ -148,8 +148,33 @@ public class ChatRoomRepository {
             Log.e("roomName", room.getRoomName());
             Log.e("imagePath", room.getImagePath());
         }
-
         _mldChatRoomList.setValue(Resource.success(result));
+    }
+
+    public LiveData<Resource<List<ChatRoom>>> checkIfHasRoomBefore() {
+        String currentUserId = getCurrentUserUID();
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<ChatRoom> result = new ArrayList<>();
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    String user1Id = datasnapshot.child("user1Id").getValue(String.class);
+                    String user2Id = datasnapshot.child("user2Id").getValue(String.class);
+                    if(user1Id.equals(currentUserId) || user2Id.equals(currentUserId)) {
+                        result.add(datasnapshot.getValue(ChatRoom.class));
+                    }
+                }
+                _mldChatRoomList.setValue(Resource.success(result));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error retrieving chatroom data" + error.getMessage());
+            }
+        };
+        ref.addValueEventListener(listener);
+
+        return _mldChatRoomList;
     }
 
 
