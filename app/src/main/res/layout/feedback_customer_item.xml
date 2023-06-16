@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             style="@style/font_crimson_italic"
             android:textSize="50px"
-            android:text="09:09 21/05/2023"/>
+            android:text="21/05/2123"/>
         <RatingBar
             android:id="@+id/ratingBarDetailItem"
             android:layout_width="wrap_content"
@@ -43,5 +43,10 @@
             android:textSize="60px"
             android:textColor="@color/primary"
             android:text="No comment yet"/>
+        <LinearLayout
+            android:layout_margin="15px"
+            android:background="@color/primary"
+            android:layout_width="match_parent"
+            android:layout_height="2px"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

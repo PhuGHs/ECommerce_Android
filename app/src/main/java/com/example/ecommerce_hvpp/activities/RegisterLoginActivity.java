@@ -1,7 +1,10 @@
 package com.example.ecommerce_hvpp.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +19,16 @@ import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.model.Revenue;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RegisterLoginViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.api.LogDescriptor;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -48,6 +56,28 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     private String iD = "";
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login_register);
+        Log.i("Register", "onCreate");
+        noInternetLayout = findViewById(R.id.noInternetLayout);
+        hasInternetLayout = findViewById(R.id.hasInternetLayout);
+        sessionManager = new SessionManager(this);
+        getDataToLocalDB();
+
+        fbHelper = FirebaseHelper.getInstance();
+        networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
+        networkChangeBroadcastReceiver.setListener(this);
+        tryAgainButton = findViewById(R.id.btnTryAgain);
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.navigate(R.id.loginFragment);
+
+        vmProvider = new ViewModelProvider(this);
+        viewModel = vmProvider.get(RegisterLoginViewModel.class);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         MainActivity.PDviewModel = new ProductViewModel();
@@ -73,7 +103,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
+                /*MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
                     @Override
                     public void run() {
                         if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
@@ -99,7 +129,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
                             }, 2, TimeUnit.SECONDS);
                         }
                     }
-                });
+                });*/
             }
         });
     }
@@ -126,24 +156,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         }).reInit();
 
         Log.i("reinit", "reinit");
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_register);
-        Log.i("Register", "onCreate");
-        noInternetLayout = findViewById(R.id.noInternetLayout);
-        hasInternetLayout = findViewById(R.id.hasInternetLayout);
-        fbHelper = FirebaseHelper.getInstance();
-        networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
-        networkChangeBroadcastReceiver.setListener(this);
-        tryAgainButton = findViewById(R.id.btnTryAgain);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        navController.navigate(R.id.loginFragment);
-
-        vmProvider = new ViewModelProvider(this);
-        viewModel = vmProvider.get(RegisterLoginViewModel.class);
     }
 
     @Override
@@ -181,5 +193,89 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         } else {
             showNoNetworkLayout();
         }
+    }
+    public void getDataToLocalDB(){
+        SQLiteDatabase db = openOrCreateDatabase("PD.db", MODE_PRIVATE, null);
+        String query = "SELECT name FROM sqlite_master WHERE type='table' AND name = 'PRODUCT';";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()){
+            Log.d("SQLite","Database created");
+        }
+        else {
+            Log.d("SQLite", "Creating database");
+
+            // create table
+            String createProductTable = "CREATE TABLE PRODUCT(ID TEXT Primary Key, Name TEXT, " +
+                    "Club TEXT, Nation TEXT, Season TEXT, Description TEXT, PointAvg REAL, " +
+                    "Price REAL, Status TEXT, SizeM INTEGER, SizeL INTEGER, SizeXL INTEGER, " +
+                    "TimeAdded INTEGER, URLmain TEXT, URLsub1 TEXT, URLsub2 TEXT, URLthumb TEXT)";
+            db.execSQL(createProductTable);
+            String createRevenueTable = "CREATE TABLE REVENUE(ID INTEGER Primary Key AUTOINCREMENT, ProductID TEXT, Quantity INTEGER)";
+            db.execSQL(createRevenueTable);
+        }
+
+        //insert data to product table
+        FirebaseHelper helper = FirebaseHelper.getInstance();
+        helper.getCollection("Product")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("Get all product", "Success");
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        ContentValues product = new ContentValues();
+                        String product_id = documentSnapshot.getString("id");
+                        product.put("ID", documentSnapshot.getString("id"));
+
+                        String name = documentSnapshot.getString("name");
+                        product.put("Name", documentSnapshot.getString("name"));
+                        product.put("Club", documentSnapshot.getString("club"));
+                        product.put("Nation", documentSnapshot.getString("nation"));
+                        product.put("Season", documentSnapshot.getString("season"));
+                        product.put("Description", documentSnapshot.getString("description"));
+                        product.put("PointAvg", documentSnapshot.getDouble("pointAvg"));
+                        product.put("Price", documentSnapshot.getDouble("price"));
+                        product.put("Status", documentSnapshot.getString("status"));
+                        product.put("SizeM", documentSnapshot.getLong("size_m"));
+                        product.put("SizeL", documentSnapshot.getLong("size_l"));
+                        product.put("SizeXL", documentSnapshot.getLong("size_xl"));
+                        product.put("TimeAdded", documentSnapshot.getTimestamp("time_added").getSeconds());
+                        product.put("URLmain", documentSnapshot.getString("url_main"));
+                        product.put("URLsub1", documentSnapshot.getString("url_sub1"));
+                        product.put("URLsub2", documentSnapshot.getString("url_sub2"));
+                        product.put("URLthumb", documentSnapshot.getString("url_thumb"));
+
+                        Log.d("Get product to SQLite", name);
+                        long result = db.insertWithOnConflict("PRODUCT", null, product, SQLiteDatabase.CONFLICT_REPLACE);
+                        if (result != - 1) Log.d("GET PRODUCT TO SQLite", "Success");
+                    }
+                })
+                .addOnFailureListener(e -> Log.d("Get product to SQLite", "Failure"));
+        helper.getCollection("Order").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        for (QueryDocumentSnapshot document : task.getResult()){
+                            String document_id = document.getId();
+
+                            helper.getCollection("Order").document(document_id).collection("items")
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()){
+                                            //get all revenue
+                                            for (QueryDocumentSnapshot items1 : task1.getResult()){
+                                                String product_id = items1.getString("product_id");
+                                                long quantity = items1.getLong("quantity");
+
+                                                ContentValues revenue = new ContentValues();
+                                                revenue.put("ProductID", product_id);
+                                                revenue.put("Quantity", quantity);
+
+                                                long result = db.insertWithOnConflict("REVENUE", null, revenue, SQLiteDatabase.CONFLICT_REPLACE);
+                                                if (result != - 1) Log.d("GET REVENUE TO SQLite", "Success");
+                                                Log.d("Revenue", product_id + quantity);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 }
