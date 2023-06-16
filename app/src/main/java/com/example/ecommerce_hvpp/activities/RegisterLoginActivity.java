@@ -55,7 +55,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
         sessionManager = new SessionManager(this);
         getDataToLocalDB();
-
         fbHelper = FirebaseHelper.getInstance();
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);

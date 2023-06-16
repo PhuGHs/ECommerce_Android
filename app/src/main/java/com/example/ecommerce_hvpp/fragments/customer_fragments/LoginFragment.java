@@ -123,6 +123,8 @@ public class LoginFragment extends Fragment {
                             break;
                     }
                 });
+
+                viewModel.insertVoucherForNewUser();
             }
         });
 

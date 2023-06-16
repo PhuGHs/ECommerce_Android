@@ -1,9 +1,12 @@
 package com.example.ecommerce_hvpp.fragments.admin_fragments;
 
+import static com.example.ecommerce_hvpp.activities.MainActivity.PDviewModel;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayOrdersDataStatistics;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayProductSoldDataStatistics;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayRevenueDataStatistics;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayVisitorsDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthClubDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthNationDataStatistics;
 import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 
 import android.annotation.SuppressLint;
@@ -58,8 +61,7 @@ public class AdminProfileFragment extends Fragment {
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private Uri thumbnailImage;
-    private ContentResolver contentResolver;
-    private String path;
+    String path;
     Disposable disposable;
 
     @Nullable
@@ -180,6 +182,9 @@ public class AdminProfileFragment extends Fragment {
         getOrdersDataStatistics();
         getProductSoldDataStatistics();
         getRevenueDataStatistics();
+
+        getClubDataStatistics();
+        getNationDataStatistics();
     }
 
     private void getVisitorsDataStatistics() {
@@ -212,6 +217,24 @@ public class AdminProfileFragment extends Fragment {
     private void getRevenueDataStatistics() {
         Observer<Resource<Map<String, Double>>> observer = getObserverRevenueDataStatistic();
         Observable<Resource<Map<String, Double>>> observable = repo.getObservableRevenueDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    private void getClubDataStatistics() {
+        Observer<Resource<Map<String, Map<String, Integer>>>> observer = getObserverClubDataStatistic();
+        Observable<Resource<Map<String, Map<String, Integer>>>> observable = repo.getObservableClubDataStatistics();
+
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    private void getNationDataStatistics() {
+        Observer<Resource<Map<String, Map<String, Integer>>>> observer = getObserverNationDataStatistic();
+        Observable<Resource<Map<String, Map<String, Integer>>>> observable = repo.getObservableNationDataStatistics();
 
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -357,6 +380,86 @@ public class AdminProfileFragment extends Fragment {
                         // handle data here from resource
                         dayRevenueDataStatistics = resource.data;
                         assert dayRevenueDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    private Observer<Resource<Map<String, Map<String, Integer>>>> getObserverClubDataStatistic() {
+        return new Observer<Resource<Map<String, Map<String, Integer>>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Map<String, Integer>>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        monthClubDataStatistics = resource.data;
+                        assert monthClubDataStatistics != null;
+
+                        break;
+                    case ERROR:
+                        Log.e("VuError", resource.message);
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                // Handle error state if needed
+            }
+
+            @Override
+            public void onComplete() {
+                // Handle completion if needed
+                Log.e("Vucoder", "onComplete");
+            }
+        };
+    }
+
+    private Observer<Resource<Map<String, Map<String, Integer>>>> getObserverNationDataStatistic() {
+        return new Observer<Resource<Map<String, Map<String, Integer>>>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                // Perform any setup here if needed
+                disposable = d;
+            }
+
+            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
+            @Override
+            public void onNext(@NonNull Resource<Map<String, Map<String, Integer>>> resource) {
+                switch (resource.status) {
+                    case LOADING:
+                        // Handle loading state if needed
+                        break;
+                    case SUCCESS:
+                        // handle data here from resource
+                        monthNationDataStatistics = resource.data;
+                        assert monthNationDataStatistics != null;
 
                         break;
                     case ERROR:
