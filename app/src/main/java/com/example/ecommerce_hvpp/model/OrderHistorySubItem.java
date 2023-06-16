@@ -2,6 +2,7 @@ package com.example.ecommerce_hvpp.model;
 
 public class OrderHistorySubItem {
     private String ProductID;
+    private String OrderID;
     private String ImagePath_subItem;
     private String Name_subItem;
     private String Quantity_subItem;
@@ -24,6 +25,13 @@ public class OrderHistorySubItem {
         this.Sum_subItem = sum_subItem;
         this.isReviewed = isReviewed;
     }
+    public OrderHistorySubItem(String imagePath_subItem, String name_subItem, String quantity_subItem, double sum_subItem, String orderID){
+        this.ImagePath_subItem = imagePath_subItem;
+        this.Name_subItem = name_subItem;
+        this.Quantity_subItem = quantity_subItem;
+        this.Sum_subItem = sum_subItem;
+        this.OrderID = orderID;
+    }
     public String getImagePath_subItem() {
         return ImagePath_subItem;
     }
@@ -32,7 +40,9 @@ public class OrderHistorySubItem {
         return Name_subItem;
     }
 
-
+    public String getOrderID() {
+        return OrderID;
+    }
 
     public String getQuantity_subItem() {
         return Quantity_subItem;

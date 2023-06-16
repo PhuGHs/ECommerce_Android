@@ -1,6 +1,9 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -37,5 +40,13 @@ public class OrderHistoryViewModel extends ViewModel {
     public LiveData<Double> showTotalSum(){
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         return repo.getTotal_of_MoneyPaid(fbUser.getUid());
+    }
+    public void getFirstItem(Context view, String orderId , ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.getFirst_Item(view, fbUser.getUid(), orderId ,image_item, name_item_tv, quantity_item_tv, price_item_tv);
+    }
+    public LiveData<OrderHistorySubItem> getFirstItem(String order_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        return repo.getFirstItem(fbUser.getUid(), order_id);
     }
 }

@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +11,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,29 +33,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.AdminProductImageSlider;
-import com.example.ecommerce_hvpp.model.ItemModel;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -141,7 +134,6 @@ public class EditProfileFrament extends Fragment {
                     thumbnailImage = data.getData();
                     Log.d(TAG, "link" + thumbnailImage);
                     Glide.with(getContext()).load(thumbnailImage).fitCenter().into(ava_image);
-                    path = thumbnailImage.toString();
                     //viewModel.uploadAvatar(contentResolver, user, thumbnailImage);
                 }
             }
@@ -212,7 +204,7 @@ public class EditProfileFrament extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.accountFragment);
+                navController.popBackStack();
             }
         });
         change_ava_btn.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +290,7 @@ public class EditProfileFrament extends Fragment {
         user.setEmail(email);
         user.setImagePath(path);
         Log.d(TAG, "link" + path);
-        viewModel.updateUser(user);
+        viewModel.updateUser(user, contentResolver, thumbnailImage);
     }
     private void processSelectedImage(Uri imageUri) {
         //SlideAdapter.addItem(new ItemModel(imageUri, null));

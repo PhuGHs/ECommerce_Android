@@ -8,6 +8,7 @@ public class ChatRoom {
     private String lastMessage;
     private String roomName;
     private long lastMessageTimeStamp;
+    private String imagePath;
 
     public ChatRoom(String id, String user1Id,String user2Id, String lastMessage, long lastMessageTimeStamp) {
         this.id = id;
@@ -78,5 +79,13 @@ public class ChatRoom {
 
     public String getRecipientId() {
         return recipientId;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

@@ -5,6 +5,14 @@ import static android.content.ContentValues.TAG;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,38 +21,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
-import com.example.ecommerce_hvpp.model.Voucher;
+import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
+import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +82,7 @@ public class AccountFragment extends Fragment {
     private FirebaseHelper firebaseHelper;
     private ProfileViewModel viewModel;
     private VoucherViewModel voucherViewModel;
+    private ChatRoomViewModel chatRoomViewModel;
     private String name;
     private String imagePath;
     private TextView name_tv;
@@ -96,7 +90,13 @@ public class AccountFragment extends Fragment {
     private TextView number_of_orderprogress_tv;
     private TextView number_of_feedback_tv;
     private ImageView ava_image;
+    private LinearLayout voucher_btn, orderprogress_btn, feedback_btn;
+    private RelativeLayout profile_btn, recep_info_btn, order_history_btn, chat_with_admin_btn, logout_btn;
     private String size_text = "";
+    private SkeletonScreen skeView;
+    private SkeletonScreen voucher_screen, orderprogress_screeen, feedback_screen, ava_screen;
+    private SkeletonScreen profile_screen, recep_screeen, history_screen, chat_screen, logout_screen;
+    private UserRepository userRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,12 +114,23 @@ public class AccountFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
+        userRepository = new UserRepository();
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         name_tv = v.findViewById(R.id.name_tv);
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
         number_of_feedback_tv = v.findViewById(R.id.number_feedback);
         ava_image = v.findViewById(R.id.image_of_user);
+
+        voucher_btn = (LinearLayout) v.findViewById(R.id.btn_voucher);
+        orderprogress_btn = (LinearLayout) v.findViewById(R.id.btn_orderprogress);
+        feedback_btn = (LinearLayout) v.findViewById(R.id.btn_feedback);
+
+        profile_btn = (RelativeLayout) v.findViewById(R.id.btn_profile);
+        recep_info_btn = (RelativeLayout) v.findViewById(R.id.btn_recep_info);
+        order_history_btn = (RelativeLayout) v.findViewById(R.id.btn_orderhistory);
+        chat_with_admin_btn = (RelativeLayout) v.findViewById(R.id.btn_chat_with_admin);
+        logout_btn = (RelativeLayout) v.findViewById(R.id.btn_logout);
 
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
@@ -128,6 +139,7 @@ public class AccountFragment extends Fragment {
            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
                switch (userInfoResource.status){
                    case LOADING:
+//                       skeView = Skeleton.bind(v).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
                        break;
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
@@ -140,8 +152,17 @@ public class AccountFragment extends Fragment {
                        }
 
                        name_tv.setText(name);
-                       setQuantity(number_of_orderprogress_tv, "Order");
-                       setQuantityFeedback(number_of_feedback_tv, "Feedback");
+
+//                       voucher_screen.hide();
+//                       orderprogress_screeen.hide();
+//                       feedback_screen.hide();
+//                       ava_screen.hide();
+//                       profile_screen.hide();
+//                       recep_screeen.hide();
+//                       history_screen.hide();
+//                       chat_screen.hide();
+//                       logout_screen.hide();
+//                       skeView.hide();
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -151,6 +172,8 @@ public class AccountFragment extends Fragment {
            });
         }
         voucherViewModel.showNumofVoucher().observe(requireActivity(), NumofVoucher -> number_of_voucher_tv.setText(Integer.toString(NumofVoucher)));
+        setQuantity(number_of_orderprogress_tv, "Order");
+        setQuantityFeedback(number_of_feedback_tv, "Feedback");
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -158,22 +181,12 @@ public class AccountFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
 
-
-        LinearLayout voucher_btn = (LinearLayout) view.findViewById(R.id.btn_voucher);
-        LinearLayout orderprogress_btn = (LinearLayout) view.findViewById(R.id.btn_orderprogress);
-        LinearLayout feedback_btn = (LinearLayout) view.findViewById(R.id.btn_feedback);
-
-        RelativeLayout profile_btn = (RelativeLayout) view.findViewById(R.id.btn_profile);
-        RelativeLayout recep_info_btn = (RelativeLayout) view.findViewById(R.id.btn_recep_info);
-        RelativeLayout order_history_btn = (RelativeLayout) view.findViewById(R.id.btn_orderhistory);
-        RelativeLayout chat_with_admin_btn = (RelativeLayout) view.findViewById(R.id.btn_chat_with_admin);
-        RelativeLayout logout_btn = (RelativeLayout) view.findViewById(R.id.btn_logout);
-
-
         voucher_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.VoucherFragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("Previous", "Account");
+                navController.navigate(R.id.VoucherFragment, bundle);
             }
         });
         orderprogress_btn.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +212,9 @@ public class AccountFragment extends Fragment {
         recep_info_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("Previous", "Account");
+                navController.navigate(R.id.RecepientInfoFragment, bundle);
             }
         });
 
@@ -212,7 +227,37 @@ public class AccountFragment extends Fragment {
         chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.chatRoomFragment);
+                chatRoomViewModel.checkIfHasRoomBefore().observe(getViewLifecycleOwner(), resource2 -> {
+                    switch (resource2.status) {
+                        case SUCCESS:
+                            if(resource2.data.isEmpty()) {
+                                chatRoomViewModel.createNewChatRoom();
+                                Log.e("come to create", "true");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
+                    switch (resource.status) {
+                        case LOADING:
+                            break;
+                        case ERROR:
+                            break;
+                        case SUCCESS:
+                            Bundle bundle = new Bundle();
+                            bundle.putString("roomId", resource.data.get(0).getChatRoomId());
+                            bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
+                            bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
+                            bundle.putString("roomName", resource.data.get(0).getRoomName());
+                            bundle.putString("imagePath", resource.data.get(0).getImagePath());
+
+                            navController.navigate(R.id.action_accountFragment_to_chatFragment, bundle);
+                            break;
+                    }
+                });
             }
         });
         logout_btn.setOnClickListener(new View.OnClickListener() {
@@ -223,10 +268,11 @@ public class AccountFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
+                                MainActivity mainActivity = (MainActivity) getContext();
                                 mAuth.signOut();
-                                navController.navigate(R.id.loginFragment);
                                 CustomToast signOutToast = new CustomToast();
                                 signOutToast.ShowToastMessage(getActivity(), 1, "Đăng xuất thành công");
+                                mainActivity.finish();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -251,7 +297,7 @@ public class AccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             int count = 0;
                             for (DocumentSnapshot document : task.getResult()) {
-                                if (document.getString("customerId").equals(fbUser.getUid())){
+                                if (document.getString("customerId").equals(fbUser.getUid()) && !(document.getString("status").equals("Received"))){
                                     count++;
                                 }
                             }
