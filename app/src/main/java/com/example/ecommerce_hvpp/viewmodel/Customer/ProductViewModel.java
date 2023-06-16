@@ -73,7 +73,7 @@ public class ProductViewModel extends ViewModel {
 
         SQLiteDatabase db = context.openOrCreateDatabase("PD.db", 0, null);
 
-        String query = "SELECT * FROM PRODUCT WHERE Status != 'disabled' ";
+        String query = "SELECT * FROM PRODUCT";
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToNext();
         while (cursor.isAfterLast() == false){
@@ -318,7 +318,7 @@ public class ProductViewModel extends ViewModel {
                     calcTotalItemAndPriceCart();
                 });
     }
-    private void calcTotalItemAndPriceCart(){
+    public void calcTotalItemAndPriceCart(){
         double sum = 0;
         int count = 0;
         for (Cart cart : listCart){
@@ -462,7 +462,8 @@ public class ProductViewModel extends ViewModel {
                 }
             }
             Log.d("Best seller", best);
-            if (listAllProduct.get(best) != null){
+            if (best.equals("")) break;
+            if (listAllProduct.get(best).getStatus().contains("avail")){
                 listBestSeller.add(listAllProduct.get(best));
             }
             if (listBestSeller.size() == 4) break;
