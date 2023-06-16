@@ -25,12 +25,6 @@
         tools:layout="@layout/admin_fragment_product_detail" />
 
     <fragment
-        android:id="@+id/categoryFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CategoryFragment"
-        android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
-
-    <fragment
         android:id="@+id/orderedListFragment"
         android:name="com.example.ecommerce_hvpp.fragments.admin_fragments.AdminOrderedListFragment"
         android:label="admin_fragmnet_orderlist"

@@ -27,12 +27,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.MainActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:launchMode="singleTask"
-            android:exported="true">
-
 
             <!-- Branch URI scheme -->
             <intent-filter>
@@ -49,6 +43,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="wmm1a.app.link" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.MainActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:launchMode="singleTask"
+            android:exported="true">
         </activity>
         <!-- Branch init -->
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_iBgjRsYoQCo5o7y9MmN5oahovAaRG5fn" />
