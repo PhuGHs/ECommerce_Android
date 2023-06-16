@@ -3,9 +3,6 @@
     <item android:title="@string/product_list"
         android:id="@+id/productListFragment"
         android:icon="@drawable/baseline_format_list_bulleted_24"/>
-    <item android:title="@string/category2"
-        android:id="@+id/categoryFragment"
-        android:icon="@drawable/baseline_category_24" />
     <item android:title="@string/order_list"
         android:id="@+id/orderedListFragment"
         android:icon="@drawable/baseline_checklist_24"/>

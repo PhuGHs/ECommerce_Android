@@ -1,7 +1,6 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
@@ -55,15 +54,13 @@ public class ProductViewModel extends ViewModel {
 
         CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
             getAllProduct();
-            initListBestSellerLiveData();
         }); // wait get all product
         future.join();
     }
-    public void initData(){
+    public void initData(){ // get data from firebase and then put into hashmap
         initCategories();
-        initListNewArrivalsLiveData();
-        initListBestSellerLiveData();
         getListBestSeller(listRevenue);
+        initListNewArrivalsLiveData();
         initListFavoriteLiveData();
         initUserCart();
     }
@@ -427,9 +424,9 @@ public class ProductViewModel extends ViewModel {
                 });
     }
 
-    public void initListBestSellerLiveData() {
+    public CompletableFuture<Void> initListBestSellerLiveData() {
         listBestSeller = new ArrayList<>();
-
+        CompletableFuture<Void> future = new CompletableFuture<>();
         helper.getCollection("Order").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
@@ -453,11 +450,13 @@ public class ProductViewModel extends ViewModel {
                                                     listRevenue.put(product_id, new Revenue(product_id, quantity));
                                                 }
                                             }
+                                            future.complete(null);
                                         }
                                     });
                         }
                     }
                 });
+        return future;
     }
 
     private void initListNewArrivalsLiveData() {
