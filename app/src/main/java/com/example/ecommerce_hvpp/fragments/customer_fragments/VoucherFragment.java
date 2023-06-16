@@ -15,6 +15,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
 import com.example.ecommerce_hvpp.model.Voucher;

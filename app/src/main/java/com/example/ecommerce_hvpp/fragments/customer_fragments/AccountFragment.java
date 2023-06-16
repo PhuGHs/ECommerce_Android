@@ -24,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.activities.RegisterLoginActivity;
@@ -98,7 +100,11 @@ public class AccountFragment extends Fragment {
     private TextView number_of_orderprogress_tv;
     private TextView number_of_feedback_tv;
     private ImageView ava_image;
+    private LinearLayout voucher_btn, orderprogress_btn, feedback_btn;
+    private RelativeLayout profile_btn, recep_info_btn, order_history_btn, chat_with_admin_btn, logout_btn;
     private String size_text = "";
+    private SkeletonScreen voucher_screen, orderprogress_screeen, feedback_screen, ava_screen;
+    private SkeletonScreen profile_screen, recep_screeen, history_screen, chat_screen, logout_screen;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +129,16 @@ public class AccountFragment extends Fragment {
         number_of_feedback_tv = v.findViewById(R.id.number_feedback);
         ava_image = v.findViewById(R.id.image_of_user);
 
+        voucher_btn = (LinearLayout) v.findViewById(R.id.btn_voucher);
+        orderprogress_btn = (LinearLayout) v.findViewById(R.id.btn_orderprogress);
+        feedback_btn = (LinearLayout) v.findViewById(R.id.btn_feedback);
+
+        profile_btn = (RelativeLayout) v.findViewById(R.id.btn_profile);
+        recep_info_btn = (RelativeLayout) v.findViewById(R.id.btn_recep_info);
+        order_history_btn = (RelativeLayout) v.findViewById(R.id.btn_orderhistory);
+        chat_with_admin_btn = (RelativeLayout) v.findViewById(R.id.btn_chat_with_admin);
+        logout_btn = (RelativeLayout) v.findViewById(R.id.btn_logout);
+
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
 
@@ -130,6 +146,16 @@ public class AccountFragment extends Fragment {
            viewModel.showUserName().observe(requireActivity(), userInfoResource -> {
                switch (userInfoResource.status){
                    case LOADING:
+                       voucher_screen = Skeleton.bind(voucher_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       orderprogress_screeen = Skeleton.bind(orderprogress_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       feedback_screen = Skeleton.bind(feedback_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       ava_screen = Skeleton.bind(ava_image).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+
+                       profile_screen = Skeleton.bind(profile_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       recep_screeen = Skeleton.bind(recep_info_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       history_screen = Skeleton.bind(order_history_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       chat_screen = Skeleton.bind(chat_with_admin_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
+                       logout_screen = Skeleton.bind(logout_btn).load(com.ethanhua.skeleton.R.layout.layout_default_item_skeleton).show();
                        break;
                    case SUCCESS:
                        name = userInfoResource.data.getUsername();
@@ -142,8 +168,16 @@ public class AccountFragment extends Fragment {
                        }
 
                        name_tv.setText(name);
-                       setQuantity(number_of_orderprogress_tv, "Order");
-                       setQuantityFeedback(number_of_feedback_tv, "Feedback");
+
+                       voucher_screen.hide();
+                       orderprogress_screeen.hide();
+                       feedback_screen.hide();
+                       ava_screen.hide();
+                       profile_screen.hide();
+                       recep_screeen.hide();
+                       history_screen.hide();
+                       chat_screen.hide();
+                       logout_screen.hide();
                        break;
                    case ERROR:
                        CustomToast loginErrorToast = new CustomToast();
@@ -153,6 +187,8 @@ public class AccountFragment extends Fragment {
            });
         }
         voucherViewModel.showNumofVoucher().observe(requireActivity(), NumofVoucher -> number_of_voucher_tv.setText(Integer.toString(NumofVoucher)));
+        setQuantity(number_of_orderprogress_tv, "Order");
+        setQuantityFeedback(number_of_feedback_tv, "Feedback");
         return v;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -160,22 +196,12 @@ public class AccountFragment extends Fragment {
 
         navController = Navigation.findNavController(requireView());
 
-
-        LinearLayout voucher_btn = (LinearLayout) view.findViewById(R.id.btn_voucher);
-        LinearLayout orderprogress_btn = (LinearLayout) view.findViewById(R.id.btn_orderprogress);
-        LinearLayout feedback_btn = (LinearLayout) view.findViewById(R.id.btn_feedback);
-
-        RelativeLayout profile_btn = (RelativeLayout) view.findViewById(R.id.btn_profile);
-        RelativeLayout recep_info_btn = (RelativeLayout) view.findViewById(R.id.btn_recep_info);
-        RelativeLayout order_history_btn = (RelativeLayout) view.findViewById(R.id.btn_orderhistory);
-        RelativeLayout chat_with_admin_btn = (RelativeLayout) view.findViewById(R.id.btn_chat_with_admin);
-        RelativeLayout logout_btn = (RelativeLayout) view.findViewById(R.id.btn_logout);
-
-
         voucher_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.VoucherFragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("Previous", "Account");
+                navController.navigate(R.id.VoucherFragment, bundle);
             }
         });
         orderprogress_btn.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +227,9 @@ public class AccountFragment extends Fragment {
         recep_info_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("Previous", "Account");
+                navController.navigate(R.id.RecepientInfoFragment, bundle);
             }
         });
 
@@ -214,7 +242,7 @@ public class AccountFragment extends Fragment {
         chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.chatRoomFragment);
+                navController.navigate(R.id.chatFragment);
             }
         });
         logout_btn.setOnClickListener(new View.OnClickListener() {
