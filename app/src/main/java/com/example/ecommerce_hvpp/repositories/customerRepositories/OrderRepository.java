@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Order;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
@@ -64,10 +65,11 @@ public class OrderRepository {
                                     .addOnSuccessListener(documentSnapshot1 -> {
                                         List<OrderHistorySubItem> items = new ArrayList<>();
                                         for (QueryDocumentSnapshot snapshot1 : documentSnapshot1){
-                                            String image = snapshot1.getString("image");
-                                            String name = snapshot1.getString("name");
                                             long quantity = snapshot1.getLong("quantity");
-                                            double price = snapshot1.getDouble("price");
+                                            String product_id = snapshot1.getString("product_id");
+                                            String image = MainActivity.PDviewModel.listAllProduct.get(product_id).getUrlthumb();
+                                            String name = MainActivity.PDviewModel.listAllProduct.get(product_id).getName();
+                                            double price = MainActivity.PDviewModel.listAllProduct.get(product_id).getPrice() * quantity;
                                             items.add(new OrderHistorySubItem(image, name, Long.toString(quantity), price));
                                             Log.d(TAG, "get items order successfully");
                                         }
@@ -91,7 +93,7 @@ public class OrderRepository {
                     for (DocumentSnapshot snapshot : documentSnapshot){
                         if (snapshot.getString("id").equals(order_id)){
                             String address = snapshot.getString("address");
-                            String deliveryMethod = snapshot.getString("deliveryMethod");
+                            String deliveryMethod = snapshot.getString("deliverMethod");
                             Timestamp startDate = snapshot.getTimestamp("createdDate");
                             Date date_end = snapshot.getDate("receiveDate");
                             int day_remaining = getDayRemaining(date_end);

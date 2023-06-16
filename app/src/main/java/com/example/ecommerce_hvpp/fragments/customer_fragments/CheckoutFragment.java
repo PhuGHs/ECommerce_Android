@@ -169,8 +169,16 @@ public class CheckoutFragment extends Fragment {
 
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
-        navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
-        navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
+        navToAddress.setOnClickListener(view12 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Previous", "Checkout");
+            navController.navigate(R.id.RecepientInfoFragment, bundle);
+        });
+        navToVoucher.setOnClickListener(view13 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Previous", "Checkout");
+            navController.navigate(R.id.VoucherFragment, bundle);
+        });
 
         //create order
         btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, total + shipping));
