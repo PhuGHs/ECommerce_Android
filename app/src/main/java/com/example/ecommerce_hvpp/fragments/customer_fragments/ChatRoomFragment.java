@@ -65,7 +65,7 @@ public class ChatRoomFragment extends Fragment {
         rcvInboxList.setLayoutManager(new LinearLayoutManager(getContext()));
         // Initialize navController
         navController = Navigation.findNavController(requireView());
-        viewModel.getChatRoomList().observe(requireActivity(), resource -> {
+        viewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
             switch(resource.status) {
                 case LOADING:
                     break;
@@ -74,31 +74,13 @@ public class ChatRoomFragment extends Fragment {
                     if (resource.data != null) {
                         list.addAll(resource.data);
                     }
-                    Log.i(TAG, list.isEmpty() ? "null" : "not null");
                     adapter = new ChatRoomAdapter(list, this);
                     rcvInboxList.setAdapter(adapter);
+                    Log.i(TAG, list.isEmpty() ? "null" : "not null");
                     break;
                 case ERROR:
                     break;
                 default: break;
-            }
-        });
-    }
-
-    public void getChatRoomName(String recipientId) {
-
-        viewModel.getUser(recipientId).observe(requireActivity(), resource -> {
-            switch(resource.status) {
-                case LOADING:
-                    break;
-                case ERROR:
-                    Log.e(TAG, resource.message);
-                    break;
-                case SUCCESS:
-                    roomName = resource.data.getUsername();
-                    adapter.updateRoomAvatar(resource.data.getImagePath());
-                    adapter.updateRoomName(roomName);
-                    break;
             }
         });
 
@@ -119,6 +101,24 @@ public class ChatRoomFragment extends Fragment {
             }
         });
     }
+
+    public void getChatRoomName(ChatRoom room, String id) {
+        viewModel.getUser(id).observe(getViewLifecycleOwner(), resource -> {
+            switch(resource.status) {
+                case LOADING:
+                    break;
+                case ERROR:
+                    Log.e(TAG, resource.message);
+                    break;
+                case SUCCESS:
+                    room.setRoomName(resource.data.getUsername());
+                    room.setImagePath(resource.data.getImagePath());
+                    adapter.notifyDataSetChanged();
+                    break;
+            }
+        });
+    }
+
 
 
     public String getCurrentUserUID() {

@@ -61,12 +61,21 @@ public class OrderDetail implements Parcelable {
         this.size = size;
     }
 
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String size) {
+        this.product_id = product_id;
+    }
+
     private String id;
     private String image;
     private String name;
     private double price;
     private int quantity;
     private String size;
+    private String product_id;
 
     public double getTotal() {
         return quantity*price;
@@ -79,6 +88,7 @@ public class OrderDetail implements Parcelable {
         price = in.readFloat();
         quantity = in.readInt();
         size = in.readString();
+        product_id = in.readString();
     }
 
     @Override
@@ -89,6 +99,7 @@ public class OrderDetail implements Parcelable {
         dest.writeDouble(price);
         dest.writeInt(quantity);
         dest.writeString(size);
+        dest.writeString(product_id);
     }
 
     @Override

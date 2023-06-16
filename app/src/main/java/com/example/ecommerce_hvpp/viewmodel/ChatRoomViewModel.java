@@ -29,4 +29,12 @@ public class ChatRoomViewModel extends ViewModel {
     public String getCurrentUserUID() {
         return repo.getCurrentUserUID();
     }
+
+    public ChatRoom createNewChatRoom() {
+        return repo.createNewChatRoom();
+    }
+
+    public LiveData<Resource<List<ChatRoom>>> checkIfHasRoomBefore() {
+        return repo.checkIfHasRoomBefore();
+    }
 }

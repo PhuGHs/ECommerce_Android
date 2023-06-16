@@ -1,16 +1,7 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +11,25 @@ import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.adapter.ProductAdapter;
+import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Product;
+import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 
 import java.util.ArrayList;
 
@@ -77,6 +80,8 @@ public class HomeFragment extends Fragment {
     TextView productFound;
     ScrollView scrollHome;
     LinearLayout layoutSearch;
+    private ImageButton btnChat;
+    private ChatRoomViewModel chatRoomViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +96,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         return v;
     }
 
@@ -128,7 +133,37 @@ public class HomeFragment extends Fragment {
         ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
         btnNavToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
         btnNavToMessage.setOnClickListener(view12 -> {
-            //navController.navigate(R.id.detailProductCustomerFragment);
+            chatRoomViewModel.checkIfHasRoomBefore().observe(getViewLifecycleOwner(), resource2 -> {
+                switch (resource2.status) {
+                    case SUCCESS:
+                        if(resource2.data.isEmpty()) {
+                            chatRoomViewModel.createNewChatRoom();
+                            Log.e("come to create", "true");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
+                switch (resource.status) {
+                    case LOADING:
+                        break;
+                    case ERROR:
+                        break;
+                    case SUCCESS:
+                        Bundle bundle = new Bundle();
+                        bundle.putString("roomId", resource.data.get(0).getChatRoomId());
+                        bundle.putString("senderId", FirebaseHelper.getInstance().getAuth().getCurrentUser().getUid());
+                        bundle.putString("recipientId", "03oJJtgjDlMjZkIQl65anPzEvm62");
+                        bundle.putString("roomName", resource.data.get(0).getRoomName());
+                        bundle.putString("imagePath", resource.data.get(0).getImagePath());
+
+                        navController.navigate(R.id.action_homeFragment_to_chatFragment, bundle);
+                        break;
+                }
+            });
         });
 
         //search

@@ -39,6 +39,12 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
+        username = view.findViewById(R.id.reg_name);
+        email = view.findViewById(R.id.reg_email);
+        password = view.findViewById(R.id.reg_password);
+        confirmPassword = view.findViewById(R.id.reg_confirmPassword);
+        registerButton = view.findViewById(R.id.reg_btn);
+        loginButton = view.findViewById(R.id.reg_login_btn);
         viewModel = new ViewModelProvider(requireActivity()).get(RegisterLoginViewModel.class);
         return view;
     }
@@ -46,14 +52,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         navController = Navigation.findNavController(requireView());
-        username = view.findViewById(R.id.reg_name);
-        email = view.findViewById(R.id.reg_email);
-        password = view.findViewById(R.id.reg_password);
-        confirmPassword = view.findViewById(R.id.reg_confirmPassword);
-        registerButton = view.findViewById(R.id.reg_btn);
-        loginButton = view.findViewById(R.id.reg_login_btn);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,8 +169,8 @@ public class SignUpFragment extends Fragment {
                         break;
                     case SUCCESS:
                         ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.SnackBarSuccess);
-                        Snackbar.make(ctw, requireView(), "Đăng ký thành công!", Snackbar.LENGTH_LONG).show();
-                        navController.navigate(R.id.loginFragment);
+//                        Snackbar.make(ctw, requireView(), "Đăng ký thành công!", Snackbar.LENGTH_LONG).show();
+                        navController.popBackStack();
                         break;
                     case ERROR:
                         registerButton.revertAnimation();

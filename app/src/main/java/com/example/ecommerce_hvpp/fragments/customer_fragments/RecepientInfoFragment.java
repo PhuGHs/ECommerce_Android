@@ -18,6 +18,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
 import com.example.ecommerce_hvpp.model.RecepInfo;
@@ -95,7 +97,12 @@ public class RecepientInfoFragment extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.popBackStack();
+                Bundle bundle = getArguments();
+                String previous = bundle.getString("Previous");
+                if (previous.equals("Checkout")){
+                    navController.navigate(R.id.checkoutFragment);
+                }
+                else navController.navigate(R.id.accountFragment);
             }
         });
         add_btn.setOnClickListener(new View.OnClickListener() {

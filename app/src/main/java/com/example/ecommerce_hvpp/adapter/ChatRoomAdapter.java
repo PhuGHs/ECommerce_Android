@@ -55,41 +55,16 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ChatRoom ib = list.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
 
-        //decide who is recipient, who is sender
-        if(Objects.equals(ib.getUser1Id(), parent.getCurrentUserUID())) {
-            senderId =  ib.getUser1Id();
-            recipientId = ib.getUser2Id();
-        } else {
-            senderId = ib.getUser2Id();
-            recipientId = ib.getUser1Id();
-        }
-
-
-        if(!Objects.equals(parent.getCurrentUserUID(), ib.getRecipientId())) {
-            lastMessage = "You: " + ib.getLastMessage();
-        } else {
-            lastMessage = ib.getLastMessage();
-        }
-
-        // assign value
-        parent.getChatRoomName(recipientId);
-        ib.setRoomName(roomName);
-        Glide.with(parent.getContext())
-                        .load(url)
-                                .fitCenter()
-                                        .into(viewHolder.siImage);
-        viewHolder.tvRecipientName.setText(roomName);
-        viewHolder.tvLastMessage.setText(lastMessage);
-        viewHolder.tvLastMessageTimestamp.setText(getLastMessageTimeStampFormat(ib.getLastMessageTimeStamp()));
+        viewHolder.bind(ib);
 
         // implement button click and pass value to new fragment through navController bundle
         viewHolder.itemView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("roomId", ib.getChatRoomId());
-            bundle.putString("roomName", roomName);
+            bundle.putString("roomName", ib.getRoomName());
             bundle.putString("senderId", senderId);
             bundle.putString("recipientId", recipientId);
-            bundle.putString("imagePath", url);
+            bundle.putString("imagePath", ib.getImagePath());
             parent.getNavController().navigate(R.id.navigate_to_chatDetail, bundle);
         });
     }
@@ -101,12 +76,10 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void updateRoomName(String roomName) {
         this.roomName = roomName;
-        notifyDataSetChanged();
     }
 
     public void updateRoomAvatar(String url) {
         this.url = url;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -165,7 +138,28 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bind(ChatRoom ib) {
+            //decide who is recipient, who is sender
+            if(Objects.equals(ib.getUser1Id(), parent.getCurrentUserUID())) {
+                senderId =  ib.getUser1Id();
+                recipientId = ib.getUser2Id();
+            } else {
+                senderId = ib.getUser2Id();
+                recipientId = ib.getUser1Id();
+            }
 
+            if(!Objects.equals(parent.getCurrentUserUID(), ib.getRecipientId())) {
+                lastMessage = "You: " + ib.getLastMessage();
+            } else {
+                lastMessage = ib.getLastMessage();
+            }
+
+            Glide.with(itemView)
+                    .load(ib.getImagePath())
+                    .fitCenter()
+                    .into(siImage);
+            tvRecipientName.setText(ib.getRoomName());
+            tvLastMessage.setText(lastMessage);
+            tvLastMessageTimestamp.setText(getLastMessageTimeStampFormat(ib.getLastMessageTimeStamp()));
         }
     }
 
