@@ -136,7 +136,7 @@ public class AdminStatisticClubFragment extends Fragment {
     private void showDropdown(String minMonthYear, String maxMonthYear) {
         final Calendar today = Calendar.getInstance();
         int minMonth = Integer.parseInt(minMonthYear.substring(0, 2)) - 1;
-        int maxMonth = Integer.parseInt(maxMonthYear.substring(0, 2));
+        int maxMonth = Integer.parseInt(maxMonthYear.substring(0, 2)) - 1;
         MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(requireContext(), new MonthPickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(int selectedMonth, int selectedYear) {
