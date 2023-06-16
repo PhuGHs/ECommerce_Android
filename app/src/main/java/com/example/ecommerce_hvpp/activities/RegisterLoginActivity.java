@@ -70,12 +70,11 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
     protected void onStart() {
         super.onStart();
-        MainActivity.PDviewModel = new ProductViewModel();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
+                /*MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
                     @Override
                     public void run() {
                         if(fbHelper.getAuth().getCurrentUser() != null) {
@@ -89,7 +88,7 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
                             }, 2, TimeUnit.SECONDS);
                         }
                     }
-                });
+                });*/
             }
         });
     }
@@ -148,69 +147,70 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
             db.execSQL(createProductTable);
             String createRevenueTable = "CREATE TABLE REVENUE(ID INTEGER Primary Key AUTOINCREMENT, ProductID TEXT, Quantity INTEGER)";
             db.execSQL(createRevenueTable);
-
-            //insert data to product table
-            FirebaseHelper helper = FirebaseHelper.getInstance();
-            helper.getCollection("Product")
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        Log.d("Get all product", "Success");
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            ContentValues product = new ContentValues();
-                            product.put("ID", documentSnapshot.getString("id"));
-
-                            String name = documentSnapshot.getString("name");
-                            product.put("Name", documentSnapshot.getString("name"));
-                            product.put("Club", documentSnapshot.getString("club"));
-                            product.put("Nation", documentSnapshot.getString("nation"));
-                            product.put("Season", documentSnapshot.getString("season"));
-                            product.put("Description", documentSnapshot.getString("description"));
-                            product.put("PointAvg", documentSnapshot.getDouble("pointAvg"));
-                            product.put("Price", documentSnapshot.getDouble("price"));
-                            product.put("Status", documentSnapshot.getString("status"));
-                            product.put("SizeM", documentSnapshot.getLong("size_m"));
-                            product.put("SizeL", documentSnapshot.getLong("size_l"));
-                            product.put("SizeXL", documentSnapshot.getLong("size_xl"));
-                            product.put("TimeAdded", documentSnapshot.getTimestamp("time_added").getSeconds());
-                            product.put("URLmain", documentSnapshot.getString("url_main"));
-                            product.put("URLsub1", documentSnapshot.getString("url_sub1"));
-                            product.put("URLsub2", documentSnapshot.getString("url_sub2"));
-                            product.put("URLthumb", documentSnapshot.getString("url_thumb"));
-
-                            Log.d("Get product to SQLite", name);
-                            long result = db.insert("PRODUCT", null, product);
-                            if (result != - 1) Log.d("GET PRODUCT TO SQLite", "Success");
-                        }
-                    })
-                    .addOnFailureListener(e -> Log.d("Get product to SQLite", "Failure"));
-            helper.getCollection("Order").get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                String document_id = document.getId();
-
-                                helper.getCollection("Order").document(document_id).collection("items")
-                                        .get()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()){
-                                                //get all revenue
-                                                for (QueryDocumentSnapshot items1 : task1.getResult()){
-                                                    String product_id = items1.getString("product_id");
-                                                    long quantity = items1.getLong("quantity");
-
-                                                    ContentValues revenue = new ContentValues();
-                                                    revenue.put("ProductID", product_id);
-                                                    revenue.put("Quantity", quantity);
-
-                                                    long result = db.insert("REVENUE", null, revenue);
-                                                    if (result != - 1) Log.d("GET REVENUE TO SQLite", "Success");
-                                                    Log.d("Revenue", product_id + quantity);
-                                                }
-                                            }
-                                        });
-                            }
-                        }
-                    });
         }
+
+        //insert data to product table
+        FirebaseHelper helper = FirebaseHelper.getInstance();
+        helper.getCollection("Product")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("Get all product", "Success");
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        ContentValues product = new ContentValues();
+                        String product_id = documentSnapshot.getString("id");
+                        product.put("ID", documentSnapshot.getString("id"));
+
+                        String name = documentSnapshot.getString("name");
+                        product.put("Name", documentSnapshot.getString("name"));
+                        product.put("Club", documentSnapshot.getString("club"));
+                        product.put("Nation", documentSnapshot.getString("nation"));
+                        product.put("Season", documentSnapshot.getString("season"));
+                        product.put("Description", documentSnapshot.getString("description"));
+                        product.put("PointAvg", documentSnapshot.getDouble("pointAvg"));
+                        product.put("Price", documentSnapshot.getDouble("price"));
+                        product.put("Status", documentSnapshot.getString("status"));
+                        product.put("SizeM", documentSnapshot.getLong("size_m"));
+                        product.put("SizeL", documentSnapshot.getLong("size_l"));
+                        product.put("SizeXL", documentSnapshot.getLong("size_xl"));
+                        product.put("TimeAdded", documentSnapshot.getTimestamp("time_added").getSeconds());
+                        product.put("URLmain", documentSnapshot.getString("url_main"));
+                        product.put("URLsub1", documentSnapshot.getString("url_sub1"));
+                        product.put("URLsub2", documentSnapshot.getString("url_sub2"));
+                        product.put("URLthumb", documentSnapshot.getString("url_thumb"));
+
+                        Log.d("Get product to SQLite", name);
+                        long result = db.insertWithOnConflict("PRODUCT", null, product, SQLiteDatabase.CONFLICT_REPLACE);
+                        if (result != - 1) Log.d("GET PRODUCT TO SQLite", "Success");
+                    }
+                })
+                .addOnFailureListener(e -> Log.d("Get product to SQLite", "Failure"));
+        helper.getCollection("Order").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        for (QueryDocumentSnapshot document : task.getResult()){
+                            String document_id = document.getId();
+
+                            helper.getCollection("Order").document(document_id).collection("items")
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()){
+                                            //get all revenue
+                                            for (QueryDocumentSnapshot items1 : task1.getResult()){
+                                                String product_id = items1.getString("product_id");
+                                                long quantity = items1.getLong("quantity");
+
+                                                ContentValues revenue = new ContentValues();
+                                                revenue.put("ProductID", product_id);
+                                                revenue.put("Quantity", quantity);
+
+                                                long result = db.insertWithOnConflict("REVENUE", null, revenue, SQLiteDatabase.CONFLICT_REPLACE);
+                                                if (result != - 1) Log.d("GET REVENUE TO SQLite", "Success");
+                                                Log.d("Revenue", product_id + quantity);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 }
