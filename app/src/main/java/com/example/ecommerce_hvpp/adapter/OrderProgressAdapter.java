@@ -65,6 +65,7 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
         else if (order.getStatus().equals("Pending")){
             holder.status_tv.setText("Pending");
             holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pending));
+            holder.confirm_btn.setVisibility(View.INVISIBLE);
         }
         else if (order.getStatus().equals("Confirmed")){
             holder.status_tv.setText("The order has been confirmed");
@@ -74,6 +75,7 @@ public class OrderProgressAdapter extends RecyclerView.Adapter<OrderProgressAdap
         else {
             holder.status_tv.setText("Packed");
             holder.status_tv.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.packaged));
+            holder.confirm_btn.setVisibility(View.INVISIBLE);
         }
         holder.confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
