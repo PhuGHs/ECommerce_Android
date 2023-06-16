@@ -29,6 +29,11 @@ import com.google.api.LogDescriptor;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class RegisterLoginActivity extends AppCompatActivity implements NetworkChangeBroadcastReceiver.NetworkConnectivityListener {
     private NavController navController;
     private RegisterLoginViewModel viewModel;
@@ -40,24 +45,20 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
     private View image;
     private ViewModelProvider vmProvider;
     public static SessionManager sessionManager;
+    private FirebaseHelper fbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
+        Log.i("Register", "onCreate");
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
         sessionManager = new SessionManager(this);
-
         getDataToLocalDB();
 
-        //if(sessionManager.isLoggedIn()) {
-        //    Intent intent = new Intent(this, MainActivity.class);
-        //    startActivity(intent);
-        //}
-
+        fbHelper = FirebaseHelper.getInstance();
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
-
         tryAgainButton = findViewById(R.id.btnTryAgain);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -65,6 +66,32 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
+    }
+
+    protected void onStart() {
+        super.onStart();
+        MainActivity.PDviewModel = new ProductViewModel();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.PDviewModel.initListBestSellerLiveData().thenRunAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(fbHelper.getAuth().getCurrentUser() != null) {
+                            Log.i("Register", "onStart inside success");
+                            ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+                            scheduledExecutorService.schedule(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(RegisterLoginActivity.this, MainActivity.class));
+                                }
+                            }, 2, TimeUnit.SECONDS);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

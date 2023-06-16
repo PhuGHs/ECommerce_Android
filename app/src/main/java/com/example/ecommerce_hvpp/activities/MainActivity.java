@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
         SQLiteDatabase db = openOrCreateDatabase("PD.db", MODE_PRIVATE, null);
         PDviewModel = new ProductViewModel(this);
         PDviewModel.initData();
+        Log.i("Main", "onCreate");
 
         String Id = fbHelper.getAuth().getCurrentUser().getUid();
         fbHelper.getCollection("users").document(Id).get()
@@ -132,8 +133,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
                 });
         NavigationUI.setupWithNavController(bottomNav, navController);
     }
-
-
 
     public void showMainLayout() {
         hasInternetLayout.setVisibility(View.VISIBLE);
