@@ -54,8 +54,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -739,5 +742,18 @@ public class AdminStatisticsRepository {
                         emitter.onComplete();
                     });
         });
+    }
+
+    public String getMinMonth(Map<String, Map<String, Integer>> data) {
+        List<String> listMonth = new ArrayList<>(data.keySet());
+
+        List<YearMonth> yearsMonth = new ArrayList<>();
+
+        for (String date : listMonth) {
+            yearsMonth.add(YearMonth.parse(date, monthFormatter));
+        }
+
+        Collections.sort(yearsMonth);
+        return yearsMonth.get(0).format(monthFormatter);
     }
 }

@@ -159,6 +159,7 @@
                             android:scaleType="centerCrop"
                             android:src="@drawable/baseline_arrow_down_white" />
 
+
                     </RelativeLayout>
 
                     <TextView
