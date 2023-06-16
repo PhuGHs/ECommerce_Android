@@ -26,6 +26,9 @@ public class constant {
     public static final int STATISTIC_SEASON = 206;
 
 
+    public static final int CLUB = 301;
+    public static final int NATION = 302;
+
     public static final String KEY_INTENT_PROMOTION = "KEY_INTENT_PROMOTION";
 
 }

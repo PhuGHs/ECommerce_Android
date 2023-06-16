@@ -476,58 +476,6 @@
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/admin_statistics_component_season_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:background="@drawable/round_item_statistic"
-                        android:onClick="@{(view) -> AdminStatisticsViewModel.onClickOption(view, constant.STATISTIC_SEASON)}"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="14dp">
-
-                        <TextView
-                            android:id="@+id/admin_statistics_component_season_title"
-                            style="@style/w500_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="SEASON TOP-SELLING"
-                            android:textColor="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/admin_statistics_component_season_quantity"
-                            style="@style/w500_50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/admin_statistics_component_season_title"
-                            android:layout_marginTop="15dp"
-                            android:maxWidth="230dp"
-                            android:text="2012-2013"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/admin_statistics_component_season_details"
-                            style="@style/w400_40"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/admin_statistics_component_season_quantity"
-                            android:layout_marginBottom="1dp"
-                            android:layout_toStartOf="@id/admin_statistics_component_season_next"
-                            android:text="Details"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/admin_statistics_component_season_next"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@id/admin_statistics_component_season_details"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="9dp"
-                            android:src="@drawable/baseline_next_details" />
-
-                    </RelativeLayout>
-
                 </LinearLayout>
 
             </LinearLayout>

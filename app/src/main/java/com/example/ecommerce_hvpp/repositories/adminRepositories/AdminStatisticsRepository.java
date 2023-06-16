@@ -1,8 +1,11 @@
 package com.example.ecommerce_hvpp.repositories.adminRepositories;
 
+import static com.example.ecommerce_hvpp.activities.MainActivity.PDviewModel;
 import static com.example.ecommerce_hvpp.util.CustomFormat.dateFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.decimalFormatter;
 import static com.example.ecommerce_hvpp.util.CustomFormat.monthFormatter;
+import static com.example.ecommerce_hvpp.util.constant.CLUB;
+import static com.example.ecommerce_hvpp.util.constant.NATION;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_CLUB;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_NATION;
 import static com.example.ecommerce_hvpp.util.constant.STATISTIC_ORDERS;
@@ -26,7 +29,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
+import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -54,6 +59,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -69,6 +75,10 @@ public class AdminStatisticsRepository {
     public static Map<String, Integer> dayProductSoldDataStatistics;
     public static Map<String, Integer> dayVisitorsDataStatistics;
     public static Map<String, Double> dayRevenueDataStatistics;
+
+    public static Map<String, Map<String, Integer>> monthClubDataStatistics;
+    public static Map<String, Map<String, Integer>> monthNationDataStatistics;
+    public static Map<String, Map<String, Integer>> monthSeasonDataStatistics;
 
     public AdminStatisticsRepository() {}
 
@@ -92,9 +102,6 @@ public class AdminStatisticsRepository {
                 break;
             case STATISTIC_NATION:
                 navController.navigate(R.id.adminStatisticNationFragment);
-                break;
-            case STATISTIC_SEASON:
-                navController.navigate(R.id.adminStatisticSeasonFragment);
                 break;
         }
     }
@@ -429,15 +436,15 @@ public class AdminStatisticsRepository {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
             firebaseHelper
-                    .getCollection("Voucher")
-                    .orderBy("date_begin", Query.Direction.ASCENDING)
+                    .getCollection("Order")
+                    .orderBy("createdDate", Query.Direction.ASCENDING)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         Map<String, Integer> mDataStatistics = new HashMap<>();
 
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                             String date = templateDate
-                                    .format(Objects.requireNonNull(snapshot.getTimestamp("date_begin")).toDate());
+                                    .format(Objects.requireNonNull(snapshot.getTimestamp("createdDate")).toDate());
                             if (mDataStatistics.containsKey(date)) {
                                 mDataStatistics.put(date, mDataStatistics.get(date) + 1);
                             } else {
@@ -460,24 +467,47 @@ public class AdminStatisticsRepository {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
             firebaseHelper
-                    .getCollection("Voucher")
-                    .orderBy("date_begin", Query.Direction.ASCENDING)
+                    .getCollection("Order")
+                    .orderBy("receiveDate", Query.Direction.ASCENDING)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         Map<String, Integer> mDataStatistics = new HashMap<>();
 
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            String date = templateDate
-                                    .format(Objects.requireNonNull(snapshot.getTimestamp("date_begin")).toDate());
-                            if (mDataStatistics.containsKey(date)) {
-                                mDataStatistics.put(date, mDataStatistics.get(date) + 1);
-                            } else {
-                                mDataStatistics.put(date, 1);
+                            if (snapshot.getString("status").equals("Delivered")) {
+                                final int[] totalQuantity = {0};
+                                String date = templateDate
+                                        .format(Objects.requireNonNull(snapshot.getTimestamp("receiveDate")).toDate());
+
+                                // handle each order to get quantity of item - sub collection
+                                snapshot
+                                        .getReference()
+                                        .collection("items")
+                                        .get()
+                                        .addOnSuccessListener(querySubCollection -> {
+                                            for (QueryDocumentSnapshot document : querySubCollection) {
+                                                int quantity = Objects.requireNonNull(document.getLong("quantity")).intValue();
+                                                totalQuantity[0] += quantity;
+                                            }
+
+                                            // put quantity item into map
+                                            if (mDataStatistics.containsKey(date)) {
+                                                mDataStatistics.put(date, mDataStatistics.get(date) + totalQuantity[0]);
+                                            } else {
+                                                mDataStatistics.put(date, totalQuantity[0]);
+                                            }
+
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            emitter.onNext(Resource.error(e.getMessage(), null));
+                                            emitter.onComplete();
+                                        });
                             }
                         }
 
                         emitter.onNext(Resource.success(mDataStatistics));
                         emitter.onComplete();
+
                     })
                     .addOnFailureListener(e -> {
                         emitter.onNext(Resource.error(e.getMessage(), null));
@@ -492,21 +522,25 @@ public class AdminStatisticsRepository {
             emitter.onNext(Resource.loading(null));
             firebaseHelper
                     .getCollection("Order")
-                    .orderBy("updateDate", Query.Direction.ASCENDING)
+                    .orderBy("receiveDate", Query.Direction.ASCENDING)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         Map<String, Double> mDataStatistics = new HashMap<>();
 
-                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            String date = templateDate
-                                    .format(Objects.requireNonNull(snapshot.getTimestamp("updateDate")).toDate());
 
-                            Double price = snapshot.getDouble("totalPrice");
-                            if (mDataStatistics.containsKey(date)) {
-                                mDataStatistics.put(date, mDataStatistics.get(date) + price);
-                            } else {
-                                mDataStatistics.put(date, price);
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            if (Objects.requireNonNull(snapshot.getString("status")).equals("Delivered")) {
+                                String date = templateDate
+                                        .format(Objects.requireNonNull(snapshot.getTimestamp("receiveDate")).toDate());
+
+                                Double price = snapshot.getDouble("totalPrice");
+                                if (mDataStatistics.containsKey(date)) {
+                                    mDataStatistics.put(date, mDataStatistics.get(date) + price);
+                                } else {
+                                    mDataStatistics.put(date, price);
+                                }
                             }
+
                         }
 
                         mDataStatistics.forEach((key, value) -> {
@@ -525,4 +559,185 @@ public class AdminStatisticsRepository {
         });
     }
 
+    public List<String> getTopQuantities(String month, Map<String, Map<String, Integer>> dataMonths) {
+        List<String> topQuantities = new ArrayList<>();
+
+        Map<String, Integer> data = dataMonths.get(month);
+
+        int maxQuantity = 0;
+        assert data != null;
+        for (int quantity : data.values()) {
+            if (quantity > maxQuantity) {
+                maxQuantity = quantity;
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+            if (Objects.equals(entry.getValue(), maxQuantity)) {
+                topQuantities.add(entry.getKey());
+            }
+        }
+
+        return topQuantities;
+    }
+
+    public Map<String, Integer> getTop5Quantities(Map<String, Map<String, Integer>> dataMonths, String month) {
+        Map<String, Integer> result = dataMonths.get(month);
+
+        if (result == null) {
+            throw new IllegalArgumentException("Invalid month: " + month);
+        }
+
+        // Create a sorted map to store the top 5 quantities
+        Map<String, Integer> top5Quantities = new LinkedHashMap<>();
+
+        // Sort the quantities by value in descending order
+        List<Map.Entry<String, Integer>> sortedQuantities = new ArrayList<>(result.entrySet());
+        sortedQuantities.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        // Get the top 5 quantities and add them to the sorted map
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : sortedQuantities) {
+            top5Quantities.put(entry.getKey(), entry.getValue());
+            count++;
+
+            if (count == 5) {
+                break;
+            }
+        }
+
+        return top5Quantities;
+    }
+
+    // club
+    public Observable<Resource<Map<String, Map<String, Integer>>>> getObservableClubDataStatistics() {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper
+                    .getCollection("Order")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        Map<String, Map<String, Integer>> mDataStatistics = new HashMap<>();
+
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            if (snapshot.getString("status").equals("Delivered")) {
+                                String date = templateDate
+                                        .format(Objects.requireNonNull(snapshot.getTimestamp("receiveDate")).toDate());
+                                String month = date.substring(3, 10);
+                                // handle each order to get quantity of item - sub collection
+                                snapshot
+                                        .getReference()
+                                        .collection("items")
+                                        .get()
+                                        .addOnSuccessListener(querySubCollection -> {
+                                            for (QueryDocumentSnapshot document : querySubCollection) {
+                                                String idItem = document.getString("product_id");
+                                                Product product = MainActivity.PDviewModel.listAllProduct.get(idItem);
+                                                assert product != null;
+
+                                                if (product.getType() == CLUB) {
+                                                    int quantity = Objects.requireNonNull(document.getLong("quantity")).intValue();
+                                                    String club = product.getClub();
+
+                                                    if (mDataStatistics.containsKey(month)) {
+                                                        Map<String, Integer> innerMap = mDataStatistics.get(month);
+                                                        innerMap.put(club, innerMap.getOrDefault(club, 0) + quantity);
+                                                        mDataStatistics.put(month, innerMap);
+                                                    } else {
+                                                        Map<String, Integer> inner = new HashMap<>();
+                                                        inner.put(club, quantity);
+                                                        mDataStatistics.put(month, inner);
+                                                    }
+                                                }
+                                            }
+
+                                            mDataStatistics.forEach((key, value) -> {
+                                                value.forEach((subKey, subValue) -> {
+                                                    Log.e("VuNationChild", key + " : " + subKey + " : " + subValue);
+                                                });
+                                            });
+                                            emitter.onNext(Resource.success(mDataStatistics));
+                                            emitter.onComplete();
+
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            emitter.onNext(Resource.error(e.getMessage(), null));
+                                            emitter.onComplete();
+                                        });
+                            }
+                        }
+
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
+    }
+
+    public Observable<Resource<Map<String, Map<String, Integer>>>> getObservableNationDataStatistics() {
+        return Observable.create(emitter -> {
+            emitter.onNext(Resource.loading(null));
+            firebaseHelper
+                    .getCollection("Order")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        Map<String, Map<String, Integer>> mDataStatistics = new HashMap<>();
+
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            if (snapshot.getString("status").equals("Delivered")) {
+                                String date = templateDate
+                                        .format(Objects.requireNonNull(snapshot.getTimestamp("receiveDate")).toDate());
+                                String month = date.substring(3, 10);
+                                // handle each order to get quantity of item - sub collection
+                                snapshot
+                                        .getReference()
+                                        .collection("items")
+                                        .get()
+                                        .addOnSuccessListener(querySubCollection -> {
+                                            for (QueryDocumentSnapshot document : querySubCollection) {
+                                                String idItem = document.getString("product_id");
+                                                Product product = MainActivity.PDviewModel.listAllProduct.get(idItem);
+                                                assert product != null;
+
+                                                if (product.getType() == NATION) {
+                                                    int quantity = Objects.requireNonNull(document.getLong("quantity")).intValue();
+                                                    String club = product.getNation();
+
+                                                    if (mDataStatistics.containsKey(month)) {
+                                                        Map<String, Integer> innerMap = mDataStatistics.get(month);
+                                                        innerMap.put(club, innerMap.getOrDefault(club, 0) + quantity);
+                                                        mDataStatistics.put(month, innerMap);
+                                                    } else {
+                                                        Map<String, Integer> inner = new HashMap<>();
+                                                        inner.put(club, quantity);
+                                                        mDataStatistics.put(month, inner);
+                                                    }
+                                                }
+                                            }
+
+                                            mDataStatistics.forEach((key, value) -> {
+                                                value.forEach((subKey, subValue) -> {
+                                                    Log.e("VuNationChild", key + " : " + subKey + " : " + subValue);
+                                                });
+                                            });
+
+
+                                            emitter.onNext(Resource.success(mDataStatistics));
+                                            emitter.onComplete();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            emitter.onNext(Resource.error(e.getMessage(), null));
+                                            emitter.onComplete();
+                                        });
+                            }
+                        }
+
+                    })
+                    .addOnFailureListener(e -> {
+                        emitter.onNext(Resource.error(e.getMessage(), null));
+                        emitter.onComplete();
+                    });
+        });
+    }
 }

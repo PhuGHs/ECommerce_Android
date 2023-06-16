@@ -134,9 +134,6 @@
             android:id="@+id/action_adminStatisticsFragment_to_adminStatisticClubFragment"
             app:destination="@id/adminStatisticClubFragment" />
         <action
-            android:id="@+id/action_adminStatisticsFragment_to_adminStatisticSeasonFragment"
-            app:destination="@id/adminStatisticSeasonFragment" />
-        <action
             android:id="@+id/action_adminStatisticsFragment_to_adminStatisticNationFragment"
             app:destination="@id/adminStatisticNationFragment" />
     </fragment>
@@ -187,11 +184,5 @@
         android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticNationFragment"
         android:label="admin_fragment_statistic_nation"
         tools:layout="@layout/admin_fragment_statistic_nation" />
-
-    <fragment
-        android:id="@+id/adminStatisticSeasonFragment"
-        android:name="com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticSeasonFragment"
-        android:label="admin_fragment_statistic_season"
-        tools:layout="@layout/admin_fragment_statistic_season" />
 
 </navigation>

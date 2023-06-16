@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.fragments.statistics_detail;
 
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthClubDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthNationDataStatistics;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strNation;
 
 import android.os.Bundle;
@@ -52,27 +54,14 @@ public class AdminStatisticNationFragment extends Fragment {
         mAdminFragmentStatisticNationBinding.adminStatisticsNationMonth.setText(repo.getCurrentMonth());
     }
 
-    private Map<String, Integer> getData() {
-        Map<String, Integer> data = new HashMap<>();
-
-        data.put("Real Madrid" ,30);
-        data.put("Manchester City", 40);
-        data.put("Liverpool", 10);
-        data.put("Inter Milan", 27);
-        data.put("Manchester United", 10);
-
-        return data;
-    }
-
     // create chart
     private void createChart() {
-
         createPieChart();
         createBarChart();
     }
 
     private void createPieChart() {
-        Map<String, Integer> data = getData();
+        Map<String, Integer> data = repo.getTop5Quantities(monthNationDataStatistics, repo.getCurrentMonth());;
         List<PieEntry> entries = new ArrayList<>();
         data.forEach((key, value) -> {
             entries.add(new PieEntry(value, key));
@@ -86,7 +75,7 @@ public class AdminStatisticNationFragment extends Fragment {
     }
 
     private void createBarChart() {
-        Map<String, Integer> data = getData();
+        Map<String, Integer> data = monthNationDataStatistics.get(repo.getCurrentMonth());
         List<BarEntry> entries = new ArrayList<>();
         List<String> xAxisLabels = new ArrayList<>();
         final int[] index = {1};

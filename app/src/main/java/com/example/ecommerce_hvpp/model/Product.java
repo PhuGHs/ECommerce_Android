@@ -1,6 +1,9 @@
 package com.example.ecommerce_hvpp.model;
 
 
+import static com.example.ecommerce_hvpp.util.constant.CLUB;
+import static com.example.ecommerce_hvpp.util.constant.NATION;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -285,5 +288,11 @@ public class Product implements Parcelable {
 
     public void setSize_m(long size_m) {
         this.size_m = size_m;
+    }
+
+    public int getType() {
+        if (!this.getClub().equals(""))
+            return CLUB;
+        return NATION;
     }
 }
