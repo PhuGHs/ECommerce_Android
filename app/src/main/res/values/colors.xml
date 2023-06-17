@@ -31,6 +31,7 @@
     <color name="confirmed">#18B344</color>
     <color name="packaged">#18B3A1</color>
     <color name="delivered">#0041A2</color>
+    <color name="received">#30A2FF</color>
     <color name="canceled">#FF0000</color>
     <color name="bg_primary">#EBEAEF</color>
     <color name="bg_calendar">#0D000000</color>

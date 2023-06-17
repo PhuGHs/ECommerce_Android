@@ -144,10 +144,6 @@ public class ChatRoomRepository {
     }
 
     private void populateDataAndNotify(List<ChatRoom> result) {
-        for (ChatRoom room : result) {
-            Log.e("roomName", room.getRoomName());
-            Log.e("imagePath", room.getImagePath());
-        }
         _mldChatRoomList.setValue(Resource.success(result));
     }
 

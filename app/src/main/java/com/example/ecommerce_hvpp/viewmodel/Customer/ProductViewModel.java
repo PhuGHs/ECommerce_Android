@@ -104,6 +104,10 @@ public class ProductViewModel extends ViewModel {
     public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
         Map<String, Object> data = new HashMap<>();
+        if (recipientInfo == null) {
+            CustomToast.ShowToastMessage(context, 2, "Add address, please!");
+            return;
+        }
         data.put("id", customer_id + estimateDate);
         data.put("address", recipientInfo.second);
         data.put("recipientName", recipientInfo.first.first);
@@ -124,7 +128,7 @@ public class ProductViewModel extends ViewModel {
                 .set(data)
                 .addOnSuccessListener(unused -> {
                     Log.d("Create Order", "success");
-                    CustomToast.ShowToastMessage(context, 1, "Create order successfully!");
+                    CustomToast.ShowToastMessage(context, 1, "Create order successfully!\nPlease wait retailer confirm your order!");
                 })
                 .addOnFailureListener(e -> {
                     Log.d("Create Order", "failure");
@@ -259,6 +263,23 @@ public class ProductViewModel extends ViewModel {
                 });
         Cart cart = new Cart(listAllProduct.get(product_id), quantity, size);
         listCart.remove(cart);
+        mldListCart.setValue(listCart);
+        calcTotalItemAndPriceCart();
+    }
+    public void clearCart(){
+        String customer_id = helper.getAuth().getCurrentUser().getUid();
+
+        for (Cart cart : listCart){
+            helper.getDb().collection("Cart").document(customer_id + "_" + cart.getProduct().getId() + "_" + cart.getSize())
+                    .delete()
+                    .addOnSuccessListener(unused -> {
+                        Log.d("Clear Cart", "Success");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("Clear Cart", "Failure");
+                    });
+        }
+        listCart.clear();
         mldListCart.setValue(listCart);
         calcTotalItemAndPriceCart();
     }

@@ -223,6 +223,8 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
                     tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.confirmed));
                 } else if (Objects.equals(order.getStatus(), "Delivered")) {
                     tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.delivered));
+                } else {
+                    tvOrderStatus.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.received));
                 }
                 tvOrderStatus.setText(order.getStatus().toString());
             }

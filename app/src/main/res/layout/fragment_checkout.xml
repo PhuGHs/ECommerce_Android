@@ -74,7 +74,7 @@
                     android:id="@+id/addressApplied"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Santiago Bernabeu Stadium, Madrid, Spain"
+                    android:text="No address chosen yet"
                     android:textSize="60px"
                     style="@style/font_crimson_regular"
                     android:textColor="#A86464"

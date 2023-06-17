@@ -117,6 +117,7 @@ public class AdminOrderDetailsFragment extends Fragment {
                     add("Confirmed");
                     add("Packaged");
                     add("Delivered");
+                    add("Received");
                 }})
                 .stepsNumber(4)
                 .animationDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
@@ -134,6 +135,9 @@ public class AdminOrderDetailsFragment extends Fragment {
             stepView.go(2, true);
         } else if (Objects.equals(order.getStatus(), "Delivered")) {
             stepView.go(3, true);
+            btnMarkAs.setVisibility(View.GONE);
+        } else {
+            stepView.go(4, true);
             btnMarkAs.setVisibility(View.GONE);
         }
     }
