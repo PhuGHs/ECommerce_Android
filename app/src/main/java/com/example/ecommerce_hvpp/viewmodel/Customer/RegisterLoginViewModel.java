@@ -94,7 +94,7 @@ public class RegisterLoginViewModel extends ViewModel {
 
     public LiveData<Resource<Void>> resetUserPassword(String email) {
         resetPasswordResult.setValue(Resource.loading(null));
-        firebaseAuth.getInstance().sendPasswordResetEmail(email)
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnSuccessListener(authResult -> {
                     resetPasswordResult.setValue(Resource.success(null));
                 })
@@ -105,7 +105,7 @@ public class RegisterLoginViewModel extends ViewModel {
     }
 
     public void insertVoucherForNewUser() {
-        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference userRef = firebaseHelper.getCollection("users").document(fbUser.getUid());
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

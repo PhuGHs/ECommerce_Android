@@ -84,7 +84,7 @@ public class LoginFragment extends Fragment {
         });
 
         btnResetPassword.setOnClickListener((View v) -> {
-            ResetPasswordDialog resetPasswordDialog = new ResetPasswordDialog(getActivity());
+            ResetPasswordDialog resetPasswordDialog = new ResetPasswordDialog(getContext());
             resetPasswordDialog.show();
         });
 
@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment {
                     return;
                 }
 
-                viewModel.loginUser(str_email, str_password).observe(requireActivity(), resource -> {
+                viewModel.loginUser(str_email, str_password).observe(getViewLifecycleOwner(), resource -> {
                     switch(resource.status) {
                         case LOADING:
                             loginButton.startAnimation();
