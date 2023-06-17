@@ -140,7 +140,10 @@ public class AdminProfileRepository {
     public Observable<Resource<List<OrderHistory>>> getObservableOrderHistory() {
         return Observable.create(emitter -> {
             emitter.onNext(Resource.loading(null));
-            firebaseHelper.getCollection("Order").get()
+            firebaseHelper
+                    .getCollection("Order")
+                    .orderBy("createdDate", Query.Direction.DESCENDING)
+                    .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         List<OrderHistory> mListOrderHistory = new ArrayList<>();
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
