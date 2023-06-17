@@ -41,6 +41,11 @@ public class ProfileViewModel extends ViewModel {
         });
         Log.e("Phuc", "Da cap nhat " + user.getUsername() + fbUser.getUid());
     }
+
+    public void updateUser(User user) {
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        repo.updateUser(fbUser.getUid(), user.getUsername(), user.getDatebirth(), user.getAddress(), user.getEmail(), user.getImagePath());
+    }
     public LiveData<String> getUserName(){
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         return repo.getUserName(fbUser.getUid());
