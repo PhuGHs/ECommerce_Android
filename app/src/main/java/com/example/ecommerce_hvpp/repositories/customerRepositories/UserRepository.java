@@ -77,6 +77,7 @@ public class UserRepository {
                         String imagePath = documentSnapshot.getString("imagePath");
                         boolean isNew = documentSnapshot.getBoolean("new");
                         _mldUser.setValue(Resource.success(new User(isAdmin, username, email, password, datebirth, address, imagePath, isNew)));
+
                     } else {
                         Log.d(TAG, "user not found");
                     }

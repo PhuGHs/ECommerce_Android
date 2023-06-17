@@ -154,7 +154,7 @@ public class CheckoutFragment extends Fragment {
                 deliverMethod = key;
                 shipping = listShippingPrice.get(key);
                 shippingPrice.setText("$" + shipping);
-                totalOrder.setText("$" + (total + shipping));
+                totalOrder.setText("$" + Math.round((total + shipping) * 100.0) / 100.0);
 
                 if (key.equals("Normal")) nextDay = (long) 432000;
                 if (key.equals("Express")) nextDay = (long) 259200;
@@ -169,11 +169,19 @@ public class CheckoutFragment extends Fragment {
 
         //navigate
         btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
-        navToAddress.setOnClickListener(view12 -> navController.navigate(R.id.RecepientInfoFragment));
-        navToVoucher.setOnClickListener(view13 -> navController.navigate(R.id.VoucherFragment));
+        navToAddress.setOnClickListener(view12 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Previous", "Checkout");
+            navController.navigate(R.id.RecepientInfoFragment, bundle);
+        });
+        navToVoucher.setOnClickListener(view13 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("Previous", "Checkout");
+            navController.navigate(R.id.VoucherFragment, bundle);
+        });
 
         //create order
-        btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, total + shipping));
+        btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0));
     }
     private void getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_detailProductCustomerFragment"
             app:destination="@id/detailProductCustomerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -28,7 +31,11 @@
         android:id="@+id/accountFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_accountFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.ecommerce_hvpp.fragments.customer_fragments.CartFragment"

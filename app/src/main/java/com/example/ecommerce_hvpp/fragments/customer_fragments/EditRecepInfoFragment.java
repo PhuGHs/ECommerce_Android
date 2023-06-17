@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.RecepInfo;
-import com.example.ecommerce_hvpp.model.User;
-import com.example.ecommerce_hvpp.util.CustomComponent.CustomToast;
-import com.example.ecommerce_hvpp.viewmodel.Customer.OrderHistoryViewModel;
-import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.RecepInfoViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -116,7 +110,7 @@ public class EditRecepInfoFragment extends Fragment {
         back_Account_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
+                navController.popBackStack();
             }
         });
 

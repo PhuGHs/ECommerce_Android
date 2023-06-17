@@ -93,15 +93,12 @@ public class AdminOrderDetailsFragment extends Fragment {
         btnMarkAs = view.findViewById(R.id.btnMarkAs);
         tvHeader = view.findViewById(R.id.header_title);
         tvFoundText = view.findViewById(R.id.tvFoundtext);
-        tvNumberOfVouchers = view.findViewById(R.id.tvNumberOfVouchers);
         tvDeliveryMethod = view.findViewById(R.id.tvDeliveryMethod);
         tvPaymentMethod = view.findViewById(R.id.tvPaymentMethod);
         tvNote = view.findViewById(R.id.tvNote);
         tvRecipientName = view.findViewById(R.id.tvRecipientName);
         tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
         tvAddress = view.findViewById(R.id.tvAddress);
-        tvSubtotal = view.findViewById(R.id.tvSubtotal);
-        tvDeliveryFee = view.findViewById(R.id.tvDeliveryFee);
         tvTotal = view.findViewById(R.id.tvTotal);
         rclProductItem = view.findViewById(R.id.RclOrderItemList);
         stepView = view.findViewById(R.id.step_view);
@@ -149,15 +146,13 @@ public class AdminOrderDetailsFragment extends Fragment {
 
         tvHeader.setText(order.getId());
         tvFoundText.setText("Found " + String.valueOf(order.getItems().size()) + " types of clothes");
-        tvNumberOfVouchers.setText(String.valueOf(order.getVoucherList().size()) + " applied");
         tvDeliveryMethod.setText(order.getDeliverMethod());
         tvPaymentMethod.setText(order.getPaymentMethod());
         tvNote.setText(order.getNote());
         tvRecipientName.setText(order.getRecipientName());
         tvPhoneNumber.setText(order.getPhone_number());
         tvAddress.setText(order.getAddress());
-        tvSubtotal.setText(CurrencyFormat.getVNDCurrency(order.getSubtotal()));
-        tvTotal.setText(CurrencyFormat.getVNDCurrency(order.getSubtotal() - order.getTotalDiscount()));
+        tvTotal.setText(CurrencyFormat.getVNDCurrency(order.getTotalPrice()));
     }
     private void handleEvents() {
         btnBack.setOnClickListener(v -> {

@@ -79,22 +79,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataViewHolder
         });
 
         //change quantity
-        holder.minusQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (quantity > 1) holder.adapter.listCart.get(p).setQuantity(quantity - 1);
-                holder.adapter.notifyDataSetChanged();
+        holder.minusQuantity.setOnClickListener(view -> {
+            if (quantity > 1) {
+                holder.adapter.listCart.get(p).setQuantity(quantity - 1);
+                MainActivity.PDviewModel.calcTotalItemAndPriceCart();
             }
+            holder.adapter.notifyDataSetChanged();
         });
-        holder.plusQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (quantity < product.getSize(cart.getSize())) {
-                    holder.adapter.listCart.get(p).setQuantity(quantity + 1);
-                }
-                else CustomToast.ShowToastMessage(context, 2, "Not enough quantity");
-                holder.adapter.notifyDataSetChanged();
+        holder.plusQuantity.setOnClickListener(view -> {
+            if (quantity < product.getSize(cart.getSize())) {
+                holder.adapter.listCart.get(p).setQuantity(quantity + 1);
+                MainActivity.PDviewModel.calcTotalItemAndPriceCart();
             }
+            else CustomToast.ShowToastMessage(context, 2, "Not enough quantity");
+            holder.adapter.notifyDataSetChanged();
         });
     }
 

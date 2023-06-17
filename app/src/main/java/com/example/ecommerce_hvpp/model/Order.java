@@ -12,7 +12,6 @@ public class Order implements Parcelable {
     private int remaining_day;
     private long createdDate, receiveDate;
     private double totalPrice;
-    private List<Voucher> voucherList;
     private List<OrderDetail> items;
     public Order(){
 
@@ -30,11 +29,10 @@ public class Order implements Parcelable {
         createdDate = in.readLong();
         receiveDate = in.readLong();
         totalPrice = in.readFloat();
-        voucherList = in.createTypedArrayList(Voucher.CREATOR);
         items = in.createTypedArrayList(OrderDetail.CREATOR);
     }
 
-    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice, List<Voucher> voucherList, List<OrderDetail> items) {
+    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice, List<OrderDetail> items) {
         this.id = id;
         this.address = address;
         this.customerId = customerId;
@@ -47,11 +45,10 @@ public class Order implements Parcelable {
         this.createdDate = createdDate;
         this.receiveDate = receiveDate;
         this.totalPrice = totalPrice;
-        this.voucherList = voucherList;
         this.items = items;
     }
 
-    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice, List<Voucher> voucherList) {
+    public Order(String id, String address, String customerId, String deliveryMethod, String paymentMethod, String recipientName, String note, String phone_number, String status, long createdDate, long receiveDate, double totalPrice) {
         this.id = id;
         this.address = address;
         this.customerId = customerId;
@@ -64,13 +61,12 @@ public class Order implements Parcelable {
         this.createdDate = createdDate;
         this.receiveDate = receiveDate;
         this.totalPrice = totalPrice;
-        this.voucherList = voucherList;
     }
 
-    public Order(String id, String title, int day_remaining) {
+    public Order(String id, String title, String status) {
         this.id = id;
         this.title = title;
-        this.remaining_day = day_remaining;
+        this.status = status;
     }
     public Order(String id, String deliveryMethod, long receiveDate, String recipientName, String phone_number, String address){
         this.id = id;
@@ -100,7 +96,6 @@ public class Order implements Parcelable {
         dest.writeLong(createdDate);
         dest.writeLong(receiveDate);
         dest.writeDouble(totalPrice);
-        dest.writeTypedList(voucherList);
         dest.writeTypedList(items);
     }
 
@@ -120,14 +115,6 @@ public class Order implements Parcelable {
             return new Order[size];
         }
     };
-
-    public float getTotalDiscount() {
-        float x = 0;
-        for(Voucher voucher : voucherList) {
-            x += voucher.getDiscountedValue();
-        }
-        return x;
-    }
 
     public float getSubtotal() {
         float x = 0;
@@ -231,14 +218,6 @@ public class Order implements Parcelable {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public List<Voucher> getVoucherList() {
-        return voucherList;
-    }
-
-    public void setVoucherList(List<Voucher> voucherList) {
-        this.voucherList = voucherList;
     }
 
     public List<OrderDetail> getItems() {

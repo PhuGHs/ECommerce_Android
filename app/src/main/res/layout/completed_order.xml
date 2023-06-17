@@ -149,14 +149,6 @@
                 android:textSize="45px"
                 android:backgroundTint="#FF8B13"
                 android:text="Review" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rebuy_btn"
-                android:textAllCaps="false"
-                style="@style/header_title"
-                android:textSize="45px"
-                android:text="Rebuy"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

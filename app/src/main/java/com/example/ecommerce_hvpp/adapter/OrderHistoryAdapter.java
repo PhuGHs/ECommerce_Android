@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,10 +49,8 @@ import java.util.Locale;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.DataViewHolder>{
     private ArrayList<OrderHistoryItem> itemList;
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private FirebaseHelper firebaseHelper = FirebaseHelper.getInstance();
     private OrderHistoryFragment parent;
+    private OrderHistoryViewModel viewModel;
 
     public OrderHistoryAdapter(OrderHistoryFragment parent, ArrayList<OrderHistoryItem> listOrderHistory) {
         this.parent = parent;
@@ -72,6 +72,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(@NonNull OrderHistoryAdapter.DataViewHolder holder, int position) {
         OrderHistoryItem item = itemList.get(position);
 
+        viewModel = new ViewModelProvider(parent).get(OrderHistoryViewModel.class);
+
         if (item.getQuantity_of_product() < 2){
             holder.quantity_tv.setText(Long.toString(item.getQuantity_of_product()) + " product");
         }
@@ -83,7 +85,15 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.sum_of_order_tv.setText("$" + Double.toString(item.getSum_of_order()));
         Log.d(TAG, "id cua order: " + item.getID_of_Order());
 
-        getFirst_Item(holder.itemView.getContext(), item.getID_of_Order(), holder.image_item, holder.name_item_tv, holder.quantity_item_tv, holder.price_item_tv);
+        viewModel.getFirstItem(item.getID_of_Order()).observe((LifecycleOwner) holder.itemView.getContext(), Item -> {
+            if (item.getID_of_Order().equals(Item.getOrderID())){
+                holder.name_item_tv.setText(Item.getName_subItem());
+                Log.d(TAG, item.getID_of_Order() + " + " + Item.getName_subItem());
+                holder.price_item_tv.setText("$" + Double.toString(Item.getSum_subItem()));
+                holder.quantity_item_tv.setText("Quantity:  " + Item.getQuantity_subItem());
+                Glide.with(holder.itemView).load(Item.getImagePath_subItem()).fitCenter().into(holder.image_item);
+            }
+        });
 
         holder.more_detail_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,32 +143,5 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         String formattedTime = dateFormat.format(new Date(timeStamp));
 
         return formattedTime;
-    }
-    public void getFirst_Item(Context view, String orderId ,ImageView image_item, TextView name_item_tv, TextView quantity_item_tv, TextView price_item_tv){
-        FirebaseUser fbUser = mAuth.getInstance().getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-
-        firebaseHelper.getCollection("users").document(fbUser.getUid()).collection("bought_items")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (snapshot.getString("orderId").equals(orderId)){
-                            String image_path = snapshot.getString("image");
-                            String name = snapshot.getString("name");
-                            long price = snapshot.getLong("price");
-                            long quantity = snapshot.getLong("quantity");
-
-                            Glide.with(view).load(image_path).fitCenter().into(image_item);
-                            name_item_tv.setText(name);
-                            quantity_item_tv.setText("Quantity: " + Long.toString(quantity));
-                            price_item_tv.setText("$" + Double.toString(price));
-                            Log.d(TAG,  "Lay 1 san pham thanh cong ");
-                        }
-                        break;
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.d(TAG, "Lay that bai");
-                });
     }
 }

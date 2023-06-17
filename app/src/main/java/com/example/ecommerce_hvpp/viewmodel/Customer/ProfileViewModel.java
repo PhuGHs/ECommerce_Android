@@ -8,16 +8,12 @@ import android.webkit.MimeTypeMap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.ecommerce_hvpp.model.ItemModel;
-import com.example.ecommerce_hvpp.model.Product;
 import com.example.ecommerce_hvpp.model.User;
 import com.example.ecommerce_hvpp.repositories.adminRepositories.AdminProductManagementRepository;
 import com.example.ecommerce_hvpp.repositories.customerRepositories.ProfileRepository;
 import com.example.ecommerce_hvpp.util.Resource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.List;
 
 public class ProfileViewModel extends ViewModel {
     private ProfileRepository repo = new ProfileRepository();
@@ -28,9 +24,21 @@ public class ProfileViewModel extends ViewModel {
         Log.e("Phuc", fbUser.getEmail());
         return repo.getUserInfo(fbUser.getUid());
     }
-    public void updateUser(User user){
-        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
-        repo.updateUser(fbUser.getUid(), user.getUsername(), user.getDatebirth(), user.getAddress(), user.getEmail(), user.getImagePath());
+    public void updateUser(User user, ContentResolver contentResolver, Uri uri){
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        String imagePath = "";
+        repo.uploadImage(uri, getFileExtension(contentResolver, uri), new AdminProductManagementRepository.OnImageUploadListener() {
+            @Override
+            public void onImageUploadSuccess(String imageUrl) {
+                repo.updateUser(fbUser.getUid(), user.getUsername(), user.getDatebirth(), user.getAddress(), user.getEmail(), imageUrl);
+                Log.i("image", imageUrl);
+            }
+
+            @Override
+            public void onImageUploadFailure(String exception) {
+
+            }
+        });
         Log.e("Phuc", "Da cap nhat " + user.getUsername() + fbUser.getUid());
     }
     public LiveData<String> getUserName(){

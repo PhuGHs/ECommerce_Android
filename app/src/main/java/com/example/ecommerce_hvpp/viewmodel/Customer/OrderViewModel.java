@@ -46,10 +46,9 @@ public class OrderViewModel extends ViewModel {
                         if (snapshot.getString("customerId").equals(fbUser.getUid())){
                             String title = snapshot.getString("name");
                             String id = snapshot.getString("id");
-                            Date date_end = snapshot.getDate("receiveDate");
-                            int day_remaining = getDayRemaining(date_end);
+                            String status = snapshot.getString("status");
 
-                            listAllOrder.put(id, new Order(id, title, day_remaining));
+                            listAllOrder.put(id, new Order(id, title, status));
                         }
                     }
                 })
@@ -78,10 +77,16 @@ public class OrderViewModel extends ViewModel {
         }
         return listFound;
     }
-    public int getDayRemaining(Date date_end){
-        Date now = new Date();
-        difference = date_end.getTime() - now.getTime();
-        daysBetween = (int) (difference / (1000 * 60 * 60 * 24));
-        return daysBetween;
+    public void confirmOrder(String order_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.confirmOrder(fbUser.getUid(), order_id);
+    }
+    public void confirmItemsOfOrder(String order_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.confirmItemsOfOrder(fbUser.getUid(), order_id);
+    }
+    public void updateStatusOrder(String order_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.updateStatusOrder(fbUser.getUid(), order_id);
     }
 }
