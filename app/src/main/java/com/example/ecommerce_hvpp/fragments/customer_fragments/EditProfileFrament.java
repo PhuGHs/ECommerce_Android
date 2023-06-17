@@ -170,6 +170,7 @@ public class EditProfileFrament extends Fragment {
                         address = userInfoResource.data.getAddress();
                         email = userInfoResource.data.getEmail();
                         imagePath = userInfoResource.data.getImagePath();
+                        path = userInfoResource.data.getImagePath();
                         Glide.with(this).load(imagePath).fitCenter().into(ava_image);
 
                         name_tv.setText(name);
@@ -290,7 +291,12 @@ public class EditProfileFrament extends Fragment {
         user.setEmail(email);
         user.setImagePath(path);
         Log.d(TAG, "link" + path);
-        viewModel.updateUser(user, contentResolver, thumbnailImage);
+        if(thumbnailImage != null) {
+            viewModel.updateUser(user, contentResolver, thumbnailImage);
+        } else {
+            viewModel.updateUser(user);
+        }
+
     }
     private void processSelectedImage(Uri imageUri) {
         //SlideAdapter.addItem(new ItemModel(imageUri, null));

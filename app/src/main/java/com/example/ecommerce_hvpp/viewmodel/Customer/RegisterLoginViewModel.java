@@ -106,6 +106,7 @@ public class RegisterLoginViewModel extends ViewModel {
 
     public void insertVoucherForNewUser() {
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        Log.e("VuVoucher", UID + "");
         DocumentReference userRef = firebaseHelper.getCollection("users").document(fbUser.getUid());
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
