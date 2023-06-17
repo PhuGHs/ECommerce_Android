@@ -103,12 +103,13 @@ public class ProductViewModel extends ViewModel {
     }
     public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
+        String document_id = helper.getDb().collection("Order").document().getId();
         Map<String, Object> data = new HashMap<>();
         if (recipientInfo == null) {
             CustomToast.ShowToastMessage(context, 2, "Add address, please!");
             return;
         }
-        data.put("id", customer_id + estimateDate);
+        data.put("id", shortID(document_id));
         data.put("address", recipientInfo.second);
         data.put("recipientName", recipientInfo.first.first);
         data.put("phoneNumber", recipientInfo.first.second);
@@ -121,8 +122,6 @@ public class ProductViewModel extends ViewModel {
         data.put("receiveDate", esDate);
         data.put("status", "Pending");
         data.put("totalPrice", totalPrice);
-
-        String document_id = helper.getDb().collection("Order").document().getId();
 
         helper.getDb().collection("Order").document(document_id)
                 .set(data)
@@ -148,6 +147,7 @@ public class ProductViewModel extends ViewModel {
                                     .addOnSuccessListener(unused -> Log.d("Order items", "success"))
                                     .addOnFailureListener(e -> Log.d("Order items", "failure"));
                         }
+                        clearCart();
                     }
                 });
     }
@@ -545,5 +545,8 @@ public class ProductViewModel extends ViewModel {
                     mldListFeedback.setValue(listFeedback);
                 });
         return mldListFeedback;
+    }
+    private String shortID(String id){
+        return id.substring(0, 6);
     }
 }
