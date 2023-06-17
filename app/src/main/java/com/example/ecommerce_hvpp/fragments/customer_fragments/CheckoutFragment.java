@@ -181,7 +181,6 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0);
-                MainActivity.PDviewModel.clearCart();
                 navController.navigate(R.id.homeFragment);
             }
         });
@@ -189,12 +188,15 @@ public class CheckoutFragment extends Fragment {
     private void getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
         voucherViewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> {
+            int voucherApplied = 0;
             if (listVoucherApplied.size() < 1){
                 for (Voucher voucher : vouchers) {
-                    if (MainActivity.PDviewModel.checkVoucherApply(voucher))
+                    if (MainActivity.PDviewModel.checkVoucherApply(voucher) && voucherApplied < 1){
                         Log.d("Voucher", "add " + voucher.getId());
-                    total -= voucher.getDiscountedValue();
-                    listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
+                        total -= voucher.getDiscountedValue();
+                        voucherApplied++;
+                        listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
+                    }
                 }
                 VoucherAdapter voucherAdapter = new VoucherAdapter(getContext(), R.layout.voucher_item, listVoucherApplied);
                 listVoucherAppliedLv.setAdapter(voucherAdapter);
