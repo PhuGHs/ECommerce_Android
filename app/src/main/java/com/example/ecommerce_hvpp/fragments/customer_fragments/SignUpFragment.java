@@ -175,7 +175,7 @@ public class SignUpFragment extends Fragment {
                     case ERROR:
                         registerButton.revertAnimation();
                         ContextThemeWrapper ctw2 = new ContextThemeWrapper(getActivity(), R.style.SnackBarError);
-                        Snackbar.make(ctw2, requireView(), resource.message, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(ctw2, getView(), resource.message, Snackbar.LENGTH_LONG).show();
                         break;
                 }
             });

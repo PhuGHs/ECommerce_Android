@@ -47,6 +47,7 @@ public class User {
     private String address = "";
     private long sumRevenue;
     private String username = "";
+    private boolean isNew = true;
 
     public User(boolean isAdmin, String username, String email, String password, String datebirth, String address, String imagePath) {
         this.isAdmin = isAdmin;
@@ -56,6 +57,17 @@ public class User {
         this.datebirth = datebirth;
         this.address = address;
         this.imagePath = imagePath;
+    }
+
+    public User(boolean isAdmin, String username, String email, String password, String datebirth, String address, String imagePath, boolean isNew) {
+        this.isAdmin = isAdmin;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.datebirth = datebirth;
+        this.address = address;
+        this.imagePath = imagePath;
+        this.isNew = isNew;
     }
 
     public String getUsername() {
@@ -111,5 +123,13 @@ public class User {
     }
 
     public void setUrlthumb(String imageUrl) {
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 }

@@ -4,6 +4,8 @@ import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminSta
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayProductSoldDataStatistics;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayRevenueDataStatistics;
 import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.dayVisitorsDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthClubDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthNationDataStatistics;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticOrders;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticProductSold;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.dataStatisticRevenue;
@@ -33,6 +35,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
+import com.example.ecommerce_hvpp.activities.MainActivity;
 import com.example.ecommerce_hvpp.databinding.AdminFragmentStatisticsBinding;
 import com.example.ecommerce_hvpp.fragments.statistics_detail.AdminStatisticOrdersFragment;
 import com.example.ecommerce_hvpp.model.DataStatisticDouble;
@@ -104,7 +107,6 @@ public class AdminStatisticsFragment extends Fragment {
 
         handleClubTopSellingComponent();
         handleNationTopSellingComponent();
-        handleSeasonTopSellingComponent();
     }
 
     // Visitors - int
@@ -173,12 +175,10 @@ public class AdminStatisticsFragment extends Fragment {
 
     private void handleClubTopSellingComponent() {
         // handle to find top selling
-        List<String> listResult = new ArrayList<>();
-        listResult.add("Manchester City");
-        listResult.add("Inter Milan");
+        List<String> listTopData = repo.getTopQuantities(repo.getCurrentMonth(), monthClubDataStatistics);
 
         StringBuilder template = new StringBuilder();
-        listResult.forEach(item ->{
+        listTopData.forEach(item ->{
             template.append(item).append(", ");
         });
         template.setLength(template.length() - 2);
@@ -189,33 +189,16 @@ public class AdminStatisticsFragment extends Fragment {
 
     private void handleNationTopSellingComponent() {
         // handle to find top selling
-        List<String> listResult = new ArrayList<>();
-        listResult.add("Argentina");
-        listResult.add("France");
+        List<String> listTopData = repo.getTopQuantities(repo.getCurrentMonth(), monthNationDataStatistics);
 
         StringBuilder template = new StringBuilder();
-        listResult.forEach(item ->{
+        listTopData.forEach(item ->{
             template.append(item).append(", ");
         });
         template.setLength(template.length() - 2);
         strNation = template.toString();
 
         mAdminFragmentStatisticsBinding.adminStatisticsComponentNationQuantity.setText(strNation);
-    }
-
-    private void handleSeasonTopSellingComponent() {
-        // handle to find top selling
-        List<String> listResult = new ArrayList<>();
-        listResult.add("2012-2013");
-
-        StringBuilder template = new StringBuilder();
-        listResult.forEach(item ->{
-            template.append(item).append(", ");
-        });
-        template.setLength(template.length() - 2);
-        strSeason = template.toString();
-
-        mAdminFragmentStatisticsBinding.adminStatisticsComponentSeasonQuantity.setText(strSeason);
     }
 
     @Override

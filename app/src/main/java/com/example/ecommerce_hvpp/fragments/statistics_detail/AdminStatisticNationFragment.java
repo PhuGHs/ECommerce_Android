@@ -1,8 +1,11 @@
 package com.example.ecommerce_hvpp.fragments.statistics_detail;
 
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthClubDataStatistics;
+import static com.example.ecommerce_hvpp.repositories.adminRepositories.AdminStatisticsRepository.monthNationDataStatistics;
 import static com.example.ecommerce_hvpp.viewmodel.admin.admin_statistics.AdminStatisticsComponentViewModel.strNation;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +20,10 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieEntry;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +44,15 @@ public class AdminStatisticNationFragment extends Fragment {
         initView();
 
         // create chart
-        createChart();
+        createChart(repo.getCurrentMonth());
+
+        // show dropdown
+        mAdminFragmentStatisticNationBinding.adminStatisticsNationMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDropdown(repo.getMinMonth(monthClubDataStatistics), repo.getCurrentMonth());
+            }
+        });
 
         // on click back page
         mAdminFragmentStatisticNationBinding.adminStatisticsNationHeaderBack.setOnClickListener(repo.onClickBackPage());
@@ -52,27 +65,14 @@ public class AdminStatisticNationFragment extends Fragment {
         mAdminFragmentStatisticNationBinding.adminStatisticsNationMonth.setText(repo.getCurrentMonth());
     }
 
-    private Map<String, Integer> getData() {
-        Map<String, Integer> data = new HashMap<>();
-
-        data.put("Real Madrid" ,30);
-        data.put("Manchester City", 40);
-        data.put("Liverpool", 10);
-        data.put("Inter Milan", 27);
-        data.put("Manchester United", 10);
-
-        return data;
-    }
-
     // create chart
-    private void createChart() {
-
-        createPieChart();
-        createBarChart();
+    private void createChart(String currMonth) {
+        createPieChart(currMonth);
+        createBarChart(currMonth);
     }
 
-    private void createPieChart() {
-        Map<String, Integer> data = getData();
+    private void createPieChart(String currMonth) {
+        Map<String, Integer> data = repo.getTop5Quantities(monthNationDataStatistics, currMonth);;
         List<PieEntry> entries = new ArrayList<>();
         data.forEach((key, value) -> {
             entries.add(new PieEntry(value, key));
@@ -85,8 +85,8 @@ public class AdminStatisticNationFragment extends Fragment {
         repo.formatPieChart(pieChart, entries, requireContext());
     }
 
-    private void createBarChart() {
-        Map<String, Integer> data = getData();
+    private void createBarChart(String currMonth) {
+        Map<String, Integer> data = monthNationDataStatistics.get(currMonth);
         List<BarEntry> entries = new ArrayList<>();
         List<String> xAxisLabels = new ArrayList<>();
         final int[] index = {1};
@@ -102,5 +102,35 @@ public class AdminStatisticNationFragment extends Fragment {
 
         BarChart barChart = mAdminFragmentStatisticNationBinding.adminStatisticsNationBarChart;
         repo.formatBarChart(barChart, entries, xAxisLabels, requireContext());
+    }
+
+    private void showDropdown(String minMonthYear, String maxMonthYear) {
+        final Calendar today = Calendar.getInstance();
+        int minMonth = Integer.parseInt(minMonthYear.substring(0, 2)) - 1;
+        int maxMonth = Integer.parseInt(maxMonthYear.substring(0, 2)) - 1;
+        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(requireContext(), new MonthPickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(int selectedMonth, int selectedYear) {
+                int currMonth = selectedMonth + 1;
+                String month = String.format("%02d", currMonth);
+                String monthYear = month + "/" + selectedYear;
+                mAdminFragmentStatisticNationBinding.adminStatisticsNationMonth.setText(month + "/" + selectedYear);
+                createChart(monthYear);
+            }
+        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+        builder.setActivatedMonth(5)
+                .setMinYear(2023)
+                .setActivatedYear(2023)
+                .setMaxYear(2023)
+                .setMinMonth(minMonth)
+                .setMaxMonth(maxMonth)
+                .setTitle("Select month")
+                .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
+                    @Override
+                    public void onMonthChanged(int selectedMonth) {
+                        Log.e("Change", "change");
+                    }
+                })
+                .build().show();
     }
 }
