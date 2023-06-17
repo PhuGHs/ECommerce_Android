@@ -115,6 +115,7 @@ public class LoginFragment extends Fragment {
                             loginButton.revertAnimation();
                             email.setError(null);
                             password.setError(null);
+                            viewModel.insertVoucherForNewUser();
                             break;
                         case ERROR:
                             loginButton.revertAnimation();
@@ -123,8 +124,6 @@ public class LoginFragment extends Fragment {
                             break;
                     }
                 });
-
-                viewModel.insertVoucherForNewUser();
             }
         });
 

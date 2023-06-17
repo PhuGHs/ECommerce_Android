@@ -105,7 +105,7 @@ public class RegisterLoginViewModel extends ViewModel {
     }
 
     public void insertVoucherForNewUser() {
-        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         DocumentReference userRef = firebaseHelper.getCollection("users").document(fbUser.getUid());
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -157,7 +157,7 @@ public class RegisterLoginViewModel extends ViewModel {
 //                    _mldUser.postValue(_mldUser.getValue());
                                     });
                         } else {
-                            return;
+                            Log.e("VuErrorChild", "error");
                         }
                     } else {
                         // Document does not exist
