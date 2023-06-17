@@ -157,7 +157,7 @@ public class RegisterLoginViewModel extends ViewModel {
 //                    _mldUser.postValue(_mldUser.getValue());
                                     });
                         } else {
-                            return;
+                            Log.e("VuErrorChild", "error");
                         }
                     } else {
                         // Document does not exist
