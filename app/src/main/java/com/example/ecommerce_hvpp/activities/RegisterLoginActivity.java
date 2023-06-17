@@ -26,6 +26,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -65,11 +68,6 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
 
         vmProvider = new ViewModelProvider(this);
         viewModel = vmProvider.get(RegisterLoginViewModel.class);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         Branch.sessionBuilder(this).withCallback(new Branch.BranchUniversalReferralInitListener() {
             @Override
@@ -85,17 +83,28 @@ public class RegisterLoginActivity extends AppCompatActivity implements NetworkC
                 }
             }
         }).withData(this.getIntent().getData()).init();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         Log.i("init", "init");
-        if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
-            Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
-            intent.putExtra("productID", iD);
-            Log.i("iD", iD);
-            startActivity(intent);
-        } else if(fbHelper.getAuth().getCurrentUser() != null) {
-            Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                if(fbHelper.getAuth().getCurrentUser() != null && !Objects.equals(iD, "")) {
+                    Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
+                    intent.putExtra("productID", iD);
+                    Log.i("iD", iD);
+                    startActivity(intent);
+                } else if(fbHelper.getAuth().getCurrentUser() != null) {
+                    Intent intent = new Intent(RegisterLoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 
     @Override
