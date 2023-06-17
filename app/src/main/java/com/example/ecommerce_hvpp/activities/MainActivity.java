@@ -80,7 +80,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
                                 .commit();
                     }
                 });
+
         NavigationUI.setupWithNavController(bottomNav, navController);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void showMainLayout() {
