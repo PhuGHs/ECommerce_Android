@@ -168,20 +168,23 @@ public class CheckoutFragment extends Fragment {
         });
 
         //navigate
-        btnBackToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
+        btnBackToCart.setOnClickListener(view1 -> navController.popBackStack());
         navToAddress.setOnClickListener(view12 -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("Previous", "Checkout");
-            navController.navigate(R.id.RecepientInfoFragment, bundle);
+            navController.navigate(R.id.RecepientInfoFragment);
         });
         navToVoucher.setOnClickListener(view13 -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("Previous", "Checkout");
-            navController.navigate(R.id.VoucherFragment, bundle);
+            navController.navigate(R.id.VoucherFragment);
         });
 
         //create order
-        btnAccept.setOnClickListener(view14 -> MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0));
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0);
+                MainActivity.PDviewModel.clearCart();
+                navController.navigate(R.id.homeFragment);
+            }
+        });
     }
     private void getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);

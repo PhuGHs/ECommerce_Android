@@ -161,12 +161,7 @@ public class NewRecepInfoFragment extends Fragment {
             }
         });
 
-        back_Account_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.RecepientInfoFragment);
-            }
-        });
+        back_Account_btn.setOnClickListener(view1 -> navController.popBackStack());
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -94,17 +94,7 @@ public class RecepientInfoFragment extends Fragment {
         back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
         add_btn = (AppCompatImageButton) view.findViewById(R.id.add_btn);
 
-        back_Account_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = getArguments();
-                String previous = bundle.getString("Previous");
-                if (previous.equals("Checkout")){
-                    navController.navigate(R.id.checkoutFragment);
-                }
-                else navController.navigate(R.id.accountFragment);
-            }
-        });
+        back_Account_btn.setOnClickListener(view1 -> navController.popBackStack());
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

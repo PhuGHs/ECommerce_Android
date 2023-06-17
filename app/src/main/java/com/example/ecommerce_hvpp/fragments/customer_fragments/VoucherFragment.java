@@ -89,17 +89,7 @@ public class VoucherFragment extends Fragment {
         navController = Navigation.findNavController(requireView());
         back_Account_btn = (ImageButton) view.findViewById(R.id.back_info);
 
-        back_Account_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = getArguments();
-                String previous = bundle.getString("Previous");
-                if (previous.equals("Checkout")){
-                    navController.navigate(R.id.checkoutFragment);
-                }
-                else navController.navigate(R.id.accountFragment);
-            }
-        });
+        back_Account_btn.setOnClickListener(view1 -> navController.popBackStack());
     }
     public void getVoucherAndSetVoucherRecycleView(List<Voucher> listVoucher){
         adapter = new VoucherListAdapter(getContext(), (ArrayList<Voucher>) listVoucher);
