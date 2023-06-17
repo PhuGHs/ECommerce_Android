@@ -94,7 +94,7 @@ public class RegisterLoginViewModel extends ViewModel {
 
     public LiveData<Resource<Void>> resetUserPassword(String email) {
         resetPasswordResult.setValue(Resource.loading(null));
-        firebaseAuth.getInstance().sendPasswordResetEmail(email)
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnSuccessListener(authResult -> {
                     resetPasswordResult.setValue(Resource.success(null));
                 })
