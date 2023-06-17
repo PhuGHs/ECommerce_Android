@@ -382,28 +382,30 @@ public class ProductViewModel extends ViewModel {
         List<String> listProductID = new ArrayList<>(listAllProduct.keySet());
 
         for (String id : listProductID){
-            Product product = listAllProduct.get(id);
-            String club = product.getClub();
-            String nation = product.getNation();
-            String season = product.getSeason();
+            if (listAllProduct.get(id).getStatus().contains("avail")){
+                Product product = listAllProduct.get(id);
+                String club = product.getClub();
+                String nation = product.getNation();
+                String season = product.getSeason();
 
-            Log.d("Categories", club + nation + season);
+                Log.d("Categories", club + nation + season);
 
-            if (!club.isEmpty() && !listClub.contains(club)){
-                listClub.add(club);
-            }
-            if (!nation.isEmpty() && !listNation.contains(nation)){
-                listNation.add(nation);
-            }
-            if (!season.isEmpty() && !listSeason.contains(season)){
-                if (season.length() < 5){ // it's a single season
-                    long singleSeason = Long.parseLong(season);
-                    String season1 = (singleSeason - 1) + "/" + singleSeason;
-                    String season2 = singleSeason + "/" + (singleSeason + 1);
-                    if (!listSeason.contains(season1)) listSeason.add(season1);
-                    if (!listSeason.contains(season2)) listSeason.add(season2);
+                if (!club.isEmpty() && !listClub.contains(club)){
+                    listClub.add(club);
                 }
-                else listSeason.add(season);
+                if (!nation.isEmpty() && !listNation.contains(nation)){
+                    listNation.add(nation);
+                }
+                if (!season.isEmpty() && !listSeason.contains(season)){
+                    if (season.length() < 5){ // it's a single season
+                        long singleSeason = Long.parseLong(season);
+                        String season1 = (singleSeason - 1) + "/" + singleSeason;
+                        String season2 = singleSeason + "/" + (singleSeason + 1);
+                        if (!listSeason.contains(season1)) listSeason.add(season1);
+                        if (!listSeason.contains(season2)) listSeason.add(season2);
+                    }
+                    else listSeason.add(season);
+                }
             }
         }
         categories.put("Club", listClub);
