@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ import com.example.ecommerce_hvpp.viewmodel.Customer.ProfileViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -89,7 +89,7 @@ public class AccountFragment extends Fragment {
     private TextView number_of_voucher_tv;
     private TextView number_of_orderprogress_tv;
     private TextView number_of_feedback_tv;
-    private ImageView ava_image;
+    private ShapeableImageView ava_image;
     private LinearLayout voucher_btn, orderprogress_btn, feedback_btn;
     private RelativeLayout profile_btn, recep_info_btn, order_history_btn, chat_with_admin_btn, logout_btn;
     private String size_text = "";
@@ -120,7 +120,7 @@ public class AccountFragment extends Fragment {
         number_of_voucher_tv = v.findViewById(R.id.number_voucher);
         number_of_orderprogress_tv = v.findViewById(R.id.number_order_progress);
         number_of_feedback_tv = v.findViewById(R.id.number_feedback);
-        ava_image = v.findViewById(R.id.image_of_user);
+        ava_image = v.findViewById(R.id.spiAvatar);
 
         voucher_btn = (LinearLayout) v.findViewById(R.id.btn_voucher);
         orderprogress_btn = (LinearLayout) v.findViewById(R.id.btn_orderprogress);
@@ -227,19 +227,6 @@ public class AccountFragment extends Fragment {
         chat_with_admin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chatRoomViewModel.checkIfHasRoomBefore().observe(getViewLifecycleOwner(), resource2 -> {
-                    switch (resource2.status) {
-                        case SUCCESS:
-                            if(resource2.data.isEmpty()) {
-                                chatRoomViewModel.createNewChatRoom();
-                                Log.e("come to create", "true");
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                });
-
                 chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
                     switch (resource.status) {
                         case LOADING:

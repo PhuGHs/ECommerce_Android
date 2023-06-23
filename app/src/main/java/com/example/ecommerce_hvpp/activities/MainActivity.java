@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -20,6 +21,7 @@ import com.example.ecommerce_hvpp.fragments.customer_fragments.DetailProductCust
 import com.example.ecommerce_hvpp.repositories.customerRepositories.UserRepository;
 import com.example.ecommerce_hvpp.util.NetworkChangeBroadcastReceiver;
 import com.example.ecommerce_hvpp.util.SessionManager;
+import com.example.ecommerce_hvpp.viewmodel.ChatRoomViewModel;
 import com.example.ecommerce_hvpp.viewmodel.Customer.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
     private NetworkChangeBroadcastReceiver networkChangeBroadcastReceiver;
     private RelativeLayout noInternetLayout, hasInternetLayout;
     private SessionManager sessionManager;
-    private boolean isActivityFirstCreated = true;
+    private ChatRoomViewModel chatRoomViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
         setContentView(R.layout.activity_main);
         noInternetLayout = findViewById(R.id.noInternetLayout);
         hasInternetLayout = findViewById(R.id.hasInternetLayout);
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
 
         networkChangeBroadcastReceiver = new NetworkChangeBroadcastReceiver();
         networkChangeBroadcastReceiver.setListener(this);
@@ -64,6 +67,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeBroa
                     } else {
                         bottomNav.inflateMenu(R.menu.bottom_menu);
                         navController.setGraph(R.navigation.nav_graph);
+                        chatRoomViewModel.checkIfHasRoomBefore().observe(this, resource2 -> {
+                            switch (resource2.status) {
+                                case SUCCESS:
+                                    if(resource2.data.isEmpty()) {
+                                        chatRoomViewModel.createNewChatRoom();
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
                     }
 
                     if(getIntent().hasExtra("productID")) {

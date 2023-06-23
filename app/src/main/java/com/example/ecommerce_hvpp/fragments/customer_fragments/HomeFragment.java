@@ -1,7 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,19 +132,6 @@ public class HomeFragment extends Fragment {
         ImageButton btnNavToMessage = (ImageButton) view.findViewById(R.id.btnNavToMessage);
         btnNavToCart.setOnClickListener(view1 -> navController.navigate(R.id.cartFragment));
         btnNavToMessage.setOnClickListener(view12 -> {
-            chatRoomViewModel.checkIfHasRoomBefore().observe(getViewLifecycleOwner(), resource2 -> {
-                switch (resource2.status) {
-                    case SUCCESS:
-                        if(resource2.data.isEmpty()) {
-                            chatRoomViewModel.createNewChatRoom();
-                            Log.e("come to create", "true");
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            });
-
             chatRoomViewModel.getChatRoomList().observe(getViewLifecycleOwner(), resource -> {
                 switch (resource.status) {
                     case LOADING:
