@@ -32,7 +32,7 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
     }
     private OnFilterSelectedListener listener;
     private ChipGroup sortByChipGroup, searchOptionsChipGroup, statusChipGroup;
-    private Chip PriceChip, CreatedDateChip, AllChip, PendingChip, ConfirmedChip, PackagedChip, DeliveredChip, OrderCodeChip, PhoneNumberChip, RecipientChip;
+    private Chip PriceChip, CreatedDateChip, AllChip, PendingChip, ConfirmedChip, PackagedChip, DeliveredChip, ReceivedChip, OrderCodeChip, PhoneNumberChip, RecipientChip;
     private ImageView btnClose;
     private Button btnApply;
     public void setOnFilterSelectedListener(OnFilterSelectedListener listener) {
@@ -146,6 +146,7 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
         filterOptions.put("Confirmed", false);
         filterOptions.put("Packaged", false);
         filterOptions.put("Delivered", false);
+        filterOptions.put("Received", false);
         filterOptions.put("Order Code", false);
         filterOptions.put("Phone Number", true);
         filterOptions.put("Recipient Name", false);
@@ -165,6 +166,7 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
         ConfirmedChip = view.findViewById(R.id.confirmedChip);
         PackagedChip = view.findViewById(R.id.packagedChip);
         DeliveredChip = view.findViewById(R.id.deliveredChip);
+        ReceivedChip = view.findViewById(R.id.receivedChip);
         OrderCodeChip = view.findViewById(R.id.OrderCodeChip);
         PhoneNumberChip = view.findViewById(R.id.PhoneNumberChip);
         RecipientChip = view.findViewById(R.id.RecipientNameChip);
@@ -178,6 +180,7 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
         chips.add(PendingChip);
         chips.add(ConfirmedChip);
         chips.add(PackagedChip);
+        chips.add(ReceivedChip);
         chips.add(DeliveredChip);
         chips.add(OrderCodeChip);
         chips.add(PhoneNumberChip);
