@@ -656,7 +656,7 @@ public class AdminStatisticsRepository {
 
                                             mDataStatistics.forEach((key, value) -> {
                                                 value.forEach((subKey, subValue) -> {
-                                                    Log.e("VuNationChild", key + " : " + subKey + " : " + subValue);
+                                                    Log.e("VuClubChild", key + " : " + subKey + " : " + subValue);
                                                 });
                                             });
                                             emitter.onNext(Resource.success(mDataStatistics));
