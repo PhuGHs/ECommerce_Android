@@ -58,7 +58,7 @@ import java.util.Map;
 public class AdminStatisticClubFragment extends Fragment {
     AdminFragmentStatisticClubBinding mAdminFragmentStatisticClubBinding;
     AdminStatisticsRepository repo;
-
+    int monthSelected = 6;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -141,13 +141,14 @@ public class AdminStatisticClubFragment extends Fragment {
             @Override
             public void onDateSet(int selectedMonth, int selectedYear) {
                 int currMonth = selectedMonth + 1;
+                monthSelected = selectedMonth;
                 String month = String.format("%02d", currMonth);
                 String monthYear = month + "/" + selectedYear;
                 mAdminFragmentStatisticClubBinding.adminStatisticsClubMonth.setText(month + "/" + selectedYear);
                 createChart(monthYear);
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
-        builder.setActivatedMonth(5)
+        builder.setActivatedMonth(monthSelected)
                 .setMinYear(2023)
                 .setActivatedYear(2023)
                 .setMaxYear(2023)
