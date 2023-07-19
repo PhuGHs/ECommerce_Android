@@ -15,10 +15,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ethanhua.skeleton.Skeleton;
-import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.adapter.VoucherListAdapter;
+import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.example.ecommerce_hvpp.viewmodel.Customer.VoucherViewModel;
 
@@ -94,6 +93,7 @@ public class VoucherFragment extends Fragment {
     public void getVoucherAndSetVoucherRecycleView(List<Voucher> listVoucher){
         adapter = new VoucherListAdapter(getContext(), (ArrayList<Voucher>) listVoucher);
         recyclerview.setAdapter(adapter);
+        recyclerview.addItemDecoration(new VerticalItemDecoration(30));
         recyclerview.setLayoutManager(linearLayoutManager);
     }
 }

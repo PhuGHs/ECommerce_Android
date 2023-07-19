@@ -1,9 +1,6 @@
 package com.example.ecommerce_hvpp.adapter;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.model.Voucher;
-import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +58,6 @@ public class VoucherListAdapter extends RecyclerView.Adapter<VoucherListAdapter.
         public DataViewHolder(View itemView){
             super(itemView);
 
-            useBtn = (Button) itemView.findViewById(R.id.btn_use);
             name_tv = (TextView) itemView.findViewById(R.id.title_of_voucher);
             code_tv = (TextView) itemView.findViewById(R.id.code_of_voucher);
             discount_value_tv = (TextView) itemView.findViewById(R.id.discount_of_voucher);
