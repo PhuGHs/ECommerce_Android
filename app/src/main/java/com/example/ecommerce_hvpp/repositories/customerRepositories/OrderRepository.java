@@ -42,7 +42,7 @@ public class OrderRepository {
                     List<Order> orders = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customerId").equals(UID)){
-                            String title = snapshot.getString("name");
+                            String title = snapshot.getString("note");
                             String id = snapshot.getString("id");
                             String status = snapshot.getString("status");
 

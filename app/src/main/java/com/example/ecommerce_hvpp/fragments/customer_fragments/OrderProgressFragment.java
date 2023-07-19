@@ -2,6 +2,7 @@ package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.database.Observable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,30 +87,6 @@ public class OrderProgressFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerview = v.findViewById(R.id.list_orderprogress);
         viewModel = new ViewModelProvider(this).get(OrderViewModel.class);
-        searchView = (SearchView) v.findViewById(R.id.search_bar_orderprogress);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                adapter = new OrderProgressAdapter(fragment, (ArrayList<Order>) viewModel.getOrderFound(s));
-                recyclerview.setAdapter(adapter);
-                recyclerview.setLayoutManager(linearLayoutManager);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                if (s.isEmpty()){
-
-                }
-                else {
-                    adapter = new OrderProgressAdapter(fragment, (ArrayList<Order>) viewModel.getOrderFound(s));
-                    recyclerview.setAdapter(adapter);
-                    recyclerview.setLayoutManager(linearLayoutManager);
-                }
-                return false;
-            }
-        });
 
         viewModel.showOrderList().observe(getViewLifecycleOwner(), orders -> getOrderAndSetOrderRecycleView(orders));
         return v;
