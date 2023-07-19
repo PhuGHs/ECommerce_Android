@@ -28,7 +28,7 @@ import java.util.Objects;
 public class AdminProductAdapter extends RecyclerView.Adapter implements Filterable {
     private List<Product> list;
     private List<Product> original;
-    private List<Product> typeList;
+    private List<Product> typeList = new ArrayList<>();
     private AdminProductListFragment parent;
     private OnLongItemClickListener mOnLongItemClickListener;
 
@@ -89,10 +89,10 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Product> filteredList = new ArrayList<>();
             if(charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(original);
+                filteredList.addAll(typeList);
             } else {
                 String filterPattern = charSequence.toString();
-                for(Product pd : original) {
+                for(Product pd : typeList) {
                     if(matchesFilter(pd, filterPattern)) {
                         filteredList.add(pd);
                     }
@@ -134,19 +134,17 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
 
     @SuppressLint("NotifyDataSetChanged")
     public void setTypeAdapter(String type, String order) {
-        list.clear();
-        list.addAll(original);
+        typeList.clear();
 
         if (!type.equals("All")) {
-            typeList = new ArrayList<>();
             if(type.equals("Nation")) {
-                for (Product or : list) {
+                for (Product or : original) {
                     if (!or.getNation().equals("")) {
                         typeList.add(or);
                     }
                 }
             } else if (type.equals("Club")) {
-                for (Product or : list) {
+                for (Product or : original) {
                     if (!or.getClub().equals("")) {
                         typeList.add(or);
                     }
@@ -155,6 +153,10 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
 
             list.clear();
             list.addAll(typeList);
+        } else {
+            list.clear();
+            typeList.addAll(original);
+            list.addAll(original);
         }
 
         Collections.sort(list, new Comparator<Product>() {
@@ -180,13 +182,13 @@ public class AdminProductAdapter extends RecyclerView.Adapter implements Filtera
         Log.i("type", selectedFilterOption);
         switch (selectedFilterOption) {
             case "Product Name Option":
-                return pd.getName().toLowerCase().trim().contains(filterPattern);
+                return pd.getName().toLowerCase().trim().contains(filterPattern.toLowerCase().trim());
             case "Nation Option":
                 if(Objects.equals(pd.getNation(), "")) return false;
-                return pd.getNation().toLowerCase().trim().contains(filterPattern);
+                return pd.getNation().toLowerCase().trim().contains(filterPattern.toLowerCase().trim());
             default:
                 if(Objects.equals(pd.getClub(), "")) return false;
-                return pd.getClub().toLowerCase().trim().contains(filterPattern);
+                return pd.getClub().toLowerCase().trim().contains(filterPattern.toLowerCase().trim());
         }
     }
 

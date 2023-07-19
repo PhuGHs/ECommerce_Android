@@ -106,6 +106,9 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
 
         btnApply.setOnClickListener(v -> {
             list = getKeysFromValue(filterOptions, true);
+            for(int i = 0; i < list.size(); i++) {
+                Log.e("list " + i, list.get((i)));
+            }
             listener.onFilterSelected(list);
             dismiss();
         });
@@ -126,6 +129,7 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (value.equals(entry.getValue())) {
                 keys.add(entry.getKey());
+                Log.e("hash", entry.getKey().toString());
             }
         }
         return keys;
@@ -192,6 +196,14 @@ public class OrderFilterDialog extends BottomSheetDialogFragment {
                         chip.setChecked(true);
                     }
                 }
+            }
+        }
+
+        for(Chip chip: chips) {
+            if(chip.isChecked()) {
+                filterOptions.put(chip.getText().toString(), true);
+            } else {
+                filterOptions.put(chip.getText().toString(), false);
             }
         }
     }

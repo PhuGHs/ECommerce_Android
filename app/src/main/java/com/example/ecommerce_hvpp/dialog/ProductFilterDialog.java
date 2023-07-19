@@ -180,5 +180,13 @@ public class ProductFilterDialog extends BottomSheetDialogFragment {
                 }
             }
         }
+
+        for(Chip chip: chips) {
+            if(chip.isChecked()) {
+                filterOptions.put(chip.getText().toString(), true);
+            } else {
+                filterOptions.put(chip.getText().toString(), false);
+            }
+        }
     }
 }

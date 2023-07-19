@@ -29,7 +29,7 @@ import java.util.Objects;
 public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrderManagementAdapter.OrderManagementViewHolder> implements Filterable {
     private List<Order> list;
     private List<Order> backUpList;
-    private List<Order> typeList;
+    private List<Order> typeList = new ArrayList<>();
     private AdminOrderedListFragment parent;
 
     public AdminOrderManagementAdapter(List<Order> list, AdminOrderedListFragment parent) {
@@ -81,10 +81,10 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Order> filteredList = new ArrayList<>();
             if(charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(backUpList);
+                filteredList.addAll(typeList);
             } else {
                 String filterPattern = charSequence.toString();
-                for(Order order : backUpList) {
+                for(Order order : typeList) {
                     if(matchesFilter(order, filterPattern)) {
                         filteredList.add(order);
                     }
@@ -113,7 +113,7 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
 
             if (charSequence == null || charSequence.length() == 0) {
                 list.clear();
-                list.addAll(backUpList);
+                list.addAll(typeList);
             } else {
                 list.clear();
                 list.addAll(filteredList);
@@ -137,18 +137,19 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
 
     @SuppressLint("NotifyDataSetChanged")
     public void setTypeAdapter(String type, String order) {
-        list.clear();
-        list.addAll(backUpList);
-
+        typeList.clear();
         if (!type.equals("All")) {
-            typeList = new ArrayList<>();
-            for (Order or : list) {
+            for (Order or : backUpList) {
                 if (or.getStatus().equals(type)) {
                     typeList.add(or);
                 }
             }
             list.clear();
             list.addAll(typeList);
+        } else {
+            list.clear();
+            typeList.addAll(backUpList);
+            list.addAll(backUpList);
         }
 
         Collections.sort(list, new Comparator<Order>() {
@@ -172,9 +173,9 @@ public class AdminOrderManagementAdapter extends RecyclerView.Adapter<AdminOrder
             case "Phone Number":
                 return order.getPhone_number().contains(filterPattern);
             case "Recipient Name":
-                return order.getRecipientName().toLowerCase().trim().contains(filterPattern);
+                return order.getRecipientName().toLowerCase().trim().contains(filterPattern.toLowerCase().trim());
             default:
-                return order.getId().toLowerCase().trim().contains(filterPattern);
+                return order.getId().toLowerCase().trim().contains(filterPattern.toLowerCase().trim());
         }
     }
 
