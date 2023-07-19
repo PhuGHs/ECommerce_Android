@@ -44,7 +44,7 @@ public class OrderViewModel extends ViewModel {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         if (snapshot.getString("customerId").equals(fbUser.getUid())){
-                            String title = snapshot.getString("name");
+                            String title = snapshot.getString("note");
                             String id = snapshot.getString("id");
                             String status = snapshot.getString("status");
 

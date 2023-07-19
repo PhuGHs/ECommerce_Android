@@ -27,17 +27,6 @@
             android:textSize="70px"
             android:gravity="center"/>
     </FrameLayout>
-    <SearchView
-        android:id="@+id/search_bar_orderprogress"
-        android:background="@drawable/bg_white_rounded"
-        android:layout_marginTop="90px"
-        android:layout_width="948px"
-        android:layout_height="wrap_content"
-        android:queryHint="Search your order..."
-        android:iconifiedByDefault="false"
-        style="@style/font_crimson_regular"
-        android:queryBackground="@color/white"
-        android:submitBackground="@drawable/bg_white_rounded"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
