@@ -114,8 +114,6 @@ public class AdminPromotionFragment extends Fragment {
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                         mAdminFragmentPromotionBinding.adminPromotionRcvItemPromotion.setLayoutManager(layoutManager);
                         mAdminFragmentPromotionBinding.adminPromotionRcvItemPromotion.setAdapter(adapterAdminCustomItemPromotion);
-
-                        layoutManager.scrollToPositionWithOffset(adapterAdminCustomItemPromotion.getItemCount() - 1, 0);
                         break;
                     case ERROR:
                         Log.i("VuError", resource.message);
