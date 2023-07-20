@@ -1,5 +1,7 @@
 package com.example.ecommerce_hvpp.repositories.customerRepositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -7,6 +9,8 @@ import com.example.ecommerce_hvpp.firebase.FirebaseHelper;
 import com.example.ecommerce_hvpp.model.Voucher;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Voucher> vouchers = new ArrayList<>();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0){
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0 && snapshot.getBoolean("isUsed") == false){
                             String name = snapshot.getString("name");
                             String code = snapshot.getString("id");
                             String apply_for = snapshot.getString("apply_for");
@@ -55,7 +59,7 @@ public class VoucherRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     int count = 0;
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0){
+                        if (Timestamp.now().getSeconds()*1000 - snapshot.getTimestamp("date_end").getSeconds()*1000 - 86400 < 0 && snapshot.getBoolean("isUsed") == false){
                             count++;
                         }
                     }
@@ -67,4 +71,21 @@ public class VoucherRepository {
         return number_of_voucher;
     }
 
-}
+    public void updateVoucher(String UID, String voucher_id) {
+        FirebaseFirestore fs = FirebaseFirestore.getInstance();
+        firebaseHelper.getCollection("users").document(UID).collection("vouchers")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        if (snapshot.getId().equals(voucher_id)) {
+                            DocumentReference ref = fs.collection("users").document(UID).collection("vouchers").document(voucher_id);
+                            ref.update("isUsed", true);
+                            Log.d(TAG, "cap nhat thanh cong" + voucher_id + snapshot.getBoolean("isUsed"));
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "khong the cap nhat trang thai voucher");
+                });
+        }
+    }

@@ -1,11 +1,8 @@
 package com.example.ecommerce_hvpp.viewmodel.Customer;
 
-import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
@@ -30,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 public class ProductViewModel extends ViewModel {
     private FirebaseHelper helper;
@@ -101,7 +97,7 @@ public class ProductViewModel extends ViewModel {
             cursor.moveToNext();
         }
     }
-    public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice){
+    public void createOrder(Context context, String deliverMethod, String note, String paymentMethod, long estimateDate, double totalPrice, int totalQuantity){
         String customer_id = helper.getAuth().getCurrentUser().getUid();
         String document_id = helper.getDb().collection("Order").document().getId();
         Map<String, Object> data = new HashMap<>();
@@ -122,6 +118,7 @@ public class ProductViewModel extends ViewModel {
         data.put("receiveDate", esDate);
         data.put("status", "Pending");
         data.put("totalPrice", totalPrice);
+        data.put("totalQuantity", totalQuantity);
 
         helper.getDb().collection("Order").document(document_id)
                 .set(data)

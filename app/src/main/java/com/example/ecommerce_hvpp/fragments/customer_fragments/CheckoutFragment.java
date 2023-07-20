@@ -1,14 +1,6 @@
 package com.example.ecommerce_hvpp.fragments.customer_fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -21,6 +13,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.ecommerce_hvpp.R;
 import com.example.ecommerce_hvpp.activities.MainActivity;
@@ -98,7 +97,7 @@ public class CheckoutFragment extends Fragment {
     private Button btnAccept;
     private EditText txtNote;
     Long nextDay = (long) 432000;
-    String deliverMethod, paymentMethod;
+    String deliverMethod, paymentMethod, voucher_id;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -180,12 +179,14 @@ public class CheckoutFragment extends Fragment {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0);
+                MainActivity.PDviewModel.createOrder(getContext(), deliverMethod, txtNote.getText().toString(), paymentMethod, (Timestamp.now().getSeconds() + nextDay) * 1000, Math.round((total + shipping) * 100.0) / 100.0, MainActivity.PDviewModel.getTotalCartItems().getValue());
+                VoucherViewModel voucherViewModel = new ViewModelProvider(getActivity()).get(VoucherViewModel.class);
+                voucherViewModel.updateVoucher(voucher_id);
                 navController.navigate(R.id.homeFragment);
             }
         });
     }
-    private void getListVoucherApplied(){
+    private String getListVoucherApplied(){
         VoucherViewModel voucherViewModel = new ViewModelProvider(this).get(VoucherViewModel.class);
         voucherViewModel.showVoucherList().observe(getViewLifecycleOwner(), vouchers -> {
             int voucherApplied = 0;
@@ -194,6 +195,7 @@ public class CheckoutFragment extends Fragment {
                     if (MainActivity.PDviewModel.checkVoucherApply(voucher) && voucherApplied < 1){
                         Log.d("Voucher", "add " + voucher.getId());
                         total -= voucher.getDiscountedValue();
+                        voucher_id = voucher.getId();
                         voucherApplied++;
                         listVoucherApplied.add(new Pair<>(voucher.getId(), voucher.getDiscountedValue()));
                     }
@@ -203,6 +205,7 @@ public class CheckoutFragment extends Fragment {
                 totalOrder.setText("$" + Math.round((total + shipping) * 100.0) / 100.0);
             }
         });
+        return voucher_id;
     }
     public void getTypeShipping(){
         listTypeShipping.add("Normal");

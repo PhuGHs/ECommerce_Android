@@ -17,14 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecommerce_hvpp.R;
-import com.example.ecommerce_hvpp.adapter.RecepInfoAdapter;
-import com.example.ecommerce_hvpp.adapter.ReviewFeedBackAdapter;
 import com.example.ecommerce_hvpp.adapter.UnreviewFeedBackAdapter;
-import com.example.ecommerce_hvpp.model.Feedback;
-import com.example.ecommerce_hvpp.model.Order;
+import com.example.ecommerce_hvpp.adapter.adapterItemdecorations.VerticalItemDecoration;
 import com.example.ecommerce_hvpp.model.OrderHistorySubItem;
 import com.example.ecommerce_hvpp.viewmodel.Customer.FeedBackViewModel;
-import com.example.ecommerce_hvpp.viewmodel.Customer.RecepInfoViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +110,7 @@ public class UnreviewedFeedbackFragment extends Fragment {
         adapter = new UnreviewFeedBackAdapter(this, (ArrayList<OrderHistorySubItem>) listUnreview);
         recyclerview.setAdapter(adapter);
         recyclerview.setLayoutManager(linearLayoutManager);
+        recyclerview.addItemDecoration(new VerticalItemDecoration(30));
     }
     public NavController getNavController(){
         return navController;

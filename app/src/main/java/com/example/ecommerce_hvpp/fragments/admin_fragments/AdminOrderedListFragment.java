@@ -153,6 +153,7 @@ public class AdminOrderedListFragment extends Fragment {
                     if(resource.data != null) {
                         orders.addAll(resource.data);
                         adapter.setBackUpList(resource.data);
+                        adapter.setTypeAdapter(filterOptions.get(1), filterOptions.get(0));
                         adapter.notifyDataSetChanged();
                         if(adapter.getItemCount() > 1) {
                             tvFoundText.setText("Found " + adapter.getItemCount() + " results");

@@ -148,6 +148,7 @@ public class AdminProductListFragment extends Fragment {
                 case SUCCESS:
                     products.addAll(resource.data);
                     adapter.setOriginalList(products);
+                    adapter.setTypeAdapter(filterOptions.get(1), filterOptions.get(0));
                     adapter.notifyDataSetChanged();
                     if(adapter.getListSize() > 1) {
                         tvFoundText.setText("Found " + adapter.getListSize() + " results");

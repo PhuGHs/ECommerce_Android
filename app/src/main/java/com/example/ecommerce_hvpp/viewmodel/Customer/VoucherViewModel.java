@@ -21,4 +21,8 @@ public class VoucherViewModel extends ViewModel {
         FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
         return repo.getNumofVoucher(fbUser.getUid());
     }
+    public void updateVoucher(String voucher_id){
+        FirebaseUser fbUser = firebaseAuth.getInstance().getCurrentUser();
+        repo.updateVoucher(fbUser.getUid(), voucher_id);
+    }
 }
